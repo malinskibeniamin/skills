@@ -26,6 +26,7 @@ SHORT_DESCRIPTIONS = {
     "in-your-own-words": "Restate the user's goals and problem",
     "interrogate": "Challenge a diff with adversarial review",
     "ketchup": "Catch up on this chat and pending user decisions",
+    "ketchup-video": "Catch up on this chat in a short subtitled video",
     "maintain-formal-verification-skill": "Refresh formal checks against changed code",
     "maintain-verification-skill": "Refresh a verifier from source and live behavior",
     "make-bot-ui": "Build a dashboard that wakes a bot through a webhook",
@@ -45,6 +46,7 @@ SHORT_DESCRIPTIONS = {
     "setup-pstack": "Configure pstack model roles and reasoning budgets",
     "sharpen": "Deepen a task and return its rewritten prompt",
     "show-me-your-work": "Keep a reviewable decision and evidence trail",
+    "statechart": "Check state transitions and draw counterexample paths",
     "swarm": "Coordinate explicitly requested parallel workers",
     "tdd": "Make a bug executable before implementing its fix",
     "teach": "Explain what changed, how it works, and why",
@@ -92,7 +94,12 @@ def discover(source, files):
         if not description:
             raise ValueError(f"Missing description: {path}")
         description = description[1].strip()
-        if description.startswith('"'):
+        if description == ">-":
+            block = re.search(r"^description: >-\n((?:  \S[^\n]*(?:\n|$))+)", match[1], re.M)
+            if not block:
+                raise ValueError(f"Unsupported folded description: {path}")
+            description = " ".join(line.strip() for line in block[1].splitlines())
+        elif description.startswith('"'):
             description = json.loads(description)
         elif description.startswith("'") and description.endswith("'"):
             description = description[1:-1].replace("''", "'")
@@ -180,14 +187,24 @@ def registration(skill):
     return f'./poteto-skills/{skill["name"]}/'
 
 
-def check(repo):
+def check(repo, *, allow_legacy_descriptions=False):
     lock = json.loads((repo / "vendor/pstack.lock.json").read_text())
     source = repo / "vendor/pstack"
     files = inventory(source)
     if files != lock["files"]:
         raise ValueError("Vendored source bytes, permissions, or file inventory drifted")
     skills = discover(source, files)
-    if skills != lock["skills"]:
+    recorded = lock["skills"]
+    if allow_legacy_descriptions:
+        # Only refresh can repair the old folded-scalar metadata bug. Source
+        # hashes, adapters, registrations and every other field still must match.
+        descriptions = {skill["name"]: skill["description"] for skill in skills}
+        recorded = [
+            {**skill, "description": descriptions.get(skill["name"], skill["description"])}
+            if skill["description"] == "Poteto: >-" else skill
+            for skill in recorded
+        ]
+    if skills != recorded:
         raise ValueError("Skill inventory does not cover the complete source package")
     expected = {skill["name"] for skill in skills}
     actual = {path.name for path in (repo / "poteto-skills").iterdir()}
@@ -206,6 +223,49 @@ def check(repo):
     print(f'OK: {len(skills)} Poteto skills; {len(files)} upstream files match {lock["revision"]}')
 
 
+def check_routing(repo):
+    """Validate the published instruction graph, not model adherence to it."""
+    native = repo / "shared/POTETO-NATIVE.md"
+    sections = re.split(r"^## (.+)\n", native.read_text(), flags=re.M)
+    expected = {
+        (repo / "vendor/pstack" / skill["source"]).resolve()
+        for skill in json.loads((repo / "vendor/pstack.lock.json").read_text())["skills"]
+    }
+    covered = set()
+    owners = set()
+    for title, body in zip(sections[1::2], sections[2::2]):
+        anchor = title.lower().replace(" ", "-")
+        links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", body)
+        paths = set()
+        for link in links:
+            if "://" in link or link.startswith("#"):
+                continue
+            path = (native.parent / link.split("#", 1)[0]).resolve()
+            if not path.is_relative_to(repo) or not path.is_file():
+                raise ValueError(f"Broken Poteto reference: {link}")
+            paths.add(path)
+        sources = paths & expected
+        if not sources:
+            raise ValueError(f"Poteto routing branch has no source skills: {title}")
+        branch_owners = {p for p in paths if p.name == "SKILL.md" and not p.is_relative_to(repo / "vendor")}
+        if not branch_owners:
+            raise ValueError(f"Poteto routing branch has no host owner: {title}")
+        for owner in branch_owners:
+            targets = re.findall(r"\[[^\]]+\]\(([^)]+)\)", owner.read_text())
+            if not any(
+                (owner.parent / target.split("#", 1)[0]).resolve() == native
+                and target.endswith(f"#{anchor}")
+                for target in targets
+            ):
+                raise ValueError(f"{owner.relative_to(repo)} does not load Poteto branch #{anchor}")
+        covered.update(sources)
+        owners.update(branch_owners)
+    if covered != expected:
+        missing = sorted(str(path.relative_to(repo)) for path in expected - covered)
+        raise ValueError(f"Unrouted Poteto skills: {missing}")
+    print(f"OK: {len(covered)} Poteto source skills referenced through {len(owners)} native owners")
+
+
 def install(repo, source, revision):
     if not re.fullmatch(r"[0-9a-f]{40}", revision):
         raise ValueError("Revision must be a full lowercase Git commit SHA")
@@ -222,7 +282,7 @@ def install(repo, source, revision):
     if destination.exists() and not lock_path.exists():
         raise ValueError("Snapshot would overwrite an existing unmanaged directory")
     if lock_path.exists():
-        check(repo)  # Preserve local patches; refresh only a verified managed snapshot.
+        check(repo, allow_legacy_descriptions=True)  # Preserve local patches.
     previous = json.loads(lock_path.read_text())["skills"] if lock_path.exists() else []
     for skill in previous:
         if not re.fullmatch(r"poteto-[a-z0-9]+(?:-[a-z0-9]+)*", skill["name"]):
@@ -261,16 +321,19 @@ def main():
     parser.add_argument("--revision", help="full upstream commit SHA")
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="check the local snapshot and complete registrations")
+    actions.add_argument("--check-routing", action="store_true", help="check the snapshot and native instruction links; execute no skills")
     actions.add_argument("--model-rule", action="store_true", help="print a pstack rule using only the host's Opus/Sol routes; write nothing")
     args = parser.parse_args()
     if args.model_rule:
         if args.source or args.revision:
             parser.error("--model-rule reads host routing; omit --source and --revision")
         print(model_rule(args.repo_root.resolve()))
-    elif args.check:
+    elif args.check or args.check_routing:
         if args.source or args.revision:
-            parser.error("--check reads local state; omit --source and --revision")
+            parser.error("checks read local state; omit --source and --revision")
         check(args.repo_root.resolve())
+        if args.check_routing:
+            check_routing(args.repo_root.resolve())
     else:
         if not args.source or not args.revision:
             parser.error("refresh requires --source and --revision")

@@ -3,6 +3,8 @@ name: docs
 description: "Write or review factual technical documents: READMEs, design specs, research notes, and runbooks. Use for document authoring or review, not ordinary chat, UI copy, or agent instructions."
 ---
 
+For prose in scope, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#writing).
+
 Write documents that readers can understand, verify, and use.
 
 ## Load guidance

@@ -21,6 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/review.excalidraw)
 
+Przy przeglądzie zmian przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#review-and-diagnosis).
+
 Dla zmian interfejsu stosuj [reguły zgodności](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#interface-review) oraz zwykły [wykaz usuniętych sygnałów](https://github.com/malinskibeniamin/skills/blob/main/vendor/jakubkrehel/skills/interface-review/removed-signals.md), aby sprawdzić utracone możliwości po obu stronach różnicy. Wczytaj `visual-review` dla dowodów renderowania. Nie wywołuj automatycznie osobnego `interface-review` ani nie twórz drugiego raportu.
 
 Przeglądaj ustalony zakres. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.

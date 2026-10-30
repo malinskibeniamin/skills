@@ -5,6 +5,8 @@ disable-model-invocation: true
 argument-hint: "What would you like to learn?"
 ---
 
+For context recovery, behavior or rationale explanations, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#orientation-and-explanation).
+
 Learning paths resolve from the invocation workspace; only `*-FORMAT.md` links are skill-relative.
 
 ## Files

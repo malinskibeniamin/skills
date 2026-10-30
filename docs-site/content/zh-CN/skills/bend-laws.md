@@ -18,6 +18,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/bend-laws.excalidraw)
 
+验证变更后的行为或维护验证流程时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification)。
+
 定律是证明必须对每个输入都满足的验收标准。[Bend](https://bend-lang.com) 依据规则的参考模型检查证明。由该模型生成的表格将已发布的代码与定律绑定。
 
 ## 适用范围 [#fit]

@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/hook-audit.excalidraw)
 
+相同修正反覆出現，或技能需要改善時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。
+
 
 稽核 `~/.claude/hook-metrics/`，使用 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/hook-audit/REFERENCE.md) 中的指標、群組和資料缺漏規則。
 

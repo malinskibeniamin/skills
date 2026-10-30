@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/quantify-impact.excalidraw)
 
+测量或报告数值前，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement)。
+
 
 每次创建或更新 PR，以及[检查会话 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 时，都评估影响，即使不发布。复用有效证据；重跑已失效的比较。评估不授予发布权限。
 

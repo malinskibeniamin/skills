@@ -20,6 +20,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
+Przed pomiarem lub raportowaniem liczby przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement).
+
 
 Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) obejmuje ocenę wpływu, nawet bez publikacji. Wykorzystuj aktualne dowody; powtarzaj unieważnione porównania. Ocena nie daje zgody na publikację.
 

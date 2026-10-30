@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/setup-routines.excalidraw)
 
+仅在用户明确要求配置 pstack、Benny 或 webhook，或处理相关问题分诊时，阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#setup-and-automation)。
+
 配置 [Claude Code 例程](https://claude.ai/code/routines)——由定时计划、GitHub 事件或 API 触发的云端托管自动化会话。例程会克隆仓库，并作为完整的 Claude Code 会话运行。钩子和 CLAUDE.md 规则会自动执行约束。
 
 ## 工作原理

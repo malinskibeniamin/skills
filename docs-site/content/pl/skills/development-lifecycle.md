@@ -21,6 +21,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/development-lifecycle.excalidraw)
 
+Przy wieloetapowej implementacji lub publikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution).
+
 Gdy zadanie obejmuje wdrożenie dostarczonego projektu Figma lub obrazu, wczytaj [build-design](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md) dla dowodów źródłowych, mapowania tokenów i porównania szerokości widoku. Zachowaj wymagane stany błędów i zabezpieczenia oraz tę pętlę dostarczania; zgodność z obrazem ich nie uchyla.
 
 Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat; dobieraj pomocnicze umiejętności automatycznie. Przed edycją przeczytaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) dla własności, izolacji i punktów końcowych. Korzystaj z [komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).

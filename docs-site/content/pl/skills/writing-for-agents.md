@@ -19,6 +19,10 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/writing-for-agents.excalidraw)
 
+Gdy poprawka się powtarza lub umiejętność wymaga ulepszenia, przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement).
+
+Pisząc tekst w zakresie zadania, przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing).
+
 Pisz instrukcje dla agentów, które zmieniają zachowanie przy minimalnym użyciu kontekstu.
 Dotyczy to umiejętności, plików `AGENTS.md`, `CLAUDE.md` i wskazanych materiałów.
 

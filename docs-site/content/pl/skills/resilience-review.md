@@ -13,6 +13,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/resilience-review.excalidraw)
 
+Przy zmianach interfejsów, typów lub współdzielonego stanu przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design).
+
 Przegląd Murphy’ego pod kątem wiarygodnych ryzyk, a nie wyczerpujące wyszukiwanie przypadków brzegowych.
 
 ## Najpierw dowody

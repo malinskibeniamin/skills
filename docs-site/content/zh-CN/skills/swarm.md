@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/swarm.excalidraw)
 
+仅在用户明确要求委派时，阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#delegation)。
+
 # Swarm
 
 把相互独立的批量工作拆分到多个通道，逐一验证后再集成。Swarm 执行已有目标；它不替代规划，也不负责交付。并行工作必须由用户通过 `/swarm` 或直接请求明确选择；其他技能不构成授权。

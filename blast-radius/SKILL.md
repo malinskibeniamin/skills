@@ -3,6 +3,8 @@ name: blast-radius
 description: Find non-local breakage from a change and prove the decisive safety invariant with executable evidence. Use for blast radius, what could this break, or a suspicious small diff.
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 # Blast radius
 
 Find what a change can break beyond its diff. Listing callers is reconnaissance, not the result. The result is the one fact the change is safe because of, proven as directly as practical.

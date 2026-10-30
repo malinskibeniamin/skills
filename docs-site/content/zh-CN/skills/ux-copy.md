@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/ux-copy.excalidraw)
 
+编写任务范围内的文字时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing)。
+
 产品术语、完整消息本地化、空状态和破坏性操作流程，加载 [better-writing](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-writing/SKILL.md)。保留本技能的词汇表、结束边界与文案事实要求。
 
 

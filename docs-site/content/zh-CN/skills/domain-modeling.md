@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/domain-modeling.excalidraw)
 
+更改接口、类型或共享状态时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 在设计过程中主动构建并完善项目的领域模型。这是一项*主动的*工作规范——质疑术语、构造边界场景，并在术语表和决策一经明确时立即将其记录下来。（仅仅为了查阅词汇而*阅读* `GLOSSARY.md` 并不算使用这项技能——那只是任何技能都能做到的一行式习惯。这项技能用于变更模型，而不仅仅是使用模型。）
 
 ## 文件结构

@@ -3,22 +3,23 @@ name: grilling
 description: Explore and stress-test plans, decisions, ideas, brainstorming approaches, and UI layouts when a material choice remains open.
 ---
 
-Resolve consequential unknowns, not every detail: no production code or implementation while a material user-reserved decision is open. Invocation does not authorize delegation.
+For forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
+
+Resolve consequential unknowns; no production code or implementation while a material user-reserved decision is open. Invocation grants no delegation.
 
 Plans/RFCs/replies: read [communication](../shared/communication.md).
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
-
 ## 1. Build evidence
 
 Ground request, plan and decisions in repo/tests/docs. Ask only for user-owned preferences, scope, risk appetite or decisions evidence cannot settle. Name the blind spot. Prototype when behavior beats prose.
 
-`/brain-dump` is optional. Preserve every opportunity track and start from its **Answer ledger**: never re-ask **Settled** entries; challenge **Tentative** only when downside matters; ask **Unknown** only when it could invalidate or prioritize a track.
+`/brain-dump` is optional: retain every opportunity track and its **Answer ledger**. Never re-ask **Settled**; challenge **Tentative** only for material downside; ask **Unknown** only if it could invalidate/prioritize a track.
 
 ## 2. Explore mode
 
 Interface/ownership fork: load "codebase-design"; sketch caller use.
 
-With no direction, present 2-3 approaches with trade-offs, reversibility, evidence, and a recommendation. For competing plans, Call the Skill tool with "plan-arbiter". **Challenge variant:** with direction, steelman the best alternative and its disproof.
+Without direction, compare 2-3 approaches with trade-offs, reversibility, evidence and a recommendation. For competing plans, Call the Skill tool with "plan-arbiter". **Challenge variant:** with direction, steelman the best alternative and its disproof.
 
 For customer-facing UI, show an **ASCII wireframe** before questions: each materially different layout in fenced `text`, with real labels, controls, grouping, order, and fixed/scroll regions. Align borders; show structure, not pixels. Desktop/mobile only when composition differs; shared layouts use one sketch plus deltas.
 
@@ -40,9 +41,9 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 **Stop signal:** "no more questions", "just do it", "don't ask", or a bare endpoint ("draft PR") ends asking for the rest of the session. Adopt every open recommendation, list them as assumptions, and continue to the endpoint; pause only for an irreversible or user-reserved decision.
 
-Word questions so yes accepts the recommendation.
+Ask so yes accepts the recommendation.
 
-An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline unless delegation is explicitly authorized; search environment, filesystem, tools, sources. User decisions stay theirs.
+An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline unless delegation is explicitly authorized; inspect environment/filesystem/tools. User decisions stay theirs.
 
 ## 3. Exit
 

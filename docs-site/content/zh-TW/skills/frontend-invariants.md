@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/frontend-invariants.excalidraw)
 
+變更介面、型別或共用狀態時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 這些原則歷經每次技術堆疊遷移後依然適用（UI 套件、路由器、資料層、表單與狀態函式庫都曾遭淘汰，唯獨這些原則屹立不搖）。當不變原則與特定技術堆疊的規則衝突時，以不變原則為準；技術堆疊的運作細節則記載於 `/stack-registry`。
 
 遇到 TypeScript 斷言或被放寬的契約時，使用 [anti-slop 檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md)保留型別證據；只有安全性註解不足以證明斷言合理。

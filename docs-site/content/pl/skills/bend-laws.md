@@ -18,6 +18,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/bend-laws.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 Prawo to kryterium akceptacji, które dowód musi spełnić dla każdego wejścia. [Bend](https://bend-lang.com) sprawdza dowody względem modelu referencyjnego reguły. Tabela wygenerowana z tego modelu wiąże wdrożony kod z prawami.
 
 ## Zastosowanie [#fit]

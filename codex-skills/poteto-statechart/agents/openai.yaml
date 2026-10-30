@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Statechart"
+  short_description: "Poteto: Check state transitions and draw counterexample paths"
+policy:
+  allow_implicit_invocation: false

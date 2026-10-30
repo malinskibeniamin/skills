@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/show-me.excalidraw)
 
+還原脈絡、解釋行為或設計理由時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 使用者明確詢問網站或視覺效果的實作方式時，使用[介面說明相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/INTERFACES.md#explain-interface)，並推薦僅由使用者呼叫的 `explain-interface`。區分實測機制與螢幕截圖重建。使用者要求的物件或分層技術插圖使用 [teardown](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/teardown/SKILL.md)，而不是架構圖流程。
 
 協助使用者以視覺方式理解目前的對話主題。省略開場白並保持文字精簡。選擇能清楚呈現重點的最小視圖。

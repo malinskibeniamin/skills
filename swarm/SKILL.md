@@ -4,6 +4,8 @@ description: Parallel executor for independent bulk work across worktree lanes.
 disable-model-invocation: true
 ---
 
+For explicitly requested delegation only, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#delegation).
+
 # Swarm
 
 Shard independent bulk work across lanes, verify each, then integrate. Swarm executes an

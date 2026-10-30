@@ -3,9 +3,9 @@ name: maintain-verification-skill
 description: Audit a project-local verifier and feature map against source and live behavior. Use when either may be stale or hiding regressions.
 ---
 
-# Maintain a verification skill
+For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
 
-Keep a verifier and its feature map honest. Cover every mapped feature from source and live behavior. Return one outcome: **clean**, **changed**, or **blocked**.
+Cover each mapped feature in source and live behavior. Return **clean**, **changed** or **blocked**.
 
 ## Fence
 

@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/research.excalidraw)
 
+恢复上下文、解释行为或设计理由时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 
 默认以内联方式开展研究；后台工作需要显式委派或使用 `/swarm`。
 

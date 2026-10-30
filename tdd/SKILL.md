@@ -8,7 +8,9 @@ paths:
   - "**/*.unit.{ts,tsx}"
 ---
 
-RED -> GREEN -> REFACTOR protects domain rules, branches, state, validation, async effects, and integration contracts. Types, wiring, copy/styles, and behavior-preserving deletion may use focused verification. Coverage is never a target.
+For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
+
+RED -> GREEN -> REFACTOR for behavior and integration contracts; focused checks for types, wiring, copy/styles and behavior-preserving deletion. Coverage is never a target.
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Test seams and anti-patterns
@@ -16,7 +18,7 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 - **Seams:** test public boundaries. Name the seam; confirm with the user when unclear. No tests at unconfirmed internals. Call the Skill tool with "codebase-design"; state what it catches and misses.
 - **Tautological tests:** expected values need an independent source of truth: literal, worked example, fixture, spec, or observation.
 - **Source-text proxies:** delete implementation/CSS/markup/config token scans posing as runtime proof. Test behavior at a public seam; use static analysis for syntax. Content assertions are for public output only.
-- Use vertical slices: one RED test plus GREEN implementation; bulk tests encode imagined behavior.
+- Use vertical slices: one RED test plus GREEN implementation; bulk tests guess behavior.
 
 ## Workflow
 

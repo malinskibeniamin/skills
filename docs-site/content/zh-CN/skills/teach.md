@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/teach.excalidraw)
 
+恢复上下文、解释行为或设计理由时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 有状态的教学工作区。当前目录用于存储学习状态。
 
 学习路径以调用技能的工作区为基准；只有 `*-FORMAT.md` 链接以技能目录为基准。测验中应变化正确答案的位置，避免位置暗示答案。

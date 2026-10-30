@@ -3,16 +3,15 @@ name: review
 description: Use for evidence-backed review of diff-introduced defects in branches, PRs, WIP, or releases.
 ---
 
-# Review
+Review: read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
-Pin scope. Keep one owner; explicit delegation. Do not edit, commit, push without intent.
-Repairs: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
+Scope. Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
+Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
 Depth/convergence: [operating model](OPERATING-MODEL.md); no added permissions.
-
 ## Review contract
 
-- **Objective**: does the diff achieve its outcome without a credible defect?
+- **Objective**: achieve the outcome without credible defects.
 - **Guardrails**: diff-introduced only; standards separate from product/spec gaps;
   generated files are evidence.
 - **Verification**: Dogfood every runnable change yourself at its real entrypoint.
@@ -31,7 +30,7 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 ### Inspect
 
-1. Read spec, rules, complete diff and callers. Do not trust a PR summary over code. Load `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md` when applicable.
+1. Read spec/rules, full diff, callers/behavior and applicable `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`. Do not trust a PR summary.
 2. For changed assumptions, reverse-trace authoritative producers, schemas, storage,
    consumers and public surfaces. Search by domain concept, field and emitted value,
    not only the changed symbol.

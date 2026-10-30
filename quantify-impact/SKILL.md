@@ -3,11 +3,13 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
-Every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr) assesses impact, even without publishing. Reuse valid evidence; rerun invalid comparisons. Assessment grants no publication permission.
+Before measurements, read [Poteto](../shared/POTETO-NATIVE.md#measurement).
+
+Assess impact, published or not, for every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr). Reuse valid evidence; rerun invalid ones. Assessment grants no publishing authority.
 
 ## Flow
 
-1. **Evidence opportunity scan:** benchmark only when a cheap direct metric could clear a predeclared worthwhile delta and normal variance. Tiny copy/style/test work gets a value sentence.
+1. **Evidence opportunity scan:** benchmark only when a cheap metric can clear a predeclared worthwhile delta and variance. Tiny copy/style/test work gets a value sentence.
 2. **Lock claim before coding:** thesis, primary metric, guardrail, scenario, minimum worthwhile delta. Never pick the winner afterward.
 3. **Product lane + Codebase lane:** one must improve; the other must not materially regress.
    - Product: capability, task success, repro, errors, steps, latency, resources.
@@ -21,13 +23,13 @@ Every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr) asse
    - No useful metric and no performance claim: normal value summary, no impact artifact.
    - Regression: fix, narrow, or stop.
 
-Filter guardrails likewise; omit negligible movement.
+Filter guardrails; omit negligible movement.
 
-For library-runtime/compiler-cost measurement, load [performance analysis](../t3code-skills/performance-analysis/SKILL.md).
+For runtime/compiler-cost measurements, load [performance analysis](../t3code-skills/performance-analysis/SKILL.md).
 
 ## PR output
 
-Provide an impact bullet: user/maintainer improvement and evidence. Tiny copy/style changes get value linked to visual before/after, not invented metrics. Only threshold-clearing evidence replaces it with:
+Impact bullet: user/maintainer improvement and evidence. Tiny copy/style changes get value linked to visual before/after, not invented metrics. Only threshold-clearing evidence replaces it with:
 
 ```md
 ## Proven impact
@@ -38,4 +40,4 @@ Provide an impact bullet: user/maintainer improvement and evidence. Tiny copy/st
 Method: `<command, fixture, runs, environment>`.
 ```
 
-Put this in the PR body through `/commit-push-pr` or `/stacked-prs`. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.
+Use in PRs through `/commit-push-pr` or `/stacked-prs`. `/make-pr-easy-to-review` reuses it when explicitly requested. Keep suppressed raw data only in local evidence when reproducibility needs it. Never emit an empty table; explicit unproven performance claims say `Value not proven` without negligible numbers.

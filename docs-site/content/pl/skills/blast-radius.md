@@ -13,6 +13,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/blast-radius.excalidraw)
 
+Przy weryfikowaniu zmienionego zachowania lub utrzymaniu weryfikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#verification).
+
 Znajdź, co zmiana może zepsuć poza zakresem różnicy. Lista miejsc wywołania to rozpoznanie, a nie wynik. Wynikiem jest jeden fakt, dzięki któremu zmiana jest bezpieczna, potwierdzony tak bezpośrednio, jak to praktycznie możliwe.
 
 ## Kontrakt

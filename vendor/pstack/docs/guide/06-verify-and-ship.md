@@ -115,6 +115,16 @@ It writes a project-local skill that tells the next agent whether a change touch
 
 The skill also records which code each check covers and the commit where the check last matched it. Merges and refactors that skip the skill can leave the check passing on a description of code that's gone. After them, run [`/maintain-formal-verification-skill`](../../skills/maintain-formal-verification-skill/SKILL.md). It updates the verification from the code, reruns it, shows that each updated check can still fail, and tells you whether each failure is drift in the verification or a bug in the code.
 
+## Show the behavior as a statechart
+
+A counterexample in model terms convinces you. The PM or designer who owns the behavior needs to see it in their terms. Run:
+
+```text
+/statechart what the user sees when they edit a note offline
+```
+
+[`/statechart`](../../skills/statechart/SKILL.md) draws a Mermaid statechart of what the user sees, generated from a TLA+ model, so the picture and the checked model can't drift apart. The reader's rules ("you never see Synced while you're offline") become invariants. The chart marks each state that breaks a rule, and the report gives the shortest path to it in the reader's words. Before the hand-off, the agent reproduces each bug path in the real code, so a modeling error doesn't reach the reader as a bug.
+
 ## Open the PR
 
 ```text

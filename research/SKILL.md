@@ -3,6 +3,8 @@ name: research
 description: Research primary sources and save cited findings. Use when durable reports, documentation surveys, API fact sets, reading passes, or design-rationale archaeology are required.
 ---
 
+For context recovery, behavior or rationale explanations, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#orientation-and-explanation).
+
 Research inline by default; background work requires explicit delegation or `/swarm`.
 
 1. Trace every claim to **primary sources**: official docs, source, specs, first-party APIs.

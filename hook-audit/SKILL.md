@@ -3,9 +3,11 @@ name: hook-audit
 description: Analyze hook effectiveness and session telemetry. Use when auditing hook latency, violations, zero-fire rules, severity, manifest drift, skill firing, session trends, or retrospectives.
 ---
 
-Audit `~/.claude/hook-metrics/` using [REFERENCE.md](REFERENCE.md) for metrics, cohorts, and data gaps.
+Repeated corrections/skill improvements: read [Poteto](../shared/POTETO-NATIVE.md#harness-improvement).
 
-Modes: default/`--hooks` activity; `--retro` adds flow and environment findings; `--all` includes retro, latency, skill firing, drift.
+Audit `~/.claude/hook-metrics/` per [REFERENCE.md](REFERENCE.md).
+
+Modes: default/`--hooks` activity; `--retro` adds flow/environment; `--all` also adds latency, skill firing and drift.
 
 ## Flow
 
@@ -15,10 +17,10 @@ Modes: default/`--hooks` activity; `--retro` adds flow and environment findings;
 4. Retro: follow [Session-environment retrospective](REFERENCE.md#session-environment-retrospective); add available retro metrics. Missing telemetry does not block transcript findings.
 5. All: inspect `skill-fires.jsonl`; run `bash scripts/generate-hook-configs.sh --check`.
 6. Model-switch policy: use `/quantify-impact`; success/rework is primary, cache-write cost a guardrail.
-7. Rank at most five actions across telemetry and session findings by impact. Recommend only unless implementation is requested.
+7. Rank at most five actions by telemetry/session impact. Recommend only unless edits were requested.
 
 Before deletion, shadow via `HOOK_SHADOW_RULES` in a representative, version-qualified trial; compare outcomes/violations. Never shadow strict safety/permission.
 
 ## Done
 
-Report available metrics/values, sample size, 7-day trend, next action; mark gaps unavailable. Below five comparable real sessions is preliminary. Cite source files and exact `harness_version` + `model` cohort for prune/severity changes.
+Report metrics/values, sample size, 7-day trend, next action; name gaps. Below five comparable real sessions is preliminary. Cite source files and exact `harness_version` + `model` cohort for prune/severity changes.

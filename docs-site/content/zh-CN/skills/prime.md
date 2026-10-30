@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/prime.excalidraw)
 
+恢复上下文、解释行为或设计理由时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation)。
+
 启动简报：仓库状态、目标、接下来要阅读的内容。
 
 对于来自其他智能体、会话或 PR 声明的线索，使用 `/agent-watchdog`；对于相互冲突的交接内容或计划，使用 `/plan-arbiter`；对于当前的外部或 API 事实，使用 `/read-the-damn-docs`。

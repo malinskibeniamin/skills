@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/resilience-review.excalidraw)
 
+變更介面、型別或共用狀態時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 針對可信風險進行墨菲檢查，而非窮舉所有邊界情況。
 
 ## 證據優先

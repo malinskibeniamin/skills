@@ -9,6 +9,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/ux-copy.excalidraw)
 
+Pisząc tekst w zakresie zadania, przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing).
+
 Dla słownictwa produktu, lokalizacji całych komunikatów, pustych stanów i działań destrukcyjnych wczytaj [better-writing](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-writing/SKILL.md). Zachowaj słownik, punkt zakończenia i wymagania rzetelnego tekstu tej umiejętności.
 
 

@@ -3,14 +3,14 @@ name: create-verification-skill
 description: Create a project-local skill that launches, drives, observes, and cleans up the real app. Use when a repository lacks a repeatable way to prove UI, CLI, API, or service behavior.
 ---
 
-# Create a verification skill
+For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
 
-Reuse existing verifiers regardless of name. T3 Code: load
+Reuse any existing verifier. T3 Code: load
 [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
 [mobile](../t3code-skills/test-t3-mobile/SKILL.md) per affected surface;
 their adapters own native rules.
 
-Only uncovered flows need a cold-start verifier: canonical skill root, else
+For uncovered flows, use the canonical skill root, else
 `.agents/skills/verify-<app>/`. Never mirror host roots or duplicate covered flows.
 
 ## Interview the repository
@@ -23,7 +23,7 @@ Discover before asking:
 - **Observe:** screenshots, accessibility snapshots, transcripts, responses, logs, exit codes, and durable side effects.
 - **Isolate:** per-run ports, profiles, data, fixtures. Never drive a shared human instance.
 
-If launch fails, report its failing prerequisite, not invented instructions.
+Report failed launch prerequisites; never invent instructions.
 
 For agent-DX or worktree setup requests, use [the capability-gap and cold-start checks](references/agent-dx.md).
 

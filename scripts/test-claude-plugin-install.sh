@@ -175,7 +175,7 @@ done < <(jq -r '.skills[]' "$manifest")
   fail "installed Claude skill count does not match the manifest"
 
 # Check upstream bytes and every adapter dependency inside the actual plugin cache.
-python3 "$installed_path/scripts/vendor-poteto.py" --check
+python3 "$installed_path/scripts/vendor-poteto.py" --check-routing
 bash "$installed_path/evals/run.sh" security-audit-vendored-skill
 python3 "$installed_path/scripts/vendor-t3code-skills.py" --check
 python3 "$installed_path/scripts/vendor-tstack.py" --check

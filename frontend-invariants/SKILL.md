@@ -6,7 +6,9 @@ paths:
   - "**/*.ts"
 ---
 
-These survive stack migrations and override conflicting stack mechanics in `/stack-registry`. Every tolerated escape hatch trains later sessions: fix at source; suppress only with a same-line reason.
+When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+
+Override conflicting `/stack-registry` mechanics. Fix at source; suppress only with a same-line reason: escapes train later sessions.
 
 For TypeScript assertions or widened contracts, use [anti-slop checks](../shared/anti-slop.md)
 to preserve type evidence; a safety comment alone does not justify a cast.
@@ -26,9 +28,9 @@ to preserve type evidence; a safety comment alone does not justify a cast.
 
 ## Design system
 
-8. Use color/spacing/type tokens; round one-offs to the scale, never hardcode when a token exists.
+8. Use color/spacing/type tokens; round one-offs to scale, never hardcode existing tokens.
 9. Fix shared components at source; no forks, inline restyles, or deep selectors. Keep feature-specific rows beside their feature, not as single-consumer primitive variants. Verify computed styles across cascade layers and combined flag/theme/interaction variants; low specificity alone does not guarantee utility precedence. A temporary fork needs a named defect and upstream ticket.
-10. Search before building. Repeated consumer misuse means fix the API.
+10. Search first; fix APIs repeatedly misused by consumers.
 
 ## Interaction
 
@@ -43,5 +45,5 @@ to preserve type evidence; a safety comment alone does not justify a cast.
 16. Migrations mechanically freeze old patterns. Feature-flag removal is definition of done.
 17. Keep PRs single-purpose; migrations migrate; deferrals link tickets; dependency bumps and registry syncs ship separately.
 18. Use precise names: no route/file/label acronyms; booleans are predicates.
-19. Source domain inheritance, units, naming, and SLAs from cited owners; never assume UI truth.
+19. Cite owners for domain inheritance, units, names and SLAs; never assume UI truth.
 20. Review security: no secrets in history; redact logs/replays/dumps; authz fails closed; reads never mutate; audit URL persistence leaks.

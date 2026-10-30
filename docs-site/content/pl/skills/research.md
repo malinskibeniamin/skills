@@ -12,6 +12,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/research.excalidraw)
 
+Przy odtwarzaniu kontekstu lub wyjaśnianiu zachowania albo uzasadnienia przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation).
+
 
 Domyślnie prowadź badania bezpośrednio w bieżącym kontekście. Praca w tle wymaga jawnego delegowania lub użycia `/swarm`.
 

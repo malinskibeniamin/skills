@@ -6,6 +6,8 @@ paths:
   - "**/laws/**"
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 A law is an acceptance criterion that a proof must meet for every input. [Bend](https://bend-lang.com)
 checks the proofs against a reference model of the rule. A table generated from that model
 ties the shipped code to the laws.

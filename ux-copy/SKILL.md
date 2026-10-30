@@ -3,8 +3,10 @@ name: ux-copy
 description: Write or review product UI copy. Use when changing headings, labels, buttons, help, messages, navigation, i18n strings, or product terminology.
 ---
 
+For prose, read [Poteto](../shared/POTETO-NATIVE.md#writing).
+
 Read [REFERENCE.md](REFERENCE.md) for tone, capitalization, budgets, and examples.
-State one useful point per sentence. Cut filler and repetition.
+One point per sentence; no filler/repetition.
 Preserve safety, limits, uncertainty, and accessible labels.
 Use project glossary and canonical product names; [GLOSSARY.md](GLOSSARY.md) is product-specific.
 
@@ -14,7 +16,7 @@ For vocabulary, whole-message localization, empty states and destructive
 flows, load [better-writing](../jakubkrehel-skills/better-writing/SKILL.md).
 Keep this skill's glossary, endpoint and factual-copy requirements.
 
-Draft the shortest accurate string per element. Check the whole view.
+Draft minimal accurate strings; check the whole view.
 Make only requested changes. Flag unverified facts; never invent behavior,
 permissions, causes, or recovery. Do not imply human approval.
 
@@ -26,8 +28,8 @@ Report missing context; do not claim visual checks from source. Review does not 
 
 ## Scope and checks
 
-Include TSX/JSX, navigation, i18n, and UI around chat. Exclude prose documentation,
-generated reference descriptions, and conversational replies. Explicit project rules win.
+Scope: TSX/JSX, navigation, i18n and chat UI; exclude docs,
+generated reference descriptions and replies. Project rules win.
 
 Install executable PostToolUse `Edit|Write` hooks from `scripts/`: `ux-copy-check.sh`,
 `prose-style-check.sh`, `_hook-lib.sh`. Preserve host configuration. UX checks warn on

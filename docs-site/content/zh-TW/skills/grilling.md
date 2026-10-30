@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/grilling.excalidraw)
 
+面臨重要的產品或設計選擇時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning)。
+
 
 解決影響重大的未知事項，而非每項細節：只要仍有保留給使用者決定的重大決策尚未定案，就不得撰寫正式環境程式碼或進行實作。呼叫此技能並不代表授權委派。
 

@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/grilling.excalidraw)
 
+面临重要的产品或设计选择时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning)。
+
 
 盘问旨在解决影响重大的未知因素，而不是要求明确每个细节：只要存在由用户保留决定权的重大决策，就不得编写生产代码或进行实现。调用此技能并不代表授权委派任务。
 

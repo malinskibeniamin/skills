@@ -11,6 +11,8 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/prime.excalidraw)
 
+Przy odtwarzaniu kontekstu lub wyjaśnianiu zachowania albo uzasadnienia przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#orientation-and-explanation).
+
 Skrót startowy: stan repozytorium, cel, kolejne materiały do przeczytania.
 
 Użyj `/agent-watchdog` w przypadku danych początkowych z innego agenta, sesji lub deklaracji w PR, `/plan-arbiter` w przypadku konkurencyjnych przekazań lub planów oraz `/read-the-damn-docs` w celu uzyskania aktualnych informacji zewnętrznych lub dotyczących API.

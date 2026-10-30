@@ -17,6 +17,8 @@ type: skill
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/frontend-invariants.excalidraw)
 
+更改接口、类型或共享状态时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 这些原则经受住了每一次技术栈迁移（UI 工具包、路由器、数据层、表单库和状态库都被淘汰了，而这些原则始终保留）。当不变量与特定技术栈的规则冲突时，以不变量为准；技术栈的具体机制记录在 `/stack-registry` 中。
 
 遇到 TypeScript 断言或被放宽的契约时，使用 [anti-slop 检查](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md)保留类型证据；仅有安全性注释不足以证明断言合理。

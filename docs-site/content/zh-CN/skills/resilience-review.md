@@ -9,6 +9,8 @@ sidebar:
 
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/resilience-review.excalidraw)
 
+更改接口、类型或共享状态时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#design)。
+
 针对可信风险执行墨菲检查，而不是穷举各种边缘情况。
 
 ## 证据优先
