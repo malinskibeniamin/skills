@@ -9,6 +9,10 @@ allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(vitest 
 
 Review the session's own changes. You have context about what was intended -- use it to find what's missing, not just what's wrong.
 
+Apply the [two-kind review contract](../shared/review-contract.md). Keep optional scope/
+direction advice in `simplification_opportunities`, not defect findings. Run deterministic
+checks separately; report their result without duplicating lint/formatting diagnostics.
+
 ## Required Reading
 
 Walk through [karpathy-failure-modes.md](./karpathy-failure-modes.md) against your own changes. Include `karpathy_checks` in output. A `fail` on any CRITICAL item blocks `status: APPROVED`.
@@ -64,7 +68,7 @@ Apply [references/review-evidence.md](references/review-evidence.md): missing re
 Output a single JSON block per [findings-schema.md](references/findings-schema.md).
 
 - Set `reviewer` to `"self-reviewer"`
-- Be honest about confidence -- if you're guessing, set confidence <0.60
+- Report defects only after tracing their concrete path; put uncertain claims in evidence limits, not low-confidence findings
 - Prefer `safe_auto` classification for trivial fixes (missing imports, typos)
 - Use `gated_auto` for anything that changes behavior
 - Include `testing_gaps` and `simplification_opportunities` arrays even if empty

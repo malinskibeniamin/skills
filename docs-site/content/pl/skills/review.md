@@ -27,7 +27,7 @@ Dla zmian interfejsu stosuj [reguły zgodności](https://github.com/malinskibeni
 
 Przeglądaj ustalony zakres. Zachowaj jednego właściciela; delegowanie wymaga jawnej zgody. Nie edytuj, nie commituj, nie wypychaj ani nie publikuj bez jawnej intencji. Żądane naprawy przechodzą do [dostarczania autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) w nazwanym zakresie.
 
-Dobierz głębokość i zasady zbieżności według [modelu przeglądu](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md); ryzyko zmienia zakres kontroli, nie uprawnienia.
+Dobierz głębokość i zasady zbieżności według [modelu przeglądu](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md); ryzyko zmienia zakres kontroli, nie uprawnienia. Przeczytaj też [kontrakt dwóch rodzajów przeglądu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md).
 
 ## Kontrakt przeglądu [#review-contract]
 

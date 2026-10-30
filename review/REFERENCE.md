@@ -104,6 +104,8 @@ Verification: <commands and real-entrypoint replay>
 Counts: <P0/P1/P2>
 Value: product: <ktlo|qol|feature|taste> -- <justified|thin|unjustified> -- <beneficiary, trigger, evidence>
 Truth: lie-detector: <truthful|suspect|lying> -- merge <ready|not proven> -- <evidence>
+Judgment: scope <aligned|concern + evidence>; direction <aligned|trade-off + evidence>; owner <decision or none>
+Risk: <reachable consequence, reversibility and evidence limits>; scrutiny <recommendation, not a new approval gate>
 Verdict: approve | changes required | blocked by missing evidence
 Residual limits: <unverified external behavior or none>
 ```

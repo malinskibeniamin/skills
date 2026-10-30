@@ -17,6 +17,10 @@ const operatingModel = readFileSync(
   new URL("../../review/OPERATING-MODEL.md", import.meta.url),
   "utf8",
 );
+const reviewContract = readFileSync(
+  new URL("../../shared/review-contract.md", import.meta.url),
+  "utf8",
+);
 
 export default {
   agent: "claude-code",
@@ -38,6 +42,7 @@ export default {
       ".claude/skills/review/REFERENCE.md": reference,
       ".claude/skills/review/DEEP-AUDIT.md": deepAudit,
       ".claude/skills/review/OPERATING-MODEL.md": operatingModel,
+      ".claude/skills/shared/review-contract.md": reviewContract,
     });
     await sandbox.runCommand("npm", ["install", "-g", "bun"]);
   },
