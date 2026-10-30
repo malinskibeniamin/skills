@@ -3,6 +3,8 @@ name: product
 description: "Keep work on track to business value: one lane, beneficiary, why now, evidence, reachability, smallest reversible slice. Use on every PR, plan, auto-review, or drift check."
 ---
 
+For a material product or design fork, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#product-and-planning).
+
 # Product
 
 Does it earn its cost and reach its beneficiary? Code defects stay in `/review`,

@@ -3,6 +3,8 @@ name: grilling
 description: Explore and stress-test plans, decisions, ideas, brainstorming approaches, and UI layouts when a material choice remains open.
 ---
 
+For a material product or design fork, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#product-and-planning).
+
 Resolve consequential unknowns, not every detail: no production code or implementation while a material user-reserved decision is open. Invocation does not authorize delegation.
 
 Plans/RFCs/replies: read [communication](../shared/communication.md).

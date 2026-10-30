@@ -115,7 +115,7 @@ installed_skill_count="$(
   fail "installed Codex skill count does not match the source"
 
 # Check upstream bytes and every proxy dependency inside the actual plugin cache.
-python3 "$installed_path/scripts/vendor-poteto.py" --check
+python3 "$installed_path/scripts/vendor-poteto.py" --check-routing
 python3 "$installed_path/scripts/vendor-t3code-skills.py" --check
 python3 "$installed_path/scripts/vendor-tstack.py" --check
 python3 "$installed_path/scripts/vendor-jakubkrehel.py" --check

@@ -3,6 +3,8 @@ name: dogfood
 description: Use after each material behavior slice and before handoff or shipping to exercise runnable work at its real entrypoint.
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 # Dogfood
 
 A material runnable slice changes a real entrypoint or public seam.

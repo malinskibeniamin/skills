@@ -4,6 +4,8 @@ description: Move issues through triage roles and prepare agent-ready work.
 disable-model-invocation: true
 ---
 
+For explicitly requested pstack, Benny or webhook setup/triage, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#setup-and-automation).
+
 # Triage
 
 Move issues through a small role state machine. For configured external pull requests, a

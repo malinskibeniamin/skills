@@ -3,6 +3,8 @@ name: quantify-impact
 description: Measure whether a change made the product or codebase meaningfully better. Use when reproducible evidence would clarify whether a feature, fix, refactor, or upgrade is worth merging.
 ---
 
+Before measuring or reporting a number, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#measurement).
+
 Every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr) assesses impact, even without publishing. Reuse valid evidence; rerun invalid comparisons. Assessment grants no publication permission.
 
 ## Flow

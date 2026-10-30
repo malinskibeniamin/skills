@@ -3,6 +3,8 @@ name: review
 description: Use for evidence-backed review of diff-introduced defects in branches, PRs, WIP, or releases.
 ---
 
+For diff review, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#review-and-diagnosis).
+
 # Review
 
 Pin scope. Keep one owner; explicit delegation. Do not edit, commit, push without intent.

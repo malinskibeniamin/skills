@@ -3,6 +3,8 @@ name: create-verification-skill
 description: Create a project-local skill that launches, drives, observes, and cleans up the real app. Use when a repository lacks a repeatable way to prove UI, CLI, API, or service behavior.
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 # Create a verification skill
 
 Reuse existing verifiers regardless of name. T3 Code: load

@@ -3,6 +3,8 @@ name: development-lifecycle
 description: "Run React, TypeScript, and UI implementation from a high-level outcome through self-verification."
 ---
 
+For multi-step implementation or publication, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#execution).
+
 Author front door: `/work`; one outcome; auto-select helpers. Before edits,
 read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
 Use [communication](../shared/communication.md) and [load helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).

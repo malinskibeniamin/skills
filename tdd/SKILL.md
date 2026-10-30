@@ -8,6 +8,8 @@ paths:
   - "**/*.unit.{ts,tsx}"
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 RED -> GREEN -> REFACTOR protects domain rules, branches, state, validation, async effects, and integration contracts. Types, wiring, copy/styles, and behavior-preserving deletion may use focused verification. Coverage is never a target.
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 

@@ -3,6 +3,8 @@ name: test-audit
 description: "Audit tests for value. Use when reviewing, sweeping, or pruning low-value, duplicative, or implementation-coupled tests and their test-only production seams, or gating a new test."
 ---
 
+When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
+
 Three modes, one value bar. Authoring mode gates every new or changed test at write time; `/tdd` routes here. Audit mode runs focused sweeps of tests that re-assert source, duplicate stronger proof, couple behavior to implementation, or keep test-only production seams alive. Continue broad audits as separate coherent follow-up PRs; optimize for confidence, not deletion count. Campaign mode prunes one whole subsystem's test surface (every test file a package, app, or core area owns); before starting one, read [CAMPAIGN.md](CAMPAIGN.md).
 
 ## Authoring gate

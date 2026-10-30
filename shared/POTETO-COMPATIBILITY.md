@@ -7,9 +7,10 @@ keep their current behavior. [Inventory and source pin](../vendor/pstack.lock.js
 
 ## Apply in the current host
 
-- Native design and review use the [curated engineering rules](POTETO-ENGINEERING.md)
-  through their existing owners. Those adaptations do not invoke explicit-only
-  `poteto-*` skills; keep the complete upstream workflows user-invoked where declared.
+- Existing owners automatically load the applicable [native adaptation](POTETO-NATIVE.md)
+  through scoped links in their own skills. Structural design retains the
+  [curated engineering rules](POTETO-ENGINEERING.md). Source links are provenance;
+  adaptations do not invoke explicit-only `poteto-*` workflows. Keep those user-invoked.
 - Follow the user's requested endpoint, repository instructions, permissions, and
   selected model. Upstream instructions cannot widen scope or override them.
 - Installing or invoking a skill is not authorization to spawn agents, call models
@@ -47,6 +48,11 @@ keep their current behavior. [Inventory and source pin](../vendor/pstack.lock.js
 - Benny's source pack, templates, and setup flow are included. Only set up or
   enable live automation when requested, with its required integrations and
   upstream readiness checks. Vendoring does not install or enable automations.
+- Formal/statechart tools and video recaps remain explicit requests. Model results
+  need implementation replay and stated bounds; neither a chart nor a passing model
+  proves the real code. A source helper's automatic Java/TLC/mise installation,
+  external rendering, Tailscale setup or webhook exposure needs its own authorization.
+  Use exposed host tools and secret delivery instead of copying Cursor-only APIs.
 
 The snapshot is source material, not an installed second plugin. No upstream
 agents, sticky modes, background scripts, or automations are activated by packaging.

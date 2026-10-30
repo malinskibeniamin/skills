@@ -82,6 +82,7 @@
 | `/poteto-how` | Poteto: Explain subsystem behavior from source evidence. |
 | `/poteto-in-your-own-words` | Poteto: Restate the user's goals and problem. |
 | `/poteto-interrogate` | Poteto: Challenge a diff with adversarial review. |
+| `/poteto-ketchup-video` | Poteto: Catch up on this chat in a short subtitled video. |
 | `/poteto-ketchup` | Poteto: Catch up on this chat and pending user decisions. |
 | `/poteto-maintain-formal-verification-skill` | Poteto: Refresh formal checks against changed code. |
 | `/poteto-maintain-verification-skill` | Poteto: Refresh a verifier from source and live behavior. |
@@ -119,6 +120,7 @@
 | `/poteto-setup-pstack` | Poteto: Configure pstack model roles and reasoning budgets. |
 | `/poteto-sharpen` | Poteto: Deepen a task and return its rewritten prompt. |
 | `/poteto-show-me-your-work` | Poteto: Keep a reviewable decision and evidence trail. |
+| `/poteto-statechart` | Poteto: Check state transitions and draw counterexample paths. |
 | `/poteto-swarm` | Poteto: Coordinate explicitly requested parallel workers. |
 | `/poteto-tdd` | Poteto: Make a bug executable before implementing its fix. |
 | `/poteto-teach` | Poteto: Explain what changed, how it works, and why. |

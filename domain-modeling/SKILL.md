@@ -3,6 +3,8 @@ name: domain-modeling
 description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.
 ---
 
+When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+
 Actively challenge, resolve, and record domain terms/decisions while designing. Merely reading `GLOSSARY.md` is not domain modeling.
 
 ## Files

@@ -548,18 +548,22 @@ host adapter is registered; no browser, runtime dependency or connector is insta
 
 `/cli-for-agents` adds Cursor's guidance for non-interactive, composable CLIs through a host-safe adapter. [Pinned sources, licenses, selection, and refresh](shared/CURSOR-SKILLS-CREDITS.md) cover the Cursor recheck; provider-specific integrations and duplicate workflows remain unregistered.
 
-The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **59 skills** from pstack **0.15.29** (56 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`88d47514b82e7c44f00f2b2a72ff6dd12158038c`](https://github.com/cursor/plugins/tree/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json).
+The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **61 skills** from pstack **0.15.36** (58 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`4dd1d05818d19792e7cd6e818f1667f95f7e1dbe`](https://github.com/cursor/plugins/tree/4dd1d05818d19792e7cd6e818f1667f95f7e1dbe/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json).
 
-The refresh adds `/poteto-create-formal-verification-skill`, `/poteto-maintain-formal-verification-skill`, `/poteto-in-your-own-words`, and `/poteto-sharpen`. These remain explicit-only; importing them runs no verifier or setup.
+The refresh adds `/poteto-statechart` and `/poteto-ketchup-video`, including statechart scripts and fixtures. Both remain explicit-only; importing them runs no verifier, renderer, setup or installer.
+
+Existing lifecycle, design, domain, planning, testing, verification, review, diagnosis, impact, research, writing and setup skills now load scoped [native Poteto adaptations](shared/POTETO-NATIVE.md). All 61 source skills have an owner path; no extra `/poteto-*` invocation is needed for the adapted guidance. Complete upstream workflows retain their explicit invocation policy, and delegation/setup remains opt-in. The routing check proves links and coverage, not agent adherence.
 
 Use `/poteto-mode`, `/poteto-how`, `/poteto-architect`, `/poteto-interrogate`, or any `/poteto-<upstream-folder>` skill through Claude or Codex. Every upstream `SKILL.md`, including the Benny automation pack, has a registered adapter in `poteto-skills/`; none are excluded. The complete inventory is linked above; authored-skill docs stay separate from imported source. The prefix avoids replacing this harness's `/tdd`, `/swarm`, `/teach`, `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Upstream invocation policies are preserved. [Compatibility rules](shared/POTETO-COMPATIBILITY.md) keep the requested endpoint, selected model, host tools, and explicit delegation/automation authorization intact. Installation activates no automation or upstream agent. `/poteto-help` guides setup and skill selection; `/poteto-ketchup` summarizes this chat and pending decisions. Active roles use only Opus 5.5 and GPT-6.1 Sol at `xhigh`; upstream Grok defaults are inert source material, not permitted routes.
 
-Verify the snapshot with `python3 scripts/vendor-poteto.py --check`. Refresh from a separate checkout of `cursor/plugins` at a reviewed full SHA:
+Verify bytes and registrations with `python3 scripts/vendor-poteto.py --check`; include native owner/source wiring with `python3 scripts/vendor-poteto.py --check-routing`. Refresh from a separate checkout of `cursor/plugins` at a reviewed full SHA:
 
 ```bash
 python3 scripts/vendor-poteto.py --model-rule # print the host's two-model rule; writes nothing
 python3 scripts/vendor-poteto.py --source /path/to/plugins/pstack --revision <full-commit-sha>
 bash scripts/generate-skill-catalog.sh
+bunx biome format --write .claude-plugin/plugin.json
+python3 scripts/vendor-poteto.py --check-routing
 ```
 
 The command discovers every skill recursively, copies the complete source tree unchanged, records file hashes and executable permissions, and generates namespaced adapters and Claude registrations. The catalog generator then derives Codex proxies and router entries from that inventory. Vendored Cursor runtime code is not reformatted or checked against this repository's toolchain.

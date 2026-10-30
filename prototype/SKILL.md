@@ -3,6 +3,8 @@ name: prototype
 description: Build disposable evidence for unresolved logic, interaction, or visual questions. Use when runnable evidence would resolve behavior or UI uncertainty before commitment.
 ---
 
+For a material product or design fork, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#product-and-planning).
+
 Answer one named question with evidence, not an early production branch.
 
 Choose cheapest faithful shape: logic/state executable model ([LOGIC.md](LOGIC.md)); UI several meaningful variants ([UI.md](UI.md)); API/tool minimal sandbox/fixture call.

@@ -3,6 +3,8 @@ name: hook-audit
 description: Analyze hook effectiveness and session telemetry. Use when auditing hook latency, violations, zero-fire rules, severity, manifest drift, skill firing, session trends, or retrospectives.
 ---
 
+When a correction repeats or a skill needs improvement, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#harness-improvement).
+
 Audit `~/.claude/hook-metrics/` using [REFERENCE.md](REFERENCE.md) for metrics, cohorts, and data gaps.
 
 Modes: default/`--hooks` activity; `--retro` adds flow and environment findings; `--all` includes retro, latency, skill firing, drift.

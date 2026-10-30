@@ -106,6 +106,31 @@ class PotetoSyncTest(unittest.TestCase):
         after = {p.relative_to(self.repo): p.read_bytes() for p in self.repo.rglob("*") if p.is_file()}
         self.assertEqual(before, after)
 
+    def test_folded_description_preserves_source_and_explicit_invocation(self):
+        original = self.write_source(
+            "skills/make-bot-ui/SKILL.md",
+            "---\nname: make-bot-ui\ndescription: >-\n"
+            "  Build a custom UI that wakes a bot\n"
+            "  over a webhook.\n"
+            "disable-model-invocation: true\n---\nFull instructions.\n",
+        ).read_bytes()
+        self.install()
+        lock = json.loads((self.repo / "vendor/pstack.lock.json").read_text())
+        skill = next(s for s in lock["skills"] if s["name"] == "poteto-make-bot-ui")
+        self.assertEqual(skill["description"], "Poteto: Build a custom UI that wakes a bot over a webhook.")
+        adapter = (self.repo / "poteto-skills/poteto-make-bot-ui/SKILL.md").read_text()
+        self.assertIn("disable-model-invocation: true\n", adapter)
+        self.assertEqual((self.repo / "vendor/pstack/skills/make-bot-ui/SKILL.md").read_bytes(), original)
+        result = self.sync("--check")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+        # Earlier importers recorded the folded marker instead of its text.
+        skill["description"] = "Poteto: >-"
+        (self.repo / "vendor/pstack.lock.json").write_text(json.dumps(lock))
+        self.assertNotEqual(self.sync("--check").returncode, 0)
+        self.install()
+        self.assertEqual(self.sync("--check").returncode, 0)
+
     def test_adapter_metadata_is_bounded_without_rewriting_upstream(self):
         source = self.write_source(
             "skills/tdd/SKILL.md",
@@ -121,6 +146,42 @@ class PotetoSyncTest(unittest.TestCase):
         self.assertNotIn("Use when", description)
         self.assertIn("disable-model-invocation: true", adapter)
         self.assertEqual((self.repo / "vendor/pstack/skills/tdd/SKILL.md").read_bytes(), original)
+
+    def test_native_routing_checks_complete_sources_and_reachable_owners(self):
+        self.install()
+        native = self.repo / "shared/POTETO-NATIVE.md"
+        native.parent.mkdir()
+        guidance = (
+            "# Native Poteto composition\n\n## Verification\n\n"
+            "Owner: [TDD](../tdd/SKILL.md).\n\n"
+            "Sources: [tdd](../vendor/pstack/skills/tdd/SKILL.md), "
+            "[mode](../vendor/pstack/skills/poteto-mode/SKILL.md), "
+            "[setup](../vendor/pstack/automations/benny/skills/setup-benny/SKILL.md).\n"
+        )
+        owner = self.repo / "tdd/SKILL.md"
+        owner.write_text("Read [verification](../shared/POTETO-NATIVE.md#verification).\n")
+        native.write_text(guidance)
+        before = {p: p.read_bytes() for p in self.repo.rglob("*") if p.is_file()}
+        result = self.sync("--check-routing")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(before, {p: p.read_bytes() for p in self.repo.rglob("*") if p.is_file()})
+
+        native.write_text(guidance.replace("[tdd](../vendor/pstack/skills/tdd/SKILL.md), ", ""))
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Unrouted Poteto skills", result.stderr)
+
+        native.write_text(guidance)
+        owner.write_text("Existing TDD without automatic composition.\n")
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("does not load", result.stderr)
+
+        owner.write_text("Read [verification](../shared/POTETO-NATIVE.md#verification).\n")
+        native.write_text(guidance.replace("../tdd/SKILL.md", "../missing/SKILL.md"))
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Broken Poteto reference", result.stderr)
 
     def test_refresh_includes_measurement_and_correction_skills(self):
         additions = ["benchmark-checklist", "correct", "principle-explain-the-number"]

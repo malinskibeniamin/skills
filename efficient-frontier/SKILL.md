@@ -3,6 +3,8 @@ name: efficient-frontier
 description: Apply eval-backed model routing and budget explicitly authorized agent waves without moving judgment away from the owner.
 ---
 
+For explicitly requested delegation only, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#delegation).
+
 Read [tool choice](../shared/communication.md#protect-attention-while-working) before routing.
 
 `config/model-routing.json` owns routing; never copy subjective scores into prompts.

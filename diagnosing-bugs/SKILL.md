@@ -3,6 +3,8 @@ name: diagnosing-bugs
 description: Diagnosis loop for hard bugs and performance regressions. Use when asked to diagnose or debug, or when a hard bug needs a reproducible feedback loop.
 ---
 
+When investigating a concrete defect or failed repair, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#review-and-diagnosis).
+
 # Diagnosing Bugs
 Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
 Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).

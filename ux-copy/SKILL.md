@@ -3,6 +3,8 @@ name: ux-copy
 description: Write or review product UI copy. Use when changing headings, labels, buttons, help, messages, navigation, i18n strings, or product terminology.
 ---
 
+For prose in scope, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#writing).
+
 Read [REFERENCE.md](REFERENCE.md) for tone, capitalization, budgets, and examples.
 State one useful point per sentence. Cut filler and repetition.
 Preserve safety, limits, uncertainty, and accessible labels.

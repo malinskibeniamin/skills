@@ -4,6 +4,8 @@ description: Commit, push, and open a reviewable PR, or execute an explicitly au
 argument-hint: "[--no-pr]"
 ---
 
+For multi-step implementation or publication, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#execution).
+
 Use [REFERENCE.md](REFERENCE.md) and [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 Merge only on explicit request: [contract](references/merge.md).

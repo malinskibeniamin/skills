@@ -2,15 +2,21 @@
 
 This is the harness's canonical adaptation of the Poteto/pstack principles that change existing design and review decisions. Source reviewed at Cursor plugins commit [`efa2a531985e0a8084d36ff3cf87233be8a9f34b`](https://github.com/cursor/plugins/tree/efa2a531985e0a8084d36ff3cf87233be8a9f34b/pstack).
 
-This curated adaptation remains the guidance for the existing owners below. The complete upstream stack, including every standalone principle, is also available through the `poteto-*` adapters; see [compatibility rules](POTETO-COMPATIBILITY.md) and the [full source inventory](../vendor/pstack.lock.json).
+This curated adaptation remains the structural guidance for the existing owners below.
+[Native composition](POTETO-NATIVE.md) connects the complete current stack to the relevant
+existing skills without invoking explicit-only workflows. See [compatibility rules](POTETO-COMPATIBILITY.md)
+and the [current source inventory](../vendor/pstack.lock.json).
 
 The native [caller-first sketch](../codebase-design/SKILL.md#caller-first-sketch) and
 structural probe below also adapt [architect](../vendor/pstack/skills/architect/SKILL.md),
 its [design red flags](../vendor/pstack/skills/architect/references/design-red-flags.md),
-and the [review rubric](../vendor/pstack/skills/interrogate/references/rubric.md) at
+and the [historical review rubric](https://github.com/cursor/plugins/blob/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack/skills/interrogate/references/rubric.md) at
 [`88d47514b82e7c44f00f2b2a72ff6dd12158038c`](https://github.com/cursor/plugins/tree/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack).
 These are authored native adaptations, not instructions to invoke the explicit-only
 upstream workflows. Existing endpoint, model, and delegation rules remain authoritative.
+The current [interrogate source](../vendor/pstack/skills/interrogate/SKILL.md) replaces
+that rubric with executed counterexamples; native review uses the scoped
+[review and diagnosis adaptation](POTETO-NATIVE.md#review-and-diagnosis).
 
 ## Probe the shortest wrong edit
 

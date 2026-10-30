@@ -6,6 +6,8 @@ paths:
   - "**/*.ts"
 ---
 
+When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+
 These survive stack migrations and override conflicting stack mechanics in `/stack-registry`. Every tolerated escape hatch trains later sessions: fix at source; suppress only with a same-line reason.
 
 For TypeScript assertions or widened contracts, use [anti-slop checks](../shared/anti-slop.md)

@@ -1,7 +1,7 @@
 # Evals for complete Poteto vendoring and the retained curated harness owners.
 
 if python3 "$REPO_ROOT/evals/test-poteto-sync.py" &&
-   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --check &&
+   python3 "$REPO_ROOT/scripts/vendor-poteto.py" --check-routing &&
    python3 "$REPO_ROOT/scripts/vendor-poteto.py" --model-rule >/dev/null; then
   echo "  PASS  complete Poteto snapshot and vendoring CLI contract"
   PASS=$((PASS + 1))

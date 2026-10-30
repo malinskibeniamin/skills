@@ -4,6 +4,8 @@ disable-model-invocation: true
 description: "Configure Claude Code routines for PR review, codebase health, issue triage, and docs drift."
 ---
 
+For explicitly requested pstack, Benny or webhook setup/triage, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#setup-and-automation).
+
 Configure [Claude Code routines](https://claude.ai/code/routines): cloud sessions triggered by schedule, GitHub event, or API. **Enforcement model:** hooks and CLAUDE.md own standards; the prompt owns the task. Add `/agent-watchdog` for outputs; `/visual-recap` only when requested.
 
 ## Templates

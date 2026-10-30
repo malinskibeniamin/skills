@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Ketchup Video"
+  short_description: "Poteto: Catch up on this chat in a short subtitled video"
+policy:
+  allow_implicit_invocation: false
