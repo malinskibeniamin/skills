@@ -5,10 +5,10 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 
 # Review
 
-Review pinned scope. Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
-Scoped repairs: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
+Pin scope. Keep one owner; explicit delegation. Do not edit, commit, push without intent.
+Repairs: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Select depth/convergence from the [operating model](OPERATING-MODEL.md); risk changes scrutiny, not permissions.
+Depth/convergence: [operating model](OPERATING-MODEL.md); no added permissions.
 
 ## Review contract
 
@@ -31,13 +31,13 @@ Recheck identity before verdict; drift invalidates affected evidence.
 
 ### Inspect
 
-1. Read spec, rules, complete diff, callers and behavior. Do not trust a PR summary over code. Include applicable `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`.
+1. Read spec, rules, complete diff and callers. Do not trust a PR summary over code. Load `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md` when applicable.
 2. For changed assumptions, reverse-trace authoritative producers, schemas, storage,
    consumers and public surfaces. Search by domain concept, field and emitted value,
    not only the changed symbol.
 3. Reuse [change evidence](../shared/change-evidence.md).
 4. Check independent artifacts in relevant unchanged code, base, recent history,
-   runtime evidence and fixtures; match fixtures to production shape.
+   runtime and fixtures; match fixtures to production shape.
 5. Build a behavioral counterexample. Map permissions/surfaces; skip formatter-owned style and pre-existing defects.
 6. What could still be wrong if tests pass?
 
@@ -51,33 +51,30 @@ Recheck identity before verdict; drift invalidates affected evidence.
   Source-text checks are no coverage unless text is public output; delete or replace at a
   public seam. Use static analysis for syntax.
 
-Add surface-specific scrutiny only when the diff supplies evidence:
-
-Interface: [checks](../shared/INTERFACES.md#interface-review).
+Add surface-specific scrutiny only when the diff supplies evidence ([interfaces](../shared/INTERFACES.md#interface-review)).
 
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Render, states, copy, keyboard/a11y, console, viewport |
-| Security/privacy/data loss | Attacker/access, trust boundary, credential source-to-sink, reachable impact, recovery |
-| Documentation/public behavior | Discoverability, defaults/omission, migration/release notes; internal-only changes owe none |
+| Security/privacy/data loss | Attacker/access, trust boundaries, credential flow, reachable impact, recovery |
+| Documentation/public behavior | Discoverability, defaults/omission, migration/release notes; none for internal-only changes |
 | API/schema/SQL/PostgreSQL | Compatibility, migrations, generated output, actual dialect |
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
-| Dependency/external API | Primary docs, versions, lockfile, advisories |
+| Dependency/external API | Primary docs, versions/pins, advisories |
 
 Proto/Buf/codegen/runtime: load [protobuf](../protobuf/SKILL.md) fully.
-
-Load per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+[Dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies):
 Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.
-Authorized axes run in the foreground; aggregate every report.
+Authorized axes: foreground; aggregate reports.
 
 ### Classify
 
-Place concrete diff-introduced findings on the tightest changed line; state impact and smallest safe fix.
+Place diff-introduced findings on the tightest changed line; give impact and smallest safe fix.
 
 - **P0**: exposure, data loss, outage, or impossible core flow.
 - **P1**: user regression, broken contract, false success, or major a11y defect.
 - **P2**: useful bounded correction with lower impact.
-- Omit optional future work and polish from inline comments.
+- Omit future work/polish from inline comments.
 
 No performance finding without measurement or a structural bound. No edge-case finding
 without credible risk.
@@ -85,18 +82,17 @@ without credible risk.
 ### Synthesize
 
 Use [communication](../shared/communication.md); keep schema.
-Lead with the finding count, including explicit zero. Deduplicate by root cause; name the bug class and affected instances.
-For a re-review, inspect repair delta and prior findings after full initial coverage; expand for changed assumptions.
-Mark each finding's state with proof. Omit praise and unrelated bug hunts; separate value from defects.
+Lead with count (including zero). Deduplicate by root cause; name bug class/affected instances.
+For a re-review, use repair delta/prior findings after full coverage; widen for changed assumptions.
+Prove dispositions; separate value from defects. Omit praise/unrelated bugs.
 
 ## Deep mode
 
-For `--deep`, use the same loop with a complete applicability ledger. Read
-[DEEP-AUDIT.md](DEEP-AUDIT.md); cover all surfaces and do not add automatic agents.
+For `--deep`, read [DEEP-AUDIT.md](DEEP-AUDIT.md); use the same loop and a
+complete applicability ledger. Cover all surfaces; do not add automatic agents.
 
 ## Output
 
-Schema: [REFERENCE.md](REFERENCE.md). Report
-`[P0|P1|P2] <file:line> <title> - <evidence, consequence, correction, verify command>`.
+Use [REFERENCE.md](REFERENCE.md) for schema and finding format.
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
-the `product:` and `lie-detector:` lines, verdict, and residual limits. A clean review returns only those lines, verdict, and residual limits.
+`product:`/`lie-detector:` lines, verdict and residual limits. Clean: receipt/verdict only.

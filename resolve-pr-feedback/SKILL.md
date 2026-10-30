@@ -18,7 +18,7 @@ hooks:
 
 # Resolve PR Feedback
 
-Repair applicable feedback and verify hosted state.
+Repair applicable feedback; verify hosted state.
 Use `/agent-watchdog` for another run's completion claims.
 
 ## Input
@@ -53,7 +53,7 @@ If clean, finish rebase and report dispositions. Pending decisions are incomplet
 
 ### 3. Repair clusters
 
-Group by root cause; record each finding as fixed (regression proof), rejected (counterexample/source), or blocked (missing evidence/decision).
+Group by root cause: fixed (regression proof), rejected (source/counterexample), blocked (missing evidence/decision).
 Fix accepted clusters on the owning branch; test and commit `fix(review): <cluster summary>`.
 
 ### 4. Reply and resolve
@@ -78,23 +78,22 @@ bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
 ```
 
-The counter must print `0`.
+Require `0`.
 
 ### 7. Summary
 
-Post one bullet per root cause/disposition plus hosted thread and CI state.
+Report root-cause dispositions, hosted threads and CI state.
 
 ## Iteration policy
 
-- AI self-review: stop when clean; after two unsuccessful passes, reassess approach/missing context. See
-  [convergence rules](../review/OPERATING-MODEL.md#make-review-converge).
-- Human feedback: NO iteration cap on dispositions; address every thread before handoff.
+- AI self-review: stop when clean; after two failed passes, [reassess approach/context](../review/OPERATING-MODEL.md#make-review-converge).
+- Human feedback: NO iteration cap; disposition every thread before handoff.
 - Automatic repair: pause after 3 feedback rounds; reassess before explicit `retry`.
   Base-only updates do not count. Paused is not complete.
-- After the first full review, focus on the changed diff and prior findings;
-  expand for changed assumptions. Deduplicate root causes; resolve existing threads instead of reposting.
+- After full review, inspect repair diff + prior findings; expand for changed assumptions.
+  Deduplicate root causes; resolve existing threads, not reposts.
 
 ## Automatic wake-up
 
-Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original feature session and binds future PRs; ordinary resolution never enables watching.
+Unattended repair: [opt-in setup](AUTO-REVIEW.md) resumes the original session and binds future PRs. Resolution never enables watching.
 Keep drafts draft; never auto-merge.

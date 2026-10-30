@@ -98,7 +98,7 @@ not a false positive to erase with `verify`.
 
 ## Resume and check
 
-[Immediate-only context](../docs/architecture/review-delta-before.png) →
+[Immediate-only context](../docs/architecture/review-delta-before.png) ->
 [findings retained through intermediate plans](../docs/architecture/review-delta-after.png).
 Editable scenes: [before](../docs/architecture/review-delta-before.excalidraw),
 [after](../docs/architecture/review-delta-after.excalidraw).
