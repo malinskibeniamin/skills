@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Writing Beats"
+  short_description: "Matt Pocock source: writing beats guidance"
+policy:
+  allow_implicit_invocation: false

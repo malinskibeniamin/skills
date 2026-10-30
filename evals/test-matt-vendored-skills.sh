@@ -85,6 +85,7 @@ if grep -RInE '/to-prd|/to-issues|to-prd|to-issues' \
   --exclude-dir=.git \
   --exclude-dir=.context \
   --exclude-dir=node_modules \
+  --exclude-dir=vendor \
   --exclude='CHANGELOG.md' \
   --exclude='*.json' \
   --exclude='test-matt-vendored-skills.sh' \

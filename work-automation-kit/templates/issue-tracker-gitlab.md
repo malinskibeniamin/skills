@@ -18,7 +18,7 @@ Infer the repo from `git remote -v` -- `glab` does this automatically when run i
 
 **MRs as a request surface: no.** Set to `yes` only when external MRs should enter the triage queue. Missing or `no` excludes MR discovery, not an explicitly named MR.
 
-When enabled, use `glab mr view`, `glab mr diff`, and `glab mr list -F json`; exclude project members and owners. Comment, label, and close through `glab mr` equivalents. GitLab numbers issues and MRs separately; choose the named surface.
+When enabled, use `glab mr view`, `glab mr diff`, and `glab mr list --output json`; exclude project members and owners. Comment, label, and close through `glab mr` equivalents. GitLab numbers issues and MRs separately; choose the named surface.
 
 ## When a skill says "publish to the issue tracker"
 
@@ -33,8 +33,8 @@ Run `glab issue view <number> --comments`.
 Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
 
 - **Map**: create one issue labelled `wayfinder:map`, holding Notes / Decisions-so-far / Fog. On tiers with epics, an epic may hold the map instead; a labelled issue works everywhere.
-- **Child ticket**: use the native parent/child hierarchy when the project tier and configured API support it, then verify the relationship. Otherwise create an issue with `Part of #<map>` at the top and labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
+- **Child ticket**: use the native parent/child hierarchy when the project tier and configured API support it, then verify the relationship. Otherwise create an issue with `Part of #<map>` at the top, link it with `glab issue create --linked-issues <map> --link-type relates_to`, and add labels `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`).
 - **Blocking**: use GitLab native blocking links when available by posting `/blocked_by #<n>` as a note. Native blocking links are a Premium/Ultimate feature; on the free tier, or when unavailable, fallback to `Blocked by: #<n>, #<n>` at the top of the description.
-- **Frontier query**: list the map's open children, drop any with a native `blocked_by` link to an open issue (`glab api projects/:id/issues/<child-iid>/links`), an open issue in the fallback `Blocked by:` line, or an assignee, and take the first in map order.
+- **Frontier query**: list native children when using the parent/child hierarchy; for the linked-issue fallback, use `glab api projects/:id/issues/<map>/links` and keep open issues carrying a `wayfinder:<type>` label. Drop any with a native `blocked_by` link to an open issue (`glab api projects/:id/issues/<child-iid>/links`), an open issue in the fallback `Blocked by:` line, or an assignee, and take the first in map order.
 - **Claim**: `glab issue update <n> --assignee @me` before any work.
 - **Resolve**: `glab issue note <n> --message "<answer>"`, then `glab issue close <n>`, then append a context pointer to the map's Decisions-so-far.

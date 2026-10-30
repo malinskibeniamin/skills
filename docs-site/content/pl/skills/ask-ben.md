@@ -88,6 +88,44 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/lie-detector` | Wykrywanie testów, które nie mogą zakończyć się niepowodzeniem, i twierdzeń niepopartych zmianami w kodzie. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
+| `/matt-ask-matt` | Wskazówki źródłowe Matta Pococka: `ask-matt`. |
+| `/matt-chief-of-staff` | Wskazówki źródłowe Matta Pococka: `chief-of-staff`. |
+| `/matt-claude-handoff` | Wskazówki źródłowe Matta Pococka: `claude-handoff`. |
+| `/matt-code-review` | Wskazówki źródłowe Matta Pococka: `code-review`. |
+| `/matt-codebase-design` | Wskazówki źródłowe Matta Pococka: `codebase-design`. |
+| `/matt-diagnosing-bugs` | Wskazówki źródłowe Matta Pococka: `diagnosing-bugs`. |
+| `/matt-domain-modeling` | Wskazówki źródłowe Matta Pococka: `domain-modeling`. |
+| `/matt-git-guardrails-claude-code` | Wskazówki źródłowe Matta Pococka: `git-guardrails-claude-code`. |
+| `/matt-grill-me` | Wskazówki źródłowe Matta Pococka: `grill-me`. |
+| `/matt-grill-with-docs` | Wskazówki źródłowe Matta Pococka: `grill-with-docs`. |
+| `/matt-grilling` | Wskazówki źródłowe Matta Pococka: `grilling`. |
+| `/matt-handoff` | Wskazówki źródłowe Matta Pococka: `handoff`. |
+| `/matt-implement` | Wskazówki źródłowe Matta Pococka: `implement`. |
+| `/matt-implement-spec` | Wskazówki źródłowe Matta Pococka: `implement-spec`. |
+| `/matt-improve-codebase-architecture` | Wskazówki źródłowe Matta Pococka: `improve-codebase-architecture`. |
+| `/matt-loop-me` | Wskazówki źródłowe Matta Pococka: `loop-me`. |
+| `/matt-migrate-to-shoehorn` | Wskazówki źródłowe Matta Pococka: `migrate-to-shoehorn`. |
+| `/matt-pr` | Wskazówki źródłowe Matta Pococka: `pr`. |
+| `/matt-prototype` | Wskazówki źródłowe Matta Pococka: `prototype`. |
+| `/matt-research` | Wskazówki źródłowe Matta Pococka: `research`. |
+| `/matt-retro` | Wskazówki źródłowe Matta Pococka: `retro`. |
+| `/matt-scaffold-exercises` | Wskazówki źródłowe Matta Pococka: `scaffold-exercises`. |
+| `/matt-setup-matt-pocock-skills` | Wskazówki źródłowe Matta Pococka: `setup-matt-pocock-skills`. |
+| `/matt-setup-pre-commit` | Wskazówki źródłowe Matta Pococka: `setup-pre-commit`. |
+| `/matt-setup-ts-deep-modules` | Wskazówki źródłowe Matta Pococka: `setup-ts-deep-modules`. |
+| `/matt-tdd` | Wskazówki źródłowe Matta Pococka: `tdd`. |
+| `/matt-teach` | Wskazówki źródłowe Matta Pococka: `teach`. |
+| `/matt-to-questionnaire` | Wskazówki źródłowe Matta Pococka: `to-questionnaire`. |
+| `/matt-to-spec` | Wskazówki źródłowe Matta Pococka: `to-spec`. |
+| `/matt-to-tickets` | Wskazówki źródłowe Matta Pococka: `to-tickets`. |
+| `/matt-triage` | Wskazówki źródłowe Matta Pococka: `triage`. |
+| `/matt-wait-what` | Wskazówki źródłowe Matta Pococka: `wait-what`. |
+| `/matt-wayfinder` | Wskazówki źródłowe Matta Pococka: `wayfinder`. |
+| `/matt-wizard` | Wskazówki źródłowe Matta Pococka: `wizard`. |
+| `/matt-writing-beats` | Wskazówki źródłowe Matta Pococka: `writing-beats`. |
+| `/matt-writing-for-agents` | Wskazówki źródłowe Matta Pococka: `writing-for-agents`. |
+| `/matt-writing-fragments` | Wskazówki źródłowe Matta Pococka: `writing-fragments`. |
+| `/matt-writing-shape` | Wskazówki źródłowe Matta Pococka: `writing-shape`. |
 | `/mobile-native` | Naprawianie mobilnego viewportu, dotyku i klawiatury w WWW. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |

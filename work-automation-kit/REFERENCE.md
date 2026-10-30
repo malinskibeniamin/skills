@@ -63,6 +63,7 @@ Read existing state. Do not assume.
 - `git remote -v`, `.git/config`
 - `AGENTS.md`, `CLAUDE.md`; existing `## Agent skills`
 - `GLOSSARY.md`, `GLOSSARY-MAP.md`, `docs/adr/`, nested ADR dirs
+- Legacy `CONTEXT.md` / `CONTEXT-MAP.md`: offer a `git mv` to the matching glossary name and update domain-document pointers; preserve unrelated context files and avoid overwriting existing glossaries.
 - `docs/agents/`
 - `.scratch/`
 - Whether `triage` is installed, either as an available skill or a sibling skill folder
@@ -79,6 +80,8 @@ Default from remote. Choices:
 - Local markdown: `.scratch/<feature>/`
 - Jira/Atlassian: run `/setup-atlassian-workflow`
 - Other: user describes workflow; record prose
+
+For GitHub/GitLab, verify the selected repository with `gh repo view` / `glab repo view` from this directory. If no matching remote exists, get the user's repository URL and configure the selected remote without replacing an unrelated origin. Initialize Git only if needed. Continue only when the command resolves the intended project; report authentication or reachability failures.
 
 **Triage labels:** skip this section when `triage` is not installed. Otherwise ask one question: "Keep the default triage labels?" (recommended: **yes**). On yes, use these canonical roles as their own label strings:
 

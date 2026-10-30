@@ -113,6 +113,9 @@ for path in markdown_paths:
             if target.startswith(("http", "#", "mailto:", "<")) or target in {"link", "url"}:
                 continue
             clean = target.split("#", 1)[0].split(" ", 1)[0]
+            # Pinned upstream example describes a consumer's layout, not a bundled resource.
+            if path == repo / "vendor/mattpocock/upstream/skills/in-progress/setup-ts-deep-modules/SKILL.md" and clean == "./src/packages/README.md":
+                continue
             if (path.parent / clean).exists() or (repo / clean).exists():
                 continue
             if path.is_relative_to(repo / "docs-site/content") and clean.startswith("/"):

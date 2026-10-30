@@ -3,9 +3,9 @@ name: grilling
 description: Explore and stress-test plans, decisions, ideas, brainstorming approaches, and UI layouts when a material choice remains open.
 ---
 
-For forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
+Forks: read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
 
-Resolve consequential unknowns; no production code or implementation while a material user-reserved decision is open. Invocation grants no delegation.
+Resolve unknowns; no production code or implementation while a material user-reserved decision is open. Invocation grants no delegation.
 
 Plans/RFCs/replies: read [communication](../shared/communication.md).
 Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
@@ -43,7 +43,7 @@ A confident, reversible **Recommended:** answer is an assumption, not a question
 
 Ask so yes accepts the recommendation.
 
-An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline unless delegation is explicitly authorized; inspect environment/filesystem/tools. User decisions stay theirs.
+An unsettled prerequisite delays only its branch. Recompute the frontier each round. Keep fact-finding inline; explicit delegation uses fresh contexts and self-contained briefs. Inspect environment/files/tools. User decisions stay theirs.
 
 ## 3. Exit
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Wait What"
+  short_description: "Matt Pocock source: wait what guidance"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Handoff"
+  short_description: "Matt Pocock source: handoff guidance"
+policy:
+  allow_implicit_invocation: false

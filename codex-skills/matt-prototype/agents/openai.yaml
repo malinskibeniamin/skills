@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Prototype"
+  short_description: "Matt Pocock source: prototype guidance"
+policy:
+  allow_implicit_invocation: false

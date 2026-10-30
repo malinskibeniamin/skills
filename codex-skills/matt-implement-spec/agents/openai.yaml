@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Implement Spec"
+  short_description: "Matt Pocock source: implement spec guidance"
+policy:
+  allow_implicit_invocation: false

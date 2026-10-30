@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Codebase Design"
+  short_description: "Matt Pocock source: codebase design guidance"
+policy:
+  allow_implicit_invocation: false

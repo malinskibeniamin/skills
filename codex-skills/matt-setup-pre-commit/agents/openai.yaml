@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Setup Pre Commit"
+  short_description: "Matt Pocock source: setup pre commit guidance"
+policy:
+  allow_implicit_invocation: false

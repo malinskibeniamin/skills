@@ -22,7 +22,7 @@ Missing fixed point: ask. Otherwise resolve
 pin head/merge-base SHAs; inspect their complete diff and log.
 WIP includes staged, unstaged, relevant untracked inputs; label exclusions.
 Mutations/concurrent reads: [snapshots](REFERENCE.md#source-snapshots-and-mutation-tests).
-Recheck identity before verdict; drift invalidates affected evidence.
+Recheck identity; drift invalidates evidence.
 
 ## Evidence loop
 
@@ -64,7 +64,7 @@ Add surface-specific scrutiny only when the diff supplies evidence ([interfaces]
 Proto/Buf/codegen/runtime: load [protobuf](../protobuf/SKILL.md) fully.
 [Dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies):
 Call the Skill tool separately for "product" and "lie-detector"; apply their hats inline.
-Authorized axes: foreground; aggregate reports.
+Authorized axes: foreground, fresh contexts; aggregate. Else inline.
 
 ### Classify
 

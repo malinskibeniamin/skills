@@ -19,6 +19,8 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/wayfinder.excalidraw)
 
+Każdy jawnie autoryzowany obszar badań rozpoczynaj ze świeżym oknem kontekstu i wskaźnikami do zgłoszenia oraz źródeł.
+
 Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
 
 Używaj, gdy cel przekracza jedno okno kontekstu, a droga jest niejasna. **Zgłoszenie decyzyjne** rozstrzyga pytanie, a nie implementuje wycinek produktu.

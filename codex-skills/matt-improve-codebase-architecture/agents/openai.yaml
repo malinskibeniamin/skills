@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Improve Codebase Architecture"
+  short_description: "Matt Pocock source: improve codebase architecture guidance"
+policy:
+  allow_implicit_invocation: false

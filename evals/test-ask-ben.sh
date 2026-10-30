@@ -25,11 +25,11 @@ else
   ERRORS="$ERRORS\n  FAIL: unrelated project name still present"
 fi
 
-# The old upstream router name should not leak after localizing the router.
+# Bare host invocations stay local; namespaced adapters and source pointers are valid.
 old_router_slug="ask""-matt"
 old_router_title="Ask ""Matt"
-stale_router_refs=$(grep -R --exclude-dir=.git --exclude-dir=.context --exclude-dir=node_modules \
-  -nE "$old_router_slug|$old_router_title" "$REPO_ROOT" 2>/dev/null || true)
+stale_router_refs=$(grep -R --exclude-dir=.git --exclude-dir=.context --exclude-dir=node_modules --exclude-dir=vendor \
+  -nE "^name:[[:space:]]*$old_router_slug$|/$old_router_slug([^[:alnum:]_/-]|$)|^# $old_router_title$" "$REPO_ROOT" 2>/dev/null || true)
 if [ -z "$stale_router_refs" ]; then
   echo "  PASS  old router name fully removed"
   PASS=$((PASS + 1))

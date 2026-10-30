@@ -9,6 +9,8 @@ sidebar:
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/improve-codebase-architecture.excalidraw)
 
+預設在目前情境中探索。委派須經明確授權；為獲授權的探索代理程式提供全新情境與獨立完整的範圍說明。
+
 當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
 
 找出能讓整類錯誤無法發生的架構變更。深化設計，而不是只增加另一項檢查或迴歸測試。

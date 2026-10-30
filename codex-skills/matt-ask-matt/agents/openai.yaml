@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Ask Matt"
+  short_description: "Matt Pocock source: ask matt guidance"
+policy:
+  allow_implicit_invocation: false

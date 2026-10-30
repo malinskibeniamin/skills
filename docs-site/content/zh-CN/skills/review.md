@@ -85,7 +85,7 @@ type: skill
 
 按[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)加载技能。
 分别为“product”和“lie-detector”调用 Skill 工具；在当前流程中应用它们的视角。
-获授权的审查维度应一起在前台运行；汇总每份报告。
+获授权的审查维度应在前台运行，使用全新上下文和固定范围指针；汇总每份报告。未经委派授权时，在当前上下文中执行。
 
 ### 分类 [#classify]
 

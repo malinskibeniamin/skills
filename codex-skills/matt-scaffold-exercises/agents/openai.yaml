@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Scaffold Exercises"
+  short_description: "Matt Pocock source: scaffold exercises guidance"
+policy:
+  allow_implicit_invocation: false

@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/wayfinder.excalidraw)
 
+為每條獲明確授權的研究工作線提供全新情境，以及工單與來源指標。
+
 當下方工作流程需要模型可呼叫的技能時，請為每個相依技能分別呼叫 Skill 工具。沒有此工具的宿主應依[相依技能載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)完整閱讀標準 `SKILL.md`。僅供使用者呼叫的技能應建議由使用者執行，不要自動呼叫。
 
 當目標超過一個上下文視窗且路徑仍不清晰時使用。**決策工單**用於解決問題，而不是實現產品切片。

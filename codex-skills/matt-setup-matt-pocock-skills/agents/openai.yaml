@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Setup Matt Pocock Skills"
+  short_description: "Matt Pocock source: setup matt pocock skills guidance"
+policy:
+  allow_implicit_invocation: false

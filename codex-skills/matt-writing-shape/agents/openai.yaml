@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Writing Shape"
+  short_description: "Matt Pocock source: writing shape guidance"
+policy:
+  allow_implicit_invocation: false

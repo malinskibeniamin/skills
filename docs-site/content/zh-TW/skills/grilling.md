@@ -17,6 +17,8 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/grilling.excalidraw)
 
+僅在獲得明確委派授權後，才為每個代理程式使用全新情境與獨立完整的證據說明；否則在目前情境中查明事實。
+
 面臨重要的產品或設計選擇時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#product-and-planning)。
 
 

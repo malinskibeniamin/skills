@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Writing For Agents"
+  short_description: "Matt Pocock source: writing for agents guidance"
+policy:
+  allow_implicit_invocation: false
