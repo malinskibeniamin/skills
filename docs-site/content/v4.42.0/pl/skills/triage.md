@@ -1,0 +1,78 @@
+---
+description: Przenoś zgłoszenia między rolami triage i przygotowuj pracę gotową dla agenta.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - triage
+sidebar:
+  label: /triage
+title: /triage
+type: skill
+---
+![Diagram umiejętności /triage](/diagrams/skills/triage.svg)
+
+[Otwórz edytowalne źródło Excalidraw](/diagrams/skills/triage.excalidraw)
+
+Przy wyraźnie zażądanej konfiguracji lub triage pstack, Benny albo webhooka przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/v4.42.0/shared/POTETO-NATIVE.md#setup-and-automation).
+
+Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj narzędzie Skill osobno dla każdej z nich. Na hostach bez tego narzędzia przeczytaj pełny kanoniczny `SKILL.md`, zgodnie z [zasadami ładowania zależności](https://github.com/malinskibeniamin/skills/blob/v4.42.0/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies). Umiejętności wywoływane tylko przez użytkownika polecaj człowiekowi; nie uruchamiaj ich automatycznie.
+
+Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
+
+Przenoś zgłoszenia przez małą maszynę stanów ról. Dla skonfigurowanych zewnętrznych PR-ów PR jest zgłoszeniem z dołączonym kodem; gołe numery rozwiązuj przez tracker.
+Używaj słownika domeny i odpowiednich ADR-ów. Aktualną dokumentację zewnętrzną czytaj przez `/read-the-damn-docs`; konkurencyjne plany rozstrzygaj przez `/plan-arbiter`, a duże epiki pokazuj przez `/visual-plan`.
+
+## Niezmiennik komentarza [#comment-invariant]
+
+Każdy publikowany komentarz triage zaczynaj od:
+
+```markdown
+> *To zostało wygenerowane przez AI podczas triage.*
+```
+
+## Tracker i role [#tracker-and-roles]
+
+Wykryj tracker z instrukcji repozytorium i zdalnych adresów:
+
+- GitHub: użyj `gh` zgodnie z [tracker-github.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/tracker-github.md).
+- Jira: użyj `acli` zgodnie z [tracker-jira.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/tracker-jira.md).
+- Gdy prawdopodobne są oba, zapytaj, który jest właścicielem elementu.
+
+Każdy element ma dokładnie jedną kategorię (`bug` albo `enhancement`) i jeden stan: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human` lub `wontfix`.
+Mapuj role kanoniczne na istniejące etykiety lub stany trackera. Sprzeczne stany wymagają decyzji przed modyfikacją.
+
+## Kolejka uwagi [#show-attention-queue]
+
+Pobieraj od najstarszych:
+
+1. Elementy bez etykiety lub stanu.
+2. Elementy `needs-triage`.
+3. Elementy `needs-info` z nową aktywnością zgłaszającego.
+
+Sprawdź flagę `PRs/MRs as a request surface` skonfigurowanego trackera; brak flagi lub `no` wyklucza zewnętrzne odkrywanie. Uwzględniaj zewnętrzne elementy tylko przy `yes` i oznaczaj każdą linię `[PR]` albo `[issue]`; aktywne PR-y współpracowników nie są pracą odkrywania. Jawnie nazwany PR pozostaje w zakresie. Pokaż liczby i pozwól maintainerowi wybrać.
+
+## Triage jednego elementu [#triage-one-item]
+
+1. **Zbierz.** Przeczytaj treść, komentarze, etykiety lub stan, autora, daty, wcześniejsze notatki i diff PR-a. Nie powtarzaj pytań z odpowiedzią.
+2. **Eksploruj.** Wykonaj wyszukiwanie redundancji po pojęciu domenowym. Sprawdź `.out-of-scope/` pod kątem wcześniejszego odrzucenia.
+3. **Zarekomenduj.** Przedstaw kategorię, stan, uzasadnienie i dowód z kodu; poczekaj na kierunek.
+4. **Zweryfikuj twierdzenie.** Odtwórz błąd albo pobierz i przetestuj PR. Zgłoś potwierdzenie, niepowodzenie lub brak dowodów. Dla przyczyny źródłowej i planu RED/GREEN użyj [trybu planu poprawki TDD](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/REFERENCE.md#tdd-fix-plan-mode).
+5. **Dopytaj w razie potrzeby.** Użyj `/grilling` dla nierozstrzygniętej oceny lub języka domeny.
+6. **Zastosuj.** Dla stanów gotowych użyj [AGENT-BRIEF.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/AGENT-BRIEF.md), a dla `needs-info` użyj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/REFERENCE.md). Dla `wontfix`:
+   - już zaimplementowane: podaj link i zamknij bez wpisu historii odrzuceń;
+   - błąd: wyjaśnij i zamknij;
+   - ulepszenie: zapisz według [OUT-OF-SCOPE.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/OUT-OF-SCOPE.md), podaj link i zamknij.
+   Zastosuj `needs-triage` bez komentarza, chyba że trzeba zapisać częściową pracę.
+
+## Nadpisanie i wznowienie [#overrides-and-resume]
+
+Dla jawnego nadpisania stanu opisz zmiany i działaj bez grillowania. Zapytaj o brief agenta tylko przy przejściu do `ready-for-agent` bez briefu.
+Przy wznowieniu przeczytaj wcześniejsze notatki i nowe odpowiedzi, a następnie pokaż aktualny stan bez ponawiania pytań.
+
+Pełne szablony i przejścia stanów: [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.42.0/triage/REFERENCE.md).
+
+Dla oceny zgodności z zasadami przyjmowania wkładu lub autoryzowanej moderacji PR wczytaj [triage wkładu](https://github.com/malinskibeniamin/skills/blob/v4.42.0/t3code-skills/contribution-triage/SKILL.md). Gotowość zgłoszeń pozostaje tutaj; o kwalifikacji decydują zaufane zasady repozytorium docelowego, a nie T3.

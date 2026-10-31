@@ -1,0 +1,40 @@
+---
+description: 针对某个前提，提出证据充分且最有力的反对论证。适用于用户要求进行钢人化论证、寻求反驳或第二意见，或者高风险决策依赖不确定假设的情况。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - steelman
+sidebar:
+  label: /steelman
+title: /steelman
+type: skill
+---
+![“/steelman”技能示意图](/diagrams/skills/steelman.svg)
+
+[打开可编辑的 Excalidraw 源文件](/diagrams/skills/steelman.excalidraw)
+
+
+以证据反迎合。跳过偏好/目标/范围、琐碎操作、已证明的主张和实现工作，除非安全性、数据丢失或不可逆性使反驳成为必要。
+
+## 流程 [#procedure]
+
+1. **主张：**重述一次并标记其类型：
+   - 事实性 -> 先验证；
+   - 因果性 -> 测试其作用机制；
+   - 架构性 -> 探查现有用法；
+   - 合并前提（“此 PR 应该合并”）-> 依据 `product:` 裁决、[lie-detector](https://github.com/malinskibeniamin/skills/blob/v4.42.0/lie-detector/SKILL.md#6-steelman-gate) 证据和审查发现进行论证；
+   - 偏好/目标/范围 -> 返回 `noise`；由用户决定。
+2. **证据优先：**搜索符号/模式，阅读引用的文件，运行成本较低的检查，查阅最新文档。不要基于泛泛而谈的理由进行论证。
+3. **相反观点：**写出 2-4 个要点，引用 `file:line` 或命令输出。说明用户的主张需要满足什么条件才会是错的、支持其主张错误的仓库证据、未考虑到的故障模式，以及与其主张相矛盾的先例/历史记录。
+4. **裁决：**
+   - **已确认：**证据支持用户；按用户的计划继续。
+   - **已反驳：**呈现证据，让用户决定坚持原方案或修改方案；不要阻止用户。
+   - **部分成立：**指出哪些部分成立，哪些部分不成立。
+
+不要询问“你确定吗？”，不要在没有依据的情况下扮演反方，不要给用户设置关卡，也不要每轮都进行钢人化论证。仅用于用户明确要求时或高风险情况。
+
+[理念：用户也会犯错。行动前先验证。呈现证据，而不是质疑。]
