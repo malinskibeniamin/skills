@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+## 4.42.0
+
+2026-11-01 -- Publish the post-4.41 changes as one Claude Code and Codex bundle.
+
+### Highlights
+
+- Add conditional contract/data, interface, runtime, integration, and performance
+  reviewers; separate defect findings from scope control and direction challenges.
+- Add schema-aware `/protobuf` review and evidence-based `/ci-fixes` guidance.
+- Refresh the full Matt Pocock suite, Poteto pstack guidance, interface skills,
+  and Chrome WebMCP tool-development references.
+- Add opt-in native Codex subscription quota guards and review/fix presets.
+- Correct hook failure hints, cap Bash output, and align runtime/protocol evals.
+
+### Upgrade notes
+
+- Claude and Codex manifests and both marketplaces advertise 4.42.0 together.
+  Refresh the marketplace and installed plugin, then reload or restart the host.
+- Codex marketplace installs pinned to v4.41.0 must explicitly move to v4.42.0.
+- Specialist reviewer definitions do not authorize native subagent dispatch;
+  delegation remains opt-in. Quota guards and review presets remain opt-in.
+- Preserve the separate `frontend-skills-mods` version (0.3.0), published tags,
+  and older documentation archives.
+
+### Previously unreleased changes
+
 2026-10-30 -- Add an opt-in native Codex subscription quota guard. It reads live
 allowance windows, blocks prompts and task launches at a configurable threshold,
 and stops further work at post-tool checkpoints. Missing or invalid readings block.

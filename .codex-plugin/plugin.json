@@ -1,6 +1,6 @@
 {
   "name": "frontend-skills",
-  "version": "4.41.0",
+  "version": "4.42.0",
   "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
   "author": {
     "name": "Beniamin Malinski",
@@ -40,12 +40,13 @@
       "Review this PR and fix all findings"
     ]
   },
-  "x-updatedAt": "2026-10-28",
+  "x-updatedAt": "2026-11-01",
   "x-includes": {
     "instructions": ["CLAUDE.md", "AGENTS.md"],
     "settings": "settings.json"
   },
   "x-changelog": {
+    "4.42.0": "2026-11-01 -- Publish conditional specialist reviewers, defect/scope/direction review separation, Protobuf and CI optimization guidance, refreshed Matt Pocock/Poteto/interface skill bundles, Chrome WebMCP development guidance, opt-in Codex quota guards and review presets, and hook runtime fixes. Synchronize manifests, marketplaces, install pin, and immutable docs; preserve prior releases.",
     "4.41.0": "2026-10-28 -- Publish /skeleton-loaders for Claude and Codex, Chrome-native /webmcp guidance, focused review-repair and security checks, frontend-hook fixes, and refreshed Bazel/Bend guidance. Retire Ponytail and /deslop. Synchronize manifests, marketplaces, install pins, and immutable documentation; preserve prior releases.",
     "4.40.0": "2026-10-24 -- Publish the post-v4.39 Claude Code and Codex bundle. Adds /bazel, /bend-laws, /software-factory, and /product; composes native T3, Effect, and Poteto guidance; and refreshes opt-in React DevTools inspection and narrated demos. Tightens permission-scoped delivery, candidate-bound reviews, verifier guidance, and model/toolchain routing. Refreshes manifests, marketplaces, install pin, and immutable docs together while preserving published v4.39.0 artifacts.",
     "4.39.0": "2026-09-25 -- Publish the post-v4.38 Claude Code and Codex bundle. Adds /test-audit with authoring, audit, and campaign modes; /implement-spec, /pr, and /retro; Poteto and Cursor review guidance; and refreshed model and harness behavior. Refreshes manifests, marketplaces, install pin, and immutable docs snapshot together.",

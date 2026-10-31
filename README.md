@@ -87,7 +87,7 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.41.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.42.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```

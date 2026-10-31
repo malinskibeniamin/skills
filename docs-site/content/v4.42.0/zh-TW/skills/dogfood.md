@@ -1,0 +1,113 @@
+---
+description: 在每個重要行為切片之後以及交接或釋出之前使用，透過真實入口體驗可執行工作。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - dogfood
+sidebar:
+  label: /dogfood
+title: /dogfood
+type: skill
+---
+![「/dogfood」技能示意圖](/diagrams/skills/dogfood.svg)
+
+[開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/dogfood.excalidraw)
+
+驗證變更後的行為或維護驗證流程時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/v4.42.0/shared/POTETO-NATIVE.md#verification)。
+
+重要的可執行切片會改變真實入口或公共接縫上的行為。
+每個切片和最終完整 PR 都要 dogfood。測試不是 dogfood。
+
+## 清點 [#inventory]
+
+1. 用
+   `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`
+   確定比較基線。
+2. 從合併基點檢查完整 PR，包括已提交、已暫存、未暫存和未跟蹤工作。
+3. 將變更的行為對映到真實入口。技能包含其引用指南、資產和
+   指令碼；鉤子透過真實事件執行。獨立文件、測試和評估不要求
+   體驗覆蓋。
+
+在本地覆蓋本輪工作。建立 PR 或釋出前，覆蓋分支中全部可執行行為。
+
+## 迴圈 [#loop]
+
+在當前實現上執行**使用 -> 濫用 -> 修復 -> 重放**。
+
+### 使用 [#use]
+
+透過實際實現完成每條預期路徑。直接檢查可見輸出、
+狀態轉換、副作用、控制臺、網路和日誌，不從程式碼推斷。
+
+使用形狀和基數接近生產的代表性真實規模資料。比較
+預期與觀察到的數量、順序、耗時、狀態和副作用；執行足夠長時間以
+暴露累積問題。
+
+對於缺陷，先在未修復行為上重放報告者的精確步驟。無法復現時，
+停止診斷，請求缺失環境或證據。
+
+### 濫用 [#abuse]
+
+應用每個相關視角，並至少嘗試一種可信破壞方式：
+
+- 粗心：空、無效、超大、重複或亂序輸入。
+- 急躁：重複、雙擊提交、重新載入、離開、取消或中斷。
+- 倒楣：陳舊或缺失資料、依賴緩慢或失敗、部分完成。
+- 真實資料：稀疏欄位、重複 ID、混合版本或租戶、長文字、Unicode、
+  時區邊界、真實基數。
+- 效能：對照基線或預算測量回應時間、網路、渲染、CPU 和記憶體。
+
+優先選擇可信使用者行為，而非任意案例。直接觀察失敗和恢復。
+
+UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重放與回執中重用符合結構描述的測試資料與證據；
+只測試尚未涵蓋的情況。無效輸入的驗證測試分開進行。
+
+### 修復 [#repair]
+
+觀察到的缺陷會使檢查點失敗。可自動化時，先新增 RED 公共契約測試，
+透過 `/tdd` 修復並重新執行聚焦檢查。任何行為編輯都會使先前證據失效。
+
+### 重放 [#replay]
+
+從真實入口重啟；重複預期使用和每項破壞嘗試。對於缺陷，重放完全相同的原始步驟並驗證相鄰行為。對於有狀態缺陷或反覆出現的重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/v4.42.0/shared/verification-replay.md)。PASS 繫結目前可執行狀態。
+
+## 入口 [#entrypoints]
+
+| 變更 | 操作 |
+|---|---|
+| Web/UI | 執行、導航、操作、重新載入並檢查控制臺/網路 |
+| CLI/TUI | 呼叫真實、無效和中斷流程 |
+| API/worker | 傳送真實請求/事件；檢查回應與副作用 |
+| 程式庫 | 從最小消費者呼叫公共 API |
+| 鉤子/自動化 | 用代表性夾具觸發真實事件 |
+| 技能/智慧體 | 在全新真實任務上使用並檢查行為 |
+| 示範/原型 | 操作到問題取得可觀察的證據 |
+
+優先使用專案原生工具。全新智慧體需要明確授權委派。
+
+如果存在專案本地的 `verify-*` 技能，使用其檢查、驅動、證據和清理功能。
+在 T3 Code 簽出目錄中驗證 UI 時，先解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/v4.42.0/shared/T3CODE-NATIVE.md#resolve-context)，再依受影響的介面載入 [Web／桌面驗證](https://github.com/malinskibeniamin/skills/blob/v4.42.0/t3code-skills/test-t3-app/SKILL.md)
+或[原生行動端驗證](https://github.com/malinskibeniamin/skills/blob/v4.42.0/t3code-skills/test-t3-mobile/SKILL.md)。
+必須具備相應的 Browser 或 Device 工具；缺少工具表示驗證 BLOCKED，
+而非安裝或切換至另一套驗證工具。其他儲存庫繼續使用自身的進入點。
+驗證器漂移交由 `/maintain-verification-skill` 處理；經證實反覆缺少的路徑則交由
+`/create-verification-skill` 處理。
+
+若問題涉及 React 狀態、元件歸屬或算繪成本，請閱讀選用的 [React 執行階段檢查](https://github.com/malinskibeniamin/skills/blob/v4.42.0/shared/react-devtools.md)。先檢查可用能力；元件證據只能補充使用者可見行為斷言，不能取代它們。
+
+## 回執 [#receipt]
+
+報告目前進入點、操作和觀察：`Verdict: PASS | FAIL | BLOCKED`，然後包含：
+
+- **入口：** 精確命令、URL、事件或消費者。
+- **操作：** 預期路徑和破壞嘗試。
+- **觀察：** 資料、輸出、狀態、效果、控制臺/網路/日誌和耗時。
+- **修復：** 缺陷、RED 測試、修復和重放結果。
+- **限制：** 未嘗試行為及原因。
+
+PASS 要求每項變更行為都有直接證據。FAIL 表示仍有已觀察缺陷。
+BLOCKED 指明缺失的存取權限、環境、硬體或安全條件。
