@@ -218,6 +218,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/skeleton-loaders` | Twórz dostępne szkielety ładowania dopasowane do układu. |
 | `/snyk-ux-security` | Audytowanie bezpieczeństwa zależności za pomocą Snyk i bramek wydania. |
 | `/software-factory` | Ocenianie przydatności fabryki i planowanie bezpiecznej infrastruktury automatyzacji. |
+| `/stack-diagram` | Rysowanie diagramów stosu z logo w jasnym i ciemnym motywie. |
 | `/stack-registry` | Zarządzanie bieżącym i zabronionym stosem technologicznym w regułach zestawu. |
 | `/stacked-prs` | Tworzenie i zarządzanie stosami zależnych pull requestów GitHub. |
 | `/stay-within-limits` | Planowanie długotrwałej pracy agentów z uwzględnieniem limitów użycia. |

@@ -789,6 +789,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Plan setup, not execution",
     ],
   },
+  "stack-diagram": {
+    kind: "pipeline",
+    nodes: [
+      "Services + relationships",
+      "Fetch official logos",
+      "Build self-contained HTML",
+      "Inspect themes + deliver",
+    ],
+  },
   "stack-registry": {
     kind: "hierarchy",
     nodes: [

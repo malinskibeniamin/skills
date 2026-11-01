@@ -218,6 +218,7 @@ type: skill
 | `/skeleton-loaders` | 构建匹配布局且无障碍的骨架加载状态。 |
 | `/snyk-ux-security` | 使用 Snyk 和发布门禁审计依赖项安全性。 |
 | `/software-factory` | 评估工厂适用性并规划安全的自动化基础设施。 |
+| `/stack-diagram` | 绘制带有标志的浅色和深色技术栈图。 |
 | `/stack-registry` | 管理框架规则中当前使用和禁用的技术栈。 |
 | `/stacked-prs` | 创建和管理相互依赖的 GitHub 拉取请求栈。 |
 | `/stay-within-limits` | 围绕用量限制规划长期运行的智能体工作。 |
