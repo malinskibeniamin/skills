@@ -70,6 +70,7 @@ type: skill
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
+| `/improve-animations` | 审计保留的动效，按优先级规划改进。 |
 | `/better-accessibility` | 用 WCAG 扩展现有无障碍验证。 |
 | `/better-colors` | 构建并测量语义化界面颜色系统。 |
 | `/better-interface` | 通过现有视觉审查流程检查界面。 |
@@ -202,6 +203,7 @@ type: skill
 | `/redpanda-ai-gateway` | 通过 Redpanda AI Gateway 运行 AI CLI。 |
 | `/registry-workflow` | 维护组件注册表分类体系和同步规范。 |
 | `/release` | 安全发布不可变的 frontend-skills 版本。 |
+| `/remove-animations` | 移除多余动效，同时保留正确的交互行为。 |
 | `/research` | 研究主要来源并保存带引用的发现。 |
 | `/resilience-review` | 根据墨菲定律审查可信的高影响故障。 |
 | `/resolve-pr-feedback` | 解决拉取请求反馈和审查线程。 |

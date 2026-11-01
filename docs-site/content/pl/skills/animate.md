@@ -59,6 +59,10 @@ nie z animacji UI. `/demo` nadal wymaga wywołania przez użytkownika; ten odno�
 
 ## Przegląd i planowanie [#review-and-planning]
 
+Aby wyłącznie usuwać zbędny ruch, wczytaj [remove-animations](https://github.com/malinskibeniamin/skills/blob/main/remove-animations/SKILL.md).
+Dla audytu całego kodu lub planu ulepszeń według priorytetów wczytaj
+[improve-animations](https://github.com/malinskibeniamin/skills/blob/main/improve-animations/SKILL.md); ten skill nadal odpowiada za jakość wykonania.
+
 Sprawdź cel/częstotliwość, krzywą/czas, punkt początkowy, przerwania, koszt klatek, dostępność
 oraz spójność. Przytocz `plik:wiersz` i dowód wizualny lub ślad; odróżniaj sugestie jakościowe
 od odtwarzalnych usterek. Istniejące świadome kompromisy stanowią kontekst, nie automatyczne zgłoszenia.

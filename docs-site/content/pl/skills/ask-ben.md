@@ -70,6 +70,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
+| `/improve-animations` | Audytuj zachowany ruch i planuj ulepszenia według priorytetów. |
 | `/better-accessibility` | Rozszerzanie istniejącej weryfikacji dostępności o WCAG. |
 | `/better-colors` | Budowanie i pomiar semantycznych systemów kolorów interfejsu. |
 | `/better-interface` | Przegląd interfejsów przez istniejącą ocenę wizualną. |
@@ -202,6 +203,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/redpanda-ai-gateway` | Uruchamianie narzędzi CLI AI przez Redpanda AI Gateway. |
 | `/registry-workflow` | Utrzymywanie taksonomii rejestru komponentów i dyscypliny synchronizacji. |
 | `/release` | Bezpieczne publikowanie niezmiennego wydania frontend-skills. |
+| `/remove-animations` | Usuń zbędny ruch, zachowując poprawne działanie interakcji. |
 | `/research` | Badanie źródeł pierwotnych i zapisywanie ustaleń z cytowaniami. |
 | `/resilience-review` | Przeglądanie wiarygodnych awarii o dużym wpływie zgodnie z prawem Murphy’ego. |
 | `/resolve-pr-feedback` | Uwzględnianie uwag do pull requesta i rozwiązywanie wątków przeglądu. |

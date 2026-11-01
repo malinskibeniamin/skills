@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "cd6653d356494bfe",
-      "zh-CN": "cd6653d356494bfe",
-      "zh-TW": "cd6653d356494bfe"
+      "pl": "49565e75a28cd319",
+      "zh-CN": "49565e75a28cd319",
+      "zh-TW": "49565e75a28cd319"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -36,9 +36,9 @@
       "zh-TW": "5e5505d3572147b3"
     },
     "content/skills/animate.md": {
-      "pl": "dfed232226748f62",
-      "zh-CN": "dfed232226748f62",
-      "zh-TW": "dfed232226748f62"
+      "pl": "e16ae6ec0d10a650",
+      "zh-CN": "e16ae6ec0d10a650",
+      "zh-TW": "e16ae6ec0d10a650"
     },
     "content/skills/animation-performance.md": {
       "pl": "9947e1cf357a2d25",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "ef10dfff3639aedb",
-      "zh-CN": "ef10dfff3639aedb",
-      "zh-TW": "ef10dfff3639aedb"
+      "pl": "8c28f6d2d60a76eb",
+      "zh-CN": "8c28f6d2d60a76eb",
+      "zh-TW": "8c28f6d2d60a76eb"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -235,6 +235,11 @@
       "zh-CN": "34b1c8f130fb8a15",
       "zh-TW": "34b1c8f130fb8a15"
     },
+    "content/skills/improve-animations.md": {
+      "pl": "f79e026a903943e9",
+      "zh-CN": "f79e026a903943e9",
+      "zh-TW": "f79e026a903943e9"
+    },
     "content/skills/improve-codebase-architecture.md": {
       "pl": "847373dbc894186f",
       "zh-CN": "847373dbc894186f",
@@ -349,6 +354,11 @@
       "pl": "ff05d5a87fec18ce",
       "zh-CN": "ff05d5a87fec18ce",
       "zh-TW": "ff05d5a87fec18ce"
+    },
+    "content/skills/remove-animations.md": {
+      "pl": "58f43005fada43ce",
+      "zh-CN": "58f43005fada43ce",
+      "zh-TW": "58f43005fada43ce"
     },
     "content/skills/research.md": {
       "pl": "822533bfece94d71",
