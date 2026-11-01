@@ -1,0 +1,3 @@
+interface:
+  display_name: "Remove Animations"
+  short_description: "Remove unnecessary motion while preserving interaction behavior"

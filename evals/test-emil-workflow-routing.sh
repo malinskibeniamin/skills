@@ -8,7 +8,7 @@ import sys
 
 repo = pathlib.Path(sys.argv[1]).resolve()
 routes = {
-    "shared/change-evidence.md": ("mobile-native", "break-ui", "ask-sonner"),
+    "shared/change-evidence.md": ("mobile-native", "break-ui", "ask-sonner", "remove-animations", "improve-animations"),
     "visual-review/REFERENCE.md": ("animate", "animation-vocabulary", "mobile-native", "ask-sonner"),
     "prototype/UI.md": ("animate", "break-ui", "mobile-native"),
     "ux-performance/OPTIMIZATION.md": ("animation-performance",),

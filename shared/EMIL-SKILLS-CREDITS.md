@@ -1,14 +1,14 @@
 # Emil Kowalski skills: selection and provenance
 
-Add six focused web skills from [emilkowalski/skills](https://github.com/emilkowalski/skills),
-reviewed at [`2d228630ba1446365f614a108cb8252f1feda202`](https://github.com/emilkowalski/skills/tree/2d228630ba1446365f614a108cb8252f1feda202/skills).
-They fill motion implementation, frame diagnosis, terminology, mobile-platform,
-data-stress, and toast-library gaps. Consolidate overlapping motion workflows;
+Maintain eight focused web skills from [emilkowalski/skills](https://github.com/emilkowalski/skills),
+reviewed at [`a81dbca07f2217b7103e510c0f13f8d5b017afc9`](https://github.com/emilkowalski/skills/tree/a81dbca07f2217b7103e510c0f13f8d5b017afc9/skills).
+They fill motion subtraction, auditing, implementation, frame diagnosis, terminology,
+mobile-platform, data-stress, and toast-library gaps. Consolidate overlapping motion workflows;
 preserve existing design/prototype owners. Upstream defaults need adaptation to
 our accessibility, runtime, and endpoint contracts rather than wholesale installation.
 
 ```text
-Distinct web capability -> six canonical skills -> Claude registration + generated Codex proxies
+Distinct web capability -> eight canonical skills -> Claude registration + generated Codex proxies
 Overlap/stack conflict -> existing owner or defer -> smaller discovery surface
 Both paths -> source/license retained -> offline distribution and repository checks
 ```
@@ -26,7 +26,8 @@ All rows refer to `skills/<name>/SKILL.md` at the revision above.
 | `break-ui` | Add | Explicit schema-backed fixture/layout stress; complements lifecycle `dogfood` |
 | `ask-sonner` | Add | Sonner-specific operation, styling, and placement guidance; existing UI wrapper wins |
 | `review-animations` | Consolidate | Read-only review mode in `animate`; general visual findings stay with `visual-review` |
-| `improve-animations` | Consolidate | Read-only audit/plan mode in `animate`; no executor dispatch or extra approval gate |
+| `improve-animations` | Add | Distinct audit/roadmap entrypoint for retained motion; `animate` owns execution, with no executor dispatch or extra approval gate |
+| `remove-animations` | Add | Subtraction-only cleanup with hidden-state, completion, unmount and focus safeguards |
 | `find-animation-opportunities` | Consolidate | Purpose/frequency gate and rejected candidates in `animate`; no forced additions |
 | `emil-design-eng` | Keep existing owner | Its motion/component craft already appears in `visual-review/REFERENCE.md` |
 | `apple-design` | Keep existing owner | Continuity, gestures, feedback, and reduced motion overlap `animate`/`visual-review`; avoid another broad taste router |
@@ -37,9 +38,14 @@ All rows refer to `skills/<name>/SKILL.md` at the revision above.
 
 ## Adapted files
 
+- `remove-animations/SKILL.md`: upstream same-name entrypoint; preserve essential
+  feedback and lifecycle behavior, with no new motion, dependency changes or invented usage counts.
+- `improve-animations/SKILL.md`: upstream same-name entrypoint, `AUDIT.md` and
+  `PLAN-TEMPLATE.md`; reuse local craft guidance, inline audits, requested plans only.
 - `animate/SKILL.md` and `REFERENCE.md`: upstream `animate`, `RECIPES.md`, and the
-  review/audit/opportunity entrypoints. Exact timing/curve candidates retained without
-  turning every upstream preference into a blocking rule.
+  review/opportunity entrypoints; broad audits now have the `improve-animations`
+  front door. Exact timing/curve candidates retained without turning every upstream
+  preference into a blocking rule.
 - `animation-performance/SKILL.md`: upstream same-name entrypoint, with measured
   diagnosis and browser/version-dependent acceleration instead of blanket GPU claims.
 - `animation-vocabulary/SKILL.md` and `GLOSSARY.md`: upstream same-name entrypoint;
@@ -76,6 +82,14 @@ and callback/return semantics are deliberately not frozen here.
 
 ## Native workflow handoffs
 
+`/remove-animations` -> `/improve-animations` -> `/animation-performance`: subtract
+first, audit retained motion second, profile remaining frame problems last. The sequence
+never promotes an audit into source editing or promises measured gains without traces.
+
+The previous pin consolidated `improve-animations` into `animate` and had no removal
+entrypoint. Upstream added `remove-animations` after that pin; the requested sequence
+justifies separate subtraction and roadmap triggers without duplicating the craft owner.
+
 Keep the existing front doors and load only the capability the task needs:
 
 - `/work` and `/review` use [change evidence](change-evidence.md) to reach motion,
@@ -94,10 +108,28 @@ the local workflow remains the source of scope, evidence and endpoint rules.
 
 ## Refresh and verify
 
-Compare the upstream sources and license at one new reviewed commit. Preserve the
-adaptations above, update this pin, and keep each skill's `LICENSE` byte-exact so an
-individual installation includes the MIT notice. Reassess deferred/overlapping skills
-only if stack or owner boundaries change.
+The complete upstream `skills/` tree, README, cheatsheets and MIT license are retained
+byte-exact in [`vendor/emil`](../vendor/emil), including deferred and consolidated
+skills as reference material, not registered commands.
+[`vendor/emil.lock.json`](../vendor/emil.lock.json) records the immutable revision and
+SHA-256/mode of every file. The six existing adapted source skills are unchanged since
+the previous pin; upstream's only skill addition is `remove-animations`.
+
+Refresh explicitly from a separate upstream checkout; nothing fetches on skill invocation:
+
+```sh
+git clone https://github.com/emilkowalski/skills.git /tmp/emil-skills-upstream
+python3 scripts/vendor-emil.py --source /tmp/emil-skills-upstream --revision <reviewed-full-commit-sha>
+python3 scripts/vendor-emil.py --check
+```
+
+The importer reads committed Git blobs (not a dirty working tree), preserves resource
+bytes/modes, copies the upstream license into all eight host skills, and rejects
+snapshot/license drift before overwriting managed state. A same-pin rerun produces no
+diff. Review source/license changes first, then reconcile adaptations manually outside
+the snapshot; do not execute upstream greetings, delegation, worktree, forced feedback,
+or automatic plan-writing instructions. Preserve the compatibility decisions above.
+Reassess deferred/overlapping skills only if stack or owner boundaries change.
 
 Edit `.claude-plugin/plugin.json` and `scripts/generate-skill-catalog.sh` for discovery;
 regenerate rather than editing Codex proxies or router rows manually:
@@ -113,5 +145,5 @@ bun run lint:fix
 bun run type:check
 ```
 
-Each added skill includes the upstream MIT license, copyright 2026 Emil Kowalski,
-from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/2d228630ba1446365f614a108cb8252f1feda202/LICENSE).
+Each adapted skill includes the upstream MIT license, copyright 2026 Emil Kowalski,
+from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/a81dbca07f2217b7103e510c0f13f8d5b017afc9/LICENSE).

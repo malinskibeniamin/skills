@@ -42,6 +42,10 @@ not UI animation. `/demo` remains user-invoked; this pointer grants no publicati
 
 ## Review and planning
 
+For subtraction-only cleanup, load [remove-animations](../remove-animations/SKILL.md).
+For a codebase-wide audit or prioritized roadmap, load
+[improve-animations](../improve-animations/SKILL.md); this skill remains the craft owner.
+
 Review purpose/frequency, easing/timing, origin, interruption, frame cost, accessibility,
 and cohesion. Cite `file:line` plus visible or trace evidence; distinguish craft suggestions
 from reproducible defects. Existing deliberate tradeoffs are context, not automatic findings.

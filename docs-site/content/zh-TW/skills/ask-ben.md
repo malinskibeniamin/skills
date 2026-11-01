@@ -70,6 +70,7 @@ type: skill
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
+| `/improve-animations` | 稽核保留的動效，按優先順序規劃改善。 |
 | `/better-accessibility` | 以 WCAG 擴充現有無障礙驗證。 |
 | `/better-colors` | 建立並量測語意化介面色彩系統。 |
 | `/better-interface` | 透過現有視覺審查流程檢查介面。 |
@@ -202,6 +203,7 @@ type: skill
 | `/redpanda-ai-gateway` | 透過 Redpanda AI Gateway 執行 AI CLI。 |
 | `/registry-workflow` | 維護元件登錄的分類與同步規範。 |
 | `/release` | 安全地發布不可變的 frontend-skills 版本。 |
+| `/remove-animations` | 移除多餘動效，同時保留正確的互動行為。 |
 | `/research` | 研究第一手來源，並儲存附有引文的研究結果。 |
 | `/resilience-review` | 依據莫非定律審查可信且影響重大的故障情境。 |
 | `/resolve-pr-feedback` | 解決提取要求的意見回饋與審查討論串。 |

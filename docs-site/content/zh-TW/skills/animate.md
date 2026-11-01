@@ -54,6 +54,10 @@ type: skill
 
 ## 審查與規劃 [#review-and-planning]
 
+僅做動效減法時，載入 [remove-animations](https://github.com/malinskibeniamin/skills/blob/main/remove-animations/SKILL.md)。
+需要整個程式碼庫的稽核或按優先順序排列的路線圖時，載入
+[improve-animations](https://github.com/malinskibeniamin/skills/blob/main/improve-animations/SKILL.md)；本技能仍負責動效實作品質。
+
 審查目的/頻率、緩動/時長、起點、打斷、每影格成本、無障礙和一致性。
 引用 `檔案:行號` 以及可見證據或效能軌跡；區分品質建議與可復現缺陷。
 現有的有意權衡是背景，不自動構成問題。

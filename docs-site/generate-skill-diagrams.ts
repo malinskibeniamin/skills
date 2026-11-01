@@ -127,6 +127,24 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Instant feedback",
     ],
   },
+  "remove-animations": {
+    kind: "decision-tree",
+    nodes: [
+      "Existing motion",
+      "Clear purpose?",
+      "Keep + verify",
+      "Subtract safely",
+    ],
+  },
+  "improve-animations": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Retained motion",
+      "Audit + confirm",
+      "Rank by impact",
+      "Requested plans",
+    ],
+  },
   "animation-performance": {
     kind: "feedback-loop",
     nodes: [
