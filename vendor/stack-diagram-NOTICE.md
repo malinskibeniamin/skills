@@ -1,0 +1,47 @@
+# Stack-diagram source and refresh
+
+The complete skill from [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram)
+is pinned to [commit `188f43b7c4f1725a0948feef8b94a199d07e6e0d`](https://github.com/caru-ini/stack-diagram/tree/188f43b7c4f1725a0948feef8b94a199d07e6e0d).
+All 18 skill-local files plus the root LICENSE are copied byte-for-byte: entrypoint,
+references, three Python helpers, HTML template, generic pictograms and bundled fonts.
+Upstream promotional screenshots, README, workflow and Git configuration are excluded;
+none is needed by the skill. No logos are bundled or fetched during installation.
+
+Copyright (c) 2026 caru-ini. The root [MIT license](stack-diagram/LICENSE) and
+[skill license/trademark notice](stack-diagram/skills/stack-diagram/LICENSE) remain
+in the snapshot. Geist and JetBrains Mono retain their separate
+[Geist OFL notice](stack-diagram/skills/stack-diagram/assets/fonts/OFL-Geist.txt),
+[JetBrains Mono OFL notice](stack-diagram/skills/stack-diagram/assets/fonts/OFL-JetBrainsMono.txt)
+and [font provenance](stack-diagram/skills/stack-diagram/assets/fonts/README.md).
+Brand marks fetched later retain their owners' trademarks and source licenses.
+
+The [lock](stack-diagram.lock.json) records repository, full revision, SHA-256 digest
+and permission mode for every file. [Host compatibility](../shared/STACK-DIAGRAM.md)
+and the [adapter](../stack-diagram/SKILL.md) live outside the snapshot. Claude's
+manifest is the registration owner; the catalog generator derives Codex discovery.
+No hooks, installs, browsers, network calls or background work activate on import.
+
+## Review and refresh
+
+Review the upstream commit diff, skill-local inventory, licenses, script behavior
+and network sources before selecting a new full SHA. Then use a separate clone:
+
+```sh
+git clone https://github.com/caru-ini/stack-diagram /tmp/stack-diagram-upstream
+python3 scripts/vendor-stack-diagram.py \
+  --source /tmp/stack-diagram-upstream \
+  --revision 188f43b7c4f1725a0948feef8b94a199d07e6e0d
+bash scripts/generate-skill-catalog.sh
+bash evals/run.sh stack-diagram-vendored-skills
+```
+
+The importer reads committed blobs, not working-tree files, and preserves modes.
+An identical rerun produces no diff. `python3 scripts/vendor-stack-diagram.py --check`
+is offline/read-only; it rejects missing/extra/changed files, modes and symlinks.
+Refresh refuses moving refs, incomplete resources, unreviewed license changes,
+unsafe Git entries and existing unmanaged or drifted output before writing.
+New licenses or required-resource changes need an importer review first.
+
+After refresh, rerun the public CLI/distribution tests, build a realistic diagram,
+render and inspect both themes, and run repository lint/type checks. Build tests do
+not establish visual quality, external logo availability or model adherence.

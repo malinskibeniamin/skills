@@ -104,6 +104,7 @@
     "./skeleton-loaders/",
     "./snyk-ux-security/",
     "./software-factory/",
+    "./stack-diagram/",
     "./stack-registry/",
     "./stacked-prs/",
     "./stay-within-limits/",

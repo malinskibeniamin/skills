@@ -108,6 +108,16 @@ Follow the guide to configure the MCP client and consumer app's dev-only bootstr
 Missing capabilities retain existing workflows; React observations do not replace tests
 or production-like UX measurements.
 
+### Stack diagrams
+
+`/stack-diagram` creates logo-based architecture and tooling diagrams with grouped
+containers, orthogonal arrows, and light/dark themes. It produces self-contained
+HTML, PNG or React/TSX from the complete pinned
+[caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram) skill. Python 3.9+
+and network access fetch logos; PNG verification also needs Playwright/Chromium.
+No dependencies install automatically. Use `/excalidraw-diagram` for hand-drawn
+editable diagrams. [Licenses and refresh](vendor/stack-diagram-NOTICE.md).
+
 ### TraceDecay code graph
 
 This harness uses [TraceDecay](https://github.com/ScriptedAlchemy/tracedecay) as a
