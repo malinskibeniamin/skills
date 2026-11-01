@@ -9,7 +9,7 @@ import sys
 
 repo = pathlib.Path(sys.argv[1]).resolve()
 selected = (
-    "animate", "animation-performance", "animation-vocabulary",
+    "animate", "remove-animations", "improve-animations", "animation-performance", "animation-vocabulary",
     "mobile-native", "break-ui", "ask-sonner",
 )
 registered = json.loads((repo / ".claude-plugin/plugin.json").read_text())["skills"]
@@ -50,4 +50,64 @@ else
   echo "  FAIL  Emil skill distribution is incomplete"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: Emil skill distribution is incomplete"
+fi
+
+# The importer is the public refresh/check boundary. Exercise immutable Git reads,
+# offline repeatability and drift rejection without relying on the network.
+if python3 - "$REPO_ROOT" <<'PY'
+import pathlib
+import shutil
+import subprocess
+import sys
+import tempfile
+
+repo = pathlib.Path(sys.argv[1]).resolve()
+importer = repo / "scripts/vendor-emil.py"
+
+def run(*args, ok=True):
+    result = subprocess.run([sys.executable, str(importer), *map(str, args)], capture_output=True, text=True)
+    assert (result.returncode == 0) == ok, result.stdout + result.stderr
+    return result
+
+run("--check")
+with tempfile.TemporaryDirectory(prefix="emil-refresh-test-") as temporary:
+    root = pathlib.Path(temporary)
+    source = root / "source"
+    shutil.copytree(repo / "vendor/emil", source)
+    subprocess.run(["git", "init", "-q", str(source)], check=True)
+    subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(source), "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "fixture"], check=True)
+    revision = subprocess.check_output(["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
+    original = (source / "skills/remove-animations/SKILL.md").read_bytes()
+    (source / "skills/remove-animations/SKILL.md").write_text("dirty working tree is not a reviewed input")
+    target = root / "target"
+    target.mkdir()
+    for name in ("animate", "remove-animations", "improve-animations", "animation-performance", "animation-vocabulary", "mobile-native", "break-ui", "ask-sonner"):
+        (target / name).mkdir()
+    args = ("--repo-root", target, "--source", source, "--revision", revision)
+    run(*args)
+    assert (target / "vendor/emil/skills/remove-animations/SKILL.md").read_bytes() == original
+    lock_path = target / "vendor/emil.lock.json"
+    first_lock = lock_path.read_bytes()
+    run(*args)
+    assert lock_path.read_bytes() == first_lock, "identical refresh changed the lock"
+    run("--repo-root", target, "--check")
+    run("--repo-root", target, "--source", source, "--revision", "HEAD", ok=False)
+    assert lock_path.read_bytes() == first_lock, "moving ref rejection changed managed state"
+    victim = target / "vendor/emil/skills/remove-animations/SKILL.md"
+    victim.write_text("uncommitted managed work")
+    assert "drift" in run("--repo-root", target, "--check", ok=False).stderr.lower()
+    run(*args, ok=False)
+    assert victim.read_text() == "uncommitted managed work", "refresh overwrote managed drift"
+    victim.write_bytes(original)
+    (target / "remove-animations/LICENSE").write_text("missing notice")
+    run("--repo-root", target, "--check", ok=False)
+print("  PASS  Emil refresh is pinned, repeatable, offline and rejects snapshot/license drift")
+PY
+then
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Emil provenance or refresh contract is broken"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Emil provenance or refresh contract is broken"
 fi

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Refresh Emil Kowalski's pinned skill sources and add `/remove-animations` and
+  `/improve-animations` alongside `/animation-performance`. Keep local accessibility
+  and execution safeguards; verify offline sources and licenses with
+  `python3 scripts/vendor-emil.py --check`.
+
 ## 4.42.0
 
 2026-11-01 -- Publish the post-4.41 changes as one Claude Code and Codex bundle.

@@ -44,6 +44,7 @@
 | `/handoff` | Prepare a compact session handoff for another agent. |
 | `/hook-audit` | Audit hook effectiveness, latency, and drift. |
 | `/implement-spec` | Implement a whole spec on one integration branch. |
+| `/improve-animations` | Audit retained motion and plan prioritized improvements. |
 | `/improve-codebase-architecture` | Redesign architecture to eliminate classes of errors. |
 | `/improve` | Audit codebases or write requested implementation plans. |
 | `/better-accessibility` | Extend existing accessibility verification with WCAG. |
@@ -178,6 +179,7 @@
 | `/redpanda-ai-gateway` | Run AI CLIs through the Redpanda AI Gateway. |
 | `/registry-workflow` | Maintain component registry taxonomy and sync discipline. |
 | `/release` | Publish an immutable frontend-skills release safely. |
+| `/remove-animations` | Remove unnecessary motion while preserving interaction behavior. |
 | `/research` | Research primary sources and save cited findings. |
 | `/resilience-review` | Review credible high-impact failures with Murphy law. |
 | `/resolve-pr-feedback` | Resolve pull request feedback and review threads. |
