@@ -41,7 +41,7 @@ claude plugin update frontend-skills@skills
 
 Restart Claude Code session so hooks reload from new cache.
 
-The unreleased bundle retires Ponytail and `/deslop`, including their review
+Since 4.41.0, the bundle no longer includes Ponytail or `/deslop`, including their review
 policy and LOC nudges. Reload or restart the host after upgrading so previously
 loaded instructions do not remain active. Use `/review` for correctness review
 or `/improve` for a requested codebase audit.
@@ -87,7 +87,7 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.42.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.43.0
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```

@@ -2,10 +2,29 @@
 
 ## Unreleased
 
-- Refresh Emil Kowalski's pinned skill sources and add `/remove-animations` and
-  `/improve-animations` alongside `/animation-performance`. Keep local accessibility
-  and execution safeguards; verify offline sources and licenses with
-  `python3 scripts/vendor-emil.py --check`.
+## 4.43.0
+
+2026-11-02 -- Publish the post-4.42 animation skills as one Claude Code and Codex bundle.
+
+### Highlights
+
+- Add `/remove-animations` for subtracting unnecessary motion without losing
+  visibility, focus, status feedback, or reduced-motion support.
+- Add `/improve-animations` for evidence-based motion audits and implementation
+  plans; implementation remains owned by `/animate` and the requested endpoint.
+- Refresh Emil Kowalski's pinned skill sources and licenses, plus localized
+  animation documentation and diagrams.
+
+### Upgrade notes
+
+- Claude and Codex manifests and both marketplaces advertise 4.43.0 together.
+  Refresh the marketplace and installed plugin, then reload or restart the host.
+- Codex marketplace installs pinned to v4.42.0 must explicitly move to v4.43.0.
+- Keep local accessibility and execution safeguards. Animation audits do not
+  authorize edits, delegation, new worktrees, or dependency removal.
+- Verify offline sources and licenses with `python3 scripts/vendor-emil.py --check`.
+- Preserve the separate `frontend-skills-mods` version (0.3.0), published tags,
+  and older documentation archives.
 
 ## 4.42.0
 
