@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "a81dbca07f2217b7103e510c0f13f8d5b017afc9",
+  "revision": "f1090bec277140d02ed202440185ad9d02ac1490",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
@@ -11,7 +11,7 @@
       "mode": 420
     },
     "performance-cheatsheet.md": {
-      "sha256": "016c7294ddd5fa17fd97b7125ffb799ffb94e27a9b465a6fbaedfd92685d4583",
+      "sha256": "814de0807d55bb2f21944eb5be33fafbc776817e4c1bed5503ab5243f0bc6cc0",
       "mode": 420
     },
     "skills/animate/RECIPES.md": {
@@ -19,7 +19,7 @@
       "mode": 420
     },
     "skills/animate/SKILL.md": {
-      "sha256": "b8ede161270458e6ae2e45e8a1985373515d4c63de5568ddb0f9012d7634356c",
+      "sha256": "39138996033e0dbe53e73217514116eaeca774bae84a0687c80d445a4e0cc3a6",
       "mode": 420
     },
     "skills/animate-expo/RECIPES.md": {
@@ -31,7 +31,7 @@
       "mode": 420
     },
     "skills/animation-performance/SKILL.md": {
-      "sha256": "ceb9dd3fe912615830f725a0120ccf8d012d15a6218001a5cd6c15d38e39a957",
+      "sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
       "mode": 420
     },
     "skills/animation-vocabulary/SKILL.md": {
@@ -59,7 +59,7 @@
       "mode": 420
     },
     "skills/emil-design-eng/SKILL.md": {
-      "sha256": "ffbe68e6007fb42cb8149f089b400a1ca007d59ba23e8948e2be4476f3175939",
+      "sha256": "965cc3108047a1f68e504977ae7816c66115b202a32e7509c0b8305314839c54",
       "mode": 420
     },
     "skills/find-animation-opportunities/SKILL.md": {
@@ -67,7 +67,7 @@
       "mode": 420
     },
     "skills/improve-animations/AUDIT.md": {
-      "sha256": "551c8473e20e5f4774680bc24d45e1c68e50992582720905c6b077756b7b5a55",
+      "sha256": "63fa8fcf7e7b3a3e252938e55c60e1f399f607e73553163e8dacf9df40f3ebed",
       "mode": 420
     },
     "skills/improve-animations/PLAN-TEMPLATE.md": {
@@ -99,11 +99,11 @@
       "mode": 420
     },
     "skills/review-animations/SKILL.md": {
-      "sha256": "6ff590d29e436766135aa3d137be1fac2a867165c7257fc315b189361f1873af",
+      "sha256": "5f9fb98b69cace7107af8b393a4196fd42fa42d98bce0e5afc1f866ff3b8a41c",
       "mode": 420
     },
     "skills/review-animations/STANDARDS.md": {
-      "sha256": "e7d3605034acda54ca13e43aec9e64d65b53de20f75b11b8d694e373012fbe07",
+      "sha256": "8f5fe3f5a04537556dd4e6a37f7a8d6f616d840eb80f2f68b5b594febb170657",
       "mode": 420
     },
     "skills/write-swift/SKILL.md": {

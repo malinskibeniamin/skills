@@ -90,6 +90,7 @@
 | `/matt-setup-matt-pocock-skills` | Matt Pocock source: setup matt pocock skills guidance. |
 | `/matt-setup-pre-commit` | Matt Pocock source: setup pre commit guidance. |
 | `/matt-setup-ts-deep-modules` | Matt Pocock source: setup ts deep modules guidance. |
+| `/matt-software-factory` | Matt Pocock source: software factory guidance. |
 | `/matt-tdd` | Matt Pocock source: tdd guidance. |
 | `/matt-teach` | Matt Pocock source: teach guidance. |
 | `/matt-to-questionnaire` | Matt Pocock source: to questionnaire guidance. |

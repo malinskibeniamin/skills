@@ -17,23 +17,25 @@ for relative in ("software-factory/SKILL.md", "software-factory/ORCHESTRATORS.md
     if not (root / relative).is_file():
         raise SystemExit(f"Missing factory design resource: {relative}")
 
-# Independently fetched from mattpocock/skills at b59cab42bf1206e1363eafc37f71b21c3bcaa12f.
-expected = {
-    "EXAMPLE-TASKS.md": "34bfb01ced8fbbff8185d347df423533d157c29e8d58bf044f8450602f162875",
-    "GIT-HOSTS.md": "f6b453cd0b1601c329dcfbffcb4added077683a4b777c819530ff0a940b1147f",
-    "LICENSE": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
-    "OBSERVABILITY-PLATFORMS.md": "c3bd68e1bd105ccdda407a7aa909807131a20117bbf510d1ad0cfefffa25cb4c",
-    "RUNNERS.md": "85aacfb9acac67948c1659562d60b52c2a13936faddd24de26c9094b35ff70e7",
-    "SKILL.md": "645ab761b6cca61a480072b1b510eb05fe0fe5cde2ce0495b6fc234311692253",
-    "TICKET-TRACKERS.md": "4b68a198d6c1a6d47f9ad7eb1f02cc3e60778a2b1610f8b2ac23f72230d575b2",
-}
-source = root / "vendor/mattpocock/software-factory"
+lock = json.loads((root / "vendor/mattpocock.lock.json").read_text())
+skill = next(s for s in lock["skills"] if s["upstream_name"] == "software-factory")
+if skill["owner"] != "software-factory":
+    raise SystemExit("Factory source bypasses the existing planning owner")
+snapshot = root / "vendor/mattpocock/upstream"
+source = (snapshot / skill["source"]).parent
+expected = {"SKILL.md", "EXAMPLE-TASKS.md", "GIT-HOSTS.md", "TICKET-TRACKERS.md",
+            "RUNNERS.md", "OBSERVABILITY-PLATFORMS.md"}
 actual = {path.name for path in source.iterdir()} if source.is_dir() else set()
-if actual != set(expected):
+if actual != expected:
     raise SystemExit(f"Incomplete factory source snapshot: {sorted(actual)}")
-for name, digest in expected.items():
-    if hashlib.sha256((source / name).read_bytes()).hexdigest() != digest:
-        raise SystemExit(f"Factory source differs from the reviewed upstream pin: {name}")
+for path in [source / name for name in expected] + [snapshot / "LICENSE"]:
+    record = lock["files"][path.relative_to(snapshot).as_posix()]
+    if hashlib.sha256(path.read_bytes()).hexdigest() != record["sha256"] or path.stat().st_mode & 0o777 != record["mode"]:
+        raise SystemExit(f"Factory source differs from the reviewed upstream pin: {path.name}")
+if str(source.relative_to(root)) not in (root / "software-factory/SKILL.md").read_text():
+    raise SystemExit("Factory planning still points at the superseded draft snapshot")
+if "../vendor/mattpocock/software-factory/" in (root / "software-factory/SKILL.md").read_text():
+    raise SystemExit("Factory planning still loads the superseded draft snapshot")
 PY
 then
   echo "  PASS  factory design resources ship with the complete pinned MIT source"

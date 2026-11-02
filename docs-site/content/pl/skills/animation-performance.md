@@ -31,7 +31,7 @@ prowadzi przez weryfikację i bramki dostarczania projektu.
    | Zajęty JS podczas ruchu | Odpowiednia ścieżka CSS/WAAPI; potwierdź rzeczywiste wykonanie w kompozytorze |
    | Render Reacta w każdej klatce | Wartości ruchu lub ograniczone aktualizacje ref; zachowaj semantyczny stan Reacta |
    | Koszt rośnie z potomkami | Ogranicz zapisy dziedziczonych zmiennych CSS do poruszającego się elementu |
-   | Osobne transformacje Motion nie korzystają z akceleracji | Sprawdź pełny `transform` po ustaleniu zainstalowanej wersji |
+   | Osobne transformacje Motion nie korzystają z akceleracji | Sprawdź wersję i ścieżkę: Motion 14.2+ może łączyć skróty HTML; w starszych wersjach wypróbuj pełny `transform` |
    | Tworzenie warstwy powoduje zaobserwowane przycięcie | Lokalne, tymczasowe `will-change`; usuń, gdy zysk nie został dowiedziony |
 
 4. Odtwórz identyczne warunki bazy i kandydata; porównaj opóźnione klatki, układ/malowanie
@@ -46,6 +46,9 @@ prowadzi przez weryfikację i bramki dostarczania projektu.
 - Akceleracja sprzętowa jest stopniowym ulepszeniem. CSS, WAAPI i Motion nie dają ogólnej gwarancji;
   sprawdź [aktualne wskazówki Motion](https://motion.dev/docs/performance) oraz zainstalowaną ścieżkę biblioteki.
   Ograniczanie CPU nie emuluje GPU ani pamięci telefonu.
+- Motion 14.2+ może łączyć HTML `x`/`y`/`scale`/`rotate` w transformację obsługiwaną przez WAAPI;
+  zachowaj te skróty, gdy są odpowiednie. Layout/layoutId, `onUpdate`,
+  `transformTemplate`, bezwładność i wartości sterowane co klatkę nadal wymagają pracy głównego wątku.
 - Skalowanie nie zastępuje zawsze wysokości lub paddingu: skaluje tekst i nie zmienia przepływu.
   Zachowaj poprawność, zanim wybierzesz tańszą ścieżkę renderowania.
 - Profiluj blur/filter/clip-path w obsługiwanych przeglądarkach; stała granica pikseli niczego nie dowodzi.

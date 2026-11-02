@@ -1,7 +1,7 @@
 # Emil Kowalski skills: selection and provenance
 
 Maintain eight focused web skills from [emilkowalski/skills](https://github.com/emilkowalski/skills),
-reviewed at [`a81dbca07f2217b7103e510c0f13f8d5b017afc9`](https://github.com/emilkowalski/skills/tree/a81dbca07f2217b7103e510c0f13f8d5b017afc9/skills).
+reviewed at [`f1090bec277140d02ed202440185ad9d02ac1490`](https://github.com/emilkowalski/skills/tree/f1090bec277140d02ed202440185ad9d02ac1490/skills).
 They fill motion subtraction, auditing, implementation, frame diagnosis, terminology,
 mobile-platform, data-stress, and toast-library gaps. Consolidate overlapping motion workflows;
 preserve existing design/prototype owners. Upstream defaults need adaptation to
@@ -86,8 +86,8 @@ and callback/return semantics are deliberately not frozen here.
 first, audit retained motion second, profile remaining frame problems last. The sequence
 never promotes an audit into source editing or promises measured gains without traces.
 
-The previous pin consolidated `improve-animations` into `animate` and had no removal
-entrypoint. Upstream added `remove-animations` after that pin; the requested sequence
+Before the November 1 import, `improve-animations` was consolidated into `animate`
+and had no separate removal entrypoint. Upstream's new `remove-animations` and the requested sequence
 justifies separate subtraction and roadmap triggers without duplicating the craft owner.
 
 Keep the existing front doors and load only the capability the task needs:
@@ -112,8 +112,9 @@ The complete upstream `skills/` tree, README, cheatsheets and MIT license are re
 byte-exact in [`vendor/emil`](../vendor/emil), including deferred and consolidated
 skills as reference material, not registered commands.
 [`vendor/emil.lock.json`](../vendor/emil.lock.json) records the immutable revision and
-SHA-256/mode of every file. The six existing adapted source skills are unchanged since
-the previous pin; upstream's only skill addition is `remove-animations`.
+SHA-256/mode of every file. This refresh updates Motion 14.2+ acceleration guidance in the snapshot and local
+motion owners; the eight registered skills are unchanged. Acceleration remains
+version/path-dependent and requires runtime evidence.
 
 Refresh explicitly from a separate upstream checkout; nothing fetches on skill invocation:
 
@@ -146,4 +147,4 @@ bun run type:check
 ```
 
 Each adapted skill includes the upstream MIT license, copyright 2026 Emil Kowalski,
-from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/a81dbca07f2217b7103e510c0f13f8d5b017afc9/LICENSE).
+from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/f1090bec277140d02ed202440185ad9d02ac1490/LICENSE).

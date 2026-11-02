@@ -25,7 +25,7 @@ type: skill
 
 加载 [grilling](https://github.com/malinskibeniamin/skills/blob/main/grilling/SKILL.md)；提问、可逆假设、停止信号和计划审批由它负责。
 以草稿 PR 为最终目标时，结束的是提问，而非安全边界。
-阅读完整的[上游参考](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/SKILL.md)，
+阅读完整的[上游参考](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/SKILL.md)，
 了解工厂术语和设计问题，并应用以下本地调整：
 
 - 以目标项目的术语表为准。工厂任务是一类工作；一次工厂运行是一次执行，
@@ -39,7 +39,7 @@ type: skill
 
 检查实际的待办工作、交付循环、检查机制、审查能力、宿主能力
 和失败情况。区分观察、推断和未知信息。当用户指出痛点或没有候选任务时，
-阅读[示例任务](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/EXAMPLE-TASKS.md)。
+阅读[示例任务](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/EXAMPLE-TASKS.md)。
 针对本框架，阅读[适用性与试点](https://github.com/malinskibeniamin/skills/blob/main/software-factory/HARNESS-FIT.md)。
 
 ## 判断是否有帮助 [#decide-whether-it-helps]
@@ -60,10 +60,10 @@ type: skill
 当前所选角色的调研资料，然后验证最新的供应商文档：
 
 - [编排器](https://github.com/malinskibeniamin/skills/blob/main/software-factory/ORCHESTRATORS.md)：触发器、持久运行状态、工作认领、重试、取消。
-- [Git 托管](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/GIT-HOSTS.md)：分支、PR、身份、门禁。
-- [工单跟踪器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/TICKET-TRACKERS.md)：接收工单、就绪状态、回复。
-- [运行器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/RUNNERS.md)：执行、隔离、清理、成本。
-- [可观测性](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/OBSERVABILITY-PLATFORMS.md)，仅在
+- [Git 托管](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/GIT-HOSTS.md)：分支、PR、身份、门禁。
+- [工单跟踪器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/TICKET-TRACKERS.md)：接收工单、就绪状态、回复。
+- [运行器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/RUNNERS.md)：执行、隔离、清理、成本。
+- [可观测性](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/OBSERVABILITY-PLATFORMS.md)，仅在
   现有运行页面无法解释发生了什么时使用；经过考虑后不添加此服务也是有效选择。
 
 ## 限定每个任务 [#bound-every-task]

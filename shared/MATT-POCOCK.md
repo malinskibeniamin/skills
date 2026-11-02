@@ -50,11 +50,20 @@ Use one fresh implementer per ticket, and a separate fresh implementer for revie
 repairs. Preserve the selected model, isolated worktrees and other owners' edits.
 
 `chief-of-staff` is an in-progress reference. Agree on a bounded goal and authorized
-actions before starting work. Persistent schedules and background execution require
-explicit scope; skip unsupported host tools. Retain dated, commit-cited knowledge
-only in the agreed project location, keep secrets out, and correct contradictions
-instead of treating memory as authority. `claude-handoff` cannot launch another
+actions before starting work. Reuse an existing shared wiki and its conventions;
+agree on a location only when none exists. Persistent schedules and background
+execution require explicit scope; skip unsupported host tools. Retain dated,
+commit-cited knowledge only in that project location, keep secrets out, and correct
+contradictions instead of treating memory as authority. Its retro and large-work
+procedures use the existing owners; automatic sampling, pursuing retro candidates,
+tracker publication and implementation require the corresponding user scope.
+`claude-handoff` cannot launch another
 session without explicit authorization; ordinary handoff remains a document.
+
+`software-factory` is now part of the complete pinned suite. Its adapter loads the
+existing planning owner, which keeps fit assessment and safety controls. The merged
+source's design language and surveys replace the separately pinned draft; importing
+them grants no provisioning, automated triggers or merge permission.
 
 ## Setup and migrations
 

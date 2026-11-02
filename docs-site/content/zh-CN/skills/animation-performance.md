@@ -29,7 +29,7 @@ type: "skill"
    | 动效期间 JS 繁忙 | 使用适用的 CSS/WAAPI 路径；确认实际在合成器执行 |
    | React 每帧渲染 | 使用动效值或有界的 ref 更新；保留有语义的 React 状态 |
    | 成本随后代增加 | 将继承的 CSS 变量写入局限到运动元素 |
-   | Motion 单独变换属性未获加速 | 检查已安装版本后尝试完整 `transform` |
+   | Motion 单独变换属性未获加速 | 检查版本和执行路径：Motion 14.2+ 可合并 HTML 简写；旧版本可尝试完整 `transform` |
    | 建立图层造成可见停顿 | 局部、临时使用 `will-change`；收益未证实就移除 |
 
 4. 在相同的基线/候选条件下重放，比较延迟帧、布局/绘制和内存。
@@ -44,6 +44,9 @@ type: "skill"
 - 硬件加速是渐进增强。CSS、WAAPI 和 Motion 都不作全面保证；检查
   [当前 Motion 指南](https://motion.dev/docs/performance)及已安装库的执行路径。
   CPU 限速并不能模拟 GPU 或手机内存。
+- Motion 14.2+ 可将 HTML `x`/`y`/`scale`/`rotate` 合并为适用的 WAAPI 变换；
+  在适当情况下保留这些简写。Layout/layoutId、`onUpdate`、
+  `transformTemplate`、惯性和逐帧驱动的值仍需主线程工作。
 - 缩放不是高度/padding 的通用替代：它会缩放文字，却不改变文档流。
   先保证正确性，再选择更廉价的渲染路径。
 - 在受支持浏览器分析 blur/filter/clip-path；固定的像素阈值证明不了什么。
