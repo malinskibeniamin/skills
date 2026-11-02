@@ -89,7 +89,7 @@ run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "subagent-stop passes through non-reviewer agents"
 
 # ── SubagentStop: valid findings JSON accepted (exit 0) ──────────
-VALID_FINDINGS='{"agent_type":"code-reviewer","session_id":"test-eval","last_assistant_message":"```json\n{\"schema_version\":1,\"reviewer\":\"code-reviewer\",\"status\":\"APPROVED\",\"findings\":[],\"testing_gaps\":[],\"simplification_opportunities\":[],\"sufficiency\":\"Reviewed the complete change and affected callers; no actionable findings.\"}\n```"}'
+VALID_FINDINGS=$(jq -cn '{agent_type:"code-reviewer",session_id:"test-eval",last_assistant_message:({schema_version:2,reviewer:"code-reviewer",status:"APPROVED",findings:[],testing_gaps:[],simplification_opportunities:[],sufficiency:"Reviewed the complete change and affected callers; no actionable findings.",challenges:[{hypothesis:"The changed failure guard discards data.",scenario:"A commit fails after staging removal.",method:"source-trace",check:"Trace src/store.ts:4 through the failure guard.",expected:"The caller retains data on failure.",observation:"The fixture guard returns before removal.",outcome:"refuted",finding_ids:[],execution_limits:"This event fixture supplies source evidence only."}]} | tojson)}')
 run_hook_eval "$HOOKS_DIR/subagent-stop.sh" \
   "$VALID_FINDINGS" \
   0 \

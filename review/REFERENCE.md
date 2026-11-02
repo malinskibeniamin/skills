@@ -36,6 +36,22 @@ follow [review gates](GATES.md) before returning the receipt. Keep source read-o
 local review artifacts go in ignored scratch. Gate preparation grants neither
 delegation nor publication permission. Ordinary reviews remain inline.
 
+## Receipt validation
+
+Before completing an inline review, use the shared
+[findings schema](../agents/references/findings-schema.md), including `challenges`.
+With no matching native hook or gate recording, validate directly with the installed CLI:
+
+```sh
+bun --no-install <harness-root>/scripts/review-results.ts self-reviewer < <receipt.json>
+```
+
+Use the dispatched identity for a native reviewer. Validation failure needs a corrected
+receipt, not a completed-review claim. Keep local evidence in existing ignored scratch;
+if scratch is unavailable, pass JSON on stdin without editing source or ignore policy.
+The CLI checks the evidence contract, not its truth. Preserve command output/source
+locations and summarize challenges, unresolved limits and findings in the human report.
+
 ## Priority and comment policy
 
 Use one priority label on every finding:

@@ -47,7 +47,7 @@ Przed werdyktem sprawdź tożsamość migawki; zmiana wejścia unieważnia odpow
 
 ## Pętla dowodowa [#evidence-loop]
 
-**sprawdź -> zweryfikuj -> sklasyfikuj -> zsyntetyzuj.**
+**zakwestionuj -> sprawdź -> zweryfikuj -> sklasyfikuj -> zsyntetyzuj.** Waliduj `challenges` według [wspólnego kontraktu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md).
 
 ### Sprawdź [#inspect]
 

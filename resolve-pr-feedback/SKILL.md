@@ -50,8 +50,9 @@ Paginate threads (bots too), comments, full/outside-diff reviews; check
 
 ### 3. Repair clusters
 
-Cluster root causes: fixed (regression), rejected (counterevidence), blocked (missing proof/decision).
-Fix accepted clusters on the owning branch; test and commit `fix(review): <cluster summary>`.
+Cluster: fixed (regression), rejected (counterevidence), blocked (proof/decision).
+On the owning branch: failing regression -> repair -> replay challenge -> fresh review.
+Commit `fix(review): <cluster summary>`.
 
 ### 4. Reply and resolve
 
@@ -66,9 +67,9 @@ without another human trigger. Honor explicit narrower stops. Lower stack layer:
 run `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; require explicit
 authorization before upstack rebase/push. Repair CI before summary.
 
-### 6. Completeness Verification
+### 6. Completeness
 
-Before declaring complete: zero unresolved threads, including bot findings and outdated lines; no stale
+Complete: zero unresolved threads (bots/outdated too); no stale
 `CHANGES_REQUESTED`. Enforced by `pr-feedback-completeness-stop`.
 
 ```bash

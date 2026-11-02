@@ -40,6 +40,19 @@ const finding = {
   confidence: 0.9,
 };
 
+const challenge = {
+  hypothesis: "A failed commit can delete the caller's data.",
+  scenario: "Commit fails after the removal is staged.",
+  method: "source-trace",
+  check: "Trace src/store.ts:4 through the failure guard and rollback.",
+  expected: "The caller's data remains available after failure.",
+  observation:
+    "The failure guard returns before removal; rollback retains data.",
+  outcome: "refuted",
+  finding_ids: [],
+  execution_limits: "This receipt exercises a source-only review fixture.",
+};
+
 function collect(result: Record<string, unknown>, reviewer = "code-reviewer") {
   const root = mkdtempSync(join(tmpdir(), "review-collector-"));
   directories.push(root);
@@ -55,8 +68,13 @@ function collect(result: Record<string, unknown>, reviewer = "code-reviewer") {
         agent_id: "review-probe",
         agent_type: reviewer,
         last_assistant_message: JSON.stringify({
-          schema_version: 1,
+          schema_version: 2,
           testing_gaps: [],
+          challenges: ["SKIPPED", "UNAVAILABLE", "FAILED"].includes(
+            String(result.status),
+          )
+            ? []
+            : [challenge],
           simplification_opportunities: [],
           ...result,
         }),
@@ -252,8 +270,13 @@ function checkout(files: Record<string, string> = {}, cli = entry) {
       "inline",
       "--input",
       input("result.json", {
-        schema_version: 1,
+        schema_version: 2,
         testing_gaps: [],
+        challenges: ["SKIPPED", "UNAVAILABLE", "FAILED"].includes(
+          String(extra.status),
+        )
+          ? []
+          : [challenge],
         simplification_opportunities: [],
         reviewer: gate,
         status: "APPROVED",
@@ -265,6 +288,165 @@ function checkout(files: Record<string, string> = {}, cli = entry) {
     );
   return { root, git, run, input, plan, record };
 }
+
+test("completed review collection requires attempted falsification, not a clean label", () => {
+  const report = {
+    reviewer: "code-reviewer",
+    status: "APPROVED",
+    findings: [],
+    sufficiency: "Inspected the complete change and its callers.",
+  };
+  expect(collect({ ...report, challenges: [challenge] }).code).toBe(0);
+  expect(collect({ ...report, challenges: undefined }).code).toBe(2);
+  expect(collect({ ...report, challenges: [] }).code).toBe(2);
+
+  const f = checkout();
+  f.plan();
+  expect(f.record("correctness", { challenges: [challenge] }).code).toBe(0);
+  expect(f.record("correctness", { challenges: undefined }).code).toBe(2);
+  expect(f.record("correctness", { challenges: [] }).code).toBe(2);
+  expect(f.run("check").code).toBe(2);
+});
+
+test("challenge evidence and finding links are validated at the installed hook", () => {
+  const report = {
+    reviewer: "code-reviewer",
+    status: "NEEDS_CHANGES",
+    findings: [finding],
+  };
+  const confirmed = {
+    ...challenge,
+    outcome: "confirmed",
+    finding_ids: [finding.id],
+  };
+  const accepted = collect({ ...report, challenges: [confirmed] });
+  expect(accepted.code).toBe(0);
+  expect(accepted.stored().challenges).toEqual([confirmed]);
+  for (const change of [
+    { hypothesis: " " },
+    { scenario: "" },
+    { method: "guess" },
+    { check: "" },
+    { expected: "" },
+    { observation: "" },
+    { outcome: "looks-good" },
+    { finding_ids: [] },
+    { finding_ids: ["unknown"] },
+    { finding_ids: [finding.id, finding.id] },
+    { execution_limits: "" },
+    { method: "execution", execution_limits: "This check did not run." },
+  ]) {
+    expect(
+      collect({ ...report, challenges: [{ ...confirmed, ...change }] }).code,
+    ).toBe(2);
+  }
+  expect(
+    collect({
+      ...report,
+      challenges: [confirmed],
+      findings: [],
+      cross_model_findings: [finding],
+    }).code,
+  ).toBe(0);
+  const execution = {
+    ...challenge,
+    method: "execution",
+    check:
+      "bun test src/store.test.ts --test-name-pattern 'failed commit retains data'",
+    observation: "1 test passed; the failed commit retained the caller's data.",
+    execution_limits: null,
+  };
+  expect(collect({ ...report, challenges: [execution] }).code).toBe(0);
+  expect(
+    collect({
+      ...report,
+      challenges: [{ ...execution, finding_ids: [finding.id] }],
+    }).code,
+  ).toBe(2);
+});
+
+test("ungated inline reviews use the same fail-closed receipt CLI", () => {
+  const cli = new URL("./review-results.ts", import.meta.url).pathname;
+  const report = {
+    schema_version: 2,
+    reviewer: "self-reviewer",
+    status: "APPROVED",
+    findings: [],
+    testing_gaps: [],
+    simplification_opportunities: [],
+    sufficiency: "Traced the changed failure guard and rollback path.",
+    challenges: [challenge],
+  };
+  const run = (extra: Record<string, unknown>) =>
+    Bun.spawnSync([process.execPath, "--no-install", cli, "self-reviewer"], {
+      stdin: Buffer.from(JSON.stringify({ ...report, ...extra })),
+    });
+  const valid = run({});
+  expect(valid.exitCode).toBe(0);
+  expect(JSON.parse(valid.stdout.toString()).challenges).toEqual([challenge]);
+  for (const invalid of [
+    { challenges: undefined },
+    { schema_version: 1 },
+    { challenges: [{ ...challenge, outcome: "unresolved" }] },
+  ]) {
+    const rejected = run(invalid);
+    expect(rejected.exitCode).toBe(2);
+    expect(rejected.stdout.toString()).toBe("");
+  }
+});
+
+test("unresolved falsification cannot be approved or erased by refuting another finding", () => {
+  const f = checkout();
+  f.plan();
+  const challenges = [
+    {
+      ...challenge,
+      outcome: "unresolved",
+      observation:
+        "Rollback cannot be traced without the missing storage adapter.",
+    },
+  ];
+  expect(f.record("correctness", { challenges }).code).toBe(2);
+  expect(
+    f.record("correctness", {
+      challenges,
+      status: "NEEDS_CHANGES",
+      findings: [{ ...finding, severity: "P2" }],
+    }).code,
+  ).toBe(0);
+  expect(
+    f.run(
+      "verify",
+      "--gate",
+      "correctness",
+      "--executor",
+      "verifier",
+      "--mode",
+      "agent",
+      "--input",
+      f.input("verification.json", {
+        verdicts: [
+          {
+            finding_id: finding.id,
+            refuted: true,
+            reason: "The unrelated minor finding is false.",
+            evidence: "src/store.ts:4 returns before removal.",
+          },
+        ],
+      }),
+    ).code,
+  ).toBe(0);
+  const state = JSON.parse(f.run("check").text);
+  expect(
+    state.rows.find((row: { gate: string }) => row.gate === "correctness")
+      .status,
+  ).toBe("NEEDS_CHANGES");
+  const rendered = f.run("render").text;
+  expect(rendered).toContain("unresolved: A failed commit");
+  expect(rendered).toContain(
+    challenges[0]?.observation ?? "missing observation",
+  );
+});
 
 test.each(["review-contract.md", "verifiability.md"])(
   "shared policy edits invalidate gate receipts: %s",
@@ -1113,7 +1295,7 @@ test("a changed staged diff or prompt cannot certify an unchanged checkout", () 
 test("gate recording shares the installed versioned reviewer contract", () => {
   const f = checkout();
   f.plan();
-  expect(f.record("correctness", { schema_version: 2 }).code).toBe(2);
+  expect(f.record("correctness", { schema_version: 1 }).code).toBe(2);
   expect(
     f.record("correctness", {
       status: "NEEDS_CHANGES",
@@ -1166,7 +1348,7 @@ test("gate recording shares the installed versioned reviewer contract", () => {
   ).toBe("NEEDS_CHANGES");
   expect(
     f.record("correctness", {
-      schema_version: 1,
+      schema_version: 2,
       status: "UNAVAILABLE",
       reason: "Source access is unavailable",
       findings: [],

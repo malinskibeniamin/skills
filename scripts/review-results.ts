@@ -19,8 +19,20 @@ export type ReviewFinding = {
   confidence: number;
 };
 
+export type ReviewChallenge = {
+  hypothesis: string;
+  scenario: string;
+  method: "execution" | "source-trace";
+  check: string;
+  expected: string;
+  observation: string;
+  outcome: "confirmed" | "refuted" | "unresolved";
+  finding_ids: string[];
+  execution_limits: string | null;
+};
+
 export type ReviewResult = {
-  schema_version: 1;
+  schema_version: 2;
   critical_checks_failed: boolean;
   reviewer: string;
   status:
@@ -32,6 +44,7 @@ export type ReviewResult = {
     | "FAILED";
   findings: ReviewFinding[];
   cross_model_findings: ReviewFinding[];
+  challenges: ReviewChallenge[];
   testing_gaps: string[];
   simplification_opportunities: string[];
   sufficiency: string;
@@ -182,7 +195,7 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
   );
   if (validation.exitCode !== 0)
     throw new Error(
-      "Invalid version 1 reviewer contract, evidence or verdict; use findings-schema.md",
+      "Invalid version 2 reviewer contract, challenges, evidence or verdict; use findings-schema.md",
     );
   const critical_checks_failed = object(
     JSON.parse(validation.stdout.toString()),
@@ -224,6 +237,34 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
       );
   }
   const testing_gaps = strings(input.testing_gaps ?? [], "testing gaps");
+  const rawChallenges = input.challenges ?? [];
+  if (!Array.isArray(rawChallenges))
+    throw new Error("Review challenges must be an array");
+  const challenges: ReviewChallenge[] = rawChallenges.map((value: unknown) => {
+    const item = object(value);
+    return {
+      hypothesis: nonempty(item.hypothesis, "challenge hypothesis"),
+      scenario: nonempty(item.scenario, "challenge scenario"),
+      method: member(
+        item.method,
+        ["execution", "source-trace"],
+        "challenge method",
+      ),
+      check: nonempty(item.check, "challenge check"),
+      expected: nonempty(item.expected, "challenge expected behavior"),
+      observation: nonempty(item.observation, "challenge observation"),
+      outcome: member(
+        item.outcome,
+        ["confirmed", "refuted", "unresolved"],
+        "challenge outcome",
+      ),
+      finding_ids: strings(item.finding_ids, "challenge finding ids"),
+      execution_limits:
+        item.execution_limits == null
+          ? null
+          : nonempty(item.execution_limits, "challenge execution limits"),
+    };
+  });
   const simplification_opportunities = strings(
     input.simplification_opportunities ?? [],
     "simplification opportunities",
@@ -247,6 +288,7 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
   const status = incomplete
     ? requested
     : findings.some(blocks) ||
+        challenges.some((challenge) => challenge.outcome === "unresolved") ||
         testing_gaps.length ||
         requested === "NEEDS_CHANGES"
       ? "NEEDS_CHANGES"
@@ -255,12 +297,13 @@ export function reviewResult(value: unknown, reviewer: string): ReviewResult {
         : "APPROVED";
   return {
     ...input,
-    schema_version: 1,
+    schema_version: 2,
     critical_checks_failed,
     reviewer,
     status,
     findings,
     cross_model_findings,
+    challenges,
     testing_gaps,
     simplification_opportunities,
     sufficiency,

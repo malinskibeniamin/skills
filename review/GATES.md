@@ -45,6 +45,10 @@ The owner can classify inline; planning never silently invokes a cheaper model.
 Use existing skills through each staged prompt, scoped to that gate's lens. Name the
 inspected sources and verification. A clean result needs a `sufficiency` explanation of
 why the evidence covers this change; related artifacts alone do not establish coverage.
+Every completed gate also requires the version 2 falsification ledger (`challenges`):
+concrete defect hypotheses, checks, observations and dispositions. Unresolved challenges
+require `NEEDS_CHANGES` and cannot be cleared by refuting another finding. The CLI retains
+the ledger in candidate-bound records, prior context and rendered evidence.
 The default result's `reviewer` is the gate id; use the shared
 [findings contract](../agents/references/findings-schema.md).
 
@@ -66,7 +70,7 @@ the owner. Preserve the selected model policy, tools, requested endpoint and for
 execution; these instructions never authorize delegation or nested model calls.
 Unknown model provenance is displayed as `not recorded`, not guessed.
 
-Use version 1 of the existing reviewer contract, including scenario, evidence and
+Use version 2 of the existing reviewer contract, including scenario, evidence and
 verification for findings. P0/P1 findings, critical checks and unresolved testing gaps
 require `NEEDS_CHANGES`; contradictory approval labels are rejected. Non-blocking findings remain visible. Collection validates the full
 contract; it does not verify that a model's claims are true. An applicable gate cannot

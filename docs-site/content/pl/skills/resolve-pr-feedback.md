@@ -55,9 +55,9 @@ Odpowiadaj z dowodami.
 
 ### 3. Napraw klastry [#3-repair-clusters]
 
-Grupuj przyczyny źródłowe: naprawione (test regresyjny), odrzucone (kontrdowody),
-zablokowane (brak dowodu lub decyzji). Napraw zaakceptowane klastry na ich gałęzi;
-przetestuj i utwórz commit `fix(review): <cluster summary>`.
+Grupuj przyczyny: naprawione (regresja), odrzucone (kontrdowody), zablokowane (brak dowodu/decyzji).
+Na gałęzi autora: najpierw test regresyjny wykazujący błąd -> naprawa -> ponowne sprawdzenie hipotezy -> nowy przegląd.
+Utwórz commit `fix(review): <cluster summary>`.
 
 ### 4. Odpowiedz i rozwiąż [#4-reply-and-resolve]
 
@@ -73,7 +73,7 @@ bez kolejnego polecenia od człowieka. Zachowaj jawne, węższe punkty zatrzyman
 warstwy stosu uruchom `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`;
 rebase lub push w górę stosu wymaga wyraźnej autoryzacji. Napraw CI przed podsumowaniem.
 
-### 6. Weryfikacja kompletności [#6-completeness-verification]
+### 6. Weryfikacja kompletności [#6-completeness]
 
 Przed deklaracją zakończenia wymagaj zera nierozwiązanych wątków, także uwag botów i wątków
 przy nieaktualnych liniach, oraz braku nieaktualnego `CHANGES_REQUESTED`.

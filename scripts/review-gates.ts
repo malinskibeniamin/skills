@@ -687,7 +687,7 @@ function createPlan(
         ...definition.skills,
         ...(definition.reviewer ? [definition.reviewer.instructions] : []),
       ];
-      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${guidance.map((path) => `- ${path}`).join("\n")}\n\n${specialist}Apply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
+      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${guidance.map((path) => `- ${path}`).join("\n")}\n\n${specialist}Apply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. Start from the hypothesis that this change is wrong. Return non-empty challenges: concrete failure hypotheses, scenarios, exact checks, expected behavior, actual observations, and confirmed/refuted/unresolved dispositions. Confirmed hypotheses link finding ids; unresolved challenges require NEEDS_CHANGES. Execute safe runnable checks; source traces must explain execution limits. A clean result needs refuted hypotheses and sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
       atomic(prompt, promptText);
       return {
         id: definition.id,
@@ -851,6 +851,9 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
         );
         const failed =
           record.result.critical_checks_failed ||
+          record.result.challenges.some(
+            (challenge) => challenge.outcome === "unresolved",
+          ) ||
           remaining.some(blocks) ||
           record.result.testing_gaps.length > 0 ||
           (record.result.status === "NEEDS_CHANGES" &&
@@ -866,6 +869,10 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
               : "PASSED";
         const evidence = [
           record.result.sufficiency,
+          ...record.result.challenges.map(
+            (challenge) =>
+              `${challenge.outcome}: ${challenge.hypothesis}; ${challenge.method}: ${challenge.check}; expected: ${challenge.expected}; observed: ${challenge.observation}${challenge.execution_limits ? `; execution limits: ${challenge.execution_limits}` : ""}`,
+          ),
           ...remaining.map(
             (finding) =>
               `${finding.severity} ${finding.file}:${finding.line}: ${finding.why_it_matters}`,

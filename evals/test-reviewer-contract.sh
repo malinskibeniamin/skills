@@ -6,7 +6,7 @@ review_dir="/tmp/hook-session-$review_session"
 mkdir -p "$review_dir/active-subagents"
 trap 'rm -rf "$review_tmp" "$review_dir"' EXIT
 
-review_clean='{"schema_version":1,"reviewer":"code-reviewer","status":"APPROVED","findings":[],"testing_gaps":[],"simplification_opportunities":[]}'
+review_clean='{"schema_version":2,"reviewer":"code-reviewer","status":"APPROVED","findings":[],"testing_gaps":[],"simplification_opportunities":[],"challenges":[{"hypothesis":"Another tenant can read the secret.","scenario":"A tenant supplies another namespace.","method":"source-trace","check":"Trace src/secrets.ts:42 through the authorization guard.","expected":"The caller only receives secrets for the authenticated tenant.","observation":"The fixture guard pins the lookup to the authenticated tenant.","outcome":"refuted","finding_ids":[],"execution_limits":"This event fixture supplies source evidence only."}]}'
 review_finding='{"title":"Other tenants can read the secret","severity":"P1","file":"src/secrets.ts","line":42,"category":"security","why_it_matters":"Another tenant receives the secret.","scenario":"A tenant supplies a different namespace to the lookup.","evidence":"The lookup uses the requested namespace without authorization.","verification":"Replay the cross-tenant lookup with dummy credentials.","autofix_class":"gated_auto","suggested_fix":"Pin the lookup to the authenticated tenant.","pre_existing":false,"confidence":0.9}'
 review_report=$(jq -cn --argjson clean "$review_clean" --argjson finding "$review_finding" '$clean | .status="NEEDS_CHANGES" | .findings=[$finding]')
 
@@ -18,7 +18,7 @@ review_event() {
 for review_state in SKIPPED UNAVAILABLE FAILED; do
   printf 'code-reviewer\n' > "$review_dir/active-subagents/contract-probe"
   review_incomplete=$(jq -cn --arg state "$review_state" \
-    '{schema_version:1,reviewer:"code-reviewer",status:$state,reason:"Coverage not completed",findings:[]}')
+    '{schema_version:2,reviewer:"code-reviewer",status:$state,reason:"Coverage not completed",findings:[]}')
   run_hook_eval "$review_hook" "$(review_event "$review_incomplete")" 0 \
     "$review_state is recorded without approval" "$review_state"
   if [ ! -f "$review_dir/active-subagents/contract-probe" ]; then
@@ -38,7 +38,7 @@ else
 fi
 
 for review_invalid in \
-  '.schema_version=2' \
+  '.schema_version=1' \
   'del(.schema_version)' \
   '.reviewer="self-reviewer"' \
   'del(.findings)' \

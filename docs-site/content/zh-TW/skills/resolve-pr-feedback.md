@@ -51,7 +51,9 @@ type: skill
 
 ### 3. 修復叢集 [#3-repair-clusters]
 
-依根因分組：已修復（迴歸證據）、已拒絕（反證）或受阻（缺少證據／決策）。在所屬分支修復已接受的群組；測試並提交 `fix(review): <cluster summary>`。
+依根因分組：已修復（迴歸證據）、已拒絕（反證）或受阻（缺少證據／決策）。
+在所屬分支依序完成：先讓迴歸測試失敗 -> 修復 -> 重播反例 -> 重新審查。
+提交 `fix(review): <cluster summary>`。
 
 ### 4. 回覆並解決 [#4-reply-and-resolve]
 
@@ -61,7 +63,7 @@ type: skill
 
 一般由目前使用者擁有的 PR：每次完成經驗證的 CI 修正或變基後都要推送；自動處理回饋，並持續執行[維護循環](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)，無須再次由人工觸發。遵守明確且較窄的停止條件。對於堆疊下層，執行 `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`；對上層分支變基或推送前，必須先取得明確授權。總結前先修復 CI。
 
-### 6. 完整性驗證 [#6-completeness-verification]
+### 6. 完整性驗證 [#6-completeness]
 
 宣告完成前必須沒有未解決的討論串，包括機器人回饋與定位到過期程式碼行的討論串，且不存在陳舊 `CHANGES_REQUESTED`。任何剩餘項都回到分類。`pr-feedback-completeness-stop` 鉤子會強制此狀態。
 

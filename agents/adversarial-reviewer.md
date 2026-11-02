@@ -27,7 +27,7 @@ This agent is expensive. Run only when at least one trigger fires.
 
    Skip block:
    ```json
-   { "schema_version": 1, "reviewer": "adversarial-reviewer", "status": "SKIPPED", "reason": "No cross-model duty, large diff, introduced P0/P1 finding, changed trust boundary, or evidenced high-impact security/recovery risk", "findings": [] }
+   { "schema_version": 2, "reviewer": "adversarial-reviewer", "status": "SKIPPED", "reason": "No cross-model duty, large diff, introduced P0/P1 finding, changed trust boundary, or evidenced high-impact security/recovery risk", "findings": [] }
    ```
 
 ## Required Reading
