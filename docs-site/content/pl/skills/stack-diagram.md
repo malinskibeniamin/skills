@@ -1,5 +1,5 @@
 ---
-description: "Twórz diagramy stosów technologicznych, infrastruktury i topologii usług z prawdziwymi logo marek, grupowanymi kontenerami i strzałkami pod kątem prostym. Używaj do przeglądów architektury z logo w jasnym i ciemnym HTML, PNG lub React/TSX; do odręcznych, edytowalnych diagramów używaj excalidraw-diagram."
+description: "Rysuj diagramy stosu, infrastruktury i topologii usług z logo w jasnym i ciemnym HTML, PNG lub React/TSX. Używaj do przeglądów architektury; do odręcznych, edytowalnych diagramów używaj excalidraw-diagram."
 related:
   - /skills/development-lifecycle
   - /skills/tdd

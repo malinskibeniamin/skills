@@ -1,5 +1,5 @@
 ---
-description: "使用真實品牌標誌、分組容器和正交箭頭建立技術堆疊、基礎設施與服務拓撲圖。適用於以標誌呈現架構概覽，並輸出淺色與深色 HTML、PNG 或 React/TSX；手繪風格的可編輯圖表請使用 excalidraw-diagram。"
+description: "以淺色與深色 HTML、PNG 或 React/TSX 繪製含品牌標誌的技術堆疊、基礎設施與服務拓撲圖。適用於架構概覽；手繪風格的可編輯圖表請使用 excalidraw-diagram。"
 related:
   - /skills/development-lifecycle
   - /skills/tdd

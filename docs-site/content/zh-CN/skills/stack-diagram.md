@@ -1,5 +1,5 @@
 ---
-description: "使用真实品牌标志、分组容器和正交箭头创建技术栈、基础设施和服务拓扑图。适用于以标志呈现架构概览，并输出浅色和深色 HTML、PNG 或 React/TSX；手绘风格的可编辑图表请使用 excalidraw-diagram。"
+description: "以浅色和深色 HTML、PNG 或 React/TSX 绘制带品牌标志的技术栈、基础设施和服务拓扑图。适用于架构概览；手绘风格的可编辑图表请使用 excalidraw-diagram。"
 related:
   - /skills/development-lifecycle
   - /skills/tdd
