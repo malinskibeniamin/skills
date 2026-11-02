@@ -1,7 +1,7 @@
 {
   "name": "frontend-skills",
   "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
-  "version": "4.43.0",
+  "version": "4.44.0",
   "author": {
     "name": "Beniamin Malinski"
   },
@@ -297,6 +297,7 @@
     "manifestSource": "skill-manifest.json"
   },
   "x-changelog": {
+    "4.44.0": "2026-11-02 -- Refresh Matt Pocock, Theo/tstack, Poteto/pstack and Emil sources. Add the explicit Matt software-factory adapter under its existing planning owner; reconcile shared-wiki, review and Motion 14.2+ guidance. Keep pstack 0.15.36 source unchanged, preserve authorization boundaries and historical links, and synchronize immutable release metadata and docs. Freeze new archived Codex install commands to the release tag.",
     "4.43.0": "2026-11-02 -- Publish /remove-animations and /improve-animations for Claude Code and Codex, refresh pinned Emil Kowalski skill sources and licenses, and update localized animation docs and diagrams. Preserve accessibility and execution safeguards; synchronize manifests, marketplaces, install pin, and immutable docs without changing prior releases.",
     "4.42.0": "2026-11-01 -- Publish conditional specialist reviewers, defect/scope/direction review separation, Protobuf and CI optimization guidance, refreshed Matt Pocock/Poteto/interface skill bundles, Chrome WebMCP development guidance, opt-in Codex quota guards and review presets, and hook runtime fixes. Synchronize manifests, marketplaces, install pin, and immutable docs; preserve prior releases.",
     "4.41.0": "2026-10-28 -- Publish /skeleton-loaders for Claude and Codex, Chrome-native /webmcp guidance, focused review-repair and security checks, frontend-hook fixes, and refreshed Bazel/Bend guidance. Retire Ponytail and /deslop. Synchronize manifests, marketplaces, install pins, and immutable documentation; preserve prior releases.",
