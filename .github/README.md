@@ -2,7 +2,8 @@
 
 ## Owner merge policy
 
-For **malinskibeniamin/skills only**, the repository owner chooses when to merge.
+The owner chooses when to merge. The shared [delivery policy](../shared/review-enforcement.md#generic-delivery-policy)
+is repository-independent: publish verified work without waiting for CI or reviews.
 CI, security scans, review findings and approvals are advisory, not merge gates.
 The hosted `main` policy and [saved payload](branch-protection.json) have no required
 status checks, required PR reviews or conversation-resolution requirement. Admin
@@ -18,15 +19,16 @@ This owner decision supersedes the earlier required-check policy. It accepts tha
 changes can merge while checks fail or findings remain open; it is not evidence
 that a change passed verification. Run useful local verification and report limits.
 
-Installed consumers retain the shared [review-enforcement contract](../shared/review-enforcement.md)
-and their native policy. This exception neither changes their protections nor
-allows their agents to skip required checks.
+Consumers retain their native merge policy. No-wait delivery does not authorize changing
+hosted protection or bypassing required checks without an explicit owner decision.
 
 ## Inspect before changing protection
 
 ```bash
-gh api repos/malinskibeniamin/skills/branches/main/protection
-gh api repos/malinskibeniamin/skills/rulesets
+REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+BASE=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
+gh api "repos/$REPO/branches/$BASE/protection"
+gh api "repos/$REPO/rulesets"
 ```
 
 Re-read hosted policy after any write. Applying `branch-protection.json` replaces
@@ -41,7 +43,7 @@ reviewer credential is checked in or inferred from a local CLI session.
 ## Observe review effort without claiming safety
 
 ```bash
-bun run review:metrics malinskibeniamin/skills 30
+bun run review:metrics "$(gh repo view --json nameWithOwner --jq .nameWithOwner)" 30
 ```
 
 The read-only command samples up to 100 latest-updated merged PRs. It reports

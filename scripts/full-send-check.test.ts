@@ -221,7 +221,7 @@ if (args[0] === "pr" && args[1] === "view") {
   return { git, run, runHook, snapshot, save, calls, worktree, head };
 }
 
-test("startup routes both hosts to automatic setup in the installed harness without hosted writes", () => {
+test("startup routes both hosts to generic no-wait guidance without hosted writes", () => {
   const f = fixture();
   for (const provider of ["CLAUDE_SESSION_ID", "CODEX_SESSION_ID"]) {
     const sid = `bootstrap-${provider}-${f.head.slice(0, 12)}`;
@@ -252,6 +252,7 @@ test("startup routes both hosts to automatic setup in the installed harness with
     const context = JSON.parse(result.stdout.toString()).hookSpecificOutput
       .additionalContext;
     expect(context).toContain("Automatically set up");
+    expect(context).toContain("No CI/review waiting");
     expect(context).toContain(
       new URL("../shared/review-enforcement.md", import.meta.url).pathname,
     );
@@ -503,74 +504,55 @@ test("a declared required check absent from the observed checks cannot silently 
   });
 });
 
-test("the shipped Stop hook rejects a green but unprotected consuming repo", () => {
-  const f = fixture();
-  f.snapshot.protection = null;
-  f.save();
-  const result = f.runHook("ship");
-  expect(result.code).toBe(2);
-  expect(result.error).toContain("review-policy:required-checks-missing");
-  expect(result.error).toContain("automatic setup");
-});
+for (const endpoint of ["pr", "ship"]) {
+  for (const state of ["PENDING", "FAILURE", "missing"]) {
+    test(`${endpoint} delivery finishes after publication with ${state} CI and unresolved reviews`, () => {
+      const f = fixture();
+      f.snapshot.pr.reviewDecision = "CHANGES_REQUESTED";
+      f.snapshot.checks =
+        state === "missing"
+          ? []
+          : [
+              {
+                name: "test",
+                bucket: state === "PENDING" ? "pending" : "fail",
+                state,
+              },
+            ];
+      f.snapshot.protection = null;
+      f.snapshot.pages = [
+        {
+          nodes: [{ id: "open-finding", isResolved: false, isOutdated: false }],
+          pageInfo: { hasNextPage: false, endCursor: "last" },
+        },
+      ];
+      f.save();
+      expect(f.runHook(endpoint).code).toBe(0);
+      const calls: string[][] = readFileSync(f.calls, "utf8")
+        .trim()
+        .split("\n")
+        .map((line) => JSON.parse(line));
+      // Publication still needs its PR; CI/review/readiness never becomes a Stop gate.
+      expect(calls.length).toBeGreaterThan(0);
+      expect(
+        calls.every((args) => args[0] === "pr" && args[1] === "list"),
+      ).toBe(true);
+    });
+  }
+}
 
-test("the shipped Stop hook allows protected consumers and preserves the PR-only endpoint", () => {
+test("no-wait delivery still requires a published branch and PR", () => {
   const f = fixture();
-  expect(f.runHook("ship").code).toBe(0);
-  f.snapshot.protection = null;
-  f.snapshot.checks = [{ name: "test", bucket: "pending", state: "PENDING" }];
+  f.snapshot.failGh = true;
   f.save();
   expect(f.runHook("ship").code).toBe(2);
-  expect(f.runHook("pr").code).toBe(0);
-});
-
-test("the skills owner's advisory policy skips CI and review waiting only in this repository", () => {
-  const f = fixture();
-  const repo = "https://github.com/malinskibeniamin/skills.git";
-  f.git(
-    "config",
-    "--add",
-    `url.${join(f.worktree, "..", "remote.git")}.insteadOf`,
-    repo,
-  );
-  f.git("remote", "set-url", "origin", repo);
-  mkdirSync(join(f.worktree, ".github"));
-  writeFileSync(
-    join(f.worktree, ".github/branch-protection.json"),
-    JSON.stringify({
-      required_status_checks: null,
-      required_pull_request_reviews: null,
-      enforce_admins: false,
-      required_conversation_resolution: false,
-    }),
-  );
-  f.git("add", ".github/branch-protection.json");
-  f.git("commit", "-m", "chore(policy): advisory owner checks");
-  f.git("push", "origin", "HEAD");
-  f.snapshot.pr.headRefOid = f.git("rev-parse", "HEAD");
-  f.snapshot.pr.reviewDecision = "CHANGES_REQUESTED";
-  f.snapshot.checks = [{ name: "test", bucket: "pending", state: "PENDING" }];
-  f.snapshot.protection = null;
-  f.snapshot.pages = [
-    {
-      nodes: [{ id: "open-finding", isResolved: false, isOutdated: false }],
-      pageInfo: { hasNextPage: false, endCursor: "last" },
-    },
-  ];
+  f.snapshot.failGh = false;
   f.save();
+  f.git("commit", "--allow-empty", "-m", "fix(test): unpublished work");
+  expect(f.runHook("ship").code).toBe(2);
+  f.git("push", "origin", "HEAD");
   expect(f.runHook("ship").code).toBe(0);
-  const calls: string[][] = readFileSync(f.calls, "utf8")
-    .trim()
-    .split("\n")
-    .map((line) => JSON.parse(line));
-  expect(calls.every((args) => args[0] === "pr" && args[1] === "list")).toBe(
-    true,
-  );
-  f.git(
-    "remote",
-    "set-url",
-    "origin",
-    "https://github.com/example/project.git",
-  );
+  f.git("push", "origin", "--delete", "ben-malinski/T-1/feature");
   expect(f.runHook("ship").code).toBe(2);
 });
 
