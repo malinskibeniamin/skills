@@ -1,0 +1,3 @@
+interface:
+  display_name: "Stack Diagram"
+  short_description: "Draw logo-based stack diagrams in light and dark themes"

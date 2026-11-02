@@ -218,6 +218,7 @@ type: skill
 | `/skeleton-loaders` | 建立符合版面且具無障礙支援的骨架載入狀態。 |
 | `/snyk-ux-security` | 使用 Snyk 與發布關卡稽核相依套件安全性。 |
 | `/software-factory` | 評估工廠適用性並規劃安全的自動化基礎設施。 |
+| `/stack-diagram` | 繪製含有標誌的淺色與深色技術堆疊圖。 |
 | `/stack-registry` | 控制框架規則中目前採用與禁止使用的技術堆疊治理。 |
 | `/stacked-prs` | 建立並管理相互依賴的 GitHub 提取要求堆疊。 |
 | `/stay-within-limits` | 配額規劃長時間執行的代理程式工作，以避免超出用量限制。 |

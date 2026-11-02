@@ -1,0 +1,82 @@
+{
+  "repository": "https://github.com/caru-ini/stack-diagram",
+  "revision": "188f43b7c4f1725a0948feef8b94a199d07e6e0d",
+  "files": {
+    "LICENSE": {
+      "sha256": "7b153fc3f5f1ccce2b9ac98a35301c666c025db85d6c44565e13304774d144a9",
+      "mode": 420
+    },
+    "skills/stack-diagram/LICENSE": {
+      "sha256": "be10012fc23bb7f2e332d62312b80cfca01c3eb7abd8970ebb1cdf8ff5b04faa",
+      "mode": 420
+    },
+    "skills/stack-diagram/SKILL.md": {
+      "sha256": "d36ac9af42505898d7b5082699b4b3cf5a88eb13544f288916a628157b0f0d81",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/fonts/Geist.woff2": {
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/fonts/JetBrainsMono.woff2": {
+      "sha256": "2c32b9b3ee358c119e210f6f5195f9bd34894d78a785ff2e95d60e718e400af4",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/fonts/OFL-Geist.txt": {
+      "sha256": "c683bfbcc7e087f5d37a54ef628f10387c451a83ddc459b151403a164ac46c90",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/fonts/OFL-JetBrainsMono.txt": {
+      "sha256": "8790c0909f720c509810f95268779450cd6b0aa75b6d24e32f0878afe068427c",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/fonts/README.md": {
+      "sha256": "9b858f504cefd75b79970b724dc55c4b8e16ecb3dc59bba059bdea38c5dff551",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/generic/browser.svg": {
+      "sha256": "626b27b7681ff5ff0c25b1d235ca49883bdb59185fe2b4063b44ab9a147f88a8",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/generic/device.svg": {
+      "sha256": "abe1c203068bef6c10727e434614fefcb68d3b02139838fcfd3a9b9d2fac7f91",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/generic/internet.svg": {
+      "sha256": "f28c67cdda8b1b234f4993d1ac557b20fb8e5cb307e398c1cf720f54ef5dc3de",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/generic/server.svg": {
+      "sha256": "81a828c927db27160a7af9d076e541686ae0b6ec96794638b7a265a4e3e26289",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/generic/user.svg": {
+      "sha256": "a383d2e82346d3c14958eab164946898a0cf07f0f33defce7f55532ec1c9f1e9",
+      "mode": 420
+    },
+    "skills/stack-diagram/assets/template.html": {
+      "sha256": "2dfca0d37d585a2495112922018bd635e65eaa3b9187e4bb8e7671845adb36b9",
+      "mode": 420
+    },
+    "skills/stack-diagram/references/geometry.md": {
+      "sha256": "e4d4298577da1b4fea78b1b153589bc7ab77dc6c88b21bc074da8c63fb7aa71d",
+      "mode": 420
+    },
+    "skills/stack-diagram/references/tsx.md": {
+      "sha256": "7f39b64a61c64c2860ca78868a99b63c6f1ee909f686efd625d3bfd6d8751053",
+      "mode": 420
+    },
+    "skills/stack-diagram/scripts/build.py": {
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "mode": 420
+    },
+    "skills/stack-diagram/scripts/fetch_icons.py": {
+      "sha256": "86945599389af5943ac44e5fc70b49c676fa5d837692a8bbd4583c0dd6156c27",
+      "mode": 420
+    },
+    "skills/stack-diagram/scripts/render_png.py": {
+      "sha256": "b60b03b9937142c4bb842c4adedca786df45420b0236de2351fe3ed87d8a7db7",
+      "mode": 420
+    }
+  }
+}

@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "49565e75a28cd319",
-      "zh-CN": "49565e75a28cd319",
-      "zh-TW": "49565e75a28cd319"
+      "pl": "6623efe937b765a4",
+      "zh-CN": "6623efe937b765a4",
+      "zh-TW": "6623efe937b765a4"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "e17bed9f1eef74aa",
-      "zh-CN": "e17bed9f1eef74aa",
-      "zh-TW": "e17bed9f1eef74aa"
+      "pl": "d478e0853c7d5a57",
+      "zh-CN": "d478e0853c7d5a57",
+      "zh-TW": "d478e0853c7d5a57"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -424,6 +424,11 @@
       "pl": "89495a91809ffda4",
       "zh-CN": "89495a91809ffda4",
       "zh-TW": "89495a91809ffda4"
+    },
+    "content/skills/stack-diagram.md": {
+      "pl": "7cea296b6248905f",
+      "zh-CN": "7cea296b6248905f",
+      "zh-TW": "7cea296b6248905f"
     },
     "content/skills/stack-registry.md": {
       "pl": "6acfe0c8a546022f",
