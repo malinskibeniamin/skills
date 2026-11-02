@@ -28,6 +28,66 @@ describe("docs version command", () => {
     expect(versionIdFromArguments([])).toBeUndefined();
   });
 
+  test("freezes archived install commands without changing current or older docs", async () => {
+    const root = await mkdtemp(join(tmpdir(), "version-docs-"));
+    const blume = join(root, "blume");
+    const current = join(root, "content", "_snippets", "codex-install.md");
+    const older = join(
+      root,
+      "content",
+      "v4.43.0",
+      "_snippets",
+      "codex-install.md",
+    );
+    const archived = join(
+      root,
+      "content",
+      "v4.44.0",
+      "_snippets",
+      "codex-install.md",
+    );
+    const command =
+      "codex plugin marketplace add {{marketplace}} --ref {{ref}}\n";
+    const page = '<include ref="main">/_snippets/codex-install.md</include>\n';
+
+    try {
+      await mkdir(join(root, "content", "_snippets"), { recursive: true });
+      await mkdir(join(root, "content", "v4.43.0", "_snippets"), {
+        recursive: true,
+      });
+      await writeFile(current, command);
+      await writeFile(older, command);
+      await writeFile(join(root, "content", "getting-started.mdx"), page);
+      await writeFile(
+        blume,
+        "#!/bin/sh\nmkdir -p content/v4.44.0/_snippets\ncp content/_snippets/codex-install.md content/v4.44.0/_snippets/codex-install.md\ncp content/getting-started.mdx content/v4.44.0/getting-started.mdx\n",
+        { mode: 0o755 },
+      );
+
+      expect(
+        await runVersionDocs({ arguments_: ["v4.44.0"], blume, root }),
+      ).toBe(0);
+      expect(await readFile(archived, "utf8")).toBe(
+        command.replace("{{ref}}", "v4.44.0"),
+      );
+      expect(await readFile(current, "utf8")).toBe(command);
+      expect(await readFile(older, "utf8")).toBe(command);
+      expect(
+        await readFile(
+          join(root, "content", "v4.44.0", "getting-started.mdx"),
+          "utf8",
+        ),
+      ).toBe(
+        '<include ref="v4.44.0">/v4.44.0/_snippets/codex-install.md</include>\n',
+      );
+      expect(
+        await readFile(join(root, "content", "getting-started.mdx"), "utf8"),
+      ).toBe(page);
+    } finally {
+      await rm(root, { force: true, recursive: true });
+    }
+  });
+
   test("rejects duplicate snapshots even when force is explicit", async () => {
     const root = await mkdtemp(join(tmpdir(), "version-docs-"));
     const marker = join(root, "blume-invoked");

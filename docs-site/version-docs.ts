@@ -14,10 +14,14 @@ export const pinSnapshotLinksInText = (
   source: string,
   version: string,
 ): string =>
-  source.replaceAll(
-    MAIN_REPOSITORY_LINK,
-    `https://github.com/malinskibeniamin/skills/blob/${version}/`,
-  );
+  source
+    .replaceAll(
+      MAIN_REPOSITORY_LINK,
+      `https://github.com/malinskibeniamin/skills/blob/${version}/`,
+    )
+    .replaceAll("{{ref}}", version)
+    .replaceAll('<include ref="main">', `<include ref="${version}">`)
+    .replaceAll(">/_snippets/", `>/${version}/_snippets/`);
 
 const pinSnapshotLinks = async (
   root: string,
