@@ -62,10 +62,9 @@ Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkow
 ## Zakończenie [#completion]
 
 1. Pobierz pojedynczy stan CI za pomocą `gh pr checks <number>`; odnotuj brak CI.
-2. Zgłoś niepowodzenia; naprawa CI wymaga jawnego żądania, nie tylko `/go` lub ship.
-   Monitorowanie i obsługa uwag wymagają jawnego zakresu; domyślnie nie czekaj.
-3. Zgłoś stan, pozostałe różnice, gałąź, commity, PR, CI i następne działanie.
-4. Stosuj kontrakt stanu oraz celu i wpływu z CLAUDE.md. Jeśli PR istnieje, umieść jego pełny adres URL w ostatnim wierszu stanu, także przy aktualizacjach.
+2. Naprawa CI, monitorowanie i obsługa uwag wymagają jawnego zakresu; `/go` ani ship nie oznacza czekania.
+3. Zgłoś niepowodzenia, różnice, gałąź/commity, PR, CI i następne działanie.
+4. Stosuj CLAUDE.md: cel/wpływ/stan oraz pełny adres URL PR w ostatnim wierszu stanu, także przy aktualizacjach.
 
 Nigdy nie dodawaj do poczekalni ani nie wypychaj niezwiązanych zmian i nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i sposób naprawy.
 
