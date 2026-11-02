@@ -1,0 +1,31 @@
+---
+description: "Research current behavior from primary documentation. Use for third-party APIs, libraries, CLIs, cloud services, API drift, auth, billing, security, migrations, or deploys."
+related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
+search: {"boost":1,"keywords":["read the damn docs"]}
+sidebar: {"label":"/read-the-damn-docs"}
+title: "/read-the-damn-docs"
+type: "skill"
+---
+![Diagram of the /read-the-damn-docs skill](/diagrams/skills/read-the-damn-docs.svg)
+
+[Open the editable Excalidraw source](/diagrams/skills/read-the-damn-docs.excalidraw)
+
+
+Read `references/builder-upstream.md` for full triggers. This is a quick official fact check without creating a research artifact. Durable multi-source reports use built-in deep research and save cited Markdown in the repo's normal notes path.
+
+## Workflow
+
+1. Identify exact package/version/endpoint/CLI/config/helper/schema/product surface.
+2. Read local docs/specs/ADRs/generated types first when they own the contract.
+3. For external/fast-moving behavior, search current official docs; open the API reference, migration guide, release notes, changelog, SDK source, or types.
+4. Extract imports, options, defaults, breaking changes, limits, permissions, examples.
+5. Apply facts to repo patterns; never cargo-cult examples.
+6. Cite facts affecting notes or answers. Flag what you could not confirm and where you looked.
+
+## Strong triggers
+
+- Latest/current/official/supported/best practice/today/look it up.
+- Package/SDK/model/provider/plugin/CLI install, upgrade, config, import.
+- Deprecation, unknown option, missing export, invalid config, unsupported field, version mismatch.
+- Hard-to-reverse wire formats, schemas, persistent IDs, events, customer behavior, automation.
+- Auth/OAuth, secrets, webhooks, PII, encryption, retention, migration, retry, rate/quotas, billing, deploy.

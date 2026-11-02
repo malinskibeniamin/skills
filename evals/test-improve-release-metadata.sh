@@ -1,10 +1,10 @@
 # Evals for latest release metadata bump.
 
-run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.43\.0"' "skill manifest bumped to 4.43.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.43\.0"' "Claude plugin bumped to 4.43.0"
-run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.43\.0"' "Codex plugin bumped to 4.43.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.43\.0"' "Claude marketplace bumped to 4.43.0"
-run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.43\.0"' "Codex marketplace bumped to 4.43.0"
+run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.44\.0"' "skill manifest bumped to 4.44.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.44\.0"' "Claude plugin bumped to 4.44.0"
+run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.44\.0"' "Codex plugin bumped to 4.44.0"
+run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.44\.0"' "Claude marketplace bumped to 4.44.0"
+run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.44\.0"' "Codex marketplace bumped to 4.44.0"
 
 # Count strings were removed from metadata descriptions (PR #46 feedback:
 # hand-maintained counts drift). Assert their ABSENCE instead.
@@ -25,24 +25,28 @@ do
   fi
 done
 
-run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.43\.0$' "changelog has 4.43.0 section"
-run_content_eval "$REPO_ROOT/README.md" 'v4\.43\.0' "README pinned release example updated"
-run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.43\.0"' "docs archive registers v4.43.0"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/index.mdx" "docs archive includes the v4.43.0 landing page"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/release.md" "docs archive includes v4.43.0 skill pages"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/test-audit.md" "docs archive includes test-audit"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/skeleton-loaders.md" "docs archive includes skeleton-loaders"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/protobuf.md" "docs archive includes protobuf"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/ci-fixes.md" "docs archive includes ci-fixes"
+run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.44\.0$' "changelog has 4.44.0 section"
+run_content_eval "$REPO_ROOT/README.md" 'v4\.44\.0' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.44\.0"' "docs archive registers v4.44.0"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/index.mdx" "docs archive includes the v4.44.0 landing page"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/release.md" "docs archive includes v4.44.0 skill pages"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/test-audit.md" "docs archive includes test-audit"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/skeleton-loaders.md" "docs archive includes skeleton-loaders"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/protobuf.md" "docs archive includes protobuf"
+run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/ci-fixes.md" "docs archive includes ci-fixes"
 run_file_eval "$REPO_ROOT/skeleton-loaders/SKILL.md" "release includes the canonical skeleton-loaders skill"
 run_file_eval "$REPO_ROOT/codex-skills/skeleton-loaders/SKILL.md" "release includes the Codex skeleton-loaders adapter"
 for skill in remove-animations improve-animations; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "release includes the canonical $skill skill"
   run_file_eval "$REPO_ROOT/codex-skills/$skill/SKILL.md" "release includes the Codex $skill adapter"
   run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./$skill/\"" "Claude plugin registers $skill"
-  run_file_eval "$REPO_ROOT/docs-site/content/v4.43.0/skills/$skill.md" "docs archive includes $skill"
+  run_file_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/$skill.md" "docs archive includes $skill"
 done
-if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.43.0"; then
+run_file_eval "$REPO_ROOT/matt-skills/matt-software-factory/SKILL.md" "release includes the new explicit Matt factory adapter"
+run_file_eval "$REPO_ROOT/codex-skills/matt-software-factory/SKILL.md" "release includes the Codex Matt factory proxy"
+run_content_eval "$REPO_ROOT/docs-site/content/v4.44.0/skills/software-factory.md" 'blob/v4\.44\.0/vendor/mattpocock/upstream/skills/in-progress/software-factory/' \
+  "factory archive links use the release-pinned complete Matt source"
+if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.44.0"; then
   echo "  FAIL  archived docs still link to mutable main content"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: archived docs links are tag-pinned"
 else

@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+## 4.44.0
+
+2026-11-02 -- Publish the four-source refresh from PR #285 for Claude Code and Codex.
+
+### Highlights
+
+- Refresh the complete Matt Pocock suite to 39 skills and expose the explicit-only
+  `/matt-software-factory` adapter through the existing planning owner. Keep the
+  frozen draft available for historical published links.
+- Reconcile shared-wiki and scoped retro procedures, Theo/tstack council and
+  full-stop guidance, and Emil's Motion 14.2+ acceleration guidance.
+- Revalidate Poteto/pstack 0.15.36 against the current monorepo pin; its source tree
+  and version are unchanged, not a new capability.
+- Preserve local authorization, accessibility and delivery boundaries. Update
+  localized documentation, source notices and complete-suite provenance checks.
+
+### Upgrade notes
+
+- Claude and Codex manifests and both marketplaces advertise 4.44.0 together.
+  Refresh the marketplace and plugin, then reload or restart the host.
+- Codex installs pinned to v4.43.0 must explicitly move to v4.44.0.
+- New archived Codex install commands use their release tag rather than mutable
+  `main`. Current docs and previously published archives remain unchanged.
+- Namespaced source skills remain explicit-only; this release enables no agents,
+  runtime setup, schedules, merge permissions or live consumer upgrades.
+- Verify all sources with the existing `scripts/vendor-*.py --check` commands.
+  Source pins, licenses and modes remain recorded in their inventory locks.
+- Preserve `frontend-skills-mods` 0.3.0 and all previously published tags and docs.
+
 ## 4.43.0
 
 2026-11-02 -- Publish the post-4.42 animation skills as one Claude Code and Codex bundle.
