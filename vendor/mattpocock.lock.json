@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/mattpocock/skills",
-  "revision": "a496f5513d4a4cf889bc48e189e579f4b0bdf6aa",
+  "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
   "skills": [
     {
       "name": "matt-ask-matt",
@@ -226,6 +226,15 @@
       "registration": "./matt-skills/matt-setup-ts-deep-modules/",
       "short_description": "Matt Pocock source: setup ts deep modules guidance",
       "description": "Use the pinned Matt Pocock setup-ts-deep-modules skill with host compatibility rules."
+    },
+    {
+      "name": "matt-software-factory",
+      "upstream_name": "software-factory",
+      "source": "skills/in-progress/software-factory/SKILL.md",
+      "owner": "software-factory",
+      "registration": "./matt-skills/matt-software-factory/",
+      "short_description": "Matt Pocock source: software factory guidance",
+      "description": "Use the pinned Matt Pocock software-factory skill with host compatibility rules."
     },
     {
       "name": "matt-tdd",
@@ -603,11 +612,11 @@
       "mode": 420
     },
     "skills/in-progress/README.md": {
-      "sha256": "740e1d097748d68ebc00cb98de7b2dadbbac0e714af37a0d6a251819c0073584",
+      "sha256": "bc279931edd2dc862a00e0692522a6c8b97666539a3ab6c519e336dd4e5bf61a",
       "mode": 420
     },
     "skills/in-progress/chief-of-staff/SKILL.md": {
-      "sha256": "d13f3a542a4664f27bf14977811ee9dcd83fae03655b20720b3441850a2008a4",
+      "sha256": "f4c1d6533edece6b275155911cb627154a6b13e2bc19934f77330f3afdd07987",
       "mode": 420
     },
     "skills/in-progress/chief-of-staff/agents/openai.yaml": {
@@ -640,6 +649,30 @@
     },
     "skills/in-progress/setup-ts-deep-modules/dependency-cruiser.config.cjs": {
       "sha256": "3c4973bec69f73b2117654abf9e666a7c28665b213be20e6d39869e29842428e",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/EXAMPLE-TASKS.md": {
+      "sha256": "34bfb01ced8fbbff8185d347df423533d157c29e8d58bf044f8450602f162875",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/GIT-HOSTS.md": {
+      "sha256": "f6b453cd0b1601c329dcfbffcb4added077683a4b777c819530ff0a940b1147f",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/OBSERVABILITY-PLATFORMS.md": {
+      "sha256": "c3bd68e1bd105ccdda407a7aa909807131a20117bbf510d1ad0cfefffa25cb4c",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/RUNNERS.md": {
+      "sha256": "85aacfb9acac67948c1659562d60b52c2a13936faddd24de26c9094b35ff70e7",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/SKILL.md": {
+      "sha256": "645ab761b6cca61a480072b1b510eb05fe0fe5cde2ce0495b6fc234311692253",
+      "mode": 420
+    },
+    "skills/in-progress/software-factory/TICKET-TRACKERS.md": {
+      "sha256": "4b68a198d6c1a6d47f9ad7eb1f02cc3e60778a2b1610f8b2ac23f72230d575b2",
       "mode": 420
     },
     "skills/in-progress/writing-beats/SKILL.md": {

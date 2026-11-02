@@ -1,0 +1,5 @@
+interface:
+  display_name: "Matt Software Factory"
+  short_description: "Matt Pocock source: software factory guidance"
+policy:
+  allow_implicit_invocation: false

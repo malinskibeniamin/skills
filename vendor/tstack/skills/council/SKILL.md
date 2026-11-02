@@ -5,6 +5,11 @@ description: Trigger this if the user says 'council'.
 
 # Council
 
+Before an audit, address outstanding PR comments, fix known issues, and run
+relevant checks. Give council the updated implementation; do not defer known
+fixes until reviews return. If the user wants to discard the implementation
+and explore new ideas, skip fixes to code being replaced.
+
 Bring in three delegates to help with the user's request, usually for review
 or feedback. Use one strong model from each of three different providers, at
 high reasoning effort. If the user's instructions name council members, use

@@ -26,7 +26,7 @@ OWNERS = {
         "improve-codebase-architecture", "pr", "prototype", "research", "retro",
         "tdd", "to-spec", "to-tickets", "triage", "wayfinder", "wizard", "grilling",
         "handoff", "teach", "to-questionnaire", "wait-what", "writing-for-agents",
-        "writing-beats", "writing-fragments", "writing-shape",
+        "writing-beats", "writing-fragments", "writing-shape", "software-factory",
     )},
 }
 

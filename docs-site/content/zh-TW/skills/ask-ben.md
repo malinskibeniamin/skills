@@ -114,6 +114,7 @@ type: skill
 | `/matt-setup-matt-pocock-skills` | Matt Pocock 原始技能指南：`setup-matt-pocock-skills`。 |
 | `/matt-setup-pre-commit` | Matt Pocock 原始技能指南：`setup-pre-commit`。 |
 | `/matt-setup-ts-deep-modules` | Matt Pocock 原始技能指南：`setup-ts-deep-modules`。 |
+| `/matt-software-factory` | Matt Pocock 原始技能指南：`software-factory`。 |
 | `/matt-tdd` | Matt Pocock 原始技能指南：`tdd`。 |
 | `/matt-teach` | Matt Pocock 原始技能指南：`teach`。 |
 | `/matt-to-questionnaire` | Matt Pocock 原始技能指南：`to-questionnaire`。 |

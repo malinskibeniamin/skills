@@ -106,6 +106,30 @@ class MattSyncTest(unittest.TestCase):
         self.assertEqual(self.install(revision).returncode, 0)
         self.assertEqual(self.snapshot(), before)
 
+    def test_new_software_factory_skill_keeps_existing_host_owner(self):
+        self.assertEqual(self.install().returncode, 0)
+        self.write(self.repo, "software-factory/SKILL.md", "Local planning and authorization policy\n")
+        manifest_path = self.repo / ".claude-plugin/plugin.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["skills"].append("./software-factory/")
+        manifest_path.write_text(json.dumps(manifest) + "\n")
+        self.write(self.source, "skills/in-progress/software-factory/SKILL.md",
+                   "---\nname: software-factory\ndescription: Factory design language.\n---\nUse the source survey.\n")
+        self.write(self.source, "skills/in-progress/software-factory/RUNNERS.md", "Source runner survey\n")
+        result = self.install(self.commit())
+        self.assertEqual(result.returncode, 0, result.stderr)
+        lock = json.loads((self.repo / "vendor/mattpocock.lock.json").read_text())
+        skill = next(s for s in lock["skills"] if s["upstream_name"] == "software-factory")
+        self.assertEqual(skill["owner"], "software-factory")
+        adapter = (self.repo / "matt-skills/matt-software-factory/SKILL.md").read_text()
+        self.assertIn("../../software-factory/SKILL.md", adapter)
+        self.assertIn("disable-model-invocation: true", adapter)
+        self.assertEqual((self.repo / "software-factory/SKILL.md").read_text(),
+                         "Local planning and authorization policy\n")
+        self.assertEqual((self.repo / "vendor/mattpocock/upstream/skills/in-progress/software-factory/RUNNERS.md").read_text(),
+                         "Source runner survey\n")
+        self.assertEqual(self.cli("--check").returncode, 0)
+
     def test_drift_is_rejected_without_overwriting_local_work(self):
         self.assertEqual(self.install().returncode, 0)
         for relative in ("vendor/mattpocock/upstream/LICENSE", "matt-skills/matt-pr/SKILL.md"):

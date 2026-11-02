@@ -24,7 +24,7 @@ request continues through verification and the project's delivery gates.
    | Busy JS during motion | Eligible CSS/WAAPI path; confirm actual compositor execution |
    | React render every frame | Motion values or bounded ref updates; retain semantic React state |
    | Cost grows with descendants | Localize inherited CSS-variable writes to the moving element |
-   | Individual Motion transforms miss acceleration | Try full `transform`, after checking installed version |
+   | Individual Motion transforms miss acceleration | Check version/path: Motion 14.2+ can combine HTML shorthands; try full `transform` on older versions |
    | Layer setup causes observed hitch | Scoped, temporary `will-change`; remove if gain is unproven |
 
 4. Replay identical base/candidate conditions and compare late frames, layout/paint,
@@ -39,6 +39,9 @@ request continues through verification and the project's delivery gates.
 - Hardware acceleration is progressive enhancement. CSS, WAAPI, and Motion are not
   blanket guarantees; verify [current Motion guidance](https://motion.dev/docs/performance)
   and the installed library path. CPU throttling does not emulate GPU or phone memory.
+- Motion 14.2+ can combine HTML `x`/`y`/`scale`/`rotate` into an eligible WAAPI transform;
+  preserve those shorthands when appropriate. Layout/layoutId, `onUpdate`,
+  `transformTemplate`, inertia and frame-driven values still need main-thread work.
 - A scale is not a universal height/padding substitute; it scales text and leaves flow
   unchanged. Preserve correctness before choosing a cheaper rendering path.
 - Profile blur/filter/clip-path on supported browsers; a fixed pixel cutoff proves nothing.

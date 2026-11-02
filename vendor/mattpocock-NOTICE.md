@@ -1,10 +1,10 @@
 # Matt Pocock skills
 
 Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
-[`a496f5513d4a4cf889bc48e189e579f4b0bdf6aa`](https://github.com/mattpocock/skills/tree/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa)
+[`4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d)
 (v1.3.2 plus subsequent main-branch changes).
 
-All **38 skills** under `skills/`, every skill-local reference/helper/asset, the
+All **39 skills** under `skills/`, every skill-local reference/helper/asset, the
 upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained byte-for-byte
 in `mattpocock/upstream/`. [The lock](mattpocock.lock.json) records the immutable
 revision, complete inventory, SHA-256 digests, executable modes and adapter/owner
@@ -16,8 +16,9 @@ Existing unprefixed skills remain local adaptations, not byte-exact copies.
 [Compatibility](../shared/MATT-POCOCK.md) owns host policy and authorization; no
 upstream agents, hooks or schedules are activated by importing the source.
 
-The separately reviewed [software-factory draft](software-factory-NOTICE.md) has
-its own pin and files in `mattpocock/software-factory/`; this import preserves them.
+The merged in-progress [software-factory source](mattpocock/upstream/skills/in-progress/software-factory/SKILL.md)
+now shares this pin and its existing planning owner. It supersedes the separate draft
+snapshot; [compatibility and refresh](software-factory-NOTICE.md) retain local safety controls.
 Non-skill upstream infrastructure, docs site and repository automation are not imported.
 
 ## Refresh
@@ -44,7 +45,11 @@ produce no additional diff. `--check` is local, read-only and network-free.
 
 ## Reconciliation at this pin
 
-Compared with the previous adapted baseline `49dd158d1076134a641b33efb035946536778336`:
+The latest refresh adds the merged software-factory design language and surveys,
+routes its adapter through the existing planning owner, and reuses shared wikis for
+chief-of-staff. Retro procedures remain scoped and recommend-only without edit authority.
+
+Earlier reconciliations from the adapted baseline `49dd158d1076134a641b33efb035946536778336` remain:
 
 - Authorized review, design, architecture, research, grilling and wayfinding agents
   now use fresh contexts; consent and inline fallbacks remain local policy.

@@ -25,7 +25,7 @@ type: skill
 
 載入 [grilling](https://github.com/malinskibeniamin/skills/blob/main/grilling/SKILL.md)；提問、可逆假設、停止訊號及計畫核准由它負責。
 以草稿 PR 為終點時，結束的是提問，而非安全邊界。
-閱讀完整的[上游參考資料](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/SKILL.md)，
+閱讀完整的[上游參考資料](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/SKILL.md)，
 了解工廠詞彙與設計問題，並套用以下本地調整：
 
 - 以目標專案的詞彙表為準。工廠任務是一種工作；一次工廠執行是一次執行，
@@ -39,7 +39,7 @@ type: skill
 
 檢查實際的待辦工作、交付循環、檢查機制、審查量能、宿主能力
 與失敗情況。區分觀察、推論及未知資訊。當使用者指出痛點或沒有候選任務時，
-閱讀[範例任務](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/EXAMPLE-TASKS.md)。
+閱讀[範例任務](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/EXAMPLE-TASKS.md)。
 針對本框架，閱讀[適用性與試行](https://github.com/malinskibeniamin/skills/blob/main/software-factory/HARNESS-FIT.md)。
 
 ## 判斷是否有幫助 [#decide-whether-it-helps]
@@ -60,10 +60,10 @@ type: skill
 目前要選擇的角色之調查資料，再驗證最新供應商文件：
 
 - [協調器](https://github.com/malinskibeniamin/skills/blob/main/software-factory/ORCHESTRATORS.md)：觸發條件、持久執行狀態、工作認領、重試、取消。
-- [Git 託管](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/GIT-HOSTS.md)：分支、PR、身分、檢查關卡。
-- [工單追蹤系統](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/TICKET-TRACKERS.md)：接收工單、就緒狀態、回覆。
-- [執行器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/RUNNERS.md)：執行、隔離、清理、成本。
-- [可觀測性](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/OBSERVABILITY-PLATFORMS.md)，僅在
+- [Git 託管](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/GIT-HOSTS.md)：分支、PR、身分、檢查關卡。
+- [工單追蹤系統](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/TICKET-TRACKERS.md)：接收工單、就緒狀態、回覆。
+- [執行器](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/RUNNERS.md)：執行、隔離、清理、成本。
+- [可觀測性](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/OBSERVABILITY-PLATFORMS.md)，僅在
   現有執行頁面無法說明發生了什麼時使用；經過考量後不新增此服務也是有效選擇。
 
 ## 限定每個任務 [#bound-every-task]

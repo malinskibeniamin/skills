@@ -27,7 +27,7 @@ używania poświadczeń, planowania cyklicznych zadań, delegowania, pracy w tle
 
 Wczytaj [grilling](https://github.com/malinskibeniamin/skills/blob/main/grilling/SKILL.md); ta umiejętność odpowiada za pytania, odwracalne założenia,
 sygnały zatrzymania i zatwierdzenie planu. Punkt końcowy w postaci roboczego PR kończy pytania, ale nie znosi granic bezpieczeństwa.
-Przeczytaj całe [źródło upstream](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/SKILL.md),
+Przeczytaj całe [źródło upstream](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/SKILL.md),
 aby poznać słownictwo i pytania projektowe fabryki. Zastosuj następujące lokalne dostosowania:
 
 - Słownik projektu docelowego ma pierwszeństwo. Zadanie fabryki to rodzaj pracy; uruchomienie fabryki to pojedyncze
@@ -41,7 +41,7 @@ aby poznać słownictwo i pytania projektowe fabryki. Zastosuj następujące lok
 
 Zbadaj rzeczywisty backlog, pętlę dostarczania, kontrole, możliwości zespołu przeglądającego, funkcje hosta
 i awarie. Oddziel obserwacje, wnioski i niewiadome. Przeczytaj
-[przykładowe zadania](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/EXAMPLE-TASKS.md), gdy użytkownik wskazuje
+[przykładowe zadania](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/EXAMPLE-TASKS.md), gdy użytkownik wskazuje
 problem lub nie ma kandydata. Dla tego zestawu przeczytaj [ocenę przydatności i pilotaż](https://github.com/malinskibeniamin/skills/blob/main/software-factory/HARNESS-FIT.md).
 
 ## Ustal, czy to pomaga [#decide-whether-it-helps]
@@ -62,10 +62,10 @@ Wykorzystuj istniejące usługi; nie zakładaj, że każda rola wymaga nowego pr
 przegląd dotyczący wybieranej roli, a następnie sprawdź aktualną dokumentację dostawcy:
 
 - [Orkiestratory](https://github.com/malinskibeniamin/skills/blob/main/software-factory/ORCHESTRATORS.md): wyzwalacze, trwały stan uruchomień, rezerwacje pracy, ponowienia, anulowanie.
-- [Hosting Git](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/GIT-HOSTS.md): gałęzie, PR, tożsamość, bramki.
-- [Systemy śledzenia zgłoszeń](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/TICKET-TRACKERS.md): przyjmowanie zgłoszeń, gotowość, odpowiedzi.
-- [Runnery](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/RUNNERS.md): wykonanie, izolacja, sprzątanie, koszt.
-- [Obserwowalność](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/software-factory/OBSERVABILITY-PLATFORMS.md), tylko gdy
+- [Hosting Git](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/GIT-HOSTS.md): gałęzie, PR, tożsamość, bramki.
+- [Systemy śledzenia zgłoszeń](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/TICKET-TRACKERS.md): przyjmowanie zgłoszeń, gotowość, odpowiedzi.
+- [Runnery](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/RUNNERS.md): wykonanie, izolacja, sprzątanie, koszt.
+- [Obserwowalność](https://github.com/malinskibeniamin/skills/blob/main/vendor/mattpocock/upstream/skills/in-progress/software-factory/OBSERVABILITY-PLATFORMS.md), tylko gdy
   istniejące strony uruchomień nie wyjaśniają, co się stało; świadomy brak dodatkowej usługi jest dopuszczalny.
 
 ## Ogranicz każde zadanie [#bound-every-task]

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/t3dotgg/tstack",
-  "revision": "7de017b3fc9d50c03cf3ecb98fb71e0ca65a78bd",
+  "revision": "1085050f3baed1ac724caa4a8166145fb2ac88af",
   "skills": [
     {
       "name": "babysit-pr",
@@ -84,7 +84,7 @@
       "mode": 493
     },
     "skills/council/SKILL.md": {
-      "sha256": "da8b4166f19defb2b6916e8f8fe30fa93b8bd2eabaf870ba87e9accaa038e2b8",
+      "sha256": "598fb2c7cdd48ddd9643cb22999e1b624c357aa6579aa0af0e7268ae16a8a164",
       "mode": 420
     },
     "skills/file-pr/SKILL.md": {
@@ -100,7 +100,7 @@
       "mode": 420
     },
     "skills/full-stop/SKILL.md": {
-      "sha256": "243ed08a040df888e35a5db8da704dced345270efdd0afa74252a766e05a4b09",
+      "sha256": "091dcabfcba73e009ddb8e32c498a993a6bb60f8c223d3e21e917f4e52ab9939",
       "mode": 420
     },
     "skills/full-stop/agents/openai.yaml": {

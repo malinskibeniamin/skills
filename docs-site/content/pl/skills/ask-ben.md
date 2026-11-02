@@ -114,6 +114,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/matt-setup-matt-pocock-skills` | Wskazówki źródłowe Matta Pococka: `setup-matt-pocock-skills`. |
 | `/matt-setup-pre-commit` | Wskazówki źródłowe Matta Pococka: `setup-pre-commit`. |
 | `/matt-setup-ts-deep-modules` | Wskazówki źródłowe Matta Pococka: `setup-ts-deep-modules`. |
+| `/matt-software-factory` | Wskazówki źródłowe Matta Pococka: `software-factory`. |
 | `/matt-tdd` | Wskazówki źródłowe Matta Pococka: `tdd`. |
 | `/matt-teach` | Wskazówki źródłowe Matta Pococka: `teach`. |
 | `/matt-to-questionnaire` | Wskazówki źródłowe Matta Pococka: `to-questionnaire`. |

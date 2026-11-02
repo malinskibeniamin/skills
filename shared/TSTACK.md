@@ -47,7 +47,9 @@ human-review requirements, or install a second delivery loop.
 ## full-stop
 
 Select the existing readiness endpoint, not merge. Preserve a narrower draft-only
-or PR-only request. Verify that the owned PR cannot merge automatically before
+or PR-only request. The source also recognizes a closing "Full stop."; interpret it
+against the user's actual delivery intent, not as authority to expand an unrelated
+question into PR work. Verify that the owned PR cannot merge automatically before
 work and pushes; disable an existing auto-merge or queue entry only for that owned
 PR within the requested no-merge task. If ownership or prevention is uncertain,
 stop before pushing and report the concrete blocker. Never merge, enable
@@ -112,6 +114,10 @@ If a disposable worktree is needed, follow the consuming repository's naming rul
 
 Only an explicit council/delegation request enters this branch. Preserve named
 models and effort; resolve available provider/model IDs from the live catalog.
+Present the current candidate with outstanding comments, known issues and relevant
+check results. If repairs are authorized, fix known issues before requesting another
+audit; a review-only request reports them without editing. Skip repairs to an
+implementation the user explicitly wants to replace.
 Missing providers remain unavailable, not substituted or called unanimous.
 Use read-only child tasks, never top-level conversations; children cannot spawn
 descendants. In T3, each review round gets fresh `delegate_task` calls, saved

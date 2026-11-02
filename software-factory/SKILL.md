@@ -12,7 +12,7 @@ scheduling, delegation, background execution, deployment, or merge authority.
 
 Load [grilling](../grilling/SKILL.md); it owns questions, reversible assumptions, stop
 signals, and the plan gate. A draft-PR endpoint ends questioning, not safety boundaries.
-Read the complete [upstream reference](../vendor/mattpocock/software-factory/SKILL.md)
+Read the complete [upstream reference](../vendor/mattpocock/upstream/skills/in-progress/software-factory/SKILL.md)
 for factory vocabulary and design questions, with these local adaptations:
 
 - The target's glossary wins. A factory task is a kind of work; a factory run is one
@@ -26,7 +26,7 @@ for factory vocabulary and design questions, with these local adaptations:
 
 Inspect the actual backlog, delivery loop, checks, review capacity, host capabilities,
 and failures. Name what is observed, inferred, and unknown. Read
-[example tasks](../vendor/mattpocock/software-factory/EXAMPLE-TASKS.md) when the user names
+[example tasks](../vendor/mattpocock/upstream/skills/in-progress/software-factory/EXAMPLE-TASKS.md) when the user names
 a pain point or has no candidate. For this harness, read [fit and pilot](HARNESS-FIT.md).
 
 ## Decide whether it helps
@@ -47,10 +47,10 @@ Reuse existing services; do not assume every slot needs another product. Read on
 survey for a slot being chosen, then verify current vendor docs:
 
 - [Orchestrators](ORCHESTRATORS.md): triggers, durable run state, claims, retries, cancellation.
-- [Git hosts](../vendor/mattpocock/software-factory/GIT-HOSTS.md): branches, PRs, identity, gates.
-- [Ticket trackers](../vendor/mattpocock/software-factory/TICKET-TRACKERS.md): intake, readiness, replies.
-- [Runners](../vendor/mattpocock/software-factory/RUNNERS.md): execution, isolation, teardown, cost.
-- [Observability](../vendor/mattpocock/software-factory/OBSERVABILITY-PLATFORMS.md), only when
+- [Git hosts](../vendor/mattpocock/upstream/skills/in-progress/software-factory/GIT-HOSTS.md): branches, PRs, identity, gates.
+- [Ticket trackers](../vendor/mattpocock/upstream/skills/in-progress/software-factory/TICKET-TRACKERS.md): intake, readiness, replies.
+- [Runners](../vendor/mattpocock/upstream/skills/in-progress/software-factory/RUNNERS.md): execution, isolation, teardown, cost.
+- [Observability](../vendor/mattpocock/upstream/skills/in-progress/software-factory/OBSERVABILITY-PLATFORMS.md), only when
   existing run pages cannot answer what happened; deliberate none is valid.
 
 ## Bound every task

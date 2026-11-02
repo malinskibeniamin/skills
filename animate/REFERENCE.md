@@ -58,8 +58,13 @@ Avoid bounce on dense data surfaces; test on the target device.
 ## Rendering cautions
 
 CSS and WAAPI can run eligible animation on the compositor; neither guarantees it.
-Motion can use WAAPI or a main-thread path. A full transform string can help when
-individual transforms use unaccelerated CSS variables; confirm the installed implementation.
+Motion can use WAAPI or a main-thread path. From Motion 14.2, independent HTML
+`x`/`y`/`scale`/`rotate` animations can combine into an eligible accelerated transform;
+keep those shorthands when supported. A full transform string can help older paths.
+Layout/layoutId, `onUpdate`, `transformTemplate`, inertia and frame-driven values
+still need main-thread work. Confirm the installed version and actual animation path
+with [Motion's performance guide](https://motion.dev/docs/performance); neither syntax
+nor a version number proves compositor execution.
 Prefer percentages for content-relative travel when needed for correctness.
 
 `filter`, `clip-path`, shadows, large layers, and blur need cross-browser profiling.
