@@ -186,6 +186,7 @@
 | `/resolve-pr-feedback` | Resolve pull request feedback and review threads. |
 | `/retro` | Conduct a retrospective on a coding session. |
 | `/revamp` | Run a large rewrite with baseline-driven translation. |
+| `/reverse-engineer-anything` | Inspect shipped artifacts and runtime evidence with REA. |
 | `/review` | Review a diff with evidence-triggered specialist hats. |
 | `/security-audit` | Review source trust boundaries with Cloudflare's audit workflow. |
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |

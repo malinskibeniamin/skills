@@ -68,9 +68,9 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/handoff` | Przygotowywanie zwięzłego przekazania sesji innemu agentowi. |
 | `/hook-audit` | Audytowanie skuteczności, opóźnień i rozbieżności hooków. |
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
+| `/improve-animations` | Audytuj zachowany ruch i planuj ulepszenia według priorytetów. |
 | `/improve-codebase-architecture` | Przeprojektowywanie architektury w celu eliminowania całych klas błędów. |
 | `/improve` | Audytowanie baz kodu lub przygotowywanie wymaganych planów implementacji. |
-| `/improve-animations` | Audytuj zachowany ruch i planuj ulepszenia według priorytetów. |
 | `/better-accessibility` | Rozszerzanie istniejącej weryfikacji dostępności o WCAG. |
 | `/better-colors` | Budowanie i pomiar semantycznych systemów kolorów interfejsu. |
 | `/better-interface` | Przegląd interfejsów przez istniejącą ocenę wizualną. |
@@ -101,8 +101,8 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/matt-grill-with-docs` | Wskazówki źródłowe Matta Pococka: `grill-with-docs`. |
 | `/matt-grilling` | Wskazówki źródłowe Matta Pococka: `grilling`. |
 | `/matt-handoff` | Wskazówki źródłowe Matta Pococka: `handoff`. |
-| `/matt-implement` | Wskazówki źródłowe Matta Pococka: `implement`. |
 | `/matt-implement-spec` | Wskazówki źródłowe Matta Pococka: `implement-spec`. |
+| `/matt-implement` | Wskazówki źródłowe Matta Pococka: `implement`. |
 | `/matt-improve-codebase-architecture` | Wskazówki źródłowe Matta Pococka: `improve-codebase-architecture`. |
 | `/matt-loop-me` | Wskazówki źródłowe Matta Pococka: `loop-me`. |
 | `/matt-migrate-to-shoehorn` | Wskazówki źródłowe Matta Pococka: `migrate-to-shoehorn`. |
@@ -146,8 +146,8 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/poteto-how` | Poteto: Wyjaśnij działanie podsystemu na podstawie kodu źródłowego. |
 | `/poteto-in-your-own-words` | Poteto: Opisz własnymi słowami cele i problem osoby korzystającej z narzędzia. |
 | `/poteto-interrogate` | Poteto: Sprawdź zmiany w kodzie poprzez krytyczną analizę. |
-| `/poteto-ketchup` | Poteto: Podsumuj ten czat i decyzje oczekujące na użytkownika. |
 | `/poteto-ketchup-video` | Poteto: Podsumuj ten czat w krótkim filmie z napisami. |
+| `/poteto-ketchup` | Poteto: Podsumuj ten czat i decyzje oczekujące na użytkownika. |
 | `/poteto-maintain-formal-verification-skill` | Poteto: Dostosuj weryfikację formalną do zmian w kodzie. |
 | `/poteto-maintain-verification-skill` | Poteto: Zaktualizuj weryfikator na podstawie kodu źródłowego i rzeczywistego działania. |
 | `/poteto-make-bot-ui` | Poteto: Zbuduj panel, który uruchamia bota przez webhook. |
@@ -197,8 +197,8 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/pr` | Pisanie opisu PR, który szybko się przegląda. |
 | `/prime` | Tworzenie zwięzłego wprowadzenia do repozytorium. |
 | `/product` | Sprawdzanie, czy praca uzasadnia poświęcony jej czas i dostarcza wartość biznesową. |
-| `/prototype` | Tworzenie jednorazowego artefaktu w celu rozstrzygnięcia kwestii projektowej. |
 | `/protobuf` | Projektowanie i przegląd schematów protobuf oraz ich odbiorców. |
+| `/prototype` | Tworzenie jednorazowego artefaktu w celu rozstrzygnięcia kwestii projektowej. |
 | `/quantify-impact` | Wykazywanie istotnych ulepszeń produktu i bazy kodu. |
 | `/read-the-damn-docs` | Badanie bieżącego działania na podstawie dokumentacji źródłowej. |
 | `/redpanda-ai-gateway` | Uruchamianie narzędzi CLI AI przez Redpanda AI Gateway. |
@@ -210,6 +210,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/resolve-pr-feedback` | Uwzględnianie uwag do pull requesta i rozwiązywanie wątków przeglądu. |
 | `/retro` | Retrospektywa sesji programistycznej. |
 | `/revamp` | Przeprowadzanie dużej przebudowy z wykorzystaniem translacji opartej na stanie bazowym. |
+| `/reverse-engineer-anything` | Badaj wydane artefakty i dowody z działania programu za pomocą REA. |
 | `/review` | Przeglądanie zmian z użyciem specjalistycznych perspektyw dobieranych na podstawie dowodów. |
 | `/security-audit` | Przeglądanie granic zaufania w kodzie źródłowym zgodnie z procedurą audytu Cloudflare. |
 | `/setup-atlassian-workflow` | Konfigurowanie opcjonalnych przepływów pracy Jira i Atlassian. |

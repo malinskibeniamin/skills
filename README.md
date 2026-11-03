@@ -108,6 +108,16 @@ Follow the guide to configure the MCP client and consumer app's dev-only bootstr
 Missing capabilities retain existing workflows; React observations do not replace tests
 or production-like UX measurements.
 
+### REA artifact analysis
+
+`/reverse-engineer-anything` loads the release-matched REA skill and all references
+for inspecting shipped binaries, packages, JavaScript/Electron artifacts and
+requested runtime evidence. Normal source-repository exploration keeps its existing
+tools. The [opt-in connection guide](shared/REA.md) and
+[pinned MCP config](config/rea.mcp.json) keep the runtime external; installing this
+harness neither starts REA nor installs native engines or changes client settings.
+[Licenses, provenance and refresh](vendor/rea-NOTICE.md).
+
 ### Stack diagrams
 
 `/stack-diagram` creates logo-based architecture and tooling diagrams with grouped

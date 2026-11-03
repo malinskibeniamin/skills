@@ -275,7 +275,8 @@
     "./poteto-skills/poteto-technical-writing/",
     "./poteto-skills/poteto-typescript-best-practices/",
     "./poteto-skills/poteto-unslop/",
-    "./poteto-skills/poteto-why/"
+    "./poteto-skills/poteto-why/",
+    "./reverse-engineer-anything/"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",

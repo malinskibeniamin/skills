@@ -68,9 +68,9 @@ type: skill
 | `/handoff` | 为其他智能体准备精简的会话交接信息。 |
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
+| `/improve-animations` | 审计保留的动效，按优先级规划改进。 |
 | `/improve-codebase-architecture` | 重新设计架构，以消除整类错误。 |
 | `/improve` | 审计代码库或编写请求的实施计划。 |
-| `/improve-animations` | 审计保留的动效，按优先级规划改进。 |
 | `/better-accessibility` | 用 WCAG 扩展现有无障碍验证。 |
 | `/better-colors` | 构建并测量语义化界面颜色系统。 |
 | `/better-interface` | 通过现有视觉审查流程检查界面。 |
@@ -101,8 +101,8 @@ type: skill
 | `/matt-grill-with-docs` | Matt Pocock 原始技能指南：`grill-with-docs`。 |
 | `/matt-grilling` | Matt Pocock 原始技能指南：`grilling`。 |
 | `/matt-handoff` | Matt Pocock 原始技能指南：`handoff`。 |
-| `/matt-implement` | Matt Pocock 原始技能指南：`implement`。 |
 | `/matt-implement-spec` | Matt Pocock 原始技能指南：`implement-spec`。 |
+| `/matt-implement` | Matt Pocock 原始技能指南：`implement`。 |
 | `/matt-improve-codebase-architecture` | Matt Pocock 原始技能指南：`improve-codebase-architecture`。 |
 | `/matt-loop-me` | Matt Pocock 原始技能指南：`loop-me`。 |
 | `/matt-migrate-to-shoehorn` | Matt Pocock 原始技能指南：`migrate-to-shoehorn`。 |
@@ -146,8 +146,8 @@ type: skill
 | `/poteto-how` | Poteto：依据源码证据解释子系统的行为。 |
 | `/poteto-in-your-own-words` | Poteto：用自己的话复述用户的目标和问题。 |
 | `/poteto-interrogate` | Poteto：通过对抗式审查质疑代码差异。 |
-| `/poteto-ketchup` | Poteto：回顾当前聊天和等待用户决定的事项。 |
 | `/poteto-ketchup-video` | Poteto：用带字幕的短视频回顾当前聊天。 |
+| `/poteto-ketchup` | Poteto：回顾当前聊天和等待用户决定的事项。 |
 | `/poteto-maintain-formal-verification-skill` | Poteto：根据代码变更更新形式化验证。 |
 | `/poteto-maintain-verification-skill` | Poteto：根据源码和实际行为更新验证器。 |
 | `/poteto-make-bot-ui` | Poteto：构建通过 webhook 唤醒机器人的仪表板。 |
@@ -197,8 +197,8 @@ type: skill
 | `/pr` | 撰写便于快速审查的 PR 描述。 |
 | `/prime` | 构建简明的仓库启动说明。 |
 | `/product` | 检查工作是否值得投入时间，并带来相应的业务价值。 |
-| `/prototype` | 构建一次性产物来回答设计问题。 |
 | `/protobuf` | 设计并审查 protobuf 模式及其使用方。 |
+| `/prototype` | 构建一次性产物来回答设计问题。 |
 | `/quantify-impact` | 证明有意义的产品和代码库改进。 |
 | `/read-the-damn-docs` | 根据主要文档研究当前行为。 |
 | `/redpanda-ai-gateway` | 通过 Redpanda AI Gateway 运行 AI CLI。 |
@@ -210,6 +210,7 @@ type: skill
 | `/resolve-pr-feedback` | 解决拉取请求反馈和审查线程。 |
 | `/retro` | 对一次编码会话进行复盘。 |
 | `/revamp` | 通过基线驱动的转换执行大规模重写。 |
+| `/reverse-engineer-anything` | 使用 REA 检查已发布的产物和运行时证据。 |
 | `/review` | 使用由证据触发的专家视角审查差异。 |
 | `/security-audit` | 使用 Cloudflare 的审计工作流审查源码信任边界。 |
 | `/setup-atlassian-workflow` | 配置可选启用的 Jira 和 Atlassian 工作流。 |

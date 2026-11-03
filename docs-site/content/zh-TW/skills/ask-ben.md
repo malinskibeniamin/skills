@@ -68,9 +68,9 @@ type: skill
 | `/handoff` | 準備精簡的工作階段交接資料，供另一個代理程式使用。 |
 | `/hook-audit` | 稽核掛鉤的成效、延遲與偏移。 |
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
+| `/improve-animations` | 稽核保留的動效，按優先順序規劃改善。 |
 | `/improve-codebase-architecture` | 重新設計架構，以消除整類錯誤。 |
 | `/improve` | 稽核程式碼庫或撰寫所要求的實作計畫。 |
-| `/improve-animations` | 稽核保留的動效，按優先順序規劃改善。 |
 | `/better-accessibility` | 以 WCAG 擴充現有無障礙驗證。 |
 | `/better-colors` | 建立並量測語意化介面色彩系統。 |
 | `/better-interface` | 透過現有視覺審查流程檢查介面。 |
@@ -101,8 +101,8 @@ type: skill
 | `/matt-grill-with-docs` | Matt Pocock 原始技能指南：`grill-with-docs`。 |
 | `/matt-grilling` | Matt Pocock 原始技能指南：`grilling`。 |
 | `/matt-handoff` | Matt Pocock 原始技能指南：`handoff`。 |
-| `/matt-implement` | Matt Pocock 原始技能指南：`implement`。 |
 | `/matt-implement-spec` | Matt Pocock 原始技能指南：`implement-spec`。 |
+| `/matt-implement` | Matt Pocock 原始技能指南：`implement`。 |
 | `/matt-improve-codebase-architecture` | Matt Pocock 原始技能指南：`improve-codebase-architecture`。 |
 | `/matt-loop-me` | Matt Pocock 原始技能指南：`loop-me`。 |
 | `/matt-migrate-to-shoehorn` | Matt Pocock 原始技能指南：`migrate-to-shoehorn`。 |
@@ -146,8 +146,8 @@ type: skill
 | `/poteto-how` | Poteto：依據原始碼實證說明子系統的行為。 |
 | `/poteto-in-your-own-words` | Poteto：用自己的話重述使用者的目標與問題。 |
 | `/poteto-interrogate` | Poteto：透過對抗式審查質疑程式碼差異。 |
-| `/poteto-ketchup` | Poteto：回顧目前對話和等待使用者決定的事項。 |
 | `/poteto-ketchup-video` | Poteto：用附字幕的短影片回顧目前對話。 |
+| `/poteto-ketchup` | Poteto：回顧目前對話和等待使用者決定的事項。 |
 | `/poteto-maintain-formal-verification-skill` | Poteto：依據程式碼變更更新形式化驗證。 |
 | `/poteto-maintain-verification-skill` | Poteto：根據原始碼與實際行為更新驗證器。 |
 | `/poteto-make-bot-ui` | Poteto：建立透過 webhook 喚醒機器人的儀表板。 |
@@ -197,8 +197,8 @@ type: skill
 | `/pr` | 撰寫便於快速審查的 PR 說明。 |
 | `/prime` | 建立精簡的儲存庫啟動簡報。 |
 | `/product` | 確認工作值得投入時間，並能交付商業價值。 |
-| `/prototype` | 建立一次性成品，以回答設計問題。 |
 | `/protobuf` | 設計並審查 protobuf 結構描述及其使用端。 |
+| `/prototype` | 建立一次性成品，以回答設計問題。 |
 | `/quantify-impact` | 證明對產品與程式碼庫具有實質意義的改善。 |
 | `/read-the-damn-docs` | 從第一手文件研究目前的行為。 |
 | `/redpanda-ai-gateway` | 透過 Redpanda AI Gateway 執行 AI CLI。 |
@@ -210,6 +210,7 @@ type: skill
 | `/resolve-pr-feedback` | 解決提取要求的意見回饋與審查討論串。 |
 | `/retro` | 對一次程式開發工作階段進行回顧。 |
 | `/revamp` | 透過以基準為依據的轉換執行大型重寫。 |
+| `/reverse-engineer-anything` | 使用 REA 檢查已發布的產物與執行階段證據。 |
 | `/review` | 使用由實證觸發的專業角色審查差異。 |
 | `/security-audit` | 使用 Cloudflare 的稽核工作流程審查原始碼的信任邊界。 |
 | `/setup-atlassian-workflow` | 設定可選用的 Jira 與 Atlassian 工作流程。 |
