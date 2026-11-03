@@ -19,7 +19,8 @@ REPOSITORY = "https://github.com/morluto/rea"
 NAME = "reverse-engineer-anything"
 REGISTRATION = f"./{NAME}/"
 SKILL = f"skills/{NAME}/SKILL.md"
-REQUIRED = {"LICENSE", "THIRD_PARTY_NOTICES.md", "package.json", SKILL}
+# Runtime dependency notices describe code we do not vendor with the instructions.
+REQUIRED = {"LICENSE", "package.json", SKILL}
 MAX_ARCHIVE_BYTES = 32 * 1024 * 1024
 MAX_SKILL_BYTES = 4 * 1024 * 1024
 ADAPTER = '''---

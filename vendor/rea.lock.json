@@ -10,10 +10,6 @@
       "sha256": "798f9e4d18e49b30bf2f12696c8ced73dc4e1413da375a333d01281543a1ea8b",
       "mode": 420
     },
-    "THIRD_PARTY_NOTICES.md": {
-      "sha256": "d2fa6973ee32ec2c3ef2d214cd5b8482f50511dcf9ba84937da3385920ebd1e6",
-      "mode": 420
-    },
     "package.json": {
       "sha256": "b0fc212f6bea9b4ee6e2b3ab0b52dd95402c229da3b8652127e5f131c3445b39",
       "mode": 420

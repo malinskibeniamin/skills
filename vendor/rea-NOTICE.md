@@ -2,10 +2,16 @@
 
 The published `rea-agents@6.8.0` npm archive supplies the unchanged
 `skills/reverse-engineer-anything/` tree, including all seven reference guides,
-plus its original LICENSE, THIRD_PARTY_NOTICES.md and package.json. Those 11 files
+plus its original LICENSE and package.json. Those 10 files
 are reference material, not an installed REA runtime. No executable runtime,
 native engine, upstream plugin manifest, root agent instruction or setup script
 is vendored. Copyright (c) 2026 morluto; [MIT license](rea/LICENSE).
+
+The [upstream runtime attribution](https://github.com/morluto/rea/blob/160d821ac9a0310afcb8d1fc427862dd6508add5/THIRD_PARTY_NOTICES.md)
+describes dependencies, native engines and assets not shipped here. Keep it with
+the separately acquired runtime, not this skill-only snapshot: its relative
+links require the wider upstream tree. Future third-party skill helpers/assets
+require their own reviewed license trail before import.
 
 [The lock](rea.lock.json) records the npm tarball URL and SHA-512 integrity,
 release version, Node requirements, complete selected file SHA-256 digests and

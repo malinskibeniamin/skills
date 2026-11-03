@@ -70,7 +70,9 @@ class ReaSyncTest(unittest.TestCase):
         lock = json.loads((self.repo / "vendor/rea.lock.json").read_text())
         self.assertEqual(lock["revision"], "a" * 40)
         self.assertEqual(lock["version"], "6.8.0")
-        expected = {name for name in self.payload if not name.startswith("dist/")}
+        expected = {"LICENSE", "package.json", SKILL,
+                    "skills/reverse-engineer-anything/references/guide.md",
+                    "skills/reverse-engineer-anything/scripts/helper"}
         self.assertEqual(set(lock["files"]), expected)
         for name in expected:
             copied = self.repo / "vendor/rea" / name
@@ -103,6 +105,18 @@ class ReaSyncTest(unittest.TestCase):
                                   "--integrity", digest)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertEqual(self.snapshot(), before)
+
+    def test_runtime_notices_are_not_required_or_shipped_with_the_skill(self):
+        self.payload["THIRD_PARTY_NOTICES.md"] = (
+            "Runtime attribution — [runtime license](licenses/runtime.txt)\n".encode(), 0o644)
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.repo / "vendor/rea/THIRD_PARTY_NOTICES.md").exists())
+        self.assertEqual((self.repo / "vendor/rea/LICENSE").read_bytes(), self.payload["LICENSE"][0])
+        del self.payload["THIRD_PARTY_NOTICES.md"]
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.cli("--check").returncode, 0)
 
     def test_unsafe_or_unreviewed_release_cannot_partially_refresh(self):
         self.assertEqual(self.install().returncode, 0)
