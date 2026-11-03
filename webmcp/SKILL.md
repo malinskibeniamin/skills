@@ -58,22 +58,10 @@ Size budgets guide design, not API limits; missing page APIs need not mean a dis
 
 ## Chrome page API (operate a page)
 
-Use [Chrome's imperative API](https://developer.chrome.com/docs/ai/webmcp/imperative-api) for the page fallback.
-Establish the native browser or polyfill's input contract before invocation:
-
-- **Chrome 153:** JSON-string arguments are required; object arguments fail, as
-  documented by [Shopify](https://shopify.dev/docs/api/web-mcp#calling-tools).
-- **Chrome 155 and later:** pass an object; JSON-string arguments are deprecated.
-- **Chrome 154, other hosts and polyfills:** verify their documented contract;
-  leave the operation pending if the format cannot be established. A host bridge's
-  own schema does not establish the native page API's input format.
-
-Never probe formats by attempting or retrying a mutation.
-
-Set `NAME`, `ORIGIN`, and the JSON-serializable `ARGS` object from the requested
-operation and discovered schema. Set `INPUT_FORMAT` to `"object"` or `"json-string"`
-only from the verified contract above. Evaluate in the page world, retaining the
-live descriptor. Stop on missing or ambiguous matches rather than picking another frame.
+Read the [native input-format preflight](references/native-calls.md) before using this fallback.
+Set `NAME`, `ORIGIN`, JSON-serializable `ARGS` and verified `INPUT_FORMAT` (`"object"` or
+`"json-string"`). Evaluate in the page world with the live descriptor; stop on missing
+or ambiguous matches rather than picking another frame. Never probe by retrying a mutation.
 
 ```js
 (async () => {

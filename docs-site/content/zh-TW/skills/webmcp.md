@@ -63,19 +63,10 @@ type: skill
 
 ## Chrome 頁面 API（操作頁面） [#chrome-page-api-operate-a-page]
 
-頁面呼叫的備用方案應使用 [Chrome 命令式 API](https://developer.chrome.com/docs/ai/webmcp/imperative-api)。
-呼叫前先確認原生瀏覽器或 polyfill 的輸入契約：
-
-- **Chrome 153：** 必須傳入 JSON 字串；傳入物件會失敗，詳見 [Shopify 文件](https://shopify.dev/docs/api/web-mcp#calling-tools)。
-- **Chrome 155 及更新版本：** 傳入物件；JSON 字串參數已棄用。
-- **Chrome 154、其他宿主與 polyfill：** 驗證其文件規定的契約；無法確認格式時，讓操作維持待處理狀態。宿主橋接器本身的結構不能決定原生頁面 API 的輸入格式。
-
-不要透過嘗試或重試會改變狀態的操作來探測格式。
-
-根據請求的操作與已探索的結構，確定 `NAME`、`ORIGIN` 及可序列化為 JSON
-的 `ARGS` 物件。僅根據上述已驗證的契約，將 `INPUT_FORMAT` 設為 `"object"`
-或 `"json-string"`。在頁面執行環境中執行，保留即時描述元。找不到相符項目或結果
-不唯一時應停止，不要改選其他框架。
+使用此備用方案前，先閱讀[原生輸入格式預檢](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/native-calls.md)。
+設定 `NAME`、`ORIGIN`、可序列化為 JSON 的 `ARGS`，以及已驗證的 `INPUT_FORMAT`
+（`"object"` 或 `"json-string"`）。在頁面執行環境中使用即時描述元執行；找不到相符項目
+或結果不唯一時應停止，不要改選其他框架。不要透過重試會改變狀態的操作來探測格式。
 
 ```js
 (async () => {

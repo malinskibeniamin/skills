@@ -17,9 +17,9 @@ Shopify cart tools reuse `Shopify.actions`, including theme behavior. For custom
 gaps, follow the same pattern: call the application's existing actions so tools
 and UI enforce the same rules. Keep credentials out of tool arguments.
 
-## Search → clarify → cart → checkout
+## Search -> clarify -> cart -> checkout
 
-Example request: “Find a blue shirt in medium, add two, and take me to checkout.”
+Example request: "Find a blue shirt in medium, add two, and take me to checkout."
 
 1. **Discover and search.** Use the current `search_catalog` schema. Present real
    candidates; ask the buyer to choose if several match.

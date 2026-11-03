@@ -75,20 +75,11 @@ Limity rozmiaru są wskazówkami projektowymi, nie ograniczeniami API; brak API 
 
 ## API strony w Chrome (obsługa strony) [#chrome-page-api-operate-a-page]
 
-Dla wywołań ze strony używaj [imperatywnego API Chrome](https://developer.chrome.com/docs/ai/webmcp/imperative-api).
-Przed wywołaniem ustal kontrakt wejścia natywnej przeglądarki lub polyfillu:
-
-- **Chrome 153:** wymagany jest ciąg JSON; argumenty będące obiektami powodują błąd, zgodnie z [dokumentacją Shopify](https://shopify.dev/docs/api/web-mcp#calling-tools).
-- **Chrome 155 i nowsze:** przekazuj obiekt; argumenty będące ciągami JSON są przestarzałe.
-- **Chrome 154, inne środowiska i polyfille:** zweryfikuj udokumentowany kontrakt; pozostaw operację oczekującą, jeśli nie można ustalić formatu. Schemat mostka środowiska nie określa formatu wejścia natywnego API strony.
-
-Nigdy nie wykrywaj formatu przez próbną lub ponowną operację zmieniającą stan.
-
-Ustal `NAME`, `ORIGIN` oraz obiekt `ARGS` serializowalny do JSON na podstawie
-zleconej operacji i poznanego schematu. Ustaw `INPUT_FORMAT` na `"object"` lub
-`"json-string"` wyłącznie na podstawie zweryfikowanego kontraktu opisanego powyżej.
-Wykonaj kod w kontekście strony, zachowując aktywny deskryptor. Brak lub
-niejednoznaczność dopasowania oznacza zatrzymanie, a nie wybór innej ramki.
+Przed użyciem tego rozwiązania zastępczego przeczytaj [weryfikację natywnego formatu wejścia](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/native-calls.md).
+Ustal `NAME`, `ORIGIN`, obiekt `ARGS` serializowalny do JSON oraz zweryfikowany
+`INPUT_FORMAT` (`"object"` lub `"json-string"`). Wykonaj kod w kontekście strony,
+zachowując aktywny deskryptor. Brak lub niejednoznaczność dopasowania oznacza
+zatrzymanie, a nie wybór innej ramki. Nigdy nie wykrywaj formatu przez ponawianie operacji zmieniającej stan.
 
 ```js
 (async () => {
