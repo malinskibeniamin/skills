@@ -75,16 +75,20 @@ Limity rozmiaru są wskazówkami projektowymi, nie ograniczeniami API; brak API 
 
 ## API strony w Chrome (obsługa strony) [#chrome-page-api-operate-a-page]
 
-Dla standardowego wywołania ze strony stosuj [aktualny kontrakt Chrome](https://developer.chrome.com/docs/ai/webmcp/imperative-api).
-Przekazuj do `executeTool` obiekt; wejście w postaci ciągu JSON jest przestarzałe
-od Chrome 155. Właściwości specyficzne dla Codex nie określają natywnego formatu.
-Zweryfikowana starsza przeglądarka lub polyfill może wymagać innego kontraktu;
-wybierz go przed wywołaniem, nigdy przez ponawianie operacji zmieniającej stan.
+Dla wywołań ze strony używaj [imperatywnego API Chrome](https://developer.chrome.com/docs/ai/webmcp/imperative-api).
+Przed wywołaniem ustal kontrakt wejścia natywnej przeglądarki lub polyfillu:
+
+- **Chrome 153:** wymagany jest ciąg JSON; argumenty będące obiektami powodują błąd, zgodnie z [dokumentacją Shopify](https://shopify.dev/docs/api/web-mcp#calling-tools).
+- **Chrome 155 i nowsze:** przekazuj obiekt; argumenty będące ciągami JSON są przestarzałe.
+- **Chrome 154, inne środowiska i polyfille:** zweryfikuj udokumentowany kontrakt; pozostaw operację oczekującą, jeśli nie można ustalić formatu. Schemat mostka środowiska nie określa formatu wejścia natywnego API strony.
+
+Nigdy nie wykrywaj formatu przez próbną lub ponowną operację zmieniającą stan.
 
 Ustal `NAME`, `ORIGIN` oraz obiekt `ARGS` serializowalny do JSON na podstawie
-zleconej operacji i poznanego schematu. Wykonaj kod w kontekście strony,
-zachowując aktywny deskryptor. Brak lub niejednoznaczność dopasowania oznacza
-zatrzymanie, a nie wybór innej ramki.
+zleconej operacji i poznanego schematu. Ustaw `INPUT_FORMAT` na `"object"` lub
+`"json-string"` wyłącznie na podstawie zweryfikowanego kontraktu opisanego powyżej.
+Wykonaj kod w kontekście strony, zachowując aktywny deskryptor. Brak lub
+niejednoznaczność dopasowania oznacza zatrzymanie, a nie wybór innej ramki.
 
 ```js
 (async () => {
@@ -92,13 +96,17 @@ zatrzymanie, a nie wybór innej ramki.
   if (typeof ctx?.getTools !== "function" || typeof ctx?.executeTool !== "function") {
     throw new Error("WebMCP page API unavailable");
   }
+  if (INPUT_FORMAT !== "object" && INPUT_FORMAT !== "json-string") {
+    throw new Error("Verify the WebMCP input format before execution");
+  }
   const matches = (await ctx.getTools()).filter(
     (tool) => tool.name === NAME && tool.origin === ORIGIN,
   );
   if (matches.length !== 1) {
     throw new Error("Expected exactly 1 matching WebMCP tool");
   }
-  return await ctx.executeTool(matches[0], ARGS);
+  const input = INPUT_FORMAT === "json-string" ? JSON.stringify(ARGS) : ARGS;
+  return await ctx.executeTool(matches[0], input);
 })()
 ```
 

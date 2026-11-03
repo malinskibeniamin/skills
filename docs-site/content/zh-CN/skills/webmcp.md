@@ -63,13 +63,18 @@ type: skill
 
 ## Chrome 页面 API（操作页面） [#chrome-page-api-operate-a-page]
 
-标准页面调用应遵循 [Chrome 当前的命令式 API](https://developer.chrome.com/docs/ai/webmcp/imperative-api)。
-向 `executeTool` 传入对象；JSON 字符串输入从 Chrome 155 起标记为弃用。
-Codex 专有属性不能决定原生输入格式。已验证的旧浏览器或 polyfill 可能需要
-不同的契约；应在调用前确定，不要通过重试改变状态的操作来探测格式。
+页面调用的备用方案应使用 [Chrome 命令式 API](https://developer.chrome.com/docs/ai/webmcp/imperative-api)。
+调用前先确认原生浏览器或 polyfill 的输入契约：
+
+- **Chrome 153：** 必须传入 JSON 字符串；传入对象会失败，详见 [Shopify 文档](https://shopify.dev/docs/api/web-mcp#calling-tools)。
+- **Chrome 155 及更高版本：** 传入对象；JSON 字符串参数已弃用。
+- **Chrome 154、其他宿主和 polyfill：** 验证其文档规定的契约；无法确认格式时，让操作保持待处理状态。宿主桥接器自身的架构不能确定原生页面 API 的输入格式。
+
+不要通过尝试或重试改变状态的操作来探测格式。
 
 根据请求的操作和已发现的架构，确定 `NAME`、`ORIGIN` 以及可序列化为 JSON
-的 `ARGS` 对象。在页面执行环境中运行，保留实时描述符。找不到匹配项或匹配
+的 `ARGS` 对象。仅根据上述已验证的契约，将 `INPUT_FORMAT` 设置为 `"object"`
+或 `"json-string"`。在页面执行环境中运行，保留实时描述符。找不到匹配项或匹配
 不唯一时应停止，不要改选其他框架。
 
 ```js
@@ -78,13 +83,17 @@ Codex 专有属性不能决定原生输入格式。已验证的旧浏览器或 p
   if (typeof ctx?.getTools !== "function" || typeof ctx?.executeTool !== "function") {
     throw new Error("WebMCP page API unavailable");
   }
+  if (INPUT_FORMAT !== "object" && INPUT_FORMAT !== "json-string") {
+    throw new Error("Verify the WebMCP input format before execution");
+  }
   const matches = (await ctx.getTools()).filter(
     (tool) => tool.name === NAME && tool.origin === ORIGIN,
   );
   if (matches.length !== 1) {
     throw new Error("Expected exactly 1 matching WebMCP tool");
   }
-  return await ctx.executeTool(matches[0], ARGS);
+  const input = INPUT_FORMAT === "json-string" ? JSON.stringify(ARGS) : ARGS;
+  return await ctx.executeTool(matches[0], input);
 })()
 ```
 
