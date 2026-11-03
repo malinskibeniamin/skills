@@ -58,14 +58,10 @@ Size budgets guide design, not API limits; missing page APIs need not mean a dis
 
 ## Chrome page API (operate a page)
 
-Use [Chrome's imperative API](https://developer.chrome.com/docs/ai/webmcp/imperative-api) for the page fallback.
-Pass an object to `executeTool`; JSON-string input is deprecated from Chrome 155.
-Codex-specific properties do not set native format. Verify older browser/polyfill
-contracts before invocation; never detect format by retrying a mutation.
-
-Set `NAME`, `ORIGIN`, and the JSON-serializable `ARGS` object from the requested
-operation and discovered schema. Evaluate in the page world, retaining the live
-descriptor. Stop on missing or ambiguous matches rather than picking another frame.
+Read the [native input-format preflight](references/native-calls.md) before using this fallback.
+Set `NAME`, `ORIGIN`, JSON-serializable `ARGS` and verified `INPUT_FORMAT` (`"object"` or
+`"json-string"`). Evaluate in the page world with the live descriptor; stop on missing
+or ambiguous matches rather than picking another frame. Never probe by retrying a mutation.
 
 ```js
 (async () => {
@@ -73,13 +69,17 @@ descriptor. Stop on missing or ambiguous matches rather than picking another fra
   if (typeof ctx?.getTools !== "function" || typeof ctx?.executeTool !== "function") {
     throw new Error("WebMCP page API unavailable");
   }
+  if (INPUT_FORMAT !== "object" && INPUT_FORMAT !== "json-string") {
+    throw new Error("Verify the WebMCP input format before execution");
+  }
   const matches = (await ctx.getTools()).filter(
     (tool) => tool.name === NAME && tool.origin === ORIGIN,
   );
   if (matches.length !== 1) {
     throw new Error("Expected exactly 1 matching WebMCP tool");
   }
-  return await ctx.executeTool(matches[0], ARGS);
+  const input = INPUT_FORMAT === "json-string" ? JSON.stringify(ARGS) : ARGS;
+  return await ctx.executeTool(matches[0], input);
 })()
 ```
 

@@ -75,16 +75,11 @@ Limity rozmiaru są wskazówkami projektowymi, nie ograniczeniami API; brak API 
 
 ## API strony w Chrome (obsługa strony) [#chrome-page-api-operate-a-page]
 
-Dla standardowego wywołania ze strony stosuj [aktualny kontrakt Chrome](https://developer.chrome.com/docs/ai/webmcp/imperative-api).
-Przekazuj do `executeTool` obiekt; wejście w postaci ciągu JSON jest przestarzałe
-od Chrome 155. Właściwości specyficzne dla Codex nie określają natywnego formatu.
-Zweryfikowana starsza przeglądarka lub polyfill może wymagać innego kontraktu;
-wybierz go przed wywołaniem, nigdy przez ponawianie operacji zmieniającej stan.
-
-Ustal `NAME`, `ORIGIN` oraz obiekt `ARGS` serializowalny do JSON na podstawie
-zleconej operacji i poznanego schematu. Wykonaj kod w kontekście strony,
+Przed użyciem tego rozwiązania zastępczego przeczytaj [weryfikację natywnego formatu wejścia](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/native-calls.md).
+Ustal `NAME`, `ORIGIN`, obiekt `ARGS` serializowalny do JSON oraz zweryfikowany
+`INPUT_FORMAT` (`"object"` lub `"json-string"`). Wykonaj kod w kontekście strony,
 zachowując aktywny deskryptor. Brak lub niejednoznaczność dopasowania oznacza
-zatrzymanie, a nie wybór innej ramki.
+zatrzymanie, a nie wybór innej ramki. Nigdy nie wykrywaj formatu przez ponawianie operacji zmieniającej stan.
 
 ```js
 (async () => {
@@ -92,13 +87,17 @@ zatrzymanie, a nie wybór innej ramki.
   if (typeof ctx?.getTools !== "function" || typeof ctx?.executeTool !== "function") {
     throw new Error("WebMCP page API unavailable");
   }
+  if (INPUT_FORMAT !== "object" && INPUT_FORMAT !== "json-string") {
+    throw new Error("Verify the WebMCP input format before execution");
+  }
   const matches = (await ctx.getTools()).filter(
     (tool) => tool.name === NAME && tool.origin === ORIGIN,
   );
   if (matches.length !== 1) {
     throw new Error("Expected exactly 1 matching WebMCP tool");
   }
-  return await ctx.executeTool(matches[0], ARGS);
+  const input = INPUT_FORMAT === "json-string" ? JSON.stringify(ARGS) : ARGS;
+  return await ctx.executeTool(matches[0], input);
 })()
 ```
 

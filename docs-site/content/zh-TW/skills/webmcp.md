@@ -63,14 +63,10 @@ type: skill
 
 ## Chrome 頁面 API（操作頁面） [#chrome-page-api-operate-a-page]
 
-標準頁面呼叫應遵循 [Chrome 目前的命令式 API](https://developer.chrome.com/docs/ai/webmcp/imperative-api)。
-向 `executeTool` 傳入物件；JSON 字串輸入自 Chrome 155 起列為已棄用。
-Codex 專有屬性不能決定原生輸入格式。已驗證的舊瀏覽器或 polyfill 可能需要
-不同的契約；應在呼叫前確定，不要透過重試會改變狀態的操作來探測格式。
-
-根據請求的操作與已探索的結構，確定 `NAME`、`ORIGIN` 及可序列化為 JSON
-的 `ARGS` 物件。在頁面執行環境中執行，保留即時描述符。找不到相符項目或結果
-不唯一時應停止，不要改選其他框架。
+使用此備用方案前，先閱讀[原生輸入格式預檢](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/native-calls.md)。
+設定 `NAME`、`ORIGIN`、可序列化為 JSON 的 `ARGS`，以及已驗證的 `INPUT_FORMAT`
+（`"object"` 或 `"json-string"`）。在頁面執行環境中使用即時描述元執行；找不到相符項目
+或結果不唯一時應停止，不要改選其他框架。不要透過重試會改變狀態的操作來探測格式。
 
 ```js
 (async () => {
@@ -78,13 +74,17 @@ Codex 專有屬性不能決定原生輸入格式。已驗證的舊瀏覽器或 p
   if (typeof ctx?.getTools !== "function" || typeof ctx?.executeTool !== "function") {
     throw new Error("WebMCP page API unavailable");
   }
+  if (INPUT_FORMAT !== "object" && INPUT_FORMAT !== "json-string") {
+    throw new Error("Verify the WebMCP input format before execution");
+  }
   const matches = (await ctx.getTools()).filter(
     (tool) => tool.name === NAME && tool.origin === ORIGIN,
   );
   if (matches.length !== 1) {
     throw new Error("Expected exactly 1 matching WebMCP tool");
   }
-  return await ctx.executeTool(matches[0], ARGS);
+  const input = INPUT_FORMAT === "json-string" ? JSON.stringify(ARGS) : ARGS;
+  return await ctx.executeTool(matches[0], input);
 })()
 ```
 

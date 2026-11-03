@@ -8,7 +8,8 @@ repositories are cited, not additional vendored runtimes or commands to execute.
 
 - [Chrome imperative API](https://developer.chrome.com/docs/ai/webmcp/imperative-api):
   registration and execution signals are separate; unregister preserves in-flight
-  executions from Chrome 153; object execution arguments supersede JSON strings.
+  executions from Chrome 153; JSON-string execution arguments are deprecated from
+  Chrome 155, which uses objects. See the adapter's explicit input-format preflight.
 - [WebMCP draft error model](https://webmachinelearning.github.io/webmcp/#tool-execution-error):
   the 2026-10-27 draft maps callback rejection and unserializable results to
   `OperationError`. The pinned Chrome Labs error guide and user-provided reports
@@ -32,6 +33,15 @@ repositories are cited, not additional vendored runtimes or commands to execute.
   Package versions are research observations, not dependencies of this plugin.
 
 ## Implementation patterns
+
+- **Shopify (checked 2026-11-03):** [storefront tools](https://shopify.dev/docs/api/web-mcp)
+  document platform-provided registrations, shared cart actions, clarification
+  without partial cart writes, route-dependent discovery, and Chrome 153's
+  JSON-string arguments. [Checkout WebMCP](https://shopify.dev/docs/agents/carts-and-checkout/checkout-webmcp)
+  adds result/status handling, replacement-style updates and buyer-confirmed
+  completion. The local [worked example](shopify-example.md) applies those patterns;
+  it is guidance, not evidence of a live store test. Recheck browser/platform versions
+  before implementation; do not retry a mutation to discover its input format.
 
 - **Aisle:** [`toolFlags` / `currentTools`](https://github.com/ergjus/aisle/blob/2cb19db819bdee55a603c25b38c021974757e160/src/webmcp/tools.ts)
   expose `finalize_chart` only with at least one attending guest, all attending
