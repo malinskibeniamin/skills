@@ -18,9 +18,33 @@ container rewrite. This pass guides experiments; it proves no speedup by itself.
   loads, bandwidth or synchronization. Use hardware counters when available;
   otherwise label locality/vectorization explanations as hypotheses.
 - Delete work and passes first. Then compare a materially different representation,
-  not just a faster spelling of the same design. Estimate the ceiling from the hot
-  path's share of the full operation. SIMD, batching or parallelism come after
-  eliminating unnecessary work and arranging data for the actual access pattern.
+  not just a faster spelling of the same design. SIMD, batching or parallelism come
+  after eliminating unnecessary work and arranging data for the actual access pattern.
+
+## Think bigger than local tuning
+
+"Think bigger", "1% is not enough" or "this should be 10x faster" means reopen the
+design, not accumulate micro-optimizations. Adopt the requested scale as the target
+for the same operation, workload and correctness contract. Do not silently lower
+it to whatever improvement the first patch achieves, or impose 10x on unrelated
+tasks that already have an agreed worthwhile delta.
+
+Work backward from the target: for 10x lower latency, budget one tenth of the
+baseline time. If untouched critical-path work already exceeds that budget, a
+local rewrite cannot reach the goal. Widen the search within authorized scope to
+the dominating algorithm, representation or pipeline boundary, not another small
+loop. Compare the current design with the simplest cache-free design built for
+this workload: eliminate repeated passes/parsing, change algorithmic scaling,
+avoid intermediate materialization, batch boundary crossings or remove per-item
+allocation/indirection. Choose a falsifiable hypothesis whose ceiling can plausibly
+meet the target before polishing it. A rewrite earns its scope from that evidence,
+not from size or novelty.
+
+A 1% patch is not completion of a 10x task. Keep it only as a justified stepping
+stone, then test the higher-ceiling design. If experiments miss the target or a
+hard lower bound rules it out, report **target unmet**, the limiting evidence and
+the next structural option. Ambition is a search direction, never permission to
+fabricate speedups, benchmark less work or weaken semantics and guardrails.
 
 ## Make uncached work fast
 
