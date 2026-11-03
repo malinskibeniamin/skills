@@ -10,6 +10,8 @@ interface Tool {
 
 const origin = "https://shop.example";
 const ownTool = { name: "update-note", origin };
+const inputFormats = ["object", "json-string"] as const;
+type InputFormat = (typeof inputFormats)[number];
 
 // Exercise the copyable example agents actually read: the adapter's override,
 // or its required upstream instructions before the override was introduced.
@@ -26,13 +28,23 @@ function example() {
   return `(async () => { ${legacy}\nreturn raw; })()`;
 }
 
-function fixture(tools: Tool[] = [ownTool], response: unknown = "saved") {
+function fixture(
+  tools: Tool[] = [ownTool],
+  response: unknown = "saved",
+  inputFormat: InputFormat = "object",
+) {
   const calls: { tool: Tool; input: unknown }[] = [];
   const context = {
     getTools: async () => tools,
     executeTool: async (tool: Tool, input: unknown) => {
       calls.push({ tool, input });
-      if (typeof input !== "object" || input === null) {
+      if (inputFormat === "json-string" && typeof input !== "string") {
+        throw new TypeError("Chrome 153 JSON-string input required");
+      }
+      if (
+        inputFormat === "object" &&
+        (typeof input !== "object" || input === null)
+      ) {
         throw new TypeError("Chrome object input required");
       }
       if (!tools.includes(tool)) throw new Error("Live descriptor required");
@@ -43,12 +55,17 @@ function fixture(tools: Tool[] = [ownTool], response: unknown = "saved") {
   return { calls, context };
 }
 
-function invoke(context: unknown, args: unknown = { text: "Hello" }) {
+function invoke(
+  context: unknown,
+  args: unknown = { text: "Hello" },
+  inputFormat = "object",
+) {
   const result: unknown = runInNewContext(example(), {
     document: { modelContext: context },
     NAME: ownTool.name,
     ORIGIN: origin,
     ARGS: args,
+    INPUT_FORMAT: inputFormat,
   });
   return Promise.resolve(result);
 }
@@ -57,6 +74,22 @@ test("the native Chrome example passes an object and a live descriptor", async (
   const { calls, context } = fixture();
   await expect(invoke(context)).resolves.toBe("saved");
   expect(calls).toEqual([{ tool: ownTool, input: { text: "Hello" } }]);
+});
+
+test("a verified Chrome 153 host receives JSON-string input", async () => {
+  const { calls, context } = fixture([ownTool], "saved", "json-string");
+  await expect(invoke(context, { text: "Hello" }, "json-string")).resolves.toBe(
+    "saved",
+  );
+  expect(calls).toEqual([{ tool: ownTool, input: '{"text":"Hello"}' }]);
+});
+
+test("an unverified input format stops before a possible mutation", async () => {
+  const { calls, context } = fixture();
+  await expect(invoke(context, {}, "unknown")).rejects.toThrow(
+    "Verify the WebMCP input format before execution",
+  );
+  expect(calls).toHaveLength(0);
 });
 
 test("same-name tools are selected by the task origin", async () => {
@@ -100,11 +133,16 @@ test("a navigation result remains null, not a fabricated success receipt", async
   await expect(invoke(context)).resolves.toBeNull();
 });
 
-test("a failed invocation is propagated without an input-format retry", async () => {
-  const { calls, context } = fixture(
-    [ownTool],
-    new Error("transport interrupted"),
-  );
-  await expect(invoke(context)).rejects.toThrow("transport interrupted");
-  expect(calls).toHaveLength(1);
-});
+for (const inputFormat of inputFormats) {
+  test(`a failed ${inputFormat} invocation is propagated without a format retry`, async () => {
+    const { calls, context } = fixture(
+      [ownTool],
+      new Error("transport interrupted"),
+      inputFormat,
+    );
+    await expect(
+      invoke(context, { text: "Hello" }, inputFormat),
+    ).rejects.toThrow("transport interrupted");
+    expect(calls).toHaveLength(1);
+  });
+}

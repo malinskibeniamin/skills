@@ -14,6 +14,22 @@ not imply an embedded MCP server, resources/prompts, or universal client/browser
 support. Lovable's [agent integrations](https://docs.lovable.dev/features/agent-integrations)
 have separate remote-server and browser-tool surfaces; do not conflate them.
 
+## Reuse platform tools before adding your own
+
+Before designing custom registrations, inspect the target's installed platform,
+version and configuration for built-in WebMCP support. When authorized and available,
+inspect the live registry in the relevant route, session and selection state.
+Distinguish an unmet prerequisite, deliberate opt-out or unavailable browser API
+from a genuinely missing capability; record unknown availability rather than guessing.
+
+Reuse supported built-in tools that cover the requested goal. Adjust configuration
+only within the requested scope, preserving deliberate opt-outs. Add custom tools
+only for uncovered goals, without shadowing platform registrations or bypassing
+their validation. On commerce/platform integrations, read the
+[Shopify worked example](shopify-example.md) for preflight, ambiguity and checkout boundaries.
+Third-party monitoring and directory listings are optional integrations, not WebMCP
+prerequisites; adding them needs its own requested scope.
+
 ## Expose capabilities, not an always-on catalog
 
 Register only the tools whose prerequisites hold: a loaded project for export,
