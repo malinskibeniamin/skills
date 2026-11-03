@@ -19,11 +19,16 @@ Apply the first rung that removes the proven bottleneck:
 2. **Bound** work with pagination, virtualization, caps, cancellation, and backpressure.
 3. **Remove serial dependencies** by starting independent work together or discovering
    critical resources earlier.
-4. **Move work earlier or later** with safe precomputation, intent prefetch, lazy loading,
+4. **Redesign hot work** around the algorithm, data layout and allocation lifetimes.
+   For CPU/allocation/locality bottlenecks, apply the shared
+   [data-oriented pass](../shared/data-oriented-performance.md): flat storage, index
+   handles, SoA, arenas, inline scratch and bitsets. Prove the cache-free path first.
+5. **Move work earlier or later** with safe precomputation, intent prefetch, lazy loading,
    yielding, or background refresh.
-5. **Reuse** valid work with HTTP, CDN, application, query, or computed-result caching.
-6. **Offload** proven CPU work from the main thread.
-7. **Accelerate** the remaining hot algorithm, query, component, or runtime.
+6. **Reuse** transport results with HTTP/CDN caching or query deduplication where
+   freshness permits; computed-result caches are removal targets in the data-oriented pass.
+7. **Offload** remaining proven CPU work from the main thread.
+8. **Accelerate** the remaining hot query, component, or runtime.
 
 Estimate the ceiling before editing: removing a 20 ms off-path task cannot produce a 100 ms
 journey win. Count new dependency, operational, invalidation, memory, and accessibility cost.
@@ -72,8 +77,9 @@ from [SKILL.md](SKILL.md); a compositor-friendly declaration is not measured smo
 - Reduce DOM depth and expensive style/layout invalidation. Batch reads before writes. Use
   compositor-friendly transform/opacity animation only when visual evidence supports it;
   avoid permanent layer promotion without memory evidence.
-- Replace quadratic scans, repeated parsing/formatting, and per-row allocation in the hot
-  path with indexed, incremental, or precomputed work. Validate the whole interaction.
+- Replace quadratic scans, repeated parsing/formatting, and per-row allocation with
+  bounded algorithms and compact traversal. Validate the whole interaction, including
+  any conversion or index maintenance.
 
 ## Shorten loading and route transitions
 
@@ -100,12 +106,14 @@ from [SKILL.md](SKILL.md); a compositor-friendly declaration is not measured smo
 
 ## Design data and caches deliberately
 
-Cache at the deepest layer that can state freshness and invalidation correctly:
+Make the uncached computation fast before moving or reusing it. Replace redundant
+derived state and memo tables through the data-oriented pass above; measure misses,
+updates and retained memory, not just hit latency. Do not add a computation cache as
+a substitute for redesign. Preserve transport and server-state contracts:
 
 - prefer CDN/HTTP validators and shared response caching for reusable transport results;
 - use the application's query cache for deduplication, stale/fresh policy, background
   refresh, cancellation, retries, and optimistic state;
-- use memoized computation only for proven repeated CPU work with bounded keys;
 - use a service worker only when offline/repeat-visit policy justifies another cache layer.
 
 Track hit rate, miss penalty, entry count/bytes, eviction, staleness, duplicate requests,

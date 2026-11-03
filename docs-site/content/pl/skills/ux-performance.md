@@ -36,8 +36,8 @@ Przed implementacją określ:
   filtrowania lub następna narysowana klatka. Dodaj zabezpieczenia poprawności i dostępności.
   Zachowaj zamierzone animacje, branding, interakcje i semantykę danych za pomocą [asercji zgodności funkcji](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md).
 - **Metrykę główną**: bezpośredni czas lub ograniczenie zasobów dla tego kamienia milowego.
-- **Minimalną wartościową zmianę**: powtarzalna poprawa o 100 ms jest wartościowa; zmiana
-  mieszcząca się w szumie nie jest. Przed edycją ustal jedną metrykę główną.
+- **Minimalną wartościową zmianę**: ustal ją przed edycją i respektuj żądaną skalę
+  (1% to nie 10x). Powtarzalna poprawa o 100 ms może mieć znaczenie.
 - **Punkt końcowy**: audyt, optymalizację lub instalację kontroli regresji. Audyt zwraca
   ustalenia bez edycji; optymalizacja trwa do zweryfikowanych zmian lokalnych; praca CI
   instaluje wyłącznie skalibrowane kontrole.
@@ -55,12 +55,12 @@ Przed implementacją określ:
    równoległą i poza ścieżką, stan pamięci podręcznej oraz najdłuższe odcinki ścieżki
    krytycznej. Przypisz czas do kolejkowania, sieci i TTFB, pobierania, parsowania i wykonania,
    pracy aplikacji, renderowania i zatwierdzania React, stylów, układu oraz rysowania.
-4. **Uszereguj wąskie gardła**, nie ostrzeżenia audytu. Utwórz 3–5 falsyfikowalnych hipotez,
-   a następnie zmieniaj po jednej zmiennej przyczynowej. Najpierw usuń pracę, zmniejsz dane
-   wejściowe lub usuń zależność szeregową, zanim przyspieszysz tę samą pracę.
-5. **Interweniuj** za pomocą najwęższej opcji popartej dowodami z
-   [OPTIMIZATION.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/OPTIMIZATION.md). Wrapper, kontekst, pamięć podręczna, worker, kompilator,
-   aktualizacja frameworka, prefetch lub renderowanie serwerowe to kandydaci, a nie domyślne zyski.
+4. **Uszereguj wąskie gardła** i sformułuj falsyfikowalne hipotezy. Przed strojeniem usuń
+   pracę, zmniejsz dane wejściowe lub usuń zależność szeregową. Zmieniaj po jednej zmiennej
+   przyczynowej.
+5. **Wybierz optymalizację opartą na pomiarach** z
+   [OPTIMIZATION.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/OPTIMIZATION.md). Gdy ograniczeniem jest CPU, alokacja lub lokalność dostępu do pamięci,
+   zastosuj [przeprojektowanie zorientowane na dane](https://github.com/malinskibeniamin/skills/blob/main/shared/data-oriented-performance.md), zanim dodasz buforowanie lub przeniesiesz pracę poza główny wątek.
 6. **Zweryfikuj** stan bazowy i kandydata przy tym samym scenariuszu, fixture, komputerze,
    przeglądarce, kompilacji i stanie pamięci podręcznej. Użyj sparowanych przebiegów; raportuj
    medianę i rozrzut. Ponownie sprawdź poprawność, dostępność, pamięć, bundle i błędy.
