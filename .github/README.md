@@ -69,6 +69,16 @@ reviewer improvement. Follow the shared
 to curate human-validated incident cases, disposition findings and compare repair rounds.
 That guidance does not add a collector, scheduled agent, or measured quality result.
 
+The separate [review-workflow experiment](../agent-evals/experiments/review-workflows.ts)
+replays supplied council histories and Sol finding triage through the real host
+adapters. It checks stale approval, repair-delta scope, clean stopping, disputed
+budget exhaustion and consequence-based severity without launching child reviewers.
+These decision cases do not measure live orchestration, defect detection or model
+rankings. Model runs still require explicit authorization; deterministic checks of
+the graders only establish that unsafe synthetic receipts fail and valid ones pass.
+Preview fixture discovery without invoking a model:
+`cd agent-evals && bunx --no-install agent-eval experiments/review-workflows.ts --dry`.
+
 ## Remaining adoption boundaries
 
 The [Claude Code review process](https://claude.dev/blog/solving-code-review-at-anthropic/)
