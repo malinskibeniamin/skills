@@ -91,6 +91,7 @@ SHORT_DESCRIPTIONS = {
     "remove-animations": "Remove unnecessary motion while preserving interaction behavior",
     "research": "Research primary sources and save cited findings",
     "resilience-review": "Review credible high-impact failures with Murphy law",
+    "reverse-engineer-anything": "Inspect shipped artifacts and runtime evidence with REA",
     "retro": "Conduct a retrospective on a coding session",
     "resolve-pr-feedback": "Resolve pull request feedback and review threads",
     "revamp": "Run a large rewrite with baseline-driven translation",

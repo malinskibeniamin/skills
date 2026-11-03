@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "d958431752aaad54",
-      "zh-CN": "d958431752aaad54",
-      "zh-TW": "d958431752aaad54"
+      "pl": "c9d1a9072965f801",
+      "zh-CN": "c9d1a9072965f801",
+      "zh-TW": "c9d1a9072965f801"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "d478e0853c7d5a57",
-      "zh-CN": "d478e0853c7d5a57",
-      "zh-TW": "d478e0853c7d5a57"
+      "pl": "87193efe64897006",
+      "zh-CN": "87193efe64897006",
+      "zh-TW": "87193efe64897006"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -384,6 +384,11 @@
       "pl": "6c8f66d36ccc2e87",
       "zh-CN": "6c8f66d36ccc2e87",
       "zh-TW": "6c8f66d36ccc2e87"
+    },
+    "content/skills/reverse-engineer-anything.md": {
+      "pl": "bffbb36f6fa12c4d",
+      "zh-CN": "bffbb36f6fa12c4d",
+      "zh-TW": "bffbb36f6fa12c4d"
     },
     "content/skills/review.md": {
       "pl": "c4f3ba502c7fe5f9",

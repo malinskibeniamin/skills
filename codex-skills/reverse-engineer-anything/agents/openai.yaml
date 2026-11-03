@@ -1,0 +1,3 @@
+interface:
+  display_name: "Reverse Engineer Anything"
+  short_description: "Inspect shipped artifacts and runtime evidence with REA"

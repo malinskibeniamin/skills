@@ -61,6 +61,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  "reverse-engineer-anything": {
+    kind: "evidence-funnel",
+    nodes: [
+      "Select shipped artifact",
+      "Reuse scoped REA tools",
+      "Inspect retained evidence",
+      "Separate facts and unknowns",
+    ],
+  },
   "ci-fixes": {
     kind: "feedback-loop",
     nodes: [

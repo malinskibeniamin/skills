@@ -1,0 +1,50 @@
+{
+  "repository": "https://github.com/morluto/rea",
+  "revision": "160d821ac9a0310afcb8d1fc427862dd6508add5",
+  "version": "6.8.0",
+  "node": "^22.23.4 || ^24.22.1 || >=26.12.1",
+  "tarball": "https://registry.npmjs.org/rea-agents/-/rea-agents-6.8.0.tgz",
+  "integrity": "sha512-9QDeRnGqEDzABZyr04eLnBXBv/c6I9/TWu/6M0MD4pEfkySI/BIgwTODIbAReX3C1x6hjw9+Jlx4A2yUSPZ9ww==",
+  "files": {
+    "LICENSE": {
+      "sha256": "798f9e4d18e49b30bf2f12696c8ced73dc4e1413da375a333d01281543a1ea8b",
+      "mode": 420
+    },
+    "package.json": {
+      "sha256": "b0fc212f6bea9b4ee6e2b3ab0b52dd95402c229da3b8652127e5f131c3445b39",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/SKILL.md": {
+      "sha256": "8818b645c9fd348399a50a8678b91cff20215690adad484e70282ff9f2ef91ee",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/android-applications.md": {
+      "sha256": "24ecaa1798eb4f28591884a7deb68df31e90313865515a23e3b466403f1abc39",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/connection-and-recovery.md": {
+      "sha256": "4754441e63e4252a0b230cf5aa12b78c0716463905305059bb7dea6713ba0bfc",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/environments.md": {
+      "sha256": "83e041f0a5243172af69eaadf62da0699617add3ff1d46b294e4bba7ece9d95f",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/evidence-workflows.md": {
+      "sha256": "f44b68acc6ebaa60c1f5d0670e4f9ff7212d351a0ecc6e6ca77ce38b9177ea57",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/javascript-applications.md": {
+      "sha256": "619cfd15ffdf466452cc32002ae357fefec59d5dcad4c9dfc27630138f0f719d",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/native-and-artifacts.md": {
+      "sha256": "cf394568ae91e9017d63056adb8872fb1df9e2f6bbe544a95d0fd9f064b06dd5",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/runtime-observation.md": {
+      "sha256": "852bd1e25e9f83f0e8c7d4f8441a043e2b2a7d5e39f729bf22ac77259a0207bd",
+      "mode": 420
+    }
+  }
+}
