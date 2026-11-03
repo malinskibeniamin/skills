@@ -52,3 +52,10 @@ Prefer an existing deterministic lint rule when enforceable; otherwise use the o
 `AGENTS.md` or skill. Rule changes need authoring intent, rationale, and known-bad/valid
 verification; a read-only review proposes them without editing. Once adopted, cite the rule
 when reporting a violation. Do not copy personal preferences into universal policy.
+
+## Source
+
+Adapted from Hayden Bleasel's [Two kinds of code review](https://haydenbleasel.com/writing/two-kinds-of-code-review)
+(October 24, 2026): separate correctness from scope/direction, scale scrutiny to consequences,
+and write recurring taste down. Evidence thresholds, retry limits and authorization/approval
+boundaries here are harness policy, not claims from the essay.

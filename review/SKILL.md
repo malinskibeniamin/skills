@@ -8,10 +8,11 @@ Read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
 Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Read [depth](OPERATING-MODEL.md) and [split](../shared/review-contract.md).
+Read [risk-based depth](OPERATING-MODEL.md) and the
+[objective/subjective review split](../shared/review-contract.md).
 ## Review contract
 
-- **Objective**: achieve the outcome without credible defects.
+- **Objective**: verify correctness; assess scope and direction separately from defects.
 - **Guardrails**: diff-introduced only; standards separate from product/spec gaps;
   generated files are evidence.
 - **Verification**: Dogfood every runnable change yourself at its real entrypoint.
