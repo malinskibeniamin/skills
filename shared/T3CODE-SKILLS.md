@@ -83,6 +83,11 @@ across revisions; displayed-type correctness is a separate test. Preserve prior 
 values and explain changes. Missing Effect performance tooling is not a reason to claim
 a benchmark ran or to install a new harness without a task need.
 
+When optimizing a runtime CPU/allocation/locality bottleneck, apply the shared
+[data-oriented redesign pass](data-oriented-performance.md): make uncached work fast,
+test compact storage and lifetime-based allocation, then retain only measured wins.
+This is runtime guidance, not a prescription for TypeScript compiler-cost fixtures.
+
 ## dependency-maintenance
 
 Use manifest-role and coordinated-upgrade references to classify development versions,
