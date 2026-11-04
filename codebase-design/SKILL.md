@@ -5,7 +5,7 @@ description: Design deep modules with small interfaces. Use when choosing seams,
 
 On interface/type/shared-state changes, read [Poteto](../shared/POTETO-NATIVE.md#design).
 
-Design **deep modules**: substantial behavior behind a small interface at a clean seam, testable through that interface. Apply [verifiability over readability](../shared/verifiability.md); optimize independent verification, caller leverage and locality, not implementation size.
+Design **deep modules**: substantial behavior behind a small, independently testable interface. Apply [verifiability](../shared/verifiability.md): caller leverage and locality, not implementation size.
 Use `GLOSSARY.md` terms, via `GLOSSARY-MAP.md` when present; respect ADRs.
 
 A module should reduce caller knowledge and coordination while preserving required behavior.
@@ -49,12 +49,10 @@ owner, invariant and failure result. Derive signatures; apply
 ## Testability
 
 1. Exercise the public interface with a focused command and repeatable fixture.
-2. Control relevant dependencies at existing seams; return observable results and isolate ambient state.
-3. Keep invariants and failure diagnostics discoverable; prove credible wrong behavior fails without coupling tests to internals.
+2. Control dependencies at existing seams; return observable results and isolate state.
+3. Expose invariants and failure diagnostics; prove wrong behavior fails through the public interface.
 
 When two designs survive deletion, Call the Skill tool with "plan-arbiter": depth, locality, test surface, rollback. Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
-
-Relationships: Module has one Interface; Depth is measured against it; Seam hosts it; Adapter satisfies it; Depth creates Leverage and Locality.
 
 Reject depth-by-line-count, interface-as-TypeScript-keyword, and vague boundary wording.
 
