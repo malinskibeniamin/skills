@@ -1,6 +1,7 @@
 """Exercise release imports through the public CLI, without downloading or running REA."""
 
 import base64
+import gzip
 import hashlib
 import io
 import json
@@ -9,6 +10,7 @@ import tarfile
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,11 +47,13 @@ class ReaSyncTest(unittest.TestCase):
         return path
 
     def pack(self):
-        with tarfile.open(self.archive, "w:gz") as archive:
+        tar_bytes = io.BytesIO()
+        with tarfile.open(fileobj=tar_bytes, mode="w") as archive:
             for name, (data, mode) in self.payload.items():
                 member = tarfile.TarInfo(f"package/{name}")
                 member.size, member.mode = len(data), mode
                 archive.addfile(member, io.BytesIO(data))
+        self.archive.write_bytes(gzip.compress(tar_bytes.getvalue(), mtime=0))
         return "sha512-" + base64.b64encode(hashlib.sha512(self.archive.read_bytes()).digest()).decode()
 
     def cli(self, *args):
@@ -65,7 +69,8 @@ class ReaSyncTest(unittest.TestCase):
                 for p in self.repo.rglob("*") if p.is_file()}
 
     def test_release_import_is_complete_pinned_opt_in_and_repeatable(self):
-        result = self.install()
+        with patch("time.time", return_value=1_700_000_000):
+            result = self.install()
         self.assertEqual(result.returncode, 0, result.stderr)
         lock = json.loads((self.repo / "vendor/rea.lock.json").read_text())
         self.assertEqual(lock["revision"], "a" * 40)
@@ -91,7 +96,9 @@ class ReaSyncTest(unittest.TestCase):
         self.assertFalse((self.repo / ".mcp.json").exists())
         self.assertEqual(self.cli("--check").returncode, 0)
         before = self.snapshot()
-        result = self.install()
+        # Cross a gzip timestamp boundary without a timing-dependent sleep.
+        with patch("time.time", return_value=1_700_000_060):
+            result = self.install()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.snapshot(), before)
 

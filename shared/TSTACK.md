@@ -109,6 +109,27 @@ an observed-head lease; preserve unrelated dirty work. REWORK beyond the request
 or closing the PR remains a reserved decision. No merge or automatic comment.
 If a disposable worktree is needed, follow the consuming repository's naming rule.
 
+## Review evidence for council and sol-loop
+
+Both branches use the host's [review contract](review-contract.md) and
+[risk-based review](../review/OPERATING-MODEL.md), including severity, convergence
+and evidence limits. These rules override upstream score-driven approval and
+blanket downgrading of rare or out-of-path failures.
+
+Pin the base and current candidate (head SHA plus relevant WIP inputs), and give
+reviewers the same source snapshot, intent, exclusions and check results. Source
+drift invalidates affected evidence; reconcile it before treating a report as current.
+Keep a stable finding ledger: id, root cause, severity, candidate, evidence and
+disposition. Deduplicate by root cause; prove fixed or rejected dispositions and
+retain unresolved objections. Use the existing [finding contract](../agents/references/findings-schema.md)
+for structured reports, not a second scoring schema. Agreement is not proof.
+
+Classify by credible consequence, reachability and recovery, not frequency or diff
+size alone. A demonstrated authorization failure or irreversible loss remains
+serious on an uncommon path; in upstream terminology it is a blocker or should,
+not a nit. Unsupported future scale and unrelated preferences
+remain advice; they do not require speculative repairs or another round.
+
 ## council
 
 Only an explicit council/delegation request enters this branch. Preserve named
@@ -120,14 +141,25 @@ implementation the user explicitly wants to replace.
 Missing providers remain unavailable, not substituted or called unanimous.
 Use read-only child tasks, never top-level conversations; children cannot spawn
 descendants. In T3, each review round gets fresh `delegate_task` calls, saved
-task IDs, distinct retry-stable request IDs, original brief, prior findings,
-responses and unresolved objections. Do not send followups to `childThreadId`.
+task IDs and distinct retry-stable request IDs. Give each member the original
+brief; keep the first pass independent of peer reports and scores. Later rounds
+also receive the finding ledger, responses and unresolved objections. Do not send
+followups to `childThreadId`.
 
-Default to at most three full rounds unless the user specifies another budget.
-Stop at agreement, unavailable capability, persistent substantive disagreement,
-or exhausted budget; report unresolved objections rather than claiming consensus.
-Scores are reported only when returned and never replace concrete findings or
-protected review gates. A review-only request authorizes no fixes or PR edits.
+Default to at most three rounds total unless the user specifies another budget;
+concurrent members count as one round. Round 1 covers the full assigned change.
+After complete initial coverage, review the repair delta and open findings; widen
+when changed assumptions, baseline or scope invalidate that coverage, following
+the host convergence rules. Send the full brief and ledger even for a delta review.
+
+Stop once every requested member's applicable coverage is current and clean, with
+evidence-backed dispositions, not a target score or repeated agreement.
+Unavailable capability, persistent substantive disagreement and exhausted budget
+stop the loop without approval; report remaining objections and missing coverage.
+Request numeric scores only if the user asks; keep
+them advisory rather than approval evidence. In an authorized PR update, summarize
+candidate, rounds, validated findings, dispositions and limits instead of the
+upstream score table. A review-only request authorizes no fixes or PR edits.
 
 ## sol-loop
 
