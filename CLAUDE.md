@@ -5,10 +5,10 @@
 `bun` | TS 7 `tsc`/tsrs | Biome | Vitest | React Doctor
 
 Local policy wins.
-Navigation: [repo navigation](shared/repo-navigation.md).
+[Navigation](shared/repo-navigation.md).
 
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
-  Functional React; React Compiler owns memoization.
+  Functional React components; React Compiler owns memoization.
 - State: zustand=client, TanStack Query=server, connect-query=ConnectRPC; app env from `@/env`.
 - Proto: enum names, not magic numbers. Validate formats, not only presence.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
@@ -18,7 +18,7 @@ Navigation: [repo navigation](shared/repo-navigation.md).
 Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
-Code quality: [verifiability](shared/verifiability.md).
+[Code quality](shared/verifiability.md).
 
 ## Human-facing text
 
@@ -26,7 +26,7 @@ Code quality: [verifiability](shared/verifiability.md).
 uncertainty. Above 200 words: <=120-word brief, then detail.
 Tool-count word limits; never invent human endorsement.
 
-Substantial outputs: `shared/intent-map.md` maps
+Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
 objective/assumptions/references/risks/implementation/verification/superseded choices.
 Trivial/single-path output stays linear.
 
