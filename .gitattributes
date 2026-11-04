@@ -3,6 +3,8 @@
 
 # Preserve the pinned upstream snapshot byte-for-byte, including its whitespace.
 vendor/pstack/** -text -whitespace
+vendor/mattpocock/** -text -whitespace
+vendor/t3code/** -text -whitespace
 vendor/cloudflare-security-audit/** -text -whitespace
 vendor/tstack/** -text -whitespace
 vendor/jakubkrehel/** -text -whitespace
