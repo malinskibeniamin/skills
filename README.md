@@ -550,6 +550,8 @@ agent-evals/capability-probes/run.sh --dry
 
 ## Credits and provenance
 
+**Automatic refresh:** [Daily priority skill updates](shared/priority-skill-updates.md) fetch pstack, Matt Pocock, T3 Code, tstack and Emil into one guarded draft PR. Local owners stay intact; compatibility blockers remain visible and nothing auto-merges.
+
 The complete [mattpocock/skills](https://github.com/mattpocock/skills) suite is vendored locally: **all 39 skills**, including engineering, productivity, misc and in-progress skills, plus every skill-local reference, helper and asset. The byte-exact snapshot is pinned to [upstream `4ae2317d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d) in [the inventory lock](vendor/mattpocock.lock.json), with SHA-256 digests, executable modes and the upstream MIT license. Nothing needs installing from the upstream repository. The refresh includes the merged software-factory glossary and surveys; its existing planning owner remains authoritative.
 
 Every source skill is available through an explicit-only `/matt-<upstream-name>` adapter, including previously omitted experiments and misc tools. Existing unprefixed skills keep their local workflow owners and invocation policies; `pr` remains registered, with its full source and Dex Horthy's `show-me` credits included. Existing skills are reconciled with the refresh rather than overwritten. [Host compatibility](shared/MATT-POCOCK.md) preserves toolchains, delivery endpoints and explicit authorization; vendoring starts no agents, hooks or schedules. Skills removed upstream, such as `resolving-merge-conflicts`, remain retired.

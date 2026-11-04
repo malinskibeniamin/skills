@@ -1,0 +1,73 @@
+name: Refresh priority skills
+
+on:
+  schedule:
+    - cron: "29 8 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Fetch and validate without publishing a draft"
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: refresh-priority-skills
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    # Privileged automation uses only trusted default-branch code. No PR events/inputs.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write # Explicitly dispatch the existing read-only evals workflow on the update head.
+    steps:
+      - name: Check out trusted default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Fetch pinned sources and prepare one draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DESTINATION: ${{ github.repository }}
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          PUBLISH: ${{ github.event_name == 'schedule' || !inputs.dry_run }}
+        run: |
+          args=()
+          if [ "$PUBLISH" = true ]; then
+            args+=(--publish --repository "$DESTINATION" --base "$BASE_BRANCH")
+          fi
+          python3 scripts/refresh-skill-upstreams.py "${args[@]}" > "$RUNNER_TEMP/priority-skills.json"
+          python3 - "$RUNNER_TEMP/priority-skills.json" <<'PY'
+          import json, sys
+          result = json.load(open(sys.argv[1]))
+          if result['status'] == 'blocked':
+              raise SystemExit('Compatibility blocked: see the draft and job summary. Existing pins are retained for blocked sources.')
+          PY
+
+      - name: Record fetched pins, compatibility blockers and publication status
+        if: always()
+        run: |
+          python3 - "$RUNNER_TEMP/priority-skills.json" <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import html, json, sys
+          from pathlib import Path
+          file = Path(sys.argv[1])
+          if not file.exists() or not file.stat().st_size:
+              print('Refresh failed before producing a result. Inspect the failing step; no success is inferred.')
+              raise SystemExit(0)
+          result = json.loads(file.read_text())
+          print(result['report'])
+          publication = result.get('publication', {'status': 'dry-run'})
+          print('\nPublication:', html.escape(publication['status']))
+          if publication.get('url'):
+              print('\nDraft:', publication['url'])
+          if publication.get('error'):
+              print('\n<pre>' + html.escape(publication['error']) + '</pre>')
+          PY
