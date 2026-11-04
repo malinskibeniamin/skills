@@ -28,4 +28,7 @@ Escape: `// allow: direct-query [reason]`.
 - Client protovalidate checks sent data, not server-validated responses.
 - Proto optionals use `undefined`, never `null`; unbounded lists use infinite query/load-more; polling uses `refetchInterval`.
 
+Editable query data: read [writable derived state](../frontend-invariants/WRITABLE-DERIVED-STATE.md)
+for local overrides and save/refetch handoff; keep server truth in the query cache.
+
 Timestamp, Duration, Any, caches: [REFERENCE.md](REFERENCE.md). Install: [SETUP.md](SETUP.md).

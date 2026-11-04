@@ -26,6 +26,11 @@ to preserve type evidence; a safety comment alone does not justify a cast.
 6. Section entry pushes history; intra-section navigation replaces it.
 7. Async state must be scoped by full environment/org/user identity. Await teardown before navigation; abort or use last-write-wins; never read defaults before providers resolve.
 
+For editable server defaults, derive the displayed value from an explicit local override
+or current server data instead of copying query results into state with an Effect.
+Read [writable derived state](WRITABLE-DERIVED-STATE.md) for override scope, reset/save
+semantics, and regression scenarios before implementing or reviewing these editors.
+
 ## Design system
 
 8. Use color/spacing/type tokens; round one-offs to scale, never hardcode existing tokens.
