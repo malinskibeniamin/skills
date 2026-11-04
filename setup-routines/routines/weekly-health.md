@@ -6,7 +6,8 @@ Run weekly. Measure codebase health, catch drift. Only report when something **c
 
 Do NOT create report if everything green and unchanged. Silence = healthy. Only open issue when:
 - Quality check that was passing now failing
-- Metric crossed threshold (test coverage dropped, new vulnerability found)
+- Verification regressed (a contract check fails, becomes flaky or cannot run independently)
+- New vulnerability or measured performance regression appeared
 - New pattern drift appeared
 
 ## Steps
@@ -50,29 +51,20 @@ fi
 
 ### 4. Measure code health signals
 
-Adapt to project language/framework:
+Apply [verifiability over readability](../../shared/verifiability.md). Start with
+modules changed since the previous report and their existing public-contract checks.
 
-```bash
-# Large files that may need splitting -- check CLAUDE.md for threshold
-find src -name '*.ts' -o -name '*.tsx' -o -name '*.py' -o -name '*.go' 2>/dev/null | while read f; do
-  lines=$(wc -l < "$f")
-  [ "$lines" -gt 300 ] && echo "$f: $lines lines"
-done
-
-# TODO/FIXME/HACK count
-grep -r 'TODO\|FIXME\|HACK' src --include='*.ts' --include='*.tsx' --include='*.py' --include='*.go' -c 2>/dev/null | sort -t: -k2 -nr | head -10
-
-# Test coverage gaps -- source files without co-located tests
-find src -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.py' \) | grep -v '.test.' | grep -v '.spec.' | grep -v '.gen.' | grep -v '_pb.' | while read f; do
-  base="${f%.*}"
-  ext="${f##*.}"
-  found=0
-  for suffix in "test.$ext" "spec.$ext" "test.ts" "test.tsx" "spec.ts"; do
-    [ -f "${base}.${suffix}" ] && found=1 && break
-  done
-  [ "$found" -eq 0 ] && echo "Missing test: $f"
-done | head -20
-```
+- Resolve focused verification commands from the maintained test map, package scripts
+  and runner configuration; a missing co-located test file does not prove a gap.
+- Run representative contract checks independently of unrelated app layers. Record
+  command, fixture, result, setup dependencies and failure diagnostics. Name blocked
+  checks as unverified; do not turn missing prerequisites into a pass.
+- Compare repeatability, setup coupling, verification time and credible untested
+  behavior with the previous run. Report a new gap with the affected contract and
+  smallest reproducer or concrete blocked verification path.
+- Preserve domain-language discoverability and human access to the relevant check.
+  File/function size, nesting, cyclomatic complexity, TODO counts and coverage
+  percentages alone are not health regressions or reasons to split code.
 
 ### 5. Compare with previous report
 

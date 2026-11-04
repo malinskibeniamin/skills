@@ -137,7 +137,7 @@ run_content_eval "$REPO_ROOT/review/SKILL.md" "No performance finding without me
 run_content_eval "$REPO_ROOT/review/SKILL.md" "No edge-case finding" "review filters hypothetical defects"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "independent audit before reading PR discussion" "deep review preserves fresh eyes before feedback"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Deep-mode review reference" "deep-audit reference exists"
-run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Code-judo.*preserves behavior.*deleting" "deep review demands evidence-backed structural ambition"
+run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "structural defects only with a concrete consequence and execution path" "deep review demands consequence-backed structural findings"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Developer experience.*secret sources.*environment variable" "deep review traces developer configuration"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "ports/networking.*required.*scripts" "deep review catches mandatory workflow regressions"
 run_content_eval "$REPO_ROOT/review/DEEP-AUDIT.md" "Feature exposure.*feature flags.*internal-only" "deep review traces feature gates"

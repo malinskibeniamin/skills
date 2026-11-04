@@ -87,7 +87,7 @@ Commit and PR titles state the guarantee after the change, not only the activity
 
 | Craft | Check |
 | --- | --- |
-| `tests-grow-with-code` | Behavior changes ship tests in the same PR; roughly one test line per production line is a target, not a gate. Substantive code without tests states why (generated, pure move, config only). |
+| `tests-grow-with-code` | Behavior changes ship public-contract tests in the same PR; add cases for independent credible risks, not test/production line ratios or coverage quotas. Substantive code without tests states why (generated, pure move, config only). |
 | `test-refusal-and-no-op-paths` | Test what must not happen: rejection, empty input, idle runs, and errors that keep the last good state. Name tests as behavior sentences, such as "idle tick writes nothing". |
 | `reproduce-first` | Shrink the trigger until it runs in milliseconds; show the check failing on the base branch and passing on the change. |
 | `revert-test` | Each new test fails when the fix is reverted. A test that still passes guards nothing. |
@@ -116,8 +116,8 @@ a fix that does not move the rate; watch the gate for a week after merge.
 | `delete-the-extra-step` | Remove an intermediate copy, cache, tag, or wrapper the next step does not need; read the source of truth directly. |
 | `question-the-expensive-default` | Serializable isolation, locks, retries, or extra round trips name the anomaly they prevent here; otherwise use the cheaper option. |
 | `lifecycle-you-can-reason-about` | Long-running components expose a blocking run that returns on fatal error; no fire-and-forget work or dropped errors; retries and waits are bounded. |
-| `readable-conditions` | No double negatives; complex conditions split into named variables; comments explain the non-obvious invariant, trade-off, or deliberate omission, with a ticket or RFC for rationale when relevant; delete comments that restate the code. |
-| `debuggable-over-clever` | Formats, config, and logs a tired on-call can read: printable effective config and one log line at each decision. Hot paths get the care; cold paths get the simplest code. |
+| `readable-conditions` | Conditions use the human's domain language; name predicates when they expose a domain rule or verification seam, not to lower nesting scores. Comments explain the non-obvious invariant, measured trade-off or deliberate omission; delete restatements. |
+| `debuggable-over-clever` | Discoverable contracts, checks, effective config and actionable diagnostics let an on-call human inspect behavior. Follow [verifiability](../shared/verifiability.md); measured hot paths may trade reading ease for speed while preserving contract proof. |
 
 ## Review voice
 
@@ -133,8 +133,8 @@ a fix that does not move the rate; watch the gate for a week after merge.
 ## Work with AI
 
 - Read every generated diff before it becomes a PR; close unreviewed agent PRs.
-- Trim generated code and comments until a human can read and own them; explain or remove
-  long, unclear comments.
+- Keep generated code independently verifiable, domain-aligned and inspectable by a human;
+  remove comments that obscure the contract, not code solely because it is long.
 - Ask the model to argue against the change, then act on the answer, including closing it.
 - Keep agent context lean: keep a line only if removing it would cause a mistake.
 - Question conventions the model invented before following them.

@@ -40,9 +40,14 @@ contracts, including ordinary review. Existing severity and proof requirements a
 
 ## Minimize reader load
 
-Maintainability has two independent costs: layers to trace and hidden state to hold. Collapse one-caller wrappers and pass-through adapters. Adjacent layers must change the abstraction or hide meaningful decisions. Shrink mutable state scope and place an invariant at its owner instead of repeating it in consumers.
+Apply [verifiability over readability](verifiability.md). Collapse pass-through layers
+when they scatter a contract or make verification require unrelated setup; keep
+adapters that isolate real dependencies. Shrink mutable state scope and place an
+invariant at its owner instead of repeating it in consumers. Favor a deep, independently
+testable module over many small helpers chosen only for reading ease.
 
-Test: can a new reader answer "where does this value come from?" and "what can change it?" without a tour of unrelated files?
+Probe: can a focused test control the inputs and state, exercise the public contract
+and diagnose a failure? Can a human locate the domain rule, state owner and that check?
 
 Owner: `/codebase-design` for design, `/review --deep` for diff evidence.
 

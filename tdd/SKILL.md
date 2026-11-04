@@ -42,7 +42,7 @@ Write the smallest passing implementation. Delete/reuse first; prefer language, 
 
 ### REFACTOR
 
-Improve names/structure or deduplication. Stay green; never weaken assertions. Flag units over 500ms, integrations over 2s; prefer bulk input to per-keystroke simulation. Call the Skill tool with "dogfood" on material green slices; defects become RED.
+Apply [verifiability](../shared/verifiability.md); stay green, never weaken assertions. Flag units over 500ms, integrations over 2s; prefer bulk input. Call the Skill tool with "dogfood" on material green slices; defects become RED.
 
 ### REPEAT
 

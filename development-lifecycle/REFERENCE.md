@@ -10,7 +10,7 @@ require explicit user authorization.
 |---|---|---|
 | Feature | Existing public seam and nearest example | Requested behavior at the real entrypoint plus repository checks |
 | Bug | Reproduction and root-cause hypothesis | Regression test fails before the fix, passes after, original path works |
-| Refactor | Preserved public contract | Existing contract remains green and complexity demonstrably drops |
+| Refactor | Preserved public contract and named verification, ownership or performance goal | Contract checks remain green; focused evidence proves the stated gain, not a size/complexity reduction |
 | Test-only | Missing behavior proof | New test fails against the faulty behavior and passes against the intended behavior |
 | Docs/config | Consumer or validator for the artifact | Render, parser, generator check, or representative invocation |
 | PR/ship | Diff and requested endpoint | Delivery evidence in the endpoint table below |

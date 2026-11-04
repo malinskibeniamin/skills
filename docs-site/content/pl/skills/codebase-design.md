@@ -1,12 +1,20 @@
 ---
-title: /codebase-design
 description: >-
   Projektuj głębokie moduły z małymi interfejsami. Używaj przy wyborze szwów,
   ograniczaniu konieczności przeskakiwania między plikami, pogłębianiu modułów,
   testowaniu interfejsów oraz stosowaniu wspólnego słownictwa projektowego.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - codebase design
 sidebar:
   label: /codebase-design
+title: /codebase-design
+type: skill
 ---
 ![Diagram umiejętności /codebase-design](/diagrams/skills/codebase-design.svg)
 
@@ -18,11 +26,11 @@ Gdy poniższy przepływ wymaga umiejętności wywoływanej przez model, wywołaj
 
 Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.md`, przejdź z niego do glosariusza właściwego kontekstu.
 
-Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem umieszczonym w dobrze dobranym szwie, możliwych do przetestowania przez ten interfejs. Optymalizuj użyteczność dla wywołujących, lokalność dla osób utrzymujących kod oraz testowalność.
+Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem w dobrze dobranym szwie, możliwych do przetestowania przez ten interfejs. Stosuj [weryfikowalność zamiast czytelności](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md); optymalizuj niezależną weryfikację, użyteczność dla wywołujących i lokalność, a nie rozmiar implementacji.
 
 Moduł powinien ograniczać wiedzę i koordynację wymaganą od kodu wywołującego, zachowując wymagane zachowanie.
 
-## Słownik
+## Słownik [#glossary]
 
 Używaj dokładnie tych terminów:
 
@@ -44,7 +52,7 @@ Używaj dokładnie tych terminów:
 
 Zapytaj, czy można ograniczyć liczbę metod i parametrów oraz ukryć więcej złożoności.
 
-## Zasady
+## Zasady [#principles]
 
 - Głębokość jest właściwością interfejsu, a nie stosunkiem liczby wierszy; prywatne szwy nie muszą być ujawniane.
 - **Test usunięcia:** jeśli usunięcie modułu sprawia, że złożoność znika, moduł był tylko warstwą pośrednią; jeśli złożoność rozprzestrzenia się na kod wywołujący lub testy, moduł zasłużył na swoje miejsce.
@@ -58,11 +66,11 @@ Dla nowego lub zmienianego interfejsu napisz reprezentatywny kod wywołujący pr
 
 Przed wyborem struktury sprawdź wobec szkicu [najkrótszą błędną zmianę](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit). Przy małej zmianie wystarczy szkic w bieżącym opisie; mechaniczne przeniesienia nie wymagają ćwiczenia projektowego. Porównuj całe alternatywne struktury tylko wtedy, gdy pozostaje istotna decyzja lub użytkownik tego zażąda. Nie dodaje to przerwy przed implementacją.
 
-## Testowalność
+## Testowalność [#testability]
 
-1. Przyjmuj zależności; nie twórz ich wewnątrz.
-2. Zwracaj wyniki; ograniczaj niejawne efekty uboczne.
-3. Utrzymuj niewiele metod i parametrów oraz jasne niezmienniki.
+1. Sprawdzaj publiczny interfejs za pomocą ukierunkowanego polecenia i powtarzalnych danych testowych.
+2. Kontroluj istotne zależności w istniejących szwach; zwracaj obserwowalne wyniki i izoluj stan otoczenia.
+3. Ułatwiaj znalezienie niezmienników i diagnostyki błędów; wykaż, że wiarygodne niepoprawne zachowanie powoduje niepowodzenie testu, bez wiązania testów z wnętrzem implementacji.
 
 Gdy dwa projekty przejdą test usunięcia, użyj `/plan-arbiter`, aby porównać głębokość, lokalność, powierzchnię testową i możliwość wycofania zmian.
 

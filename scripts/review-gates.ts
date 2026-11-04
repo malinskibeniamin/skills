@@ -122,6 +122,7 @@ function definitions(root: string) {
       const skills = [
         ...new Set([
           realpathSync(join(harness, "shared/review-contract.md")),
+          realpathSync(join(harness, "shared/verifiability.md")),
           ...references,
         ]),
       ];

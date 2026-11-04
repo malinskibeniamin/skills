@@ -19,6 +19,8 @@ Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
 Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
+Code quality: [verifiability](shared/verifiability.md).
+
 ## Human-facing text
 
 `shared/communication.md`: decision/value/ask first; own claims, intent,
