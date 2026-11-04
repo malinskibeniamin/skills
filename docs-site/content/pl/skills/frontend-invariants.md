@@ -40,7 +40,7 @@ Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, 
 6. **Nawigacja wewnątrz sekcji zastępuje historię; wejście do sekcji dodaje wpis** -- przycisk Wstecz opuszcza sekcję, zamiast odtwarzać każdą kartę.
 7. **Powtarzający się asynchroniczny metabłąd**: stan rozwiązany asynchronicznie, odczytany zbyt wcześnie lub zbyt szeroko określony -- kluczuj pamięci podręczne według ich pełnego zakresu (środowisko/organizacja/użytkownik), zaczekaj na zakończenie sprzątania przed nawigacją, anuluj nieaktualne odpowiedzi lub stosuj zasadę ostatniego zapisu, nie odczytuj domyślnych wartości flag lub konfiguracji przed rozwiązaniem dostawcy.
 
-Dla edytowalnych wartości domyślnych z serwera wyliczaj wyświetlaną wartość z jawnego lokalnego nadpisania lub aktualnych danych serwera, zamiast kopiować wyniki zapytania do stanu za pomocą efektu. Przed implementacją lub przeglądem takich edytorów przeczytaj [zapisywalny stan pochodny](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md): zakres nadpisania, zasady resetowania i zapisu oraz scenariusze regresji.
+Edytowalne wartości domyślne z serwera: przeczytaj [zasady nadpisywania](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md).
 
 ## Relacja z systemem projektowym
 8. **Tokeny zamiast doraźnych wartości** -- kolor, odstępy i typografia pochodzą ze skali; jednorazowe wartości projektanta zaokrąglaj do najbliższego stopnia; nigdy nie wpisuj na stałe wartości hex/px, jeśli istnieje token.
