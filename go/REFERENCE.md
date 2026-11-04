@@ -60,11 +60,10 @@ Before delivery:
 - never merge, use plain `--force`, or rewrite a default, shared, foreign, or concurrently
   owned branch without explicit permission.
 
-For `/go`, take one CI snapshot and report its actual state, then stop. CI, reviews and
-approvals do not gate publication. An explicit CI-fix request authorizes repairing the
-observed failure and pushing the fix, not waiting for another run. Feedback resolution
-and monitoring need explicit scope; only requested monitoring uses the host's native
-watcher or the documented foreground fallback. No background polling or invented approval.
+For `/go`, follow [automatic maintenance](../shared/delivery-workflow.md#automatic-pr-maintenance):
+repair owned-PR CI, feedback and conflicts; verify and push; use one authorized native
+wake or configured continuation. Publication is not readiness. Preserve narrower stops,
+hosted merge policy and human approvals; never add duplicate polling or implicit merge.
 
 ## Handoff
 

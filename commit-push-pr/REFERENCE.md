@@ -5,7 +5,10 @@ When finishing or recovering another agent's local-only work, follow
 
 ## Pre-rebase check
 
-Resolve the PR base, then run the bundled `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>` (this repository root while developing the skill). Files touched by multiple commits are a prompt to inspect fixups, not proof of conflicts or token savings. Squash only coherent fixups on the current user-owned branch; preserve meaningful commits and branch topology. The script is read-only and never rewrites history.
+Resolve the PR base, then run `<plugin-root>/scripts/rebase-cost-preflight.sh <base-ref>`
+(this repository root while developing the skill). Repeated paths are a heuristic, not
+measured conflict or token savings. Before rebasing an ordinary coherent owned PR, use
+the guarded consolidation below rather than replaying every fixup conflict separately.
 
 ## Automatic rebase
 
@@ -17,8 +20,15 @@ protection does not report `BEHIND`, and even with no new review feedback.
    git operation or concurrent owner, and local HEAD equal to the published PR HEAD. Record
    that published SHA for the push lease. Defer unsafe ownership/worktree states visibly;
    never stash, reset, or switch another worktree to make them eligible.
-2. Fetch origin, run the pre-rebase check, and rebase onto the fetched PR base. Preserve
-   meaningful commits and merge topology. Resolve routine conflicts from feature intent,
+2. Fetch origin and run the pre-rebase check. For a coherent linear branch whose commits
+   belong to the current Git identity, consolidate before rebase:
+   `<plugin-root>/scripts/pr-maintenance-squash.sh <fetched-base-ref> <observed-pr-head>
+   "<conventional-commit-message>"`. The helper retains the tree and reflog recovery,
+   uses compare-and-swap ref mutation and never resets/stashes. A default/base branch,
+   dirty tree, active operation or changed HEAD fails closed. Foreign authorship, merge
+   topology and stack/dependent boundaries must be preserved: skip consolidation visibly
+   when ineligible and choose the safe topology-preserving rebase, not a blind squash.
+   Rebase onto the fetched PR base. Resolve routine conflicts from feature intent,
    tests, and current base behavior, not blanket `ours`/`theirs`. Continue without asking
    the human to click Update branch or approve a routine rebase. Only a genuine access,
    ownership, or material owner-reserved semantic decision blocks this work.
@@ -31,7 +41,8 @@ protection does not report `BEHIND`, and even with no new review feedback.
    becomes the next maintenance pass, not proof that the completed rebase failed.
 
 Enabled [local PR maintenance](../resolve-pr-feedback/AUTO-REVIEW.md) also wakes the original
-bound session for base advances. Ordinary delivery does not install or enable a watcher.
+bound session for base advances and failed CI. Prefer the host-authorized native watcher;
+ordinary delivery does not silently install or enable a persistent local job.
 Stack descendants remain outside the current branch's authorization.
 
 ## Review evidence (Phase 0 pre-flight)
@@ -42,7 +53,9 @@ state, not a hand-written approval table. Preserve human context and expose actu
 executor/model, skips and missing/stale evidence. Do not enable agents or a new review
 profile as a publication side effect. An agent result never implies human sign-off.
 
-Before the PR endpoint, run the applicable review axes inline:
+Before the PR endpoint, run applicable self-review axes with their owning skills. Use
+[authorized council review](../shared/TSTACK.md#council) when requested; keep its independent
+reports separate from author self-review. Without delegation consent, review inline:
 
 - `/review` -- correctness, value (`/product` hat), and maintainability
 - `/improve-codebase-architecture` -- deep-module and invariant redesigns that remove error classes
@@ -51,8 +64,9 @@ Before the PR endpoint, run the applicable review axes inline:
 
 Frontend or customer-facing surface diff -> `/visual-review` and the visual evidence gate below must run, even if another review skill already ran. Only an explicit user waiver can accept a named missing check; record it in the PR body.
 
-A named review skill is not a separate approval gate. Use `/review` only when requested;
-frontend/customer-facing changes still need visual evidence, not an agent-authored skip.
+A named review skill is not a separate approval gate. Self-review automatically loads
+`/review` through author delivery; a standalone review request remains read-only.
+Frontend/customer-facing changes still need visual evidence, not an agent-authored skip.
 
 For backend architecture, data flow, API contract, or workflow changes, follow
 [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`.

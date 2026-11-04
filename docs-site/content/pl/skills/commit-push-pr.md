@@ -20,8 +20,7 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/commit-push-pr.excalidraw)
 
-Przy wieloetapowej implementacji lub publikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution).
-
+Przeczytaj [Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution).
 
 Korzystaj z [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md) i [zasad ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
@@ -29,43 +28,44 @@ Scalaj tylko na wyraźne żądanie: [kontrakt scalania](https://github.com/malin
 
 ## Kontrola wstępna [#preflight]
 
-1. Sprawdź stan, różnice, gałąź, dziennik i PR. Przy wypchnięciu lub PR-ze, jeśli bieżący PR na gałęzi użytkownika nie zawiera commitów bazy, automatycznie wykonaj [rebase i wypchnięcie z zabezpieczeniem lease](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase). Rutynowy rebase nie wymaga pytania użytkownika.
-2. Ustal żądany punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Wariant z samym commitem pomija kontrolę zdalnego repozytorium i `gh`.
-3. Wypchnięcie/PR: [automatycznie skonfiguruj zabezpieczenia repozytorium korzystającego z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md); zachowaj węższe punkty końcowe.
-4. W przypadku PR-a uruchom `gh stack view --json`; sprawdź bazę i stos. Zwykły PR obejmuje jedną warstwę; nigdy nie używaj `gh stack submit`.
-5. Przeprowadź przegląd bezpośrednio; wywołanie wskazanej umiejętności nie jest bramką zatwierdzania.
+1. Sprawdź stan, diff, gałąź, dziennik i PR; przy wypchnięciu lub publikacji PR-a wykonaj [automatyczny rebase](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#automatic-rebase), jeśli PR należący do użytkownika nie zawiera aktualnej bazy.
+2. Ustal punkt końcowy: tylko commit, wypchnięcie (`--no-pr`) lub PR. Sam commit pomija kontrolę zdalnego repozytorium i `gh`.
+3. Wypchnięcie/PR: [automatycznie skonfiguruj zabezpieczenia](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md); zachowaj węższe punkty końcowe.
+4. Dla PR-a uruchom `gh stack view --json`. Obsługuj jedną warstwę; nigdy nie uruchamiaj `gh stack submit` bez odpowiedniego zakresu.
+5. Przeprowadź przegląd zgodnie z właściwymi umiejętnościami; autoryzowana rada recenzentów zachowuje wymagany zakres oceny. Samo wywołanie umiejętności nie jest bramką zatwierdzania.
 6. Dla uruchamialnych zmian w PR-ze załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); wymagaj aktualnego wyniku PASS. BLOCKED wymaga zgody użytkownika na odstępstwo.
-7. Dodawaj do poczekalni według celu i tylko żądane ścieżki. Zapytaj, jeśli własność zmian jest niejasna.
+7. Dodawaj zmiany do poczekalni według celu; zapytaj, jeśli ich własność jest niejasna.
 
 ## Commit
 
-1. Pozostań na gałęzi funkcji; jeśli jesteś na gałęzi domyślnej, utwórz `type/description`.
-2. Dla każdej spójnej grupy wykonaj `git add <explicit paths>`, a następnie utwórz commit `type(scope): terse description`: małymi literami, 5–72 znaki, bez kropki.
-3. Wyraźne żądanie samego commita kończy się tutaj po sprawdzeniu czystości drzewa.
+Jeśli repozytorium używa Changesets, po weryfikacji załaduj [changesets](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md).
+
+1. Pozostań na gałęzi funkcji; na gałęzi domyślnej utwórz `type/description`.
+2. Dla każdej spójnej grupy wykonaj `git add <explicit paths>`, a następnie utwórz commit `type(scope): description`: małymi literami, 5–72 znaki, bez kropki.
+3. Wyraźne żądanie samego commita kończy pracę tutaj, po sprawdzeniu czystości drzewa.
 4. Wypchnięcie/PR, każda poprawka CI lub rebase: pokaż `origin/<branch>..HEAD`, a następnie wypchnij gałąź z ustawieniem śledzenia.
-5. Po przepisaniu bieżącej, należącej do użytkownika gałęzi użyj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, należącej do kogoś innego lub równolegle używanej wymaga wyraźnej zgody.
+5. Po przepisaniu gałęzi funkcji należącej do użytkownika użyj `--force-with-lease` bez ponownego pytania o zgodę. Nigdy nie używaj zwykłego wymuszenia; przepisanie gałęzi domyślnej, współdzielonej, cudzej lub równolegle używanej wymaga wyraźnej zgody.
 
 ## Pull request
 
-`--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu: [utrzymanie istniejącego PR-a](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr), następnie sprawdzenie czystości drzewa. Najpierw przygotuj dowody wizualne.
+`--no-pr` nigdy nie tworzy PR-a. Po wypchnięciu zadbaj o [istniejący PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr), następnie sprawdź drzewo. Przygotuj dowody.
 
-1. Ustal gałąź bazową za pomocą `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze; przy tworzeniu i aktualizacji, także wersji roboczych, stosuj [metadane repozytorium](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md). Korzystaj z szablonu; wersje robocze nie wymagają osobnej zgody. Dla stosów używaj `/stacked-prs`.
-2. Dla każdego PR-a załaduj osobno [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md), [wpływ](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [opis](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); zachowaj stan szkicu i przedstaw wartość.
+1. Baza: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze i zachowaj [metadane](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md), w tym stan szkicu. Tworzenie szkiców PR nie wymaga zatwierdzenia; stosy: `/stacked-prs`.
+2. Dla każdego PR-a załaduj osobno [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md), [wpływ](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [opis](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); zachowaj szkic i przedstaw wartość.
 3. Widoczne zmiany: inwentaryzacja, automatycznie opisane zrzuty ekranu i nagrania przed zmianą i po niej, z numerowanymi oznaczeniami i legendą zmian zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations), sprawdzone migawki oraz przechodzące testy wizualne. Nie potrzeba osobnej prośby o adnotacje. Brak dowodów wymaga zgody użytkownika na odstępstwo przed publikacją.
-4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów i produktów, imiona i nazwiska osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
-5. Uwzględnij potwierdzenie dogfood. Przeczytaj ponownie opis, sprawdź dostęp recenzenta do obrazów i wyświetl adres URL. Aktualizacje i ponowne otwarcia podlegają tym samym wymaganiom; edycje unieważniają dowody, których dotyczą.
+4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów, produktów i osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
+5. Uwzględnij potwierdzenie dogfood; ponownie odczytaj opis i sprawdź dostęp do obrazów. Edycje unieważniają dowody, których dotyczą.
 
-Jeśli automatyczny przegląd jest włączony, [powiąż pierwotną sesję](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md).
+Utrzymanie: [właściciel pętli utrzymania](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance).
+Przed monitorowaniem wybierz natywny mechanizm wznowień; nie uruchamiaj drugiego dispatchera.
 
 Nie uruchamiaj `/visual-recap` ani `/make-pr-easy-to-review`, chyba że użytkownik wyraźnie o to poprosi.
 
 ## Zakończenie [#completion]
 
-1. Pobierz pojedynczy stan CI za pomocą `gh pr checks <number>`; odnotuj brak CI.
-2. Naprawa CI, monitorowanie i obsługa uwag wymagają jawnego zakresu; `/go` ani ship nie oznacza czekania.
-3. Zgłoś niepowodzenia, różnice, gałąź/commity, PR, CI i następne działanie.
-4. Stosuj CLAUDE.md: cel/wpływ/stan oraz pełny adres URL PR w ostatnim wierszu stanu, także przy aktualizacjach.
+1. Odczytaj CI: `gh pr checks <number>`; brak, oczekiwanie lub pominięcie nie oznacza przejścia kontroli.
+2. Automatycznie naprawiaj zasadne uwagi, CI i konflikty; zweryfikuj i wypchnij zmiany. Kontynuuj przez jeden autoryzowany mechanizm wznowień.
+3. Podaj head, PR, kontrole, luki w przeglądzie oraz sposób kontynuacji lub blokadę; zachowaj węższe punkty zatrzymania.
+4. Stosuj CLAUDE.md: cel/wpływ/stan oraz pełny adres URL PR-a w ostatnim wierszu stanu, także przy aktualizacjach.
 
-Nigdy nie dodawaj do poczekalni ani nie wypychaj niezwiązanych zmian i nie ukrywaj niepowodzeń. Jeśli `gh pr create` się nie powiedzie, pokaż błąd i sposób naprawy.
-
-Jeśli repozytorium docelowe używa Changesets, po ukierunkowanej weryfikacji, a przed commitem, wczytaj [finalizację changesetu](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/changesets/SKILL.md). Aktualizuj istniejącą notatkę bieżącego PR zamiast tworzyć nową przy każdym poleceniu.
+Zachowaj niezwiązaną pracę; ujawniaj niepowodzenia i sposób odzyskania poprawnego stanu.

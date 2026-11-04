@@ -3,23 +3,23 @@
 ## Owner merge policy
 
 The owner chooses when to merge. The shared [delivery policy](../shared/review-enforcement.md#generic-delivery-policy)
-is repository-independent: publish verified work without waiting for CI or reviews.
+is repository-independent: publish verified work and maintain owned PRs automatically.
 CI, security scans, review findings and approvals are advisory, not merge gates.
 The hosted `main` policy and [saved payload](branch-protection.json) have no required
 status checks, required PR reviews or conversation-resolution requirement. Admin
 protection enforcement is off. Force pushes and branch deletion remain disabled.
 
-Do not wait for CI, approvals or review-thread closure during PR, ship or `/go`
-delivery here. An optional status snapshot must not start a wait/remediation loop.
+PR, ship and `/go` use [automatic maintenance](../shared/delivery-workflow.md#automatic-pr-maintenance)
+for CI failures, feedback and conflicts; keep hosted merge policy separate.
 Do not automatically restore blocking safeguards through consumer bootstrap.
-Explicitly requested monitoring or feedback work remains separate. Agents still
+Use one authorized continuation transport. Agents still
 need explicit permission to merge; this policy does not grant it.
 
 This owner decision supersedes the earlier required-check policy. It accepts that
 changes can merge while checks fail or findings remain open; it is not evidence
 that a change passed verification. Run useful local verification and report limits.
 
-Consumers retain their native merge policy. No-wait delivery does not authorize changing
+Consumers retain their native merge policy. Automatic upkeep does not authorize changing
 hosted protection or bypassing required checks without an explicit owner decision.
 
 ## Inspect before changing protection

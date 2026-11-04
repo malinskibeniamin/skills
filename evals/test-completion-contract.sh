@@ -41,7 +41,7 @@ fi
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "single owner" "lifecycle uses a single owner"
 run_content_eval "$REPO_ROOT/development-lifecycle/SKILL.md" "continue immediately" "lifecycle does not pause ordinary implementation"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "inline" "grilling runs plan hats inline"
-run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "one CI status snapshot" "PR endpoint takes one CI snapshot"
+run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "Automatically fix applicable feedback" "PR endpoint owns automatic maintenance"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "full PR URL.*final status line" \
   "PR workflow reports the full URL on the final status line"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "[Dd]raft PR.*without.*approval" \

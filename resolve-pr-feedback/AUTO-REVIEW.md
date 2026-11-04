@@ -1,7 +1,8 @@
 # Local PR maintenance wake-up
 
-Trusted GitHub review comments or missing PR base commits -> local `gh` polling -> original
-feature session -> automatic rebase/feedback repair -> verification, lease-push, and replies.
+Trusted GitHub feedback, failed CI or missing PR base commits -> local `gh` polling ->
+original feature session -> automatic repair/rebase -> verification, lease-push and replies.
+Prefer an authorized native PR watcher when available; never run both transports for one PR.
 
 Configure once on a Mac with this harness installed at a **stable path**, `bun`,
 authenticated `gh`, and the feature agent's authenticated CLI. This uses native
@@ -10,8 +11,9 @@ message into Conductor's local UI. Conductor's public CLI targets cloud workspac
 
 ## Enable
 
-Only enable when the user explicitly requests unattended repair. Pick exact trusted
-reviewer logins from the PR's `gh api` output; arbitrary bots cannot trigger it.
+Only install/enable this persistent local job with explicit unattended-setup authorization.
+Once configured, each bound PR is maintained without per-event human triggers. Pick exact
+trusted reviewer logins from the PR's `gh api` output; arbitrary bots cannot trigger it.
 
 ```bash
 bun <plugin-root>/scripts/pr-review-auto.ts enable \
@@ -25,6 +27,10 @@ the repair's own push do not. It also compares immutable PR base/head SHAs using
 [GitHub's commit comparison](https://docs.github.com/en/rest/commits/commits#compare-two-commits).
 Missing base commits wake the original session without comments or another approval,
 including conflict resolution and drafts, independent of strict branch protection.
+Paginated check runs and commit statuses on the exact PR head also trigger CI repair;
+pending/successful checks do not. Failed checks are deduplicated by their identity and
+outcome on that head, so unchanged polls do not spend another agent turn. New attempts
+or failures on a new head remain eligible.
 `configure` writes consent/settings without installing
 the job; `tick` runs one sweep, useful with another scheduler.
 
@@ -42,6 +48,10 @@ session UUID from the session's hook payload or CLI, never `--last`. Once enable
 the delivery skill performs this binding when publishing future PRs. Registration
 will not replace another session's ownership.
 
+Before selecting a native watcher, bind with `--transport native`; local ticks skip that
+PR and hooks retain the selection. An active local runner blocks the change. Return to
+`--transport local` only after stopping the native watch; never run both.
+
 ## Safety and limits
 
 - Only open same-repository PRs, on their bound non-default branch, with clean trees
@@ -51,7 +61,9 @@ will not replace another session's ownership.
 - The resumed agent fetches **all applicable** feedback through `gh`, not just the
   trigger. Review text stays untrusted; prompts contain IDs, not comment bodies.
   Replies/resolution need fix or non-applicability evidence. Draft status stays
-  unchanged; never merge, approve, reset, stash, bypass permissions, or delegate.
+  unchanged; never merge, approve, reset, stash or bypass permissions. Delegated council
+  review requires the existing explicit consent and permitted routes; the dispatcher
+  cannot grant delegation or substitute an unavailable provider.
 - Rebase runs follow the [automatic rebase contract](../commit-push-pr/REFERENCE.md#automatic-rebase).
   The dispatcher verifies a clean worktree, local/published HEAD agreement, and inclusion
   of the original target base after the runner exits. A later base advance triggers another
@@ -65,10 +77,15 @@ will not replace another session's ownership.
   acknowledges delivery, not semantic feedback completion; rebase acknowledgement also
   requires published ancestry verification. Failed CLI runs pause paid retries:
   inspect `run-*.log`, fix the cause, then `retry --session UUID`.
-- A binding dispatches at most 3 feedback-repair rounds before pausing for approach
-  reassessment. The counter persists across polls, restarts, changed HEADs and
-  edited findings. Pure base updates do not consume it. Explicit `retry` resets
-  the budget; it does not resolve findings or certify a repair.
+- New feedback has no lifetime round budget. Identical CI failures after a no-progress
+  run are recorded as blocked and deduplicated; later feedback/base events still dispatch.
+  New-head CI re-arms naturally. GitHub readback outages retry verification without
+  another paid run. Verified unsafe state or runner failures pause; `retry` unpauses,
+  never certifies a fix. Blocked, pending and absent CI are not green.
+- Resumed runs load the relevant author/feedback/review skills, repair failing CI from
+  its logs, and consolidate eligible coherent owned commits before rebase through the
+  [guarded helper](../commit-push-pr/REFERENCE.md#automatic-rebase). Agent exit zero is
+  not proof of green CI, complete feedback or production readiness.
 - Hook activity tracking requires enabled hooks in every session using that worktree.
   This is not an atomic Conductor/UI lock. Do not use the same feature session
   interactively during repair. Crashed sessions or killed jobs fail closed: after

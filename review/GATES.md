@@ -178,7 +178,7 @@ Refresh the block after changes; a table does not substitute for `check`.
 with `.review-gates.json`; `--review-plan <file>` selects an explicit plan. Missing,
 blocked, stale or mismatched review evidence cannot pass readiness. Without opt-in or a
 plan it reports `not-configured`, not semantic review. Native checks, approvals and
-protections remain separate requirements. PR-only still stops after its one CI snapshot.
+protections remain separate requirements. Owned PRs continue [automatic maintenance](../shared/delivery-workflow.md#automatic-pr-maintenance).
 
 ## Consumer-specific gates
 

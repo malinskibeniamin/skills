@@ -6,18 +6,18 @@ actual base branch. Never copy this harness's CI names or overwrite a stricter p
 
 ## Generic delivery policy
 
-CI, reviews and approvals do not block delivery, including ship and `/go`. Verify locally,
-publish the requested scope, report one current snapshot and stop without waiting. Apply
-this uniformly: no repository-name checks, allowlists or copied protection payloads.
-Publication/ownership checks still apply. Monitoring and feedback resolution need explicit
-scope; merging always needs explicit permission. Advisory or pending checks are not passing
-evidence and must be reported accurately.
+Owned PR delivery includes [automatic maintenance](delivery-workflow.md#automatic-pr-maintenance):
+verify, publish, repair current CI/feedback/base issues and continue using an authorized
+host wake. Apply uniformly without repository-name exceptions or copied protection payloads.
+Explicit narrower stops and publication/ownership checks remain binding. Merging always
+needs explicit permission. Advisory, pending, absent or skipped checks are not passing
+evidence; publication and watcher registration are not production readiness.
 
 Delivery policy does not replace hosted merge policy. Preserve existing classic protection,
 rulesets, required checks, approval counts and owner-approved admin bypasses. If the owner
 chooses advisory checks or unrestricted admin merging, honor that decision without restoring
 blocking gates. Never infer approval to weaken hosted rules merely from admin access, sole
-contributor status or the no-wait delivery default.
+contributor status or automatic PR maintenance.
 
 ## Automatic setup
 
@@ -84,9 +84,10 @@ threads, and mergeability. It also reads classic protection and active inherited
   scanner coverage; `not-detected` supplies no dependency-security evidence.
 
 The lifecycle Stop hook checks publication, not hosted readiness, in both supported hosts.
-PR and ship endpoints stop without CI/review waiting; pending or missing protections are
-reported, never described as hosted-gates-pass. Commit-only, push-only, local-only and
-genuine blocked/awaiting-decision endpoints stay intact.
+The author loop owns automatic CI/feedback maintenance and the host owns wakes; the
+publication hook alone cannot prove ongoing monitoring or production readiness. Pending
+or missing protections are reported, never described as hosted-gates-pass. Commit-only,
+push-only, local-only and genuine blocked/awaiting-decision endpoints stay intact.
 
 This is sampled evidence, not an atomic merge lock or a tamper-proof security boundary.
 The authorized merge path must still use the expected-head guard and hosted base-race

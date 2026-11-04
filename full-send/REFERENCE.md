@@ -7,8 +7,9 @@ preserve the requested endpoint and native GitHub approval policy.
 
 ## Full stop
 
-Use `/full-send --no-merge <task or PR>` to publish locally verified work without waiting
-for CI/reviews/approvals, retaining the human merge decision. "Full stop" means this endpoint, not permission to merge.
+Use `/full-send --no-merge <task or PR>` to publish and maintain verified work through
+CI/review/base repairs, retaining the human merge decision. "Full stop" means this
+no-merge endpoint, not permission to merge or deploy.
 Local-only, no-push and draft-only stops remain narrower. Loading a skill grants no action.
 
 ## Read-only hosted checkpoint
@@ -71,8 +72,10 @@ paragraph. For a historical revert, locate the introducing commit/diff and origi
 intent before choosing revert versus repair; replay preserved behavior afterward.
 
 Use [progress evidence](../shared/progress-evidence.md) when attempts repeat without gain.
-Foreground checks use the checkpoint, not a new scheduler. Unattended wake-ups require
-separate consent and the existing [auto-review controller](../resolve-pr-feedback/AUTO-REVIEW.md).
+Foreground checks use the checkpoint, not a new scheduler. Prefer host-authorized native
+PR wakes for automatic maintenance; outside that transport, reuse an enabled
+[local controller](../resolve-pr-feedback/AUTO-REVIEW.md). Installing/enabling a persistent
+job still requires explicit setup consent.
 Reuse its ownership, deduplication, pagination, stale-event recheck and failed-dispatch pause;
 dispatch success is not proof that a repair landed or feedback was resolved.
 

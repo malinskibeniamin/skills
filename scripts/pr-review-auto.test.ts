@@ -16,6 +16,18 @@ setDefaultTimeout(15_000);
 
 const entry = new URL("./pr-review-auto.ts", import.meta.url).pathname;
 const directories: string[] = [];
+interface FixtureCheck {
+  id: number;
+  head_sha: string;
+  status: string;
+  conclusion: string | null;
+  completed_at: string | null;
+}
+interface FixtureStatus {
+  id: number;
+  context: string;
+  state: string;
+}
 interface FixtureEvent {
   id: number;
   user: { login: string };
@@ -80,6 +92,18 @@ function fixture() {
     ],
     reviews,
     inline,
+    checks: [] as FixtureCheck[],
+    statuses: [] as FixtureStatus[],
+    pushCiAgent: false,
+    switchNativeDuringAgent: false,
+    nativeSwitchResult: -1,
+    nativeSwitchError: "",
+    invalidCompareAfterAgent: false,
+    fixCiAgent: false,
+    failChecks: false,
+    invalidChecks: false,
+    failChecksAfterAgent: false,
+    failAfterAgent: false,
     failAgent: false,
     rebaseAgent: false,
     failGh: false,
@@ -118,6 +142,25 @@ appendFileSync(process.env.CALLS, JSON.stringify({ tool, args, input, cwd: proce
 const data = JSON.parse(readFileSync(process.env.DATA, "utf8"));
 if (tool !== "gh") {
   if (data.failAgent) process.exit(1);
+  if (data.invalidCompareAfterAgent) { data.invalidCompare = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
+  if (data.failChecksAfterAgent) { data.failChecks = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
+  if (data.failAfterAgent) { data.failGh = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
+  if (data.switchNativeDuringAgent) {
+    const result = Bun.spawnSync([process.env.BUN, process.env.ENTRY, "bind", "--agent", "codex", "--session", "11111111-1111-4111-8111-111111111111", "--transport", "native"]);
+    data.nativeSwitchResult = result.exitCode;
+    data.nativeSwitchError = result.stderr.toString();
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+  }
+  if (data.pushCiAgent) {
+    Bun.spawnSync(["git", "commit", "--allow-empty", "-m", "fix(ci): repair"]);
+    data.pr.headRefOid = Bun.spawnSync(["git", "rev-parse", "HEAD"]).stdout.toString().trim();
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+  }
+  if (data.fixCiAgent) {
+    data.checks = [];
+    data.statuses = [];
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+  }
   if (data.rebaseAgent) {
     const result = Bun.spawnSync(["git", "rebase", data.pr.baseRefOid]);
     process.stderr.write(result.stderr);
@@ -134,12 +177,24 @@ if (tool !== "gh") {
   process.exit(0);
 }
 if (data.failGh) process.exit(1);
-if (args[0] === "repo") {
+if (args[0] === "api" && args[1] === "user") {
+  console.log("owner");
+} else if (args[0] === "repo") {
   console.log(args.includes("-q") ? "example/project" : JSON.stringify({ nameWithOwner: "example/project", defaultBranchRef: { name: "main" } }));
 } else if (args[0] === "pr") {
   console.log(JSON.stringify(data.pr));
 } else if (args[0] === "api") {
   const endpoint = args[1];
+  if (endpoint.includes("/check-runs")) {
+    if (data.failChecks) process.exit(1);
+    if (data.invalidChecks) { console.log(JSON.stringify([{ check_runs: null }])); process.exit(0); }
+    console.log(JSON.stringify(data.laterPage ? [{ check_runs: [] }, { check_runs: data.checks }] : [{ check_runs: data.checks }]));
+    process.exit(0);
+  }
+  if (endpoint.includes("/statuses")) {
+    console.log(JSON.stringify(data.laterPage ? [[], data.statuses] : [data.statuses]));
+    process.exit(0);
+  }
   if (endpoint.includes("/compare/")) {
     if (data.failCompare) process.exit(1);
     if (data.invalidCompare) { console.log(JSON.stringify({ behind_by: "unknown" })); process.exit(0); }
@@ -247,6 +302,13 @@ test("base advances rebase the bound feature session without review feedback", (
   f.advanceBase();
   f.bind();
   expect(f.run(["tick"]).code).toBe(0);
+  const rebasePrompt = f.recorded().find((call) => call.tool === "codex").input;
+  expect(rebasePrompt).toContain(
+    new URL("./rebase-cost-preflight.sh", import.meta.url).pathname,
+  );
+  expect(rebasePrompt).toContain(
+    new URL("./pr-maintenance-squash.sh", import.meta.url).pathname,
+  );
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
   expect(f.git(["merge-base", "HEAD", f.snapshot.pr.baseRefOid])).toBe(
     f.snapshot.pr.baseRefOid,
@@ -267,6 +329,13 @@ test("an agent exit zero without a published rebase pauses instead of claiming s
   expect(binding.last).toContain("rebase not verified");
   expect(f.run(["tick"]).out).toContain("paused");
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  f.snapshot.rebaseAgent = true;
+  f.save();
+  expect(
+    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"]).code,
+  ).toBe(0);
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
 });
 
 test("later base advances wake again; current PRs and dry runs never resume", () => {
@@ -402,12 +471,17 @@ test("human/unknown/empty comments do not wake agents; all three paginated surfa
   expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
   const api = f
     .recorded()
-    .filter((call) => call.tool === "gh" && call.args[0] === "api");
+    .filter(
+      (call) =>
+        call.tool === "gh" && call.args[0] === "api" && call.args[1] !== "user",
+    );
   expect(new Set(api.map((call) => call.args[1]))).toEqual(
     new Set([
       "repos/example/project/issues/42/comments",
       "repos/example/project/pulls/42/comments",
       "repos/example/project/pulls/42/reviews",
+      `repos/example/project/commits/${f.snapshot.pr.headRefOid}/check-runs?filter=latest&per_page=100`,
+      `repos/example/project/commits/${f.snapshot.pr.headRefOid}/statuses?per_page=100`,
     ]),
   );
   expect(
@@ -735,34 +809,19 @@ test("bot completeness counts later GraphQL pages", () => {
   expect(result.stdout.toString().trim()).toBe("1");
 });
 
-test("automatic feedback pauses after three repairs until explicit reassessment", () => {
+test("distinct successful feedback rounds never exhaust a lifetime repair budget", () => {
   const f = fixture();
   f.bind();
   const event = f.snapshot.comments[0];
   if (!event) throw new Error("Missing review fixture");
-  for (let round = 0; round < 3; round++) {
+  for (let round = 0; round < 5; round++) {
     event.body = `New review round ${round}`;
     f.save();
     expect(f.run(["tick"]).code).toBe(0);
   }
-  event.body = "Another finding";
-  f.save();
-  expect(f.run(["tick", "--dry-run"]).out).toContain("Would pause");
-  expect(f.run(["tick"]).err).toContain("Review repair limit");
-  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(3);
-  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(true);
-  expect(f.run(["tick"]).out).toContain("Review repair limit");
-  expect(
-    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"], "", {
-      PR_REVIEW_AUTO_RUN: "1",
-    }).code,
-  ).toBe(1);
-  expect(
-    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"]).code,
-  ).toBe(0);
-  expect(f.run(["tick"]).code).toBe(0);
-  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(4);
-}, 15_000);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(5);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(false);
+}, 20_000);
 
 test("automatic completeness fails visibly when GitHub is unavailable", () => {
   const f = fixture();
@@ -809,4 +868,339 @@ test("automatic completeness blocks failed PR discovery instead of treating it a
   });
   expect(result.exitCode).toBe(2);
   expect(result.stderr.toString()).toContain("Could not verify");
+});
+
+test("head-scoped failed Checks and commit statuses wake an idle session without comments", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.laterPage = true;
+  f.snapshot.fixCiAgent = true;
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "failure",
+      completed_at: "2026-11-04T01:00:00Z",
+    },
+  ];
+  f.snapshot.statuses = [{ id: 201, context: "build", state: "error" }];
+  f.save();
+  f.bind();
+  expect(f.run(["tick", "--dry-run"]).out).toContain("ci:check:101");
+  expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
+  expect(f.run(["tick"]).code).toBe(0);
+  const resumes = f.recorded().filter((call) => call.tool === "codex");
+  expect(resumes).toHaveLength(1);
+  expect(resumes[0].input).toContain("ci:status:201");
+  expect(resumes[0].input).toContain("failed CI");
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("pending, successful, superseded statuses and other-head checks do not dispatch", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: "a".repeat(40),
+      status: "completed",
+      conclusion: "failure",
+      completed_at: "today",
+    },
+    {
+      id: 102,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "in_progress",
+      conclusion: null,
+      completed_at: null,
+    },
+    {
+      id: 103,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "success",
+      completed_at: "today",
+    },
+  ];
+  f.snapshot.statuses = [
+    { id: 202, context: "build", state: "success" },
+    { id: 201, context: "build", state: "failure" },
+    { id: 203, context: "test", state: "pending" },
+  ];
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
+});
+
+test("unavailable or malformed CI defers without spending an agent turn", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.save();
+  f.bind();
+  for (const fault of ["failChecks", "invalidChecks"] as const) {
+    f.snapshot[fault] = true;
+    f.save();
+    expect(f.run(["tick"]).code).toBe(1);
+    expect(JSON.parse(f.run(["status"]).out).bindings[0].seen).toEqual({});
+    expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
+    f.snapshot[fault] = false;
+  }
+});
+
+test("blocked CI is deduplicated without disabling future feedback maintenance", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "timed_out",
+      completed_at: "today",
+    },
+  ];
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).out).toContain("CI blocked");
+  const binding = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(binding.paused).toBe(false);
+  expect(binding.blockedCi).toHaveProperty("ci:check:101");
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  f.snapshot.comments.push({
+    id: 12,
+    user: { login: "reviewer[bot]" },
+    body: "New finding",
+    updated_at: "today",
+  });
+  f.save();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
+});
+
+test("post-run GitHub outage retries verification without another paid run", () => {
+  const f = fixture();
+  f.bind();
+  f.snapshot.failAfterAgent = true;
+  f.save();
+  expect(f.run(["tick"]).out).toContain("Verification deferred");
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(false);
+  expect(f.run(["tick"]).code).toBe(1);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  current.failGh = false;
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  expect(f.run(["tick", "--dry-run"]).out).toContain("Would verify");
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].pending).toBeDefined();
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].pending).toBeUndefined();
+});
+
+test("native transport disables local dispatch and creation hooks cannot re-enable it", () => {
+  const f = fixture();
+  f.bind();
+  expect(
+    f.run([
+      "bind",
+      "--agent",
+      "codex",
+      "--session",
+      "11111111-1111-4111-8111-111111111111",
+      "--transport",
+      "native",
+    ]).code,
+  ).toBe(0);
+  expect(
+    f.run(
+      ["hook", "--agent", "codex"],
+      JSON.stringify({
+        session_id: "11111111-1111-4111-8111-111111111111",
+        hook_event_name: "PostToolUse",
+        tool_input: { command: "gh pr create --draft" },
+      }),
+    ).code,
+  ).toBe(0);
+  expect(
+    f.run(
+      ["hook"],
+      JSON.stringify({
+        session_id: "11111111-1111-4111-8111-111111111111",
+        hook_event_name: "Stop",
+      }),
+    ).code,
+  ).toBe(0);
+  expect(f.run(["tick"]).out).toContain("native transport");
+  expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
+});
+
+test("unavailable Checks do not disable independent feedback repairs", () => {
+  const f = fixture();
+  f.bind();
+  f.snapshot.failChecks = true;
+  f.save();
+  expect(f.run(["tick"]).code).toBe(1);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].seen).toHaveProperty(
+    "comment:11",
+  );
+  expect(f.run(["tick"]).code).toBe(1);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("the publishing login cannot be configured as a self-triggering reviewer", () => {
+  const f = fixture();
+  expect(f.run(["configure", "--reviewer", "owner"]).err).toContain(
+    "publishing login",
+  );
+});
+
+test("a published CI repair re-arms failures on the new head", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.pushCiAgent = true;
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "failure",
+      completed_at: "today",
+    },
+  ];
+  const oldHead = f.snapshot.pr.headRefOid;
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  expect(current.pr.headRefOid).not.toBe(oldHead);
+  expect(f.git(["rev-parse", "HEAD"])).toBe(current.pr.headRefOid);
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+  current.checks = [
+    {
+      id: 102,
+      head_sha: current.pr.headRefOid,
+      status: "completed",
+      conclusion: "failure",
+      completed_at: "later",
+    },
+  ];
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
+});
+
+test("transport ownership cannot change during an active local runner", () => {
+  const f = fixture();
+  f.snapshot.switchNativeDuringAgent = true;
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  expect(current.nativeSwitchResult).toBe(1);
+  expect(current.nativeSwitchError).toMatch(/EEXIST.*run-[a-f0-9]+\.lock/);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].transport).toBe("local");
+});
+
+test("post-run Checks denial does not trap new feedback behind pending CI verification", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.failChecksAfterAgent = true;
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "failure",
+      completed_at: "today",
+    },
+  ];
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(1);
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].pending).toBeUndefined();
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  current.comments = [
+    {
+      id: 12,
+      user: { login: "reviewer[bot]" },
+      body: "Later feedback",
+      updated_at: "today",
+    },
+  ];
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  expect(f.run(["tick"]).code).toBe(1);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
+});
+
+test("a deferred receipt survives dirty work and retry verifies without another paid run", () => {
+  const f = fixture();
+  f.bind();
+  f.snapshot.failAfterAgent = true;
+  f.save();
+  expect(f.run(["tick"]).code).toBe(1);
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  current.failGh = false;
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  const userFile = join(f.root, "human-work.txt");
+  writeFileSync(userFile, "preserve me");
+  expect(f.run(["tick"]).err).toContain("dirty");
+  const paused = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(paused.paused).toBe(true);
+  expect(paused.pending).toBeDefined();
+  expect(paused.pending.events).toHaveProperty("comment:11");
+  expect(readFileSync(userFile, "utf8")).toBe("preserve me");
+  rmSync(userFile);
+  expect(
+    f.run(["retry", "--session", "11111111-1111-4111-8111-111111111111"]).code,
+  ).toBe(0);
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("malformed post-run base comparison defers receipt verification rather than pausing", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.rebaseAgent = true;
+  f.snapshot.invalidCompareAfterAgent = true;
+  f.git(["commit", "--allow-empty", "-m", "feat(test): feature before base"]);
+  f.advanceBase();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(1);
+  const binding = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(binding.paused).toBe(false);
+  expect(binding.pending).toBeDefined();
+  const current = JSON.parse(readFileSync(join(f.root, "github.json"), "utf8"));
+  current.invalidCompare = false;
+  writeFileSync(join(f.root, "github.json"), JSON.stringify(current));
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("current-head cancellation wakes diagnosis once without review comments", () => {
+  const f = fixture();
+  f.snapshot.comments = [];
+  f.snapshot.fixCiAgent = true;
+  f.snapshot.checks = [
+    {
+      id: 101,
+      head_sha: f.snapshot.pr.headRefOid,
+      status: "completed",
+      conclusion: "cancelled",
+      completed_at: "today",
+    },
+  ];
+  f.save();
+  f.bind();
+  expect(f.run(["tick"]).code).toBe(0);
+  const resumes = f.recorded().filter((call) => call.tool === "codex");
+  expect(resumes).toHaveLength(1);
+  expect(resumes[0].input).toContain("intentional cancellation");
+  expect(f.run(["tick"]).code).toBe(0);
+  expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
 });
