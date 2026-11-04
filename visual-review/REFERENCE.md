@@ -299,14 +299,18 @@ Detector output is supporting evidence, not final judgment. Map each hit to the 
 
 ## Screenshot callouts
 
-When screenshots exist, annotate or describe numbered callouts:
+When screenshots exist, annotate numbered callouts:
 
 1. Assign callout numbers to visible issues.
 2. Reference those numbers in findings.
 3. Include viewport, state, and browser.
 4. Use the squint test: name what remains dominant when details blur.
 
-If image annotation is unavailable, write text callouts: "Callout 2: right side of pricing card, mobile 390x844".
+For PR evidence, follow [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations):
+cover all changed results, not only review findings, and pair IDs with a change legend.
+If image annotation is unavailable during standalone review, write text callouts:
+"Callout 2: right side of pricing card, mobile 390x844" and report the gap. This fallback
+does not satisfy the PR publication requirement without an explicit user waiver.
 
 ## Environment fingerprint
 
@@ -481,7 +485,7 @@ Add a compact design-language strip:
 
 ### Callouts
 
-Screenshots can include numbered callouts. Each finding references callout number, screenshot path, viewport, browser, and state. If image annotation is unavailable, describe callouts in text.
+Use the [screenshot callouts](#screenshot-callouts) contract. Each finding references callout number, screenshot path, viewport, browser, and state; a local report does not replace annotated media in the PR body.
 
 ### Finding cards
 
