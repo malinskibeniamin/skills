@@ -28,7 +28,9 @@
   request continues after its concise plan through commit and push; an explicit local,
   no-commit, or no-push instruction stops earlier. Stop for plan approval only when the user
   requested planning/grilling or a material reserved decision remains.
-- A PR request ends after one CI status snapshot; ship and `/go` also never wait for
-  CI/reviews/approvals. Follow `shared/review-enforcement.md`; preserve hosted merge policy.
-  Monitoring and feedback need explicit scope; `/plow-ahead` is not delegation consent.
+- Owned PR requests include automatic CI/feedback/base maintenance through
+  `shared/delivery-workflow.md`; preserve hosted merge policy and explicit narrower stops.
+  Use host-authorized wakes rather than polling; unavailable monitoring is a visible gap,
+  not green readiness. `/plow-ahead` is not delegation consent. Standing owner consent covers only its explicit review scope; preserve model routes
+  and disclose unavailable providers.
 - `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Keep the owner-selected Opus/Sol `xhigh` routes; unknown usage never invents a 50% effort gate. Authorized unknown-usage agent waves checkpoint after one explicitly requested wave.

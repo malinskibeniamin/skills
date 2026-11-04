@@ -154,7 +154,7 @@ fi
 if [ -n "$_current_root" ]; then
   _harness_root=$(cd "$(dirname "$0")/../.." && pwd -P)
   _ctx="${_ctx:+$_ctx
-}[harness-setup] Automatically set up local review safeguards during authorized delivery. No CI/review waiting; preserve hosted policy unless the owner explicitly requests changes: read $_harness_root/shared/review-enforcement.md (Automatic setup). Preserve read-only/local-only and narrower endpoints; startup alone authorizes no hosted writes."
+}[harness-setup] Automatically set up local review safeguards during authorized delivery. Follow $_harness_root/shared/delivery-workflow.md#automatic-pr-maintenance for owned-PR upkeep; preserve hosted policy unless the owner explicitly requests changes: read $_harness_root/shared/review-enforcement.md (Automatic setup). Preserve read-only/local-only and narrower endpoints; startup alone authorizes no hosted writes."
 fi
 
 # ── Capture typecheck baseline (opt-in, background) ──────────────

@@ -100,6 +100,16 @@ class ContextTest(unittest.TestCase):
             self.assertEqual(self.result("full-send", "--babysit", "--tool", "watch_pull_request")["pr_watch"], "foreground")
             self.assertEqual(self.result("full-send", "--babysit", "--allow-wake", "--tool", "watch_pull_request")["pr_watch"], "native")
 
+    def test_owned_pr_work_can_select_native_maintenance_without_full_send(self):
+        for t3 in (False, True):
+            if t3:
+                self.t3()
+            result = self.result("work", "--babysit", "--allow-wake", "--tool", "watch_pull_request")
+            self.assertEqual(result["pr_watch"], "native")
+            self.assertEqual(self.result("work", "--babysit")["pr_watch"], "foreground")
+            # Ordinary work without a PR-maintenance selection never invents consent.
+            self.assertEqual(self.result("work", "--tool", "watch_pull_request")["pr_watch"], "not-requested")
+
     def test_missing_native_check_does_not_invent_a_command(self):
         self.t3()
         self.manifest["scripts"] = {"test": "do-not-run-full-suite"}
@@ -118,7 +128,7 @@ class ContextTest(unittest.TestCase):
         self.write("package.json", json.dumps(self.manifest))
         result = self.cli("tdd", "--babysit")
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("full-send", result.stderr)
+        self.assertIn("work or full-send", result.stderr)
         result = self.cli("full-send", "--allow-wake")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("requires --babysit", result.stderr)

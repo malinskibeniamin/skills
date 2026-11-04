@@ -19,7 +19,7 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/resolve-pr-feedback.excalidraw)
 
-對照來源分類回饋，修復適用缺陷，並核實託管狀態。其他執行聲稱已完成時，使用 `/agent-watchdog`。
+其他執行的完成聲明：使用 `/agent-watchdog`。
 
 ## 輸入 [#input]
 
@@ -49,11 +49,9 @@ type: skill
 
 取得討論串（含機器人評論）、評論與完整審查內文的所有分頁，涵蓋差異範圍外的發現；檢查[證據時效](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness)。回覆時提供證據。
 
-沒有新項目時，完成 rebase 並回報實際處理狀態；等待決策不等於完成。
-
 ### 3. 修復叢集 [#3-repair-clusters]
 
-依根因分組；將每項發現記為已修復（迴歸證據）、已拒絕（反例/來源）或受阻（缺少證據/決策）。在所屬分支修復已接受的群組；測試並提交 `fix(review): <cluster summary>`。
+依根因分組：已修復（迴歸證據）、已拒絕（反證）或受阻（缺少證據／決策）。在所屬分支修復已接受的群組；測試並提交 `fix(review): <cluster summary>`。
 
 ### 4. 回覆並解決 [#4-reply-and-resolve]
 
@@ -61,10 +59,7 @@ type: skill
 
 ### 5. 推送和 CI [#5-push-and-ci]
 
-普通 PR 每次完成 CI 修復或 rebase 後都要推送，並執行請求的 CI 動作。對於堆疊下層，執行
-`${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`；上層 rebase
-或 push 可能重寫上層分支，必須先取得明確授權。監控所有受影響 PR。僅在
-請求終點負責修復時，才在總結前修復 CI。
+一般由目前使用者擁有的 PR：每次完成經驗證的 CI 修正或變基後都要推送；自動處理回饋，並持續執行[維護循環](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)，無須再次由人工觸發。遵守明確且較窄的停止條件。對於堆疊下層，執行 `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`；對上層分支變基或推送前，必須先取得明確授權。總結前先修復 CI。
 
 ### 6. 完整性驗證 [#6-completeness-verification]
 
@@ -75,22 +70,19 @@ bash scripts/pr-unresolved-count.sh
 bash scripts/pr-unresolved-count.sh --verbose
 ```
 
-第一條命令必須輸出 `0`。該封裝隱藏僅 GraphQL 可見的執行緒解決細節。
+要求輸出 `0`。
 
 ### 7. 總結 [#7-summary]
 
-每個根因及處理狀態一條項目符號，並附託管討論串和 CI 的實際狀態。
+回報處理狀態、討論串及 CI。
 
 ## 迭代策略 [#iteration-policy]
 
 - AI 自審：結果無問題時停止；兩次未通過後，重新評估方案與缺少的脈絡。參見[收斂規則](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#make-review-converge)。
 - 人工回饋：交接前必須處理每個討論串，這項義務不設輪次上限。
-- 自動修正派送 3 輪回饋處理後暫停。明確執行 `retry` 前重新評估方案；暫停不代表完成。僅更新基準分支不消耗此預算。
+- 自動修復：對未變更的事件去重；新發現不會耗盡固定的累積回饋輪次預算。對受阻的 CI 去重，但不停止後續回饋及基底分支維護。執行器或歸屬問題必須明確呈現，不得視為完成。
 - 首次完整審查後，重點複查變更差異與既有發現；假設改變時擴大範圍。依根因去重；解決既有討論串，而非重複發布。
-  完整性鉤子阻止未解決的討論串或待處理變更請求。
 
 ## 自動喚醒 [#automatic-wake-up]
 
-自動處理日後的回饋、不需人工介入：[主動啟用設定](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)
-會恢復原始功能工作階段，並透過鉤子綁定日後的 PR。一般回饋處理絕不會啟用監看。
-保持草稿狀態；絕不自動合併。
+遵循[自動維護](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)；[本機設定](https://github.com/malinskibeniamin/skills/blob/main/resolve-pr-feedback/AUTO-REVIEW.md)仍須主動啟用。保留草稿狀態；絕不自動合併。

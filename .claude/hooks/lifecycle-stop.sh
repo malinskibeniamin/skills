@@ -9,7 +9,7 @@ input=$(cat)
 # Lifecycle gates (sequential):
 #   commit → commit, stop
 #   push   → commit + push, stop
-#   pr/ship → verify + commit + push + PR, stop without CI/review waiting
+#   pr/ship → verify + commit + push + PR; author skill owns maintenance continuation
 #   All pass → allow finish
 
 source "$(dirname "$0")/../../shared/hook-lib.sh" 2>/dev/null || true
@@ -126,7 +126,7 @@ if [ -z "$pr_number" ]; then
   hook_stop_block "No PR for '$branch'. Create one NOW: gh pr create --fill — then retry."
 fi
 
-# Publication completes delivery for every repository. CI/review diagnostics belong
-# in the receipt, not a Stop gate; monitoring or feedback repair needs explicit scope.
+# This hook checks publication. The author workflow owns automatic PR upkeep and
+# native wake registration; publication alone is not production readiness.
 # Hosted merge policy and merge authorization remain separate from delivery.
 exit 0

@@ -143,9 +143,16 @@ Reviewer: "Yes, if CLI output is customer-facing surface. Use terminal evidence,
 Developer: "Run Prime before starting on this branch."
 Domain expert: "Prime is for current-state orientation. Use Handoff only to transfer decisions from one session to next."
 
+**Maintained PR**:
+An owned pull request whose author automatically handles applicable feedback, failing CI
+and base movement through the authorized continuation transport. Publication alone is not
+readiness; maintenance preserves draft state and the human merge decision.
+_Avoid_: Automatic merge, one-snapshot delivery
+
 **Review repair round**:
-One automatic feedback dispatch to the bound feature session. A persisted budget pauses
-repeated repair for explicit reassessment; dispatch is not finding resolution or a reviewer pass.
+One automatic feedback dispatch to the bound feature session. Unchanged events are
+deduplicated; new findings do not exhaust a lifetime round budget. Dispatch is not finding
+resolution or a reviewer pass.
 _Avoid_: Review accuracy, reviews-to-pass
 
 **Quota guard**:

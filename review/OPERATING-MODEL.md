@@ -50,8 +50,8 @@ current source rather than rely on reading every trivial diff for shared context
    [gate staging/fallback rules](GATES.md#resume-and-check).
 3. Stop at the first clean result, not a minimum number of rounds. After two
    unsuccessful inline self-review passes, reassess the approach and missing context
-   before continuing. Automatic repair retains its
-   [three-round pause/retry contract](../resolve-pr-feedback/SKILL.md#iteration-policy).
+   before continuing. Automatic repair follows the
+   [event deduplication contract](../resolve-pr-feedback/SKILL.md#iteration-policy).
    Reassessment is not approval, discarded findings, or delegation permission.
 4. Keep every applicable human/bot thread accounted for: fixed with regression proof,
    rejected with counterevidence, intentional with contract evidence, or accepted risk

@@ -18,10 +18,11 @@ Use the current entrypoint (`work`, `tdd`, `dogfood`, `full-send`). Add `--surfa
 Add repeated `--tool NAME` only for capabilities actually exposed by the current host:
 `preview_status`, `device_list`, `watch_pull_request`. These are discovery entrypoints,
 not proof that every interaction tool or device works. Read their actual schemas before use.
-Pass `--babysit` only for an authorized `/full-send` monitoring endpoint, never a PR-only stop.
-Add `--allow-wake` only when host wake-ups are explicitly authorized for the current task;
-tool availability or merge/ship intent alone does not grant that permission. Otherwise
-stop after the current status snapshot; monitoring needs an explicit request.
+For an owned PR maintained through `work` or `full-send`, pass `--babysit`; it is not
+limited to merge endpoints. Honor an explicit publication-only/no-monitoring stop.
+Add `--allow-wake` only when the host authorizes wakes for this task. Tool availability
+alone does not grant permission; a user request for unattended upkeep does. A missing
+authorized continuation is a visible capability gap, not green readiness.
 
 The JSON selects guidance; it does **not** execute checks, invoke tools, grant authority,
 or prove verification. Repository markers identify a layout, not a trusted identity.
@@ -54,14 +55,21 @@ host happens to expose Browser or Device tools. A resolver result is not a dogfo
 
 Host and repository are separate: a T3 host can watch a PR for another application.
 For `pr_watch: native`, save repository/PR, verified head/base, evidence and pending work
-to the session checkpoint, then call the exposed `watch_pull_request` using its actual
+to the session checkpoint. If the local dispatcher is configured, first select this owner
+with `bun <plugin-root>/scripts/pr-review-auto.ts bind --agent <codex|claude> --session <original-uuid> --transport native`.
+This excludes local dispatch, survives PR-creation hooks, and refuses an active local runner.
+Then call the exposed `watch_pull_request` using its actual
 schema. Confirm registration before ending the turn for the host to wake it. Do not also
 poll or sleep. A failed or uncertain registration requires readback/recovery from the tool
 contract; never report it as successful or register duplicate watchers blindly.
 
-On wake, refresh head/base, checks and feedback before continuing `/full-send`. Registration
-or pending CI is not completion, approval or merge permission. If the tool is unavailable,
-use the existing foreground GitHub check loop; do not install a daemon or change hosts.
+On wake, refresh head/base, checks and all feedback, then run the
+[maintenance loop](delivery-workflow.md#automatic-pr-maintenance): fix, verify and push
+without another human trigger. The watch survives wakes; do not register it again.
+Registration or pending CI is not completion, approval or merge permission. Unwatch on
+terminal handoff according to the host tool contract, not merely after a push. If native
+watch is unavailable, reuse an already configured local dispatcher or authorized foreground
+loop; report missing continuation rather than silently installing a daemon or changing hosts.
 
 [Upstream guidance reviewed at 96f09c65](https://github.com/pingdotgg/t3code/blob/96f09c6558b098f05ad0c027afa3846209c03d4f/AGENTS.md).
 The current target and exposed tool contracts remain authoritative, not this review date.

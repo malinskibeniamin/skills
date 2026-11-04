@@ -252,7 +252,7 @@ test("startup routes both hosts to generic no-wait guidance without hosted write
     const context = JSON.parse(result.stdout.toString()).hookSpecificOutput
       .additionalContext;
     expect(context).toContain("Automatically set up");
-    expect(context).toContain("No CI/review waiting");
+    expect(context).toContain("delivery-workflow.md#automatic-pr-maintenance");
     expect(context).toContain(
       new URL("../shared/review-enforcement.md", import.meta.url).pathname,
     );

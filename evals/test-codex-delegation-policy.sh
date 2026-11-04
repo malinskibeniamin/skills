@@ -13,12 +13,12 @@ run_content_eval "$APPENDIX" 'do not.*recursive.*`codex exec`' \
   "native Codex does not recursively invoke codex"
 run_content_eval "$APPENDIX" "run.*axes inline" \
   "required review coverage falls back inline"
-run_content_eval "$APPENDIX" 'ship and `/go` also never wait' \
-  "Codex keeps ship delivery non-blocking without repository exceptions"
+run_content_eval "$APPENDIX" 'automatic CI/feedback/base maintenance' \
+  "Codex keeps owned PR maintenance automatic"
 run_content_eval "$APPENDIX" 'preserve hosted merge policy' \
   "no-wait delivery preserves native merge policy"
-run_content_eval "$APPENDIX" 'Monitoring and feedback need explicit scope' \
-  "monitoring and feedback remain explicitly scoped work"
+run_content_eval "$APPENDIX" 'Use host-authorized wakes rather than polling' \
+  "automatic maintenance preserves host wake authorization"
 run_content_eval "$APPENDIX" '`/plow-ahead`.*(not.*delegation consent|grants no delegation)' \
   "plow-ahead does not silently authorize subagents"
 run_content_eval "$APPENDIX" "Codex usage unavailable to the harness" \

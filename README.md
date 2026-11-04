@@ -273,8 +273,9 @@ You: "Build feature X" or "Fix these 5 issues overnight"
 ```
 
 Say the endpoint once: local, commit, push, draft PR, verified readiness, or explicitly
-merged. Ordinary implementation defaults to push; draft PR stops after publication and
-one CI snapshot. Ship/readiness owns CI and feedback repairs, not automatic merge.
+merged. Ordinary implementation defaults to push. Owned PRs, including drafts, get
+automatic CI/review/base maintenance: repair, verify and push without repeated nudges.
+Draft state and the human merge decision remain intact. Pending CI is not readiness.
 
 [Evidence routing](shared/change-evidence.md) selects real screenshots/video for visible
 changes, diagrams for changed relationships, and measurements for performance claims.
@@ -285,8 +286,11 @@ Existing commands remain compatible: `/development-lifecycle` implements the aut
 `/go` selects readiness, `/full-send` selects authorized merge unless narrowed, and
 `/commit-push-pr` handles publication. `/pr-shepherd` or `/work maintain all my open PRs`
 runs one repository sweep, repairs only this workspace and routes other owners. These
-are presets/helpers, not extra commands to chain. History cleanup and unattended jobs
-remain explicit opt-ins.
+are presets/helpers, not extra commands to chain. Coherent owned commits consolidate
+before rebase with guarded history recovery. Native PR wakes follow host authorization;
+new persistent jobs still require setup consent. Requested council review uses the
+permitted routes and exposes missing providers instead of inventing sign-off.
+[Maintenance contract](shared/delivery-workflow.md#automatic-pr-maintenance).
 
 Delivery ownership: [diagram](docs/architecture/author-delivery.png) and
 [editable source](docs/architecture/author-delivery.excalidraw).

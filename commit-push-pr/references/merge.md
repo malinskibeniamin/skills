@@ -9,7 +9,8 @@ all repositories; it does not waive hosted merge requirements. Honor an explicit
 policy making CI/reviews/approvals advisory or allowing admin bypass, without repository
 identity special cases. Preserve publication, ownership, mergeability, deployment-scope,
 expected-head and final readback checks. That policy is not itself permission to merge.
-Report current blockers instead of waiting unless monitoring was explicitly requested.
+Continue pending CI/review work through the owned PR's host-authorized maintenance
+transport; report genuine blockers. Merge authorization never bypasses host wake permissions.
 
 ## Verify the merge candidate
 

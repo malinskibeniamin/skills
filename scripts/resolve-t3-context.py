@@ -54,11 +54,11 @@ def main():
     parser.add_argument("--surface", choices=("none", "web", "mobile", "both"), default="none")
     parser.add_argument("--effect", action="store_true", help="The current task changes or reviews Effect code")
     parser.add_argument("--tool", action="append", default=[], help="Observed host capability name; repeat as needed")
-    parser.add_argument("--babysit", action="store_true", help="The requested endpoint authorizes PR monitoring")
+    parser.add_argument("--babysit", action="store_true", help="The owned PR endpoint selects maintenance within host authorization")
     parser.add_argument("--allow-wake", action="store_true", help="The current task explicitly authorizes host wake-ups")
     args = parser.parse_args()
-    if args.babysit and args.entrypoint != "full-send":
-        parser.error("--babysit is only valid for the full-send entrypoint")
+    if args.babysit and args.entrypoint not in ("work", "full-send"):
+        parser.error("--babysit is only valid for work or full-send entrypoints")
     if args.allow_wake and not args.babysit:
         parser.error("--allow-wake requires --babysit and explicit host-wake authorization")
     print(json.dumps(resolve(args), indent=2))

@@ -27,7 +27,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    # PR portability uses the standard Intel pool after hosted arm64 queue failures.
+    # Keep check names and all steps; push, scheduled and manual runs retain arm64.
+    runs-on: ${{ matrix.os == 'macos-latest' && github.event_name == 'pull_request' && 'macos-26-intel' || matrix.os }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
@@ -67,6 +69,7 @@ jobs:
 
       - name: Tool versions
         run: |
+          uname -srm
           bash --version | head -1
           jq --version
           perl --version | head -2 | tail -1

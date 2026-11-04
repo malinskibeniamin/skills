@@ -60,18 +60,19 @@ auto-merge, enqueue, or bypass protection. Unwatch before handing back readiness
 Use upstream's problem-first summary and verified model/harness attribution with
 the host's evidence, risk and rollback sections. Publication stays with
 `commit-push-pr`: check for the current PR, verify, commit, push, create/update,
-read back and take one CI snapshot. **Honor requested drafts**; upstream's
-non-draft default does not apply. A REST fallback must retain draft state too.
-PR creation alone authorizes neither monitoring nor merge. No invented metrics,
+read back and enter [automatic maintenance](delivery-workflow.md#automatic-pr-maintenance).
+**Honor requested drafts**; upstream's non-draft default does not apply. A REST fallback
+must retain draft state too. Host authorization governs wakes; merging remains explicit. No invented metrics,
 human endorsement, reviewer results or model identities.
 
 ## babysit-pr
 
 Handle current checks and findings first. Use one watcher per PR, owned by the
-parent thread; child reviewers never watch. When monitoring, watching or babysitting
-is requested and T3 exposes `watch_pull_request`, checkpoint, register and end the
-turn; no polling or second watcher. Readiness/ship intent alone does not authorize waiting or monitoring. Call
-`unwatch_pull_request` before a handoff or user question. A wake is new evidence,
+parent thread; child reviewers never watch. For owned PR maintenance with host-authorized
+wakes and exposed `watch_pull_request`, handle current events, checkpoint, register once
+and end the turn; no polling or second watcher. An explicit unattended upkeep request
+selects this path without per-event prompts. Call `unwatch_pull_request` at terminal
+handoff or before a user question as required by the host, not after every push. A wake is new evidence,
 not approval. Read back uncertain tool outcomes before retrying.
 
 Outside T3, for authorized monitoring only, use the snapshot's executable
@@ -97,8 +98,8 @@ Preserve verified authorship and co-author trailers. Continue the current owned
 PR unless a replacement was explicitly requested; do not silently import foreign
 commits, rewrite a shared branch, close the source PR or take over another owner.
 Reassess old work with `modernize` when needed. Follow the requested endpoint:
-an ordinary draft/PR request stops after publication, not upstream's automatic
-babysitting continuation.
+an ordinary owned draft/PR continues through automatic maintenance under host wake
+authorization, while explicit publication-only/no-monitoring stops remain narrower.
 
 ## modernize
 

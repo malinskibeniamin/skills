@@ -793,6 +793,8 @@ test("consumer gates are additive and rubric changes invalidate otherwise identi
   expect(f.run("plan", "--base", "main").error).toContain("cannot be shadowed");
 });
 
+// This scenario invokes 25 real CLIs; its 26-call predecessor took 17.1s on Intel CI.
+// Give only this scenario bounded startup headroom; other cases retain 15 seconds.
 test("verification retains claims and requires distinct reviewers and concrete counterevidence", () => {
   const f = checkout();
   const plan = f.plan();
@@ -856,9 +858,11 @@ test("verification retains claims and requires distinct reviewers and concrete c
     readFileSync(join(plan.directory, "results/correctness.json"), "utf8"),
   );
   expect(record.result.findings).toHaveLength(1);
-  expect(f.run("render").text).toContain("rollback regression");
-  expect(f.run("render").text).toContain("fixture-reviewer");
-});
+  const rendered = f.run("render");
+  expect(rendered.code).toBe(0);
+  expect(rendered.text).toContain("rollback regression");
+  expect(rendered.text).toContain("fixture-reviewer");
+}, 30_000);
 
 test("prior findings cannot disappear through a later applicability skip", () => {
   const f = checkout();
