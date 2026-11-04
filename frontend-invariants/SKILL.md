@@ -6,25 +6,27 @@ paths:
   - "**/*.ts"
 ---
 
-When changing interfaces, types or shared state, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#design).
+For interface, type or shared-state changes, read [Poteto](../shared/POTETO-NATIVE.md#design).
 
 Override conflicting `/stack-registry` mechanics. Fix at source; suppress only with a same-line reason: escapes train later sessions.
 
-For TypeScript assertions or widened contracts, use [anti-slop checks](../shared/anti-slop.md)
-to preserve type evidence; a safety comment alone does not justify a cast.
+For TypeScript assertions/widened contracts, use [anti-slop](../shared/anti-slop.md):
+preserve type evidence; safety comments do not justify casts.
 
 ## Rendering
 
 1. Never lie: no fake defaults, lossy display of undecodable data, or truthiness hiding numeric zero. Degraded states name possible causes, preserve the reported reason, and offer retry.
 2. Put machine truth beside human labels where operators need it; derive labels, never present keys as labels.
 3. Hide unready features; reserve loading layout to prevent CLS.
-4. Handle loading, empty, error, no-permission, disabled, and stuck states. Hide empty chrome only from authoritative loaded state: zero diff totals or a disabled action do not prove no work; preserve errors, untracked work, progress, and recovery paths.
+4. Handle loading, empty, error, no-permission, disabled and stuck states. Hide empty chrome only on authoritative loaded data: zero diff totals or disabled actions do not prove no work. Preserve errors, untracked work, progress and recovery.
 
 ## State
 
 5. URL holds shareable tabs/filters/sort/page; local/session storage holds preferences; server cache holds server data; component state dies with its component.
-6. Section entry pushes history; intra-section navigation replaces it.
-7. Async state must be scoped by full environment/org/user identity. Await teardown before navigation; abort or use last-write-wins; never read defaults before providers resolve.
+6. Push history on section entry; replace within sections.
+7. Scope async state by environment/org/user; await teardown before navigation. Abort stale work or use last-write-wins; read defaults after providers resolve.
+
+Editable server defaults: read [override guidance](WRITABLE-DERIVED-STATE.md).
 
 ## Design system
 

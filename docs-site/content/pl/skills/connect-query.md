@@ -32,4 +32,6 @@ Wyjątek: `// allow: direct-query [reason]`
 - **Kierunek walidacji**: walidacja proto po stronie klienta (protovalidate) dotyczy danych, które WYSYŁASZ. Odpowiedzi są już zweryfikowane przez serwer — nie weryfikuj ponownie odczytywanych danych.
 - **Opcjonalne pola proto mają wartość `undefined`, nigdy `null`**; nieograniczone listy korzystają z zapytania nieskończonego i opcji „wczytaj więcej”; odpytywanie okresowe używa wbudowanego `refetchInterval`, a nie własnych liczników czasu.
 
+Edytowalne dane zapytań: przeczytaj [zapisywalny stan pochodny](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md), aby poznać lokalne nadpisania i przekazanie kontroli po zapisie lub ponownym pobraniu danych; wiarygodne dane serwera przechowuj w pamięci podręcznej zapytań.
+
 Pułapki Protobuf (Timestamp, Duration, Any, wzorce pamięci podręcznej): [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/REFERENCE.md). Konfiguracja: [SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/SETUP.md).

@@ -5,7 +5,7 @@
 `bun` | TS 7 `tsc`/tsrs | Biome | Vitest | React Doctor
 
 Local policy wins.
-Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
+[Navigation](shared/repo-navigation.md).
 
 - UI: `@/components/ui/` first; buttons: `<Button>`, variants/tokens.
   Functional React components; React Compiler owns memoization.
@@ -18,13 +18,13 @@ Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
 Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
-Code quality: [verifiability](shared/verifiability.md).
+[Code quality](shared/verifiability.md).
 
 ## Human-facing text
 
 `shared/communication.md`: decision/value/ask first; own claims, intent,
 uncertainty. Above 200 words: <=120-word brief, then detail.
-Count word limits with a tool; never invent human endorsement.
+Tool-count word limits; never invent human endorsement.
 
 Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
 objective/assumptions/references/risks/implementation/verification/superseded choices.

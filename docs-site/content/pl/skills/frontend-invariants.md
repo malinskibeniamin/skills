@@ -40,6 +40,8 @@ Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, 
 6. **Nawigacja wewnątrz sekcji zastępuje historię; wejście do sekcji dodaje wpis** -- przycisk Wstecz opuszcza sekcję, zamiast odtwarzać każdą kartę.
 7. **Powtarzający się asynchroniczny metabłąd**: stan rozwiązany asynchronicznie, odczytany zbyt wcześnie lub zbyt szeroko określony -- kluczuj pamięci podręczne według ich pełnego zakresu (środowisko/organizacja/użytkownik), zaczekaj na zakończenie sprzątania przed nawigacją, anuluj nieaktualne odpowiedzi lub stosuj zasadę ostatniego zapisu, nie odczytuj domyślnych wartości flag lub konfiguracji przed rozwiązaniem dostawcy.
 
+Edytowalne wartości domyślne z serwera: przeczytaj [zasady nadpisywania](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md).
+
 ## Relacja z systemem projektowym
 8. **Tokeny zamiast doraźnych wartości** -- kolor, odstępy i typografia pochodzą ze skali; jednorazowe wartości projektanta zaokrąglaj do najbliższego stopnia; nigdy nie wpisuj na stałe wartości hex/px, jeśli istnieje token.
 9. **Naprawiaj współdzielone komponenty u źródła** -- nigdy nie twórz odgałęzień, nie zmieniaj stylów lokalnie ani nie używaj głębokich selektorów wobec współdzielonego komponentu. Wiersze właściwe jednej funkcji trzymaj przy niej, zamiast dodawać wariant prymitywu dla jednego odbiorcy. Sprawdzaj obliczone style między warstwami kaskady i dla połączeń flagi, motywu oraz stanu interakcji; sama niska specyficzność nie gwarantuje pierwszeństwa klas narzędziowych. Tymczasowe odgałęzienie wymaga nazwanego defektu i zadania naprawy w źródle.
