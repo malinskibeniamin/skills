@@ -63,7 +63,7 @@ type: skill
 
 一般由目前使用者擁有的 PR：每次完成經驗證的 CI 修正或變基後都要推送；自動處理回饋，並持續執行[維護循環](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)，無須再次由人工觸發。遵守明確且較窄的停止條件。對於堆疊下層，執行 `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`；對上層分支變基或推送前，必須先取得明確授權。總結前先修復 CI。
 
-### 6. 完整性驗證 [#6-completeness]
+### 6. 完整性驗證 [#6-completeness-verification]
 
 宣告完成前必須沒有未解決的討論串，包括機器人回饋與定位到過期程式碼行的討論串，且不存在陳舊 `CHANGES_REQUESTED`。任何剩餘項都回到分類。`pr-feedback-completeness-stop` 鉤子會強制此狀態。
 

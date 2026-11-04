@@ -67,7 +67,7 @@ without another human trigger. Honor explicit narrower stops. Lower stack layer:
 run `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; require explicit
 authorization before upstack rebase/push. Repair CI before summary.
 
-### 6. Completeness
+### 6. Completeness Verification
 
 Complete: zero unresolved threads (bots/outdated too); no stale
 `CHANGES_REQUESTED`. Enforced by `pr-feedback-completeness-stop`.

@@ -61,7 +61,7 @@ type: skill
 
 对于自己负责的普通 PR，推送每项已验证的 CI 修复或变基，并自动处理反馈；继续[维护循环](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)，无需用户再次触发。遵守明确且更窄的停止条件。对于堆栈下层，运行 `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`；对上层执行变基或推送前必须取得明确授权。总结前修复 CI。
 
-### 6. 完整性验证 [#6-completeness]
+### 6. 完整性验证 [#6-completeness-verification]
 
 声明完成前，未解决的讨论串必须为零，包括机器人反馈和定位到过期代码行的讨论串；不得有陈旧的 `CHANGES_REQUESTED`。由 `pr-feedback-completeness-stop` 强制执行。
 

@@ -73,7 +73,7 @@ bez kolejnego polecenia od człowieka. Zachowaj jawne, węższe punkty zatrzyman
 warstwy stosu uruchom `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`;
 rebase lub push w górę stosu wymaga wyraźnej autoryzacji. Napraw CI przed podsumowaniem.
 
-### 6. Weryfikacja kompletności [#6-completeness]
+### 6. Weryfikacja kompletności [#6-completeness-verification]
 
 Przed deklaracją zakończenia wymagaj zera nierozwiązanych wątków, także uwag botów i wątków
 przy nieaktualnych liniach, oraz braku nieaktualnego `CHANGES_REQUESTED`.
