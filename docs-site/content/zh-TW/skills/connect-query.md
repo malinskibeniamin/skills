@@ -31,4 +31,6 @@ sidebar:
 - **驗證方向**：用戶端的 proto 驗證（protovalidate）適用於你送出的內容。回應已由伺服器驗證，因此不要再次驗證讀取結果。
 - **Proto 選用欄位應為 `undefined`，絕不可為 `null`**；無上限的清單應使用無限查詢搭配「載入更多」；輪詢應使用內建的 `refetchInterval`，不要自行實作計時器。
 
+可編輯的查詢資料：請閱讀[可寫入的衍生狀態](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md)，了解本機覆寫值，以及儲存或重新擷取資料後的控制權交接；伺服器的權威資料仍保存在查詢快取中。
+
 Protobuf 注意事項（Timestamp、Duration、Any、快取模式）：[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/REFERENCE.md)。設定方式：[SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/SETUP.md)。

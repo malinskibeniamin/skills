@@ -31,4 +31,6 @@ sidebar:
 - **验证方向**：客户端 Proto 验证（protovalidate）适用于你发送的数据。响应已经过服务端验证——不要再次验证读取的数据。
 - **Proto 可选字段应为 `undefined`，绝不能为 `null`**；无界列表使用无限查询 + “加载更多”；轮询使用内置的 `refetchInterval`，不要自行实现计时器。
 
+可编辑的查询数据：请阅读[可写派生状态](https://github.com/malinskibeniamin/skills/blob/main/frontend-invariants/WRITABLE-DERIVED-STATE.md)，了解本地覆盖值以及保存或重新获取数据后的控制权交接；服务端的权威数据仍保存在查询缓存中。
+
 Protobuf 注意事项（Timestamp、Duration、Any、缓存模式）：[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/REFERENCE.md)。设置：[SETUP.md](https://github.com/malinskibeniamin/skills/blob/main/connect-query/SETUP.md)。
