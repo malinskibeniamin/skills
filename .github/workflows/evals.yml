@@ -23,11 +23,19 @@ concurrency:
 
 jobs:
   evals:
+    name: evals (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+        # Keep check identities stable while avoiding the ARM pool's allocation
+        # cancellations. Standard Intel macOS retains the Bash/BSD test surface.
+        include:
+          - os: ubuntu-latest
+            runner: ubuntu-latest
+          - os: macos-latest
+            runner: macos-26-intel
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
