@@ -19,6 +19,18 @@ Use the highest evidenced tier. Investigate unknown trust/recovery assumptions.
 Path matches are conservative signals, not a complete classifier; inspect semantic
 impact too. Routine never waives required checks or human approvals.
 
+For sensitive domain changes, locate the authoritative helper and producer contract before
+accepting local arithmetic or a generic migration recipe. Check the evidenced hazards:
+
+- Money: currency-specific minor-unit scale and rounding through existing domain utilities.
+- Live data migrations: table size/workload, actual locking and transaction constraints,
+  interrupted execution and write/deploy availability; choose the database-supported safe path.
+- Payments or other external effects: idempotency across retries, replay and old/new migration
+  paths. Reverting code cannot undo an already-issued payment.
+
+Use these as risk probes, not universal rules about currencies or index syntax. Cheap code
+changes do not make production side effects reversible.
+
 Reuse verified consumer ownership/approval policy. Route sensitive work to designated
 humans; missing policy stays explicit, not invented CODEOWNERS or relaxed tiers.
 Agent votes are not human approvals. New commits invalidate affected evidence and
@@ -67,7 +79,9 @@ another cycle.
 ## Learn from misses and noise
 
 Retain incident/revert base/head, root-cause location, fix, reproduction, impact,
-and missed check. Have a code owner validate the defect/oracle before labeling an
+and missed check, including forward fixes that never produced a revert. Reuse the owning
+rule/test improvement above; a lower revert rate alone can hide unchanged incident risk.
+Have a code owner validate the defect/oracle before labeling an
 evaluation case. Redact private data and isolate executable fixtures.
 
 Pair validated cases with clean controls. Measure bug detection, false positives

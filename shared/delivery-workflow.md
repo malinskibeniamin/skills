@@ -69,6 +69,8 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    repeat the same baseline/candidate scenario under [quantify-impact](../quantify-impact/SKILL.md).
 6. Bind verification and captures to the head SHA and base revision and scenario. Any relevant
    edit or base movement invalidates affected receipts; replay those before claiming success.
+7. Leave [shared area context](repo-navigation.md#leave-shared-context) when the work reveals
+   a missing or stale contract. Update its existing owner, not a parallel session diary.
 
 Stop self-review as soon as it is clean. Repeated noisy findings need diagnosis; hand off only at a genuine
 external blocker, not after scheduled rounds.

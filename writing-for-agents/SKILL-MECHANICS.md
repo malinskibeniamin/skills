@@ -32,3 +32,27 @@ Link repository-owned command scripts/configs instead of copying recipes into
 memory or handoffs. Keep durable rationale; correct stale advice in place rather
 than appending contradictory updates. Label historical snapshots/proposals with
 date, status, and the current-policy pointer. Verify every referenced path exists.
+
+## Improve the owning workflow
+
+For broad authorized harness improvements, inventory registered skills and group them by task
+family. Trace each lesson to its current owner and callers; record a concrete gap, existing
+coverage, or non-applicability. Assess adapters through their local compatibility owner;
+keep pinned upstream bytes intact. A catalogue pass is not a deep review of every skill.
+For a scoped correction, start at the known owner and its callers instead.
+
+Improve the step that changes behavior, not a standalone summary of the source material:
+
+- **Selection:** named outcome, priority, displaced work and smallest useful slice.
+- **Context:** authoritative inputs, domain helpers, invariants and existing area guide.
+- **Execution:** one accountable owner, permitted tools, bounded independent work.
+- **Feedback:** cheapest decisive check, credible failure/recovery and evidence limits.
+- **Exit:** requested endpoint, compact result, durable context and actionable continuation.
+- **Learning:** put a demonstrated miss in its owning type, test, check or scoped guidance;
+  retain a valid control and known-bad case. Read-only advice proposes changes, not writes.
+
+Keep shared rules once at a loaded owner, with skill-specific steps where needed. Verify
+both lifecycle routing and direct invocations reach them. Preserve exceptions, permission
+boundaries and context budgets; replace stale instructions rather than prefix every skill
+with identical prose. Use the owning validator or prompt-contract check before and after;
+instruction checks prove publication/routing, not adherence, review accuracy or productivity.

@@ -72,6 +72,12 @@ subjective product/design taste -> No hook. Need evidence + user-impact sentence
 
 Read existing tokens/theme and at least one representative component or page before judging. Check design tokens, Tailwind config/theme, shadcn/ui or `@/components/ui` components, registry components, shared typography, Button variants, form controls, layout shell, and neighboring surfaces. Preserve system intent when it works; call out drift when local choices break the system or user task.
 
+Treat generated style as a proposal, not design intent. Name the user's task, the intended
+brand/register and the existing reference or tokens before judging polish. A generic kit
+can look coherent while missing hierarchy, identity or the product's purpose; show that
+mismatch with surface evidence. Preserve deliberate design rather than substituting a
+model default, and keep subjective preference separate from correctness findings.
+
 ## Review lanes
 
 Critique lane = what the surface communicates: first read, hierarchy, scan path, copy, emotional fit. Audit lane = whether it holds under runtime constraints: accessibility, performance, responsive behavior, browser/platform risk. Polish lane = whether it is ready to ship: design-system alignment, states, microcopy, visual consistency, rough edges.

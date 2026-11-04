@@ -6,6 +6,19 @@ A finding is only a finding with evidence. "Probably has N+1 queries somewhere" 
 
 ---
 
+## Agent workflow bottlenecks
+
+For agent DX or throughput work, trace one real task from request to verified outcome.
+Identify the current limiter: unclear priority/context, generation, local verification,
+operator review/repair, CI or external coordination. Use observed queues, repeated misses,
+commands and elapsed waits; unavailable attention or quality data stays unknown.
+
+Rank the smallest change that relieves that limiter without increasing incidents, false
+positives or operator work. Faster code generation, more PRs or more tokens are not outcome
+evidence. Check whether another lane would displace higher-priority work; park unrelated
+opportunities with a reopen condition. Reassess after a verified improvement rather than
+adding concurrency to hide a slow feedback loop. Report/Plan remain advisor-only.
+
 ## 1. Correctness / Bugs
 
 The highest-trust category -- real bugs found by reading, not speculation.

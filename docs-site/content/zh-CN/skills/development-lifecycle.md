@@ -21,9 +21,7 @@ type: skill
 
 进行多步骤实现或发布时，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution)。
 
-任务需要实现提供的 Figma 设计或图片时，加载 [build-design](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)，用于获取源证据、映射设计 token和比较视口。保留必要的安全与错误状态以及当前交付循环；匹配图片不能免除这些要求。
-
-作者入口：`/work`。负责一个结果；自动选择辅助技能。编辑前阅读[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明确归属、隔离和终点。遵循[沟通约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
+作者入口：`/work`。负责一个结果。编辑前阅读[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明确归属、隔离和终点。遵循[沟通约定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#admit-work-by-priority)及[依赖加载规则](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 
 ## 结果契约 [#outcome-contract]
 
@@ -43,13 +41,15 @@ type: skill
 
 ### 检查 [#inspect]
 
-根据源证据解决盲点或易变的未知项。遵循现有惯用方式和已验证的规模；将事项分类为查阅、原型验证、可逆假设或暂停触发条件。
+阅读工单、正文、标签和评论；明确标题和引用。通过查阅、探查、可逆假设或暂停来解决盲点和易变的未知项；遵循仓库惯例和已验证的规模。
 
 编写前阅读适用范围的规范，并从脚本、配置和 CI 中确定仓库原生的格式化、lint、类型检查和受影响测试命令。记录相关的基线失败；沿用已安装的工具链。
 
 处理 T3 检出或 Effect 代码时，以 `work` 为入口解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；在整个循环中使用返回的目标项目指南和范围检查。
 
 编辑前加载[变更证据路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及适用的负责技能。按比例评估影响；可见编辑前先捕获基线，包括细小文案和共享 UI 的影响。
+
+[Figma/图片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 操作 [#act]
 

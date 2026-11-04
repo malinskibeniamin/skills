@@ -2,7 +2,7 @@
 
 How work is chosen, shaped, verified, written, and reviewed so it passes `/product` on the
 first read. Load when planning or writing a change; in review, cite a craft id beside the
-rule it supports. Numbers are targets, not gates.
+rule it supports. Evidence and reachable outcomes choose scope, not activity targets.
 
 ## Choose the work
 
@@ -11,21 +11,20 @@ rule it supports. Numbers are targets, not gates.
 | `unblock-before-polish` | Red main, flaky gates, broken onboarding, and slow local loops come before new surface; they tax everyone at once. |
 | `pick-compounding-work` | Prefer work every later change pays for: slow CI legs, broken tooling, silent correctness holes, per-request cost. Fix at the source, even in another repository, and link the pair. |
 | `three-outcomes` | Every idea gets one: build the smallest slice, park it with a reopen condition, or point at the existing feature that solves it. |
+| `priority-before-capacity` | Before admitting a cheap fix or another lane, name the beneficiary, urgency and work it would displace. A blocker or urgent failure can change priority; spare agent capacity cannot. |
 | `time-box-out-loud` | Say where low-value work stops: "beyond this change I will not spend more time; reject it if it is not worth it." |
 | `draft-to-learn` | RFCs, proofs of concept, and CI experiments open as drafts and close without regret when they lose. A closed-unmerged rate of zero means nothing risky was tried. |
 
 ## Shape the change
 
-| Size (changed lines) | Target time to merge | Typical content |
-| ---: | ---: | --- |
-| under 50 | about 1 hour | fix, config, copy, dependency bump |
-| 50-200 | a few hours | one behavior with its test |
-| 200-800 | same day | a feature slice behind a default-off switch |
-| over 800 | a planned series | scaffold, generated code, or step n of N |
+Size work by an independently useful outcome, decisive verification and affordable recovery.
+PRs, lines and tokens measure activity, not customer value or sustainable throughput.
+Inspect queueing and repair effort before adding parallel work; cheap generation does not
+make operator attention or production side effects cheap.
 
 | Craft | Check |
 | --- | --- |
-| `merge-within-hours` | Size the PR to merge the day it opens. A PR that needs days of review is a split request. |
+| `reviewable-outcomes` | Keep a slice independently verifiable and understandable with its evidence and recovery path. Split when distinct outcomes or risks compete, not to hit a line count or merge-time quota. |
 | `numbered-series` | Large work is "PR n of N": each step lands on main default off or with zero behavior change, with Deferred and Up next notes. Use `stacked on #N` only when a step cannot land alone, and state the merge order. |
 | `phase-shape-then-semantics` | Land large API or data changes in labelled phases: shape first, semantics next, legacy fields kept until no consumer reads them. |
 | `split-by-blast-radius` | Anything global (retry policy, shared layout, auth) ships alone; adjacent bugs found on the way get their own PRs, linked from this one. |

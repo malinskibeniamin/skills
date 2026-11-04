@@ -36,3 +36,18 @@ Use when orienting in unfamiliar code, choosing commands, or reconciling stale g
   readiness check. A stale index or generated/ignored artifacts outside the graph
   also permits scoped native reads. Quote shell globs and exclude unrelated
   generated/vendor trees, unless those artifacts are the target.
+
+## Leave shared context
+
+When authorized changes reveal a missing or stale area contract, update the existing
+maintained area guide before handoff. Keep a small front door in scoped `AGENTS.md` or
+`CLAUDE.md`, respecting source generators. Record load-bearing invariants, shared helpers,
+ownership boundaries, entrypoints and known failure modes; link the owning verification
+and recovery commands and consequential decisions. Add a scoped guide only when no current
+owner exists and the next contributor would otherwise need to rediscover those facts.
+
+Verify pointers against the changed checkout and replace stale statements in place.
+Keep transient task state, pending checks and next actions in the local checkpoint or PR,
+not permanent area rules. A new session should be able to locate the contract and exercise
+it without the original author or a feed of every PR. This is guidance, not proof of
+shared understanding; read-only reviews report gaps without editing.

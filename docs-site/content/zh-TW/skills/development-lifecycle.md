@@ -21,9 +21,7 @@ type: skill
 
 進行多步驟實作或發佈時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution)。
 
-任務需要實作提供的 Figma 設計或圖片時，載入 [build-design](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)，以取得來源證據、對應設計 token並比較檢視區。保留必要的安全與錯誤狀態以及目前的交付循環；符合圖片不能免除這些要求。
-
-作者入口：`/work`。負責一個結果；自動選擇輔助技能。編輯前閱讀[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明確歸屬、隔離和端點。遵循[溝通約定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md)及[相依載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
+作者入口：`/work`。負責一個結果。編輯前閱讀[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)，明確歸屬、隔離和端點。遵循[溝通約定](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#admit-work-by-priority)及[相依載入規則](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)。
 
 ## 成果契約 [#outcome-contract]
 
@@ -43,13 +41,15 @@ type: skill
 
 ### 檢查 [#inspect]
 
-根據來源證據釐清盲點或易變的未知事項。遵循現有慣例與已展現的規模；將事項分類為查詢、原型、可逆假設或暫停觸發條件。
+閱讀工單、內文、標籤與留言；釐清標題和參照。透過查詢、探查、可逆假設或暫停來釐清盲點與易變的未知事項；遵循儲存庫慣例與已展現的規模。
 
 撰寫前閱讀適用範圍的規範，並從指令碼、設定與 CI 確認儲存庫原生的格式化、lint、型別檢查及受影響測試指令。記錄相關的基準失敗；沿用已安裝的工具鏈。
 
 處理 T3 簽出或 Effect 程式碼時，以 `work` 為入口解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；在整個循環中使用回傳的目標專案指南和範圍檢查。
 
 編輯前載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及適用的負責技能。按比例評估影響；可見編輯前先擷取基準，包括細小文案和共用 UI 的影響。
+
+[Figma/圖片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 行動 [#act]
 
