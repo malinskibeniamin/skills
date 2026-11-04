@@ -508,6 +508,46 @@ test.each(["review-contract.md", "verifiability.md"])(
   },
 );
 
+test("planning reads the original capture inode after its pathname is replaced", () => {
+  const f = checkout();
+  const directory = join(f.root, ".context");
+  mkdirSync(directory, { recursive: true });
+  const swaps = join(directory, "capture-swaps.log");
+  const preload = join(directory, "capture-race.cjs");
+  writeFileSync(
+    preload,
+    `const fs = require("node:fs");
+const open = fs.openSync;
+fs.openSync = (path, flags, ...args) => {
+  const descriptor = open(path, flags, ...args);
+  if (typeof path === "string" && path.includes("/review-command-") &&
+      typeof flags === "string" && flags.includes("x")) {
+    fs.renameSync(path, path + ".original");
+    fs.writeFileSync(path, "replaced capture pathname\\n");
+    fs.appendFileSync(${JSON.stringify(swaps)}, "swapped\\n");
+  }
+  return descriptor;
+};
+require("node:module").syncBuiltinESMExports();
+`,
+  );
+  const plan = (base: string) =>
+    Bun.spawnSync(
+      [process.execPath, "--preload", preload, entry, "plan", "--base", base],
+      { cwd: f.root },
+    );
+  const valid = plan("main");
+  expect(valid.exitCode, valid.stderr.toString()).toBe(0);
+  expect(JSON.parse(valid.stdout.toString()).snapshot.paths).toEqual([
+    "README.md",
+  ]);
+  expect(readFileSync(swaps, "utf8")).toContain("swapped\n");
+  const invalid = plan("missing-base");
+  expect(invalid.exitCode).toBe(2);
+  expect(invalid.stderr.toString()).toContain("git failed:");
+  expect(invalid.stderr.toString()).not.toContain("replaced capture pathname");
+});
+
 test("planning excludes its own capture files even when TMPDIR is the checkout", () => {
   const f = checkout();
   const entries = () =>

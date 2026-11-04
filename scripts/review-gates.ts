@@ -2,10 +2,12 @@
 import {
   closeSync,
   existsSync,
+  fstatSync,
   mkdirSync,
   mkdtempSync,
   openSync,
   readFileSync,
+  readSync,
   realpathSync,
   renameSync,
   rmSync,
@@ -68,31 +70,44 @@ function command(
   try {
     const capture = (name: string) => {
       const path = join(directory, name);
-      const writer = openSync(path, "wx", 0o600);
-      descriptors.push(writer);
-      const reader = openSync(path, "r");
-      descriptors.push(reader);
+      const descriptor = openSync(path, "wx+", 0o600);
+      descriptors.push(descriptor);
       // Anonymous files stay out of Git snapshots even with TMPDIR in the checkout.
-      // A separate reader keeps its cursor at zero while the child writes.
       rmSync(path);
-      return { writer, reader };
+      return descriptor;
+    };
+    const read = (descriptor: number) => {
+      const buffer = Buffer.alloc(fstatSync(descriptor).size);
+      // Positional reads keep the original inode and ignore the child's cursor.
+      for (let offset = 0; offset < buffer.length; ) {
+        const count = readSync(
+          descriptor,
+          buffer,
+          offset,
+          buffer.length - offset,
+          offset,
+        );
+        if (count === 0) throw new Error("Command capture ended unexpectedly");
+        offset += count;
+      }
+      return buffer.toString("utf8");
     };
     const stdout = capture("stdout");
     const stderr = capture("stderr");
     const run = Bun.spawnSync(args, {
       cwd,
       timeout: 30_000,
-      stdout: stdout.writer,
-      stderr: stderr.writer,
+      stdout,
+      stderr,
       ...(options.env ? { env: options.env } : {}),
       stdin:
         options.stdin === undefined ? "ignore" : Buffer.from(options.stdin),
     });
     if (!allowed.includes(run.exitCode ?? -1))
       throw new Error(
-        `${args[0]} failed: ${readFileSync(stderr.reader, "utf8").trim()} (arguments: ${JSON.stringify(args.slice(1))})`,
+        `${args[0]} failed: ${read(stderr).trim()} (arguments: ${JSON.stringify(args.slice(1))})`,
       );
-    return readFileSync(stdout.reader, "utf8");
+    return read(stdout);
   } finally {
     try {
       for (const descriptor of descriptors) closeSync(descriptor);
