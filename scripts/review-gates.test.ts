@@ -4,6 +4,7 @@ import {
   existsSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   realpathSync,
   rmSync,
@@ -506,6 +507,33 @@ test.each(["review-contract.md", "verifiability.md"])(
     expect(f.run("check").code).toBe(1);
   },
 );
+
+test("planning excludes its own capture files even when TMPDIR is the checkout", () => {
+  const f = checkout();
+  const entries = () =>
+    readdirSync(f.root)
+      .filter((name) => name !== ".context")
+      .sort();
+  const before = entries();
+  const status = f.git("status", "--porcelain");
+  const plan = (base: string) =>
+    Bun.spawnSync(
+      [process.execPath, "--no-install", entry, "plan", "--base", base],
+      { cwd: f.root, env: { ...Bun.env, TMPDIR: f.root } },
+    );
+  const valid = plan("main");
+  expect(valid.exitCode, valid.stderr.toString()).toBe(0);
+  expect(JSON.parse(valid.stdout.toString()).snapshot.paths).toEqual([
+    "README.md",
+  ]);
+  expect(entries()).toEqual(before);
+  expect(f.git("status", "--porcelain")).toBe(status);
+  const invalid = plan("missing-base");
+  expect(invalid.exitCode).toBe(2);
+  expect(invalid.stderr.toString()).toContain("git failed:");
+  expect(entries()).toEqual(before);
+  expect(f.git("status", "--porcelain")).toBe(status);
+});
 
 test("gate plans retain lockfiles, generated changes and names with spaces", () => {
   const f = checkout();

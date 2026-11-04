@@ -1,13 +1,17 @@
 #!/usr/bin/env bun
 import {
+  closeSync,
   existsSync,
   mkdirSync,
+  mkdtempSync,
+  openSync,
   readFileSync,
   realpathSync,
   renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve, sep } from "node:path";
 import { object } from "./github-evidence";
 import {
@@ -51,11 +55,51 @@ function atomic(file: string, value: string) {
 function save(file: string, value: unknown) {
   atomic(file, `${JSON.stringify(value, null, 2)}\n`);
 }
-function command(args: string[], cwd: string, allowed = [0]): string {
-  const run = Bun.spawnSync(args, { cwd, timeout: 30_000 });
-  if (!allowed.includes(run.exitCode ?? -1))
-    throw new Error(`${args[0]} failed: ${run.stderr.toString().trim()}`);
-  return run.stdout.toString();
+function command(
+  args: string[],
+  cwd: string,
+  allowed = [0],
+  options: { env?: Record<string, string | undefined>; stdin?: string } = {},
+): string {
+  // Avoid Bun's macOS pipe-capture failures without retrying failed commands.
+  // https://github.com/oven-sh/bun/issues/24690
+  const directory = mkdtempSync(join(tmpdir(), "review-command-"));
+  const descriptors: number[] = [];
+  try {
+    const capture = (name: string) => {
+      const path = join(directory, name);
+      const writer = openSync(path, "wx", 0o600);
+      descriptors.push(writer);
+      const reader = openSync(path, "r");
+      descriptors.push(reader);
+      // Anonymous files stay out of Git snapshots even with TMPDIR in the checkout.
+      // A separate reader keeps its cursor at zero while the child writes.
+      rmSync(path);
+      return { writer, reader };
+    };
+    const stdout = capture("stdout");
+    const stderr = capture("stderr");
+    const run = Bun.spawnSync(args, {
+      cwd,
+      timeout: 30_000,
+      stdout: stdout.writer,
+      stderr: stderr.writer,
+      ...(options.env ? { env: options.env } : {}),
+      stdin:
+        options.stdin === undefined ? "ignore" : Buffer.from(options.stdin),
+    });
+    if (!allowed.includes(run.exitCode ?? -1))
+      throw new Error(
+        `${args[0]} failed: ${readFileSync(stderr.reader, "utf8").trim()} (arguments: ${JSON.stringify(args.slice(1))})`,
+      );
+    return readFileSync(stdout.reader, "utf8");
+  } finally {
+    try {
+      for (const descriptor of descriptors) closeSync(descriptor);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  }
 }
 function git(root: string, ...args: string[]) {
   return command(["git", ...args], root);
@@ -271,17 +315,16 @@ function candidateTree(
   const index = join(root, stage, `index-${crypto.randomUUID()}`);
   mkdirSync(dirname(index), { recursive: true });
   const run = (args: string[], input?: string) => {
-    const result = Bun.spawnSync(["git", ...args], {
-      cwd: root,
-      env: { ...Bun.env, GIT_INDEX_FILE: index },
-      stdin: input === undefined ? undefined : Buffer.from(input),
-      timeout: 30_000,
-    });
-    if (result.exitCode !== 0)
+    try {
+      return command(["git", ...args], root, [0], {
+        env: { ...Bun.env, GIT_INDEX_FILE: index },
+        ...(input === undefined ? {} : { stdin: input }),
+      }).trim();
+    } catch (error) {
       throw new Error(
-        `Cannot reconstruct review candidate: ${result.stderr.toString().trim()}`,
+        `Cannot reconstruct review candidate: ${error instanceof Error ? error.message : String(error)}`,
       );
-    return result.stdout.toString().trim();
+    }
   };
   try {
     run([
