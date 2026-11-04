@@ -19,6 +19,11 @@ Unfamiliar code/conflicts: [repo navigation](shared/repo-navigation.md).
 Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.
 
+Design/review/refactor/health: [verifiability over readability](shared/verifiability.md).
+Prefer independent contract checks, domain language and human spot-check entrypoints;
+size and cyclomatic complexity alone are not quality gates. Measured performance can
+justify less readable internals while preserving behavior and verification.
+
 ## Human-facing text
 
 `shared/communication.md`: decision/value/ask first; own claims, intent,

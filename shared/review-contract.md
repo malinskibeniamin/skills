@@ -6,6 +6,11 @@ approval requirements or merge permission.
 
 ## Objective: does it work?
 
+Apply [verifiability over readability](verifiability.md): inspect independently
+rerunnable contract evidence, domain-language alignment and human spot-check access.
+Size, nesting and cyclomatic complexity alone are not defects; measured performance
+can justify less readable internals without weakening correctness proof.
+
 Inspect the complete assigned diff and affected contracts. Find bugs, security failures,
 credible edge cases and unmet explicit requirements. Report a defect only with a concrete
 execution path or reproduction, consequence and smallest correction. Uncertain suspicions

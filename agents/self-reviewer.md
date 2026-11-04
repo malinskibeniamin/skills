@@ -39,10 +39,10 @@ You receive session context via SubagentStart hook:
   success. Reuse current verifier output; name the missing proof when unavailable.
 
 ### 2. Simplification
-- Can any new code be simplified while keeping tests green?
-- Do extracted helpers clarify a responsibility or improve testing?
-- Any over-engineered abstractions for simple operations?
-- Duplicated logic across new files that could be shared?
+- Would a simplification improve independent verification or remove a concrete failure mode?
+- Do extracted helpers isolate a real responsibility or dependency without coupling tests to internals?
+- Does an abstraction add caller coordination or unrelated test setup without earning it?
+- Does duplicated domain logic risk divergent behavior and need one tested owner?
 
 ### 3. CI Readiness
 - Check repository-native lint/type commands (`bun run lint` / `bun run type:check`
@@ -50,10 +50,10 @@ You receive session context via SubagentStart hook:
 - Any `as any` or `@ts-ignore` that can be properly typed?
 
 ### 4. Maintainability
-- Complex branching logic (>3 levels deep) that could be flattened?
-- Does a function hide multiple domain responsibilities that become clearer when separated?
+- Can each changed responsibility be verified through its public interface with controlled state?
+- Are domain rules or state owners entangled in a way that prevents independent verification?
 - Missing error handling on async operations?
-- Unclear variable/function names?
+- Do variable/function names match the human's domain, with invariants and checks discoverable for spot-checks?
 
 ### 5. Security
 - Any `eval()`, `innerHTML`, `dangerouslySetInnerHTML` without sanitization?

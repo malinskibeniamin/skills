@@ -266,57 +266,64 @@ function checkout(files: Record<string, string> = {}, cli = entry) {
   return { root, git, run, input, plan, record };
 }
 
-test("gate prompts include the shared review contract and policy edits invalidate receipts", () => {
-  const harness = realpathSync(mkdtempSync(join(tmpdir(), "review-contract-")));
-  directories.push(harness);
-  for (const file of [
-    "scripts/review-gates.ts",
-    "scripts/review-results.ts",
-    "scripts/github-evidence.ts",
-    "agents/references/findings-schema.md",
-    "agents/references/findings-schema.jq",
-    "agents/references/specialist-review.md",
-  ]) {
-    const target = join(harness, file);
-    mkdirSync(join(target, ".."), { recursive: true });
-    copyFileSync(new URL(`../${file}`, import.meta.url), target);
-  }
-  mkdirSync(join(harness, "config"));
-  const gate = {
-    id: "correctness",
-    title: "Correctness",
-    always: true,
-    globs: [],
-    skills: [],
-    lens: "Find concrete defects",
-  };
-  writeFileSync(
-    join(harness, "config/review-gates.json"),
-    JSON.stringify({ version: 1, gates: [gate] }),
-  );
-  mkdirSync(join(harness, "shared"));
-  const contract = join(harness, "shared/review-contract.md");
-  writeFileSync(contract, "Review defects separately from owner judgment.\n");
-  const f = checkout({}, join(harness, "scripts/review-gates.ts"));
-  writeFileSync(
-    join(f.root, ".review-gates.json"),
-    JSON.stringify({ version: 1, gates: [{ ...gate, id: "consumer" }] }),
-  );
-  const plan = f.plan();
-  for (const item of plan.gates) {
-    expect(readFileSync(item.prompt, "utf8")).toContain(contract);
-    expect(f.record(item.id).code).toBe(0);
-  }
-  expect(f.run("check").code).toBe(0);
-  writeFileSync(
-    contract,
-    "New owner policy: preserve required human review.\n",
-  );
-  expect(f.run("check").code).toBe(3);
-  const next = f.plan();
-  expect(next.id).not.toBe(plan.id);
-  expect(f.run("check").code).toBe(1);
-});
+test.each(["review-contract.md", "verifiability.md"])(
+  "shared policy edits invalidate gate receipts: %s",
+  (policy) => {
+    const harness = realpathSync(
+      mkdtempSync(join(tmpdir(), "review-contract-")),
+    );
+    directories.push(harness);
+    for (const file of [
+      "scripts/review-gates.ts",
+      "scripts/review-results.ts",
+      "scripts/github-evidence.ts",
+      "agents/references/findings-schema.md",
+      "agents/references/findings-schema.jq",
+      "agents/references/specialist-review.md",
+    ]) {
+      const target = join(harness, file);
+      mkdirSync(join(target, ".."), { recursive: true });
+      copyFileSync(new URL(`../${file}`, import.meta.url), target);
+    }
+    mkdirSync(join(harness, "config"));
+    const gate = {
+      id: "correctness",
+      title: "Correctness",
+      always: true,
+      globs: [],
+      skills: [],
+      lens: "Find concrete defects",
+    };
+    writeFileSync(
+      join(harness, "config/review-gates.json"),
+      JSON.stringify({ version: 1, gates: [gate] }),
+    );
+    mkdirSync(join(harness, "shared"));
+    const contract = join(harness, "shared/review-contract.md");
+    writeFileSync(contract, "Review defects separately from owner judgment.\n");
+    const verifiability = join(harness, "shared/verifiability.md");
+    writeFileSync(verifiability, "Verify public contracts independently.\n");
+    const f = checkout({}, join(harness, "scripts/review-gates.ts"));
+    writeFileSync(
+      join(f.root, ".review-gates.json"),
+      JSON.stringify({ version: 1, gates: [{ ...gate, id: "consumer" }] }),
+    );
+    const plan = f.plan();
+    for (const item of plan.gates) {
+      expect(readFileSync(item.prompt, "utf8")).toContain(contract);
+      expect(f.record(item.id).code).toBe(0);
+    }
+    expect(f.run("check").code).toBe(0);
+    writeFileSync(join(harness, "shared", policy), "Updated review policy.\n");
+    expect(f.run("check").code).toBe(3);
+    for (const item of plan.gates) {
+      expect(readFileSync(item.prompt, "utf8")).toContain(verifiability);
+    }
+    const next = f.plan();
+    expect(next.id).not.toBe(plan.id);
+    expect(f.run("check").code).toBe(1);
+  },
+);
 
 test("gate plans retain lockfiles, generated changes and names with spaces", () => {
   const f = checkout();

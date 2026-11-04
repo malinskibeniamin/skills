@@ -13,7 +13,7 @@ Assess impact, published or not, for every PR creation/update and [session PR ch
 2. **Lock claim before coding:** thesis, primary metric, guardrail, scenario, minimum worthwhile delta. Never pick the winner afterward.
 3. **Product lane + Codebase lane:** one must improve; the other must not materially regress.
    - Product: capability, task success, repro, errors, steps, latency, resources.
-   - Codebase: maintenance surface, complexity, dependencies, warnings, leaks, bundle, build/test cost, testability.
+   - Codebase: independently verifiable contracts, change coordination, dependencies, warnings, leaks, bundle and build/test cost. Size/cyclomatic scores alone prove no improvement; follow [verifiability](../shared/verifiability.md).
 4. **Proportional rigor:** sentence for obvious value; deterministic repro/count for correctness; controlled paired [REFERENCE.md](REFERENCE.md) benchmark for runtime; always measure explicit performance claims.
 5. **Base:** measure before coding or reconstruct merge-base. Use the same scenario, fixture, config, and machine for base/candidate.
 6. **Compare:** only threshold-clearing metrics report raw before/after, absolute/percent delta, method, environment, and noise. Suppress below-threshold/within-variance numbers. Invariant tests/proxies are not performance claims.

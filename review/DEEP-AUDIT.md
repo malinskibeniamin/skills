@@ -5,23 +5,23 @@ single-owner, evidence-driven frontend harness audit.
 
 ## Posture
 
-Cold review means the reviewer ignores implementation confidence, PR prose, and author self-report until verified. Skip generated files unless the generator, schema, or manual edit is part of the change; generated files are evidence, not review targets. Prefer structural simplification over local polish: delete complexity, collapse branches, move logic to its canonical owner, and make the direct path obvious.
+Cold review means the reviewer ignores implementation confidence, PR prose, and author self-report until verified. Skip generated files unless the generator, schema, or manual edit is part of the change; generated files are evidence, not review targets. Prefer changes that improve independent verification or prevent a concrete failure over local polish. Keep complex optimized internals when contract evidence and measured gains justify them.
 
 For structural findings, read [the curated Poteto engineering rules](../shared/POTETO-ENGINEERING.md).
-Apply reader-load, structural-enforcement, and first-principles rules only when they produce
+Apply verifiability, structural-enforcement, and first-principles rules only when they produce
 a concrete diff correction or executable safety proof.
 
 ## Structural quality axis
 
-Block or escalate when the PR:
-- Misses a concrete Code-judo restructuring that preserves behavior while deleting branches,
-  helpers, modes, or layers; require a verifiable alternative, not a preference.
-- Pushes a file across 1,000 lines without a strong decomposition reason.
-- Adds spaghetti or special-case branching into unrelated flows.
-- Spreads feature checks across shared code instead of adding a clear ownership boundary.
-- Adds wrappers, helpers, or generic mechanisms that do not reduce concepts.
-- Uses casts, `unknown`, unnecessary optionality, or silent fallbacks where a typed boundary would be clearer.
-- Serializes independent work or performs non-atomic updates when a simpler structure is obvious.
+Report structural defects only with a concrete consequence and execution path, such as when the PR:
+- Entangles unrelated state or dependencies so a changed contract cannot be verified independently.
+- Spreads a domain rule across owners and permits demonstrably divergent behavior.
+- Adds wrappers or mechanisms that hide failures or prevent checks from exercising the real path.
+- Uses casts, `unknown`, unnecessary optionality or silent fallbacks to bypass an invariant.
+- Serializes independent work with measured cost or performs non-atomic updates that violate a contract.
+
+Size, nesting and complexity scores alone justify no finding or split. Put optional
+restructuring in direction advice; name the verification or ownership gain, not fewer lines.
 
 Use [conditional specialist axes](REVIEWERS.md) for harness/content propagation,
 runtime lifecycles, data fidelity and performance; keep them inline unless delegation
@@ -109,4 +109,4 @@ hide a P2+ risk.
 
 ## Approval bar
 
-Approve only when no unresolved P0/P1 remains, spec and standards are accounted for, structural complexity did not regress without justification, required visual/resilience evidence exists or is explicitly skipped, and the PR body can prove what was checked.
+Approve only when no unresolved P0/P1 remains, spec and standards are accounted for, changed contracts have rerunnable verification or an explicit evidence gap, required visual/resilience evidence exists or is explicitly skipped, and the PR body can prove what was checked. Treat any evidence gap according to its reachable consequence, not a complexity score.

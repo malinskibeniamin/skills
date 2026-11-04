@@ -65,4 +65,7 @@ public-contract test can prove many lines; add another only for an independent
 credible risk. Coverage quotas and speculative edge-case matrices are not
 correctness.
 
+Judge code by [verifiability](shared/verifiability.md), not reading time or size.
+Keep modules independently testable and names aligned with the human's domain.
+
 Enforced by: `/tdd`, test runner hooks, `self-reviewer`, `code-reviewer`.
