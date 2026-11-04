@@ -1,9 +1,17 @@
 ---
-title: /codebase-design
 description: 设计具有小型接口的深度模块。适用于选择接缝、减少文件间跳转阻力、加深模块、测试接口或应用共享的设计术语。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - codebase design
 sidebar:
   label: /codebase-design
+title: /codebase-design
+type: skill
 ---
 ![“/codebase-design”技能示意图](/diagrams/skills/codebase-design.svg)
 
@@ -15,11 +23,11 @@ sidebar:
 
 使用 `GLOSSARY.md` 中的领域术语并遵循相关 ADR。若存在 `GLOSSARY-MAP.md`，按映射找到对应上下文的词汇表。
 
-设计**深度模块**：在清晰的接缝处，以小型接口封装大量行为，并可通过该接口进行测试。目标：为调用方提供杠杆效应，为维护者提升局部性，并增强可测试性。
+设计**深度模块**：在清晰的接缝处，以小型接口封装大量行为，并可通过该接口进行测试。遵循[可验证性优先于可读性](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md)；优化独立验证、调用方的杠杆效应和局部性，而不是实现的大小。
 
 模块应减少调用方需要掌握的知识和协调成本，同时保留所需行为。
 
-## 术语表
+## 术语表 [#glossary]
 
 严格使用以下术语：
 
@@ -41,7 +49,7 @@ sidebar:
 
 思考方法和参数能否精简，以及能否将更多复杂性隐藏在内部。
 
-## 原则
+## 原则 [#principles]
 
 - 深度是接口的属性，而非代码行数之比；私有接缝无需暴露。
 - **删除测试：** 如果删除一个模块会使复杂性消失，那么它只是透传层；如果复杂性扩散到调用方或测试中，那么该模块便有存在的价值。
@@ -55,11 +63,11 @@ sidebar:
 
 选择设计形态前，针对草图尝试[最短的错误修改](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)。小改动的草图可直接写在当前说明中；机械式移动不需要设计练习。仅在仍有实质性分歧或用户要求时，比较整体形态的替代方案。这不会增加实现前的暂停环节。
 
-## 可测试性
+## 可测试性 [#testability]
 
-1. 接受依赖项；不要在内部创建它们。
-2. 返回结果；尽量减少环境式副作用。
-3. 保持方法和参数精简，并确保不变量清晰。
+1. 使用针对性的命令和可重复的测试数据来测试公共接口。
+2. 在现有接缝处控制相关依赖；返回可观察的结果，并隔离环境状态。
+3. 确保不变量和失败诊断易于查找；证明可信的错误行为会使测试失败，而不将测试耦合到内部实现。
 
 当两种设计都通过删除测试时，使用 `/plan-arbiter` 比较其深度、局部性、测试表面和回滚能力。
 

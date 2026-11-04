@@ -1,9 +1,17 @@
 ---
-title: /codebase-design
 description: 設計具備小型介面的深層模組。適用於選擇接縫、減少跨檔案切換阻力、深化模組、測試 API，或採用共通的設計詞彙。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - codebase design
 sidebar:
   label: /codebase-design
+title: /codebase-design
+type: skill
 ---
 ![「/codebase-design」技能示意圖](/diagrams/skills/codebase-design.svg)
 
@@ -15,11 +23,11 @@ sidebar:
 
 使用 `GLOSSARY.md` 中的領域術語並遵循相關 ADR。若存在 `GLOSSARY-MAP.md`，依對照找到相應脈絡的詞彙表。
 
-設計**深層模組**：在清楚的接縫上，以小型介面封裝大量行為，並可透過該介面進行測試。目標是為呼叫端提供槓桿效益、為維護者提升局部性，並提高可測試性。
+設計**深層模組**：在清楚的接縫上，以小型介面封裝大量行為，並可透過該介面進行測試。遵循[可驗證性優先於可讀性](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md)；最佳化獨立驗證、呼叫端的槓桿效益與局部性，而非實作的大小。
 
 模組應減少呼叫端必須掌握的知識與協調成本，同時保留必要行為。
 
-## 詞彙表
+## 詞彙表 [#glossary]
 
 請精確使用：
 
@@ -41,7 +49,7 @@ sidebar:
 
 請思考方法與參數能否縮減，以及能否在內部隱藏更多複雜性。
 
-## 原則
+## 原則 [#principles]
 
 - 深度是介面的屬性，而非行數比率；私有接縫無須洩漏出去。
 - **刪除測試：**如果移除模組會讓複雜性一併消失，那它只是直通層；如果複雜性擴散至呼叫端或測試中，則該模組確實有其價值。
@@ -55,11 +63,11 @@ sidebar:
 
 選定設計形狀前，針對草圖嘗試[最短的錯誤修改](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)。小幅變更的草圖可直接寫在目前的說明中；機械式搬移不需要設計練習。只有在仍有實質分歧或使用者要求時，才比較整體形狀的替代方案。這不會新增實作前的暫停關卡。
 
-## 可測試性
+## 可測試性 [#testability]
 
-1. 接受相依項目；不要在內部建立它們。
-2. 回傳結果；將環境中的副作用降至最低。
-3. 維持少量的方法與參數，並確保不變條件清楚。
+1. 使用聚焦的命令與可重複的測試資料來驗證公開介面。
+2. 在既有接縫處控制相關相依項目；回傳可觀察的結果，並隔離環境狀態。
+3. 讓不變條件與失敗診斷易於尋找；證明可信的錯誤行為會使測試失敗，而不將測試耦合至內部實作。
 
 當兩種設計都通過刪除測試時，請使用 `/plan-arbiter` 比較深度、局部性、測試表面與回復能力。
 

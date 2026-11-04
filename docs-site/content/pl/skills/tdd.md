@@ -62,7 +62,7 @@ Napisz najmniejszą implementację, która przechodzi test. Najpierw usuń lub w
 
 ### REFACTOR
 
-Poprawiaj nazwy i strukturę tylko dla większej przejrzystości lub usunięcia rzeczywistej duplikacji. Utrzymuj stan zielony; nigdy nie osłabiaj asercji. Oznacz testy jednostkowe trwające ponad 500 ms i testy integracyjne trwające ponad 2 s; preferuj zbiorcze dane wejściowe zamiast symulowania każdego naciśnięcia klawisza. Uruchom `/dogfood` dla istotnych zielonych przekrojów; usterki stają się RED.
+Stosuj [weryfikowalność zamiast czytelności](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md): ulepszaj niezależne sprawdzenia, nazwy domenowe, własność stanu lub zmierzoną wydajność, a nie wskaźniki rozmiaru lub złożoności. Utrzymuj stan zielony; nigdy nie osłabiaj asercji. Oznacz testy jednostkowe trwające ponad 500 ms i testy integracyjne trwające ponad 2 s; preferuj zbiorcze dane wejściowe zamiast symulowania każdego naciśnięcia klawisza. Wywołaj narzędzie Skill z nazwą "dogfood" dla istotnych zielonych przekrojów; usterki stają się RED.
 
 ### POWTÓRZENIE [#repeat]
 
