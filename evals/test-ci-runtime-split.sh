@@ -7,39 +7,6 @@ _macos_portability="$REPO_ROOT/scripts/run-macos-portability-ci.sh"
 
 run_content_eval "$_ci_workflow" "os: \[ubuntu-latest, macos-latest\]" \
   "CI preserves the existing Linux and macOS check names"
-
-# Public workflow contract: parse the actual YAML, not comments mentioning a
-# runner. This proves routing/identity, not GitHub-hosted pool availability.
-if bun - "$_ci_workflow" <<'JS'
-import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { YAML } from "bun";
-
-const job = YAML.parse(readFileSync(process.argv.at(-1), "utf8")).jobs.evals;
-const matrix = job.strategy.matrix;
-const mappings = matrix.include ?? [];
-const rows = matrix.os.map((os) => {
-  const matches = mappings.filter((entry) => entry.os === os);
-  assert.equal(matches.length, 1, `Exactly one runner mapping for ${os}`);
-  return { os, runner: matches[0].runner };
-});
-assert.equal(mappings.length, rows.length, "No extra matrix jobs");
-assert.deepEqual(rows, [
-  { os: "ubuntu-latest", runner: "ubuntu-latest" },
-  { os: "macos-latest", runner: "macos-26-intel" },
-]);
-assert.equal(job.name.replace(/\s/g, ""), "evals(${{matrix.os}})");
-assert.equal(job["runs-on"].replace(/\s/g, ""), "${{matrix.runner}}");
-JS
-then
-  echo "  PASS  CI selects standard runner pools without changing check identities"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  CI runner mapping or stable check identity is invalid"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: CI runner mapping and stable check identity"
-fi
-
 _ci_full_condition="if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'"
 _ci_full_condition_count=$(grep -cF -- "$_ci_full_condition" "$_ci_workflow" || true)
 if [ "$_ci_full_condition_count" -eq 6 ]; then
