@@ -243,7 +243,7 @@ function checkout(files: Record<string, string> = {}, cli = entry) {
         ? ["--classifications", input("classifications.json", classified)]
         : []),
     );
-    expect(result.code).toBe(0);
+    expect(result.code, result.error || result.text).toBe(0);
     return JSON.parse(result.text) as {
       id: string;
       directory: string;
