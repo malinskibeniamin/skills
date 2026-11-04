@@ -5,8 +5,9 @@ Pick the smallest view that makes the key point clear.
 ## UI change maps
 
 For broad UI work, report requirements by surface: user problem -> observable change ->
-annotated capture or flow -> acceptance check. Match numbered callouts to a short legend;
-keep full-resolution originals behind the overview. Distinguish base-versus-candidate from
+annotated capture or flow -> acceptance check. All visible PR changes, including small ones,
+follow [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations), not only broad
+UI overviews. Distinguish base-versus-candidate from
 off-versus-on comparisons. Name the setting path, default, gated changes, and changes that
 still affect everyone; an off switch is not a full rollback when shared tokens also change.
 Bind captures to build/commit and fixture/platform/viewport/theme; verify hosted assets still

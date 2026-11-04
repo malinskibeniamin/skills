@@ -48,7 +48,7 @@ type: skill
 
 1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 確認基底。沿用目前的 PR；建立及更新時皆套用[儲存庫中繼資料規範](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用範本；建立草稿無須另行核准。堆疊使用 `/stacked-prs`。
 2. 每個 PR 都應分別載入 [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md)、[影響評估](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)與[內文](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；保留草稿狀態並說明價值。
-3. 每項可見變更都需要參考文件中的清單、變更前／後的螢幕擷取畫面與影片、已審查的快照，以及通過的視覺測試。若缺少證明，除非使用者明確豁免，否則會阻擋發布。
+3. 可見變更：建立清單，依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自動為前後對照的螢幕擷取畫面與影片加上編號標記及變更圖例，審查快照，並確保視覺測試通過。不需要另外要求標註。缺少證據時，必須在發布前取得使用者的明確豁免。
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證明中移除內部組織、儲存庫、產品、人員名稱及私人連結。
 5. 附上 dogfood 執行證明。重新閱讀內文、確認審查者可存取圖片，並輸出網址。更新／重新開啟也適用相同關卡；編輯會使受影響的證明失效。
 

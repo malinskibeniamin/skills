@@ -35,6 +35,9 @@ idle spans and watch the whole rendered MP4; cursor/overlay motion is not activi
 Videos explain the old/new result at matched steps; stills and synthetic explainers
 are not recordings of actual product behavior. A CLI/report uses its real terminal/output
 surface, not an invented browser UI. Follow the existing procedure's evidence gates and limits.
+For every visible PR delta, automatically produce [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations)
+on screenshots and other visual evidence, not just video; keep callout IDs and the change
+legend current across authoring, review, and PR updates.
 
 A request to build product motion is different from a request to animate an explanation.
 Do not add UI animations, generated images or extra movies merely to decorate a PR.

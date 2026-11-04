@@ -16,9 +16,9 @@ Read [the reader-attention contract](../shared/communication.md). The complete [
 At start/resume, after material scope, implementation, or evidence changes, and before handoff:
 
 1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
-2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents.
+2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents. Check visual captures, callouts, and legend for staleness per [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations).
 3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
-4. For authorized write/delivery work, replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
 5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
 
 ## Body template
@@ -34,7 +34,7 @@ Use this template for the PR body:
 
 ## Evidence
 
-<frontend: before/after flow video playing inline (user-attachments URL), then screenshot table>
+<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
 
 - **Before:** <screenshot/output/failing test run>
   **After:** <screenshot/output/passing test run>
@@ -85,7 +85,7 @@ Use only views that change understanding.
 Concrete evidence that the change works. Show a before and after. Name checks not run and
 remaining uncertainty; passing tests are not evidence of human review or consensus.
 
-For broad UI work, map user problem -> surface delta -> evidence -> acceptance using [UI change maps](SUMMARY-VIEWS.md#ui-change-maps).
+For every visible change, automatically annotate the evidence using [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations), not only the video. For broad UI work, map user problem -> surface delta -> evidence -> acceptance using [UI change maps](SUMMARY-VIEWS.md#ui-change-maps).
 
 For backend architecture, data flow, API contract, or workflow changes, follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`. Include a focused before/after comparison and editable source link; refresh relevant maintained diagrams. Diagram failures warn and continue, never block the PR or replace test evidence.
 

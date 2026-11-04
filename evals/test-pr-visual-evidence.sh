@@ -3,8 +3,24 @@
 for command in 'gh pr create --fill' 'gh pr edit 12 --body-file /tmp/body.md' 'gh pr reopen 12' 'gh pr ready 12' 'gh stack submit --auto' 'gh --repo org/repo pr create --fill' 'git push origin feature' 'env GH_HOST=github.com gh pr create --draft'; do
   input=$(jq -nc --arg command "$command" '{tool_name:"Bash",tool_input:{command:$command}}')
   run_hook_eval "$REPO_ROOT/.claude/hooks/pre-bash.sh" "$input" 0 \
-    "PR evidence reminder: $command" '[pr-evidence]'
+    "Automatic annotation reminder: $command" 'Automatically annotate'
 done
+
+# Annotation guidance is model-visible on follow-up pushes, not an optional
+# video-only instruction. This tests emitted context, not hook source text.
+input='{"tool_name":"Bash","tool_input":{"command":"git push origin feature"}}'
+output=$(printf '%s' "$input" | "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>/dev/null)
+if printf '%s' "$output" | jq -e '.hookSpecificOutput.additionalContext
+  | contains("numbered callouts") and contains("legend")
+    and contains("screenshots") and contains("not just video")
+    and contains("no separate request") and contains("refresh")' >/dev/null 2>&1; then
+  echo '  PASS  pushes require annotated screenshots and a legend without a separate request'
+  PASS=$((PASS + 1))
+else
+  echo '  FAIL  push reminder lacks automatic, non-video annotation requirements'
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: automatic visual annotation reminder"
+fi
 
 # Follow-up pushes must route existing session PRs through impact/body upkeep,
 # not just remind authors to attach screenshots at initial publication.

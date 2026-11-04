@@ -48,7 +48,7 @@ type: skill
 
 1. 使用 `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"` 确定目标分支。复用当前 PR；创建和更新时均应用[仓库元数据规则](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿。使用模板；创建草稿无需另行批准。堆栈使用 `/stacked-prs`。
 2. 每个 PR 都应分别加载 [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md)、[影响评估](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)和[正文](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；保留草稿状态并说明价值。
-3. 每项可见更改都需要参考资料中规定的清单、前后对比截图和视频、已审查的快照以及通过的视觉测试。如缺少证据，则阻止发布，除非用户明确豁免。
+3. 可见变更：建立清单，按照[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自动为前后对比截图和视频添加编号标记及变更图例，审查快照，并确保视觉测试通过。无需另行请求标注。缺少证据时，必须在发布前获得用户的明确豁免。
 4. 公开仓库（`gh repo view --json visibility`）：推送前，从提交、标题、正文和证据中清除内部组织、仓库、产品、人员名称及私有链接。
 5. 包含实际使用验证回执。重新阅读正文，验证审查者能否访问图片，并输出 URL。更新/重新打开 PR 时遵循相同的前置条件；编辑会使受影响的证据失效。
 

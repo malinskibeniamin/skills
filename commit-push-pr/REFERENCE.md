@@ -113,7 +113,10 @@ gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(
 
 | Changed region/state | Previous: <old behavior> | New: <new behavior> | Look here |
 |------|--------|-------|-------|
-| <route/component> | ![before](<url>) | ![after](<url>) | <what changed> |
+| <route/component/state> | ![Before: callout 1, <old result>](<annotated url>) | ![After: callout 1, <new result>](<annotated url>) | 1: <previous -> new; why it matters> |
+
+<For multiple callouts, put a short numbered change legend immediately below the images.>
+<Link full-resolution originals; include focused crops/diff images when needed.>
 
 - Visual regression: `<normal command>` - PASS; <test count and report link>
 - Coverage: <affected views/states, viewports/themes; inventory link if large>
@@ -203,7 +206,7 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    include TSX/JSX, CSS, HTML, Vue/Svelte/Astro, tokens/themes, fonts/icons/images, copy and
    translations, rendered docs/reports, CLI/TUI, mobile/desktop, and data/config/dependency
    changes that alter rendered output. Trace shared components/styles to affected consumers.
-   Map every visible change to `surface/state -> test -> before/after capture`; include
+   Map every visible change to `surface/state -> test -> before/after capture -> callout ID`; include
    affected responsive sizes, themes, roles, and loading/empty/error/success states. Add
    keyboard/focus and interaction checks where changed. Mark non-applicable cases with
    concrete reasons. A type-only edit may be non-visible; a backend response change may not.
@@ -231,8 +234,8 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    visible through the action and its result. For small or dense UI, use matched
    `PR_VIDEO_FOCUS` crops to zoom both takes into the interaction and retain a full-view
    context link. Frame the control and its resulting feedback together; avoid cropping
-   away the cursor, error, or success state. Red circles, arrows, or drawn callouts may
-   clarify a real action, but must not cover important text or invent UI behavior.
+   away the cursor, error, or success state. Annotate the changed result per
+   [visual annotations](#visual-annotations); cursor/click cues alone do not identify the delta.
    For a small change, show its real trigger and result; a tooltip can use a focused
    hover/reveal/dismiss flow without unrelated actions.
    Start the flow file with a `# <flow title>` line. Add **on-screen narration subtitles,
@@ -301,12 +304,15 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    consumers against the inventory, test results, and captures. Every affected surface/state
    must be accounted for. Inspect changed and unexpectedly unchanged snapshots. Record exact
    normal test command/result, baseline updates, revision pair, environment, and remaining
-   limits. New edits, rebases, base changes, or failed CI invalidate affected evidence;
-   refresh the tests, captures, and PR body before declaring it current. A green suite alone
-   does not prove the inventory complete; never claim exhaustive coverage from filenames.
+   limits. Check [visual annotations](#visual-annotations) against every inventory item.
+   New edits, rebases, base changes, or failed CI invalidate affected evidence;
+   refresh the tests, captures, callouts, legend, and PR body before declaring it current.
+   A green suite alone does not prove the inventory complete; never claim exhaustive coverage from filenames.
 5. **Publish visible evidence:** put **What changed: previous -> new; look here** directly
    above the video and focused screenshot pair. Each row owns a distinct observable delta;
    group unchanged states in a coverage note instead of repeating nearly identical images.
+   Automatically annotate screenshots and other visual evidence using
+   [visual annotations](#visual-annotations); a video alone does not satisfy this requirement.
    Put behavior and revision labels on the media, not just the table headers. Keep a
    full-view context link when cropping. Check the comparison at PR display size: the
    reviewer must identify the old/new result without searching the page. If not, focus
@@ -342,7 +348,8 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    limitation in the body, never PASS.
 6. **Verify publication:** Re-read the actual PR body after create/edit/reopen/stack submit.
    Use `gh pr view <number> --json body,url` to verify the uploaded media references and
-   body placement, revision pair, and concise impact/test bullets. Confirm native video
+   body placement, revision pair, annotated screenshot references, matching callout legend,
+   and concise impact/test bullets. Confirm native video
    URLs occupy their own paragraph and no attached local paths remain. CLI readback
    proves publication, not playback or every reviewer's access; name any unverified
    access limits. Do not launch a browser merely to upload, edit, or verify publication.
@@ -350,6 +357,39 @@ one-word label, one-pixel spacing adjustment, focus/hover/disabled state, or rem
    isolated session, close it afterward, and never take over a human-owned browser.
    Do not overwrite unrelated reviewer notes. Omit the visual section only when the
    inventory establishes no user-visible effect; keep that rationale in verification evidence.
+
+### Visual annotations
+
+For every visible PR change, create annotated evidence as part of ordinary authoring and
+upkeep, with no separate request or optional recap skill. This includes small copy, font,
+color, spacing, icon, layout, responsive, focus/hover/disabled, loading/error/empty/success-state,
+and motion changes, across web, mobile, desktop, CLI/TUI, rendered docs, and reports.
+
+- **Point to the delta:** put numbered callouts with arrows, rings, or boxes on the actual
+  before/after screenshots. Reuse each change's ID across paired images, crops, and video
+  beats; positions can differ when elements move. Cover every distinct visible delta, not
+  just the headline feature. For new/removed content, mark the real prior/replacement
+  location and label absence honestly; do not invent a matching element.
+- **Explain the numbers:** place a concise numbered legend beside/below the media:
+  `1. <element/state>: <previous> -> <new>; <user consequence>`. Name measured values only
+  when verified. Include descriptive alt text and a text legend; color alone is insufficient.
+- **Beyond video:** annotate stills, focused crops, and supporting diff images too. For
+  recordings/GIFs, use timed callouts or focus highlights and captions identifying the
+  changed result; reference the same IDs and useful timestamps in the legend. A cursor
+  halo or generic "Before / After" label is not a change annotation. CLI/report evidence
+  points to the changed output region; source-grounded diagrams label changed nodes/edges
+  when included, but remain explanations rather than proof of rendered behavior.
+- **Preserve evidence:** overlay annotations deterministically on copies of real captures;
+  retain and link unannotated full-resolution originals, revision pair, and environment.
+  Apply the same privacy/access checks to originals as to annotated media before upload.
+  Do not regenerate, retouch, or alter UI pixels to suggest a change. Keep markers outside
+  important text, show context for crops, and split dense comparisons rather than crowding.
+- **Inspect and refresh:** check final rendered media at PR display size: callout targets,
+  numbers, legend, and old/new difference must be legible and consistent. Refresh affected
+  overlays and legend with recaptures after edits/base changes. Publish annotated images
+  inline, not only in local HTML, downloads, or a video. Missing annotation tooling/evidence
+  follows the existing named-gap/user-waiver rule; text-only descriptions are not a silent
+  substitute. Read-only reviews report gaps without editing or publishing.
 
 The PR-entrypoint hook is an advisory reminder, not a completeness detector or a hard CI
 gate. This workflow owns semantic detection and evidence collection on every supported

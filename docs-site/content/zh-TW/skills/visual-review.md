@@ -36,7 +36,7 @@ type: skill
 內容／版面配置壓力測試：使用 Skill 工具呼叫 "break-ui"。重用目前 dogfood 測試資料與螢幕截圖；
 只測試尚未涵蓋的情況。保留唯讀或已獲授權修復的執行邊界。
 
-已實作／發布：遵循 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：以擷取畫面與視覺測試核對每個受影響的介面／狀態，在更新預期的基準前檢查快照差異，依正常方式重新執行，並在編輯後更新證據。螢幕截圖不是視覺測試；通過的測試也不是嵌入式的前後對照證據。
+已實作／發布：遵循 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：以擷取畫面與視覺測試核對每個受影響的介面／狀態，在更新預期的基準前檢查快照差異，依正常方式重新執行，並在編輯後更新證據。螢幕截圖不是視覺測試；通過的測試也不是嵌入式的前後對照證據。 每項可見的 PR 差異都必須遵循[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)，而不只是影片：提供成對的編號標記、變更圖例及原始擷取畫面連結。唯讀審查僅回報缺少或過時的標註；獲授權的作者自動建立或更新標註。
 
 HTML 優先。生命週期勝過螢幕截圖。狀態勝過順利路徑。動態效果就是互動。內容壓力測試更有價值。無障礙自動化只能涵蓋部分情況。效能是可見的。若出現兩次，就將其自動化。
 

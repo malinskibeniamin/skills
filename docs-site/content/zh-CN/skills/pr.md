@@ -27,9 +27,9 @@ type: skill
 在会话开始或恢复时、范围、实现或证据发生实质变化后，以及交接前：
 
 1. 查找与此对话、会话或聊天明确关联的已打开 PR；否则通过 `gh pr view` 检查当前分支。核实打开状态、仓库、源分支、基分支和归属；绝不选择无关的近期 PR。没有已打开的 PR 就无需维护，也不意味着可以创建 PR。
-2. 将已发布的描述与**完整 PR 差异**、原始目标及当前验证结果对照，而非只看最近一轮对话或提交。对于堆叠 PR，逐一对照父分支评估受影响的层。
+2. 将已发布的描述与**完整 PR 差异**、原始目标及当前验证结果对照，而非只看最近一轮对话或提交。对于堆叠 PR，逐一对照父分支评估受影响的层。 按照[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)检查截图、标记和图例是否过时。
 3. 单独加载 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新评估业务价值及产品或代码库影响；复用仍有效的证据，重跑已失效的比较，并删除缺乏依据的主张。价值未知时明确写出 `not established`。
-4. 对已获授权的修改或交付工作，就地更新过时描述。保持简洁：改了什么、谁受益、为何重要、决定性证据及实质风险。替换过时条目；链接到详情，而非追加会话日志。保留人工撰写的意图和必需证据；已经准确时不作修改。
+4. 对已获授权的修改或交付工作，一并刷新受影响的截图、标记和图例；就地更新过时描述。保持简洁：改了什么、谁受益、为何重要、决定性证据及实质风险。替换过时条目；链接到详情，而非追加会话日志。保留人工撰写的意图和必需证据；已经准确时不作修改。
 5. 编辑后重新读取托管平台上的正文，确认其描述的是已发布的源分支状态。只读请求仅报告偏差，不编辑。明确要求仅本地修改或禁止推送时，暂缓发布；绝不将未发布的工作描述为已交付。
 
 ## 正文模板 [#body-template]
@@ -45,7 +45,7 @@ type: skill
 
 ## Evidence
 
-<frontend: before/after flow video playing inline (user-attachments URL), then screenshot table>
+<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
 
 - **Before:** <screenshot/output/failing test run>
   **After:** <screenshot/output/passing test run>
@@ -93,7 +93,7 @@ PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前�
 
 提供变更有效的具体证据，展示变更前后对比。列明未运行的检查和剩余不确定性；测试通过不代表人工审查或共识。
 
-对于大范围 UI 工作，使用 [UI 变更映射](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)串联用户问题 -> 界面变化 -> 证据 -> 验收标准。
+对于每项可见变更，按照[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自动标注证据，而不只是视频。 对于大范围 UI 工作，使用 [UI 变更映射](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)串联用户问题 -> 界面变化 -> 证据 -> 验收标准。
 
 对于后端架构、数据流、API 契约或工作流变更，请遵循[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指南并调用 `excalidraw-diagram`。提供聚焦的前后对比和可编辑源文件链接；更新相关的持续维护图表。图表失败时报告警告并继续，绝不阻塞 PR，也不能替代测试证据。
 

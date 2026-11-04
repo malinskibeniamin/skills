@@ -21,7 +21,7 @@ Web UI: load [better-interface](../jakubkrehel-skills/better-interface/SKILL.md)
 Content/layout stress: Call the Skill tool with "break-ui". Reuse dogfood fixtures
 and captures; test only uncovered cases. Preserve the read-only or authorized-fix endpoint.
 
-Implemented/release: use [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5): reconcile every affected surface/state with captures and visual tests, inspect snapshot diffs before updating intended baselines, rerun normally, and refresh evidence after edits. Screenshots are not tests; tests are not before/after evidence.
+Implemented/release: follow [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Review snapshot diffs before intended baseline updates; rerun normally and refresh after edits. Auto-annotate screenshots/video: numbered callouts + legend; read-only: report gaps. Screenshots are not tests; tests are not before/after evidence.
 
 HTML first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
 
