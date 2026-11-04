@@ -29,9 +29,9 @@ Przeczytaj [kontrakt ochrony uwagi czytelnika](https://github.com/malinskibeniam
 Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementacji lub dowodów i przed przekazaniem pracy:
 
 1. Znajdź otwarte PR-y jawnie powiązane z tą rozmową, sesją lub czatem; w przeciwnym razie sprawdź bieżącą gałąź przez `gh pr view`. Zweryfikuj stan otwarty, repozytorium, gałąź źródłową, bazę i własność. Nie wybieraj niepowiązanego ostatniego PR-a. Brak otwartego PR-a oznacza brak aktualizacji i nie daje zgody na jego utworzenie.
-2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica.
+2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica. Sprawdź aktualność zrzutów, oznaczeń i legendy zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations).
 3. Osobno załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md). Ponownie oceń wartość biznesową i wpływ na produkt lub bazę kodu; wykorzystaj nadal aktualne dowody, powtórz unieważnione porównania i usuń niepoparte twierdzenia. Gdy wartość jest nieznana, napisz `not established`.
-4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie zaktualizuj nieaktualny opis w miejscu. Pisz zwięźle: co się zmienia, kto korzysta, dlaczego to ważne, rozstrzygające dowody i istotne ryzyka. Zastępuj nieaktualne punkty; zamiast dopisywać dziennik sesji, podawaj odnośniki do szczegółów. Zachowaj intencję autora i wymagane dowody; pomiń edycję, jeśli opis jest już poprawny.
+4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj nieaktualny opis w miejscu. Pisz zwięźle: co się zmienia, kto korzysta, dlaczego to ważne, rozstrzygające dowody i istotne ryzyka. Zastępuj nieaktualne punkty; zamiast dopisywać dziennik sesji, podawaj odnośniki do szczegółów. Zachowaj intencję autora i wymagane dowody; pomiń edycję, jeśli opis jest już poprawny.
 5. Po edycji ponownie odczytaj opis z serwera i sprawdź, czy opisuje opublikowany stan gałęzi źródłowej. Żądania tylko do odczytu zgłaszają rozbieżności bez edycji. Wyraźny zakaz wypychania lub zakres lokalny odracza publikację; nie opisuj nieopublikowanej pracy jako dostarczonej.
 
 ## Szablon opisu [#body-template]
@@ -47,7 +47,7 @@ Użyj tego szablonu do napisania opisu PR:
 
 ## Evidence
 
-<frontend: before/after flow video playing inline (user-attachments URL), then screenshot table>
+<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
 
 - **Before:** <screenshot/output/failing test run>
   **After:** <screenshot/output/passing test run>
@@ -95,7 +95,7 @@ Używaj wyłącznie widoków, które pomagają zrozumieć zmianę.
 
 Konkretne dowody, że zmiana działa. Pokaż stan przed i po. Wymień niewykonane kontrole i pozostałe niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
 
-Przy szerokich zmianach interfejsu powiąż problem użytkownika -> zmianę widocznego obszaru -> dowody -> kryterium akceptacji, korzystając z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps).
+Dla każdej widocznej zmiany automatycznie dodawaj [adnotacje wizualne](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations) do dowodów, nie tylko do nagrania. Przy szerokich zmianach interfejsu powiąż problem użytkownika -> zmianę widocznego obszaru -> dowody -> kryterium akceptacji, korzystając z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps).
 
 Przy zmianach architektury backendu, przepływu danych, kontraktów API lub przebiegu pracy postępuj zgodnie z [diagramami backendowymi](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) i wywołaj `excalidraw-diagram`. Dodaj zwięzłe porównanie stanu przed i po oraz link do edytowalnego źródła; odśwież odpowiednie utrzymywane diagramy. Błędy diagramów zgłaszaj i kontynuuj pracę; nigdy nie blokują PR ani nie zastępują dowodów z testów.
 
