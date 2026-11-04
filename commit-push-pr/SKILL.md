@@ -36,7 +36,7 @@ With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after c
 
 1. Resolve base: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up in current PR; apply [repo metadata](references/metadata.md), including drafts. Draft PRs open without approval. Stacks use `/stacked-prs`.
 2. Every PR: load [PR](../tstack-skills/file-pr/SKILL.md), [impact](../quantify-impact/SKILL.md) and [body](../pr/SKILL.md) separately; keep drafts/value.
-3. Visible changes: inventory, automatically annotated before/after screenshots/video with numbered callouts and a change legend per [visual annotations](REFERENCE.md#visual-annotations), reviewed snapshots and passing visual tests. No separate annotation request needed. Missing evidence needs user waiver before publication.
+3. Visible changes: inventory, annotated before/after screenshots/video, reviewed snapshots, passing visual tests per reference. Auto-add numbered callouts/legend; gaps need user waiver.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Include dogfood receipt. Re-read body, check reviewer image access. Updates/reopens use same gate; edits invalidate affected evidence.
 
