@@ -4,7 +4,7 @@
 CONTRACT="$REPO_ROOT/shared/communication.md"
 run_file_eval "$CONTRACT" "shared reader-attention contract exists"
 
-for entry in CLAUDE.md AGENTS.md shared/intent-map.md pr/SKILL.md review/SKILL.md grilling/SKILL.md development-lifecycle/SKILL.md efficient-frontier/SKILL.md; do
+for entry in CLAUDE.md AGENTS.md shared/intent-map.md shared/TSTACK.md pr/SKILL.md review/SKILL.md grilling/SKILL.md development-lifecycle/SKILL.md efficient-frontier/SKILL.md; do
   run_content_eval "$REPO_ROOT/$entry" 'communication\.md' \
     "$entry routes relevant communication or tool choice to the shared contract"
 done
@@ -39,6 +39,32 @@ run_content_eval "$CONTRACT" 'schema|safety' \
 
 # The PR prompt is the public artifact here, not proof of model compliance.
 PR_CONTRACT="$REPO_ROOT/pr/SKILL.md"
+run_content_eval "$CONTRACT" 'one sentence.*entire change.*why it matters' \
+  "every PR opens with the whole change and its purpose in one sentence"
+run_content_eval "$CONTRACT" '10 seconds' \
+  "the PR opening has a ten-second first-read budget"
+
+# Templates are public prompts: prove neither entrypoint puts headings or metadata
+# ahead of the opening sentence. This checks guidance, not generated PR quality.
+if python3 - "$PR_CONTRACT" "$REPO_ROOT/commit-push-pr/REFERENCE.md" <<'PY'
+import sys
+from pathlib import Path
+
+for path, marker in zip(sys.argv[1:], ("```markdown\n", "<<'EOF'\n")):
+    body = Path(path).read_text().split(marker, 1)[1].lstrip()
+    opening = body.split("\n\n", 1)[0]
+    assert "\n" not in opening and not opening.startswith(("#", "-", "*")), path
+    assert "one sentence" in opening and "entire change" in opening and "why it matters" in opening, path
+PY
+then
+  echo '  PASS  both PR templates start with a standalone whole-change sentence'
+  PASS=$((PASS + 1))
+else
+  echo '  FAIL  a PR template puts headings, metadata, or a partial summary first'
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: PR opening sentence placement"
+fi
+
 run_content_eval "$PR_CONTRACT" 'scope, contracts, verification, or rollout risk' \
   "PR decision context is limited to consequential departures"
 run_content_eval "$PR_CONTRACT" 'prior choice -> new evidence -> current choice -> review consequence' \

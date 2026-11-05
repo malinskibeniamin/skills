@@ -18,7 +18,7 @@ At start/resume, after material scope, implementation, or evidence changes, and 
 1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
 2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents. Check visual captures, callouts, and legend for staleness per [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations).
 3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
-4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; update the opening sentence to cover the full current change and replace stale bullets in place with concise beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
 5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
 
 ## Body template
@@ -26,11 +26,12 @@ At start/resume, after material scope, implementation, or evidence changes, and 
 Use this template for the PR body:
 
 ```markdown
+<one sentence capturing the entire change and why it matters>
+
 ## Summary
 
-<outcome and why it matters to the affected user or caller>
-<reviewer focus or specific question; say if no special input is needed>
-<smallest useful diagram, diff-sketch, or tree>
+<optional reviewer focus or specific question; omit this section if it adds nothing to the opening>
+<optional smallest useful diagram, diff-sketch, or tree>
 
 ## Evidence
 
@@ -52,12 +53,15 @@ Use this template for the PR body:
 
 ## Sections
 
-Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`.
+The opening sentence is the required first read, not a preamble; follow the
+[PR attention budget](../shared/communication.md#match-the-artifact). Keep only supporting
+detail below it and omit unused sections. Use the user's domain language from `GLOSSARY.md`.
 
 ### Summary
 
-Lead with value and reviewer focus, not a changelog. Separate core changes from generated
-or mechanical files; name useful review entry points without a file-by-file inventory. Distinguish observed results from expectations.
+Add reviewer focus only when useful; do not repeat the opening sentence. Separate core
+changes from generated or mechanical files; name useful review entry points without a
+file-by-file inventory. Distinguish observed results from expectations.
 
 Use the PR body as the operator digest: behavior/value, decisive evidence, domain decisions,
 remaining risk/recovery and next action; link detail for resumption. Separate HTML or visual

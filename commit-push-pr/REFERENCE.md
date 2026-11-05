@@ -100,8 +100,9 @@ CODEOWNERS review routing. It also owns draft deferral and metadata readback/rec
 
 ## PR body template (Phase 5)
 
-Run `/quantify-impact` for every PR, including non-UI changes. Lead with the outcome,
-use short bullets, and omit unused sections. Frontend PRs show before telling: the
+Run `/quantify-impact` for every PR, including non-UI changes. Follow the
+[PR opening and attention budget](../shared/communication.md#match-the-artifact),
+use short supporting bullets, and omit unused sections. Frontend PRs show before telling: the
 before/after video and screenshot table sit directly under Summary, and prose only names
 what the visuals cannot show. No commit
 dump, boilerplate attribution, repeated rationale, or separate recap artifact. Keep full
@@ -109,9 +110,11 @@ logs/matrices in reviewer-accessible evidence links; keep before/after images in
 
 ```
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
+<one sentence capturing the entire change and why it matters>
+
 ## Summary
 - Lane: <Keep the lights on | Quality of life | Feature | Taste> -- <beneficiary>; trigger: <why now>; see `/product`
-- <observable behavior change and why it matters; 1-3 bullets>
+- <optional reviewer focus or essential context not already in the opening>
 <optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
 
 ## Before / after
