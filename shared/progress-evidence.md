@@ -9,6 +9,12 @@ Record repository/worktree/branch, local and published HEAD/base, dirty scope, c
 review/replay receipts, next action and missing prerequisites. Link existing artifacts;
 redact state using [verification replay](verification-replay.md).
 
+Keep parked work with its reason, owner and reopen condition; resume the current priority,
+not every old suggestion. Link [shared area contracts](repo-navigation.md#leave-shared-context)
+for stable invariants/helpers and verification/recovery entrypoints. Keep transient checks
+and next actions here, so another operator can resume without reading every PR or replaying
+the conversation. A handoff transfers context, not new scope or execution permission.
+
 Re-read git and hosted state before trusting inherited receipts. Match their revision,
 fixture and environment; invalidate affected receipts after edits, pushes, rebases or base
 movement. Distinguish locally fixed, committed, pushed, reviewed, merged and deployed.

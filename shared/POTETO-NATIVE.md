@@ -197,6 +197,10 @@ Owners: [swarm](../swarm/SKILL.md), [efficient frontier](../efficient-frontier/S
 Only an explicit delegation request enters this branch. Partition independent ownership
 for coverage work; use bounded candidates and a common acceptance check for a requested
 bakeoff. Review each result, rerun decisive claims and synthesize in the primary context.
+Prefer independent end-to-end outcomes over handoffs between frontend/backend layers.
+Bound active lanes by operator review/repair capacity as well as verified allowance; finish
+or checkpoint a lane before admitting another. A waiting agent or spare subscription
+capacity does not outrank the current outcome. Use [priority admission](communication.md#admit-work-by-priority).
 Keep the host's model, isolation, tool and lifecycle contracts. No automatic nested agents,
 extra provider, background worker or upstream orchestration daemon.
 

@@ -23,9 +23,7 @@ type: skill
 
 Przy wieloetapowej implementacji lub publikacji przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#execution).
 
-Gdy zadanie obejmuje wdrożenie dostarczonego projektu Figma lub obrazu, wczytaj [build-design](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md) dla dowodów źródłowych, mapowania tokenów i porównania szerokości widoku. Zachowaj wymagane stany błędów i zabezpieczenia oraz tę pętlę dostarczania; zgodność z obrazem ich nie uchyla.
-
-Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat; dobieraj pomocnicze umiejętności automatycznie. Przed edycją przeczytaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) dla własności, izolacji i punktów końcowych. Korzystaj z [komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md) i [ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat. Przed edycją przeczytaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md) dla własności, izolacji i punktów końcowych. Korzystaj z [komunikacji](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#admit-work-by-priority) i [ładowania zależności](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Kontrakt rezultatu [#outcome-contract]
 
@@ -45,13 +43,15 @@ Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj
 
 ### Sprawdź [#inspect]
 
-Rozstrzygnij przeoczony obszar lub zmienną niewiadomą na podstawie dowodów źródłowych. Dopasuj się do istniejących wzorców i sprawdzonej skali; zaklasyfikuj kwestie jako wyszukanie, prototyp, odwracalne założenie lub przesłankę do wstrzymania pracy.
+Przeczytaj zgłoszenia, opisy, etykiety i komentarze; doprecyzuj tytuł i odnośniki. Rozstrzygnij przeoczony obszar lub zmienną niewiadomą przez sprawdzenie źródeł, próbę, odwracalne założenie lub wstrzymanie pracy; dopasuj się do wzorców repozytorium i sprawdzonej skali.
 
 Przed pisaniem przeczytaj zasady właściwe dla danego zakresu i ustal natywne polecenia repozytorium do formatowania, lintowania, sprawdzania typów i testów dotkniętych zmianą na podstawie skryptów, konfiguracji i CI. Zapisz istotne błędy stanu wyjściowego; korzystaj z zainstalowanego zestawu narzędzi.
 
 Dla checkoutów T3 lub pracy z Effect ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `work`; w całej pętli używaj zwróconych wskazówek projektu i kontroli dla zmienionego zakresu.
 
 Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wpływ proporcjonalnie; przed zmianą widocznego zachowania zarejestruj bazę, także dla drobnego tekstu lub współdzielonego UI.
+
+[Figma/obraz](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md).
 
 ### Działaj [#act]
 

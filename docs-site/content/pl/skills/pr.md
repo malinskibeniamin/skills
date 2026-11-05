@@ -72,7 +72,8 @@ Pomiń wszelkie wstępy i ogranicz opis do minimum. Używaj języka domeny użyt
 Oddziel zmiany główne od plików generowanych lub mechanicznych; wskaż przydatne punkty wejścia do przeglądu bez inwentarza wszystkich plików.
 
 Zacznij od wartości i kwestii wymagających uwagi recenzenta, a nie od listy zmian. Oddziel zaobserwowane wyniki od oczekiwań.
-Następnie wybierz najmniejszy widok wyjaśniający sedno; pomiń wizualizację, która niczego nie wyjaśnia.
+
+Opis PR ma być zwięzłym podsumowaniem dla operatora: zachowanie i wartość, rozstrzygające dowody, decyzje domenowe, pozostałe ryzyko i sposób odzyskiwania oraz następne działanie; szczegóły podlinkuj, aby ułatwić wznowienie pracy. Osobne podsumowania HTML lub wizualne wymagają wyraźnej prośby; zachowaj przegląd pełnego diffu i wymagane dowody wizualne.
 
 Wybierz najmniejszy widok z [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md).
 
@@ -85,11 +86,9 @@ Opis PR musi być samowystarczalny; pomijaj puste historie zmian i nigdy nie wym
 Fragmenty sesji są opcjonalnym kontekstem. Używaj tylko istotnych fragmentów, dopuszczonych do udostępnienia, z usuniętymi danymi wrażliwymi i dostępnych dla recenzentów; w przeciwnym razie podaj bezpieczne, samodzielne uzasadnienie.
 Nie rozszerzaj zakresu udostępniania ani uprawnień do wykonywania działań tylko po to, by podać link. Długość sesji lub liczba tur nie dowodzi poprawności ani staranności; sprawdzaj twierdzenia na podstawie bieżącego diffu i dowodów z wykonania.
 
-#### Wskazówki [#guidance]
-
 Umieść wizualizacje obok tekstu, który wspierają. Pokaż tylko kluczowe wywołania, pliki, właściwości, stany i granice.
 
-Używaj wyłącznie widoków, które pomagają zrozumieć zmianę.
+Pomiń widoki, które nie pomagają zrozumieć zmiany.
 
 ### Dowody [#evidence]
 

@@ -5,8 +5,8 @@ description: "Run React, TypeScript, and UI implementation from a high-level out
 
 For multi-step delivery, read [Poteto](../shared/POTETO-NATIVE.md#execution).
 
-`/work`: one outcome; select helpers. Before edits, read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
-Use [communication](../shared/communication.md) and [load helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+`/work`: one outcome. Before edits, read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
+Use [communication](../shared/communication.md#admit-work-by-priority); [helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Outcome contract
 

@@ -398,14 +398,11 @@ test("repair reviews focus on the captured delta without reusing approval or dro
   expect(f.run("check").code).toBe(2);
 });
 
-test("base, branch, history, rubric and unavailable-review changes require full review", () => {
-  for (const change of [
-    "base",
-    "branch",
-    "history",
-    "rubric",
-    "unavailable",
-  ] as const) {
+// Each invalidation is an independent contract with its own existing timeout.
+// One aggregate test let five real Git/CLI scenarios exhaust the CI budget together.
+test.each(["base", "branch", "history", "rubric", "unavailable"] as const)(
+  "review invalidation (%s) requires full coverage",
+  (change) => {
     const f = checkout();
     f.git("add", "README.md");
     f.git("commit", "-m", "test(review): first candidate");
@@ -459,8 +456,8 @@ test("base, branch, history, rubric and unavailable-review changes require full 
       "full",
     );
     expect(f.run("check").code).toBe(1);
-  }
-});
+  },
+);
 
 test("consumer re-review scope defaults to full and rejects invalid policy", () => {
   const f = checkout();

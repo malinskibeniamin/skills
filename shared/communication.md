@@ -63,6 +63,21 @@ feedback loops before hiding latency with more agents. Delegation still requires
 consent; once authorized, use only bounded lanes with a reason to run concurrently.
 Keep one owner for synthesis; adding a communication-only agent is not the default.
 
+## Admit work by priority
+
+Keep the requested outcome as the active lane, owned end to end across design, code,
+verification and delivery. Before picking up an interruption, name its urgency and what
+it displaces. Cheap implementation or idle agent capacity is not a priority signal.
+Within authorized scope, switch for a blocking dependency or credible urgent failure;
+otherwise park the follow-up in the existing issue or local checkpoint and finish the lane.
+An unrelated urgent discovery warrants a concise alert, not silent scope expansion.
+
+When parallel work is explicitly authorized, bound lanes by the operator's ability to
+review and recover them, not the number of available agents. Finish or checkpoint a lane
+before adding another; record owner, state and next action in existing notes rather than
+inventing a second queue. Honor requested stops, working-hours limits and background-work
+boundaries; unused capacity creates no obligation to start more work.
+
 ## Sources
 
 - [Run fewer agents](https://blog.exe.dev/etoomanythings): attention and feedback-loop cost.

@@ -58,7 +58,10 @@ Skip all preambles and keep prose brief. Use the user's domain language from `GL
 
 Lead with value and reviewer focus, not a changelog. Separate core changes from generated
 or mechanical files; name useful review entry points without a file-by-file inventory. Distinguish observed results from expectations.
-Then pick the smallest view that makes the key point clear; omit a visual that adds no understanding.
+
+Use the PR body as the operator digest: behavior/value, decisive evidence, domain decisions,
+remaining risk/recovery and next action; link detail for resumption. Separate HTML or visual
+recap artifacts need an explicit request; retain full-diff review and required visual evidence.
 
 Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).
 
@@ -74,11 +77,8 @@ authorized, redacted excerpts accessible to reviewers; otherwise give safe stand
 Do not widen sharing or execution access just to provide a link. Session length or turn count proves
 neither correctness nor diligence; verify claims against the current diff and execution evidence.
 
-#### Guidance
-
 Place visuals beside their supporting text. Show only load-bearing calls, files, props, states, and boundaries.
-
-Use only views that change understanding.
+Omit views that add no understanding.
 
 ### Evidence
 
