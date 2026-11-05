@@ -43,24 +43,34 @@ run_content_eval "$CONTRACT" 'one sentence.*entire change.*why it matters' \
   "every PR opens with the whole change and its purpose in one sentence"
 run_content_eval "$CONTRACT" '10 seconds' \
   "the PR opening has a ten-second first-read budget"
+run_content_eval "$CONTRACT" 'at most three short bullets' \
+  "PR supporting prose has a compact default instead of a section inventory"
+run_content_eval "$CONTRACT" 'collapsed.*details|details.*collapsed' \
+  "long required receipts stay available outside the main read"
 
 # Templates are public prompts: prove neither entrypoint puts headings or metadata
 # ahead of the opening sentence. This checks guidance, not generated PR quality.
-if python3 - "$PR_CONTRACT" "$REPO_ROOT/commit-push-pr/REFERENCE.md" <<'PY'
+if python3 - "$PR_CONTRACT" "$REPO_ROOT/commit-push-pr/REFERENCE.md" "$REPO_ROOT/.github/pull_request_template.md" <<'PY'
 import sys
 from pathlib import Path
 
-for path, marker in zip(sys.argv[1:], ("```markdown\n", "<<'EOF'\n")):
-    body = Path(path).read_text().split(marker, 1)[1].lstrip()
+for path, marker, end in zip(sys.argv[1:], ("```markdown\n", "<<'EOF'\n", ""), ("\n```", "\nEOF", "")):
+    body = Path(path).read_text()
+    if marker:
+        body = body.split(marker, 1)[1].split(end, 1)[0]
+    body = body.strip()
     opening = body.split("\n\n", 1)[0]
     assert "\n" not in opening and not opening.startswith(("#", "-", "*")), path
     assert "one sentence" in opening and "entire change" in opening and "why it matters" in opening, path
+    lines = body.splitlines()
+    assert not any(line.startswith("#") for line in lines), f"section inventory: {path}"
+    assert 1 <= sum(line.startswith("- ") for line in lines) <= 3, f"bullet budget: {path}"
 PY
 then
-  echo '  PASS  both PR templates start with a standalone whole-change sentence'
+  echo '  PASS  all PR templates use a standalone whole-change sentence and at most three bullets'
   PASS=$((PASS + 1))
 else
-  echo '  FAIL  a PR template puts headings, metadata, or a partial summary first'
+  echo '  FAIL  a PR template buries the opening or expands into a wall of text'
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: PR opening sentence placement"
 fi

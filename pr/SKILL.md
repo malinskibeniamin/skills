@@ -28,34 +28,18 @@ Use this template for the PR body:
 ```markdown
 <one sentence capturing the entire change and why it matters>
 
-## Summary
-
-<optional reviewer focus or specific question; omit this section if it adds nothing to the opening>
-<optional smallest useful diagram, diff-sketch, or tree>
-
-## Evidence
-
-<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
-
-- **Before:** <screenshot/output/failing test run>
-  **After:** <screenshot/output/passing test run>
-
-## Merge Danger
-
-**Door:** <one-way or two-way>
-
-<optional: description>
-
-**Blast Radius:** <affected users, callers, or contracts>
-
-<rollback path and unresolved risks, when applicable>
+- Review: <optional focus or decision; omit if none>
+- Testing: <decisive checks and observed results; before -> after; gaps>
+- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
 ```
 
 ## Sections
 
 The opening sentence is the required first read, not a preamble; follow the
 [PR attention budget](../shared/communication.md#match-the-artifact). Keep only supporting
-detail below it and omit unused sections. Use the user's domain language from `GLOSSARY.md`.
+detail below it. The topics below are author guidance, not required PR headings.
+Link or collapse long receipts; retain required visual media inline immediately after the
+opening. Use the user's domain language from `GLOSSARY.md`.
 
 ### Summary
 
@@ -93,7 +77,7 @@ For every visible change, automatically annotate the evidence using [visual anno
 
 For backend architecture, data flow, API contract, or workflow changes, follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`. Include a focused before/after comparison and editable source link; refresh relevant maintained diagrams. Diagram failures warn and continue, never block the PR or replace test evidence.
 
-For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the opening sentence so reviewers see the change before reading supporting detail. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
