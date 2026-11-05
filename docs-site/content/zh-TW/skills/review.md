@@ -45,7 +45,7 @@ type: skill
 
 ## 證據迴圈 [#evidence-loop]
 
-**檢查 -> 驗證 -> 分類 -> 綜合。**
+**質疑 -> 檢查 -> 驗證 -> 分類 -> 綜合。** 依[共用約定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)驗證 `challenges`。
 
 ### 檢查 [#inspect]
 

@@ -1,13 +1,19 @@
 #!/usr/bin/env bun
 import {
+  closeSync,
   existsSync,
+  fstatSync,
   mkdirSync,
+  mkdtempSync,
+  openSync,
   readFileSync,
+  readSync,
   realpathSync,
   renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve, sep } from "node:path";
 import { object } from "./github-evidence";
 import {
@@ -51,11 +57,64 @@ function atomic(file: string, value: string) {
 function save(file: string, value: unknown) {
   atomic(file, `${JSON.stringify(value, null, 2)}\n`);
 }
-function command(args: string[], cwd: string, allowed = [0]): string {
-  const run = Bun.spawnSync(args, { cwd, timeout: 30_000 });
-  if (!allowed.includes(run.exitCode ?? -1))
-    throw new Error(`${args[0]} failed: ${run.stderr.toString().trim()}`);
-  return run.stdout.toString();
+function command(
+  args: string[],
+  cwd: string,
+  allowed = [0],
+  options: { env?: Record<string, string | undefined>; stdin?: string } = {},
+): string {
+  // Avoid Bun's macOS pipe-capture failures without retrying failed commands.
+  // https://github.com/oven-sh/bun/issues/24690
+  const directory = mkdtempSync(join(tmpdir(), "review-command-"));
+  const descriptors: number[] = [];
+  try {
+    const capture = (name: string) => {
+      const path = join(directory, name);
+      const descriptor = openSync(path, "wx+", 0o600);
+      descriptors.push(descriptor);
+      // Anonymous files stay out of Git snapshots even with TMPDIR in the checkout.
+      rmSync(path);
+      return descriptor;
+    };
+    const read = (descriptor: number) => {
+      const buffer = Buffer.alloc(fstatSync(descriptor).size);
+      // Positional reads keep the original inode and ignore the child's cursor.
+      for (let offset = 0; offset < buffer.length; ) {
+        const count = readSync(
+          descriptor,
+          buffer,
+          offset,
+          buffer.length - offset,
+          offset,
+        );
+        if (count === 0) throw new Error("Command capture ended unexpectedly");
+        offset += count;
+      }
+      return buffer.toString("utf8");
+    };
+    const stdout = capture("stdout");
+    const stderr = capture("stderr");
+    const run = Bun.spawnSync(args, {
+      cwd,
+      timeout: 30_000,
+      stdout,
+      stderr,
+      ...(options.env ? { env: options.env } : {}),
+      stdin:
+        options.stdin === undefined ? "ignore" : Buffer.from(options.stdin),
+    });
+    if (!allowed.includes(run.exitCode ?? -1))
+      throw new Error(
+        `${args[0]} failed: ${read(stderr).trim()} (arguments: ${JSON.stringify(args.slice(1))})`,
+      );
+    return read(stdout);
+  } finally {
+    try {
+      for (const descriptor of descriptors) closeSync(descriptor);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  }
 }
 function git(root: string, ...args: string[]) {
   return command(["git", ...args], root);
@@ -271,17 +330,16 @@ function candidateTree(
   const index = join(root, stage, `index-${crypto.randomUUID()}`);
   mkdirSync(dirname(index), { recursive: true });
   const run = (args: string[], input?: string) => {
-    const result = Bun.spawnSync(["git", ...args], {
-      cwd: root,
-      env: { ...Bun.env, GIT_INDEX_FILE: index },
-      stdin: input === undefined ? undefined : Buffer.from(input),
-      timeout: 30_000,
-    });
-    if (result.exitCode !== 0)
+    try {
+      return command(["git", ...args], root, [0], {
+        env: { ...Bun.env, GIT_INDEX_FILE: index },
+        ...(input === undefined ? {} : { stdin: input }),
+      }).trim();
+    } catch (error) {
       throw new Error(
-        `Cannot reconstruct review candidate: ${result.stderr.toString().trim()}`,
+        `Cannot reconstruct review candidate: ${error instanceof Error ? error.message : String(error)}`,
       );
-    return result.stdout.toString().trim();
+    }
   };
   try {
     run([
@@ -687,7 +745,7 @@ function createPlan(
         ...definition.skills,
         ...(definition.reviewer ? [definition.reviewer.instructions] : []),
       ];
-      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${guidance.map((path) => `- ${path}`).join("\n")}\n\n${specialist}Apply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. A clean result needs sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
+      const promptText = `# ${definition.title}\n\n${definition.lens}\n\n${input}\n\nGuidance to load for this gate:\n${guidance.map((path) => `- ${path}`).join("\n")}\n\n${specialist}Apply only this gate's lens. Linked skills supply guidance, not permission to execute sibling workflows, dispatch agents or publish.\n\nRouting: ${reason}; review scope: ${scope}.\n\nReturn the structured review contract at ${join(harness, "agents/references/findings-schema.md")}, with reviewer ${definition.id} for inline/generic gate workers. Existing native reviewer agents retain their dispatched identity; the owner binds it with --reviewer. Start from the hypothesis that this change is wrong. Return non-empty challenges: concrete failure hypotheses, scenarios, exact checks, expected behavior, actual observations, and confirmed/refuted/unresolved dispositions. Confirmed hypotheses link finding ids; unresolved challenges require NEEDS_CHANGES. Execute safe runnable checks; source traces must explain execution limits. A clean result needs refuted hypotheses and sufficiency tied to this change, not merely related existing artifacts. Report all findings; preserve their ids across re-reviews. Confirm prior findings are fixed or rebut them with source/reproduction evidence. Report the class of bug and every affected instance, not duplicate line-level findings. Do not modify code, invoke another model, invent endorsement, or claim another executor's work as your own.\n\nPrior review context (not current approval):\n${prior || "No prior review."}\n`;
       atomic(prompt, promptText);
       return {
         id: definition.id,
@@ -851,6 +909,9 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
         );
         const failed =
           record.result.critical_checks_failed ||
+          record.result.challenges.some(
+            (challenge) => challenge.outcome === "unresolved",
+          ) ||
           remaining.some(blocks) ||
           record.result.testing_gaps.length > 0 ||
           (record.result.status === "NEEDS_CHANGES" &&
@@ -866,6 +927,10 @@ export function reviewCheckpoint(cwd: string, file?: string): ReviewCheckpoint {
               : "PASSED";
         const evidence = [
           record.result.sufficiency,
+          ...record.result.challenges.map(
+            (challenge) =>
+              `${challenge.outcome}: ${challenge.hypothesis}; ${challenge.method}: ${challenge.check}; expected: ${challenge.expected}; observed: ${challenge.observation}${challenge.execution_limits ? `; execution limits: ${challenge.execution_limits}` : ""}`,
+          ),
           ...remaining.map(
             (finding) =>
               `${finding.severity} ${finding.file}:${finding.line}: ${finding.why_it_matters}`,

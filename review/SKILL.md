@@ -8,7 +8,7 @@ Read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
 Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Read [depth](OPERATING-MODEL.md) and [split](../shared/review-contract.md).
+Read [depth](OPERATING-MODEL.md).
 ## Review contract
 
 - **Objective**: achieve the outcome without credible defects.
@@ -26,7 +26,8 @@ Recheck identity; drift invalidates evidence.
 
 ## Evidence loop
 
-**inspect -> verify -> classify -> synthesize.**
+**challenge -> inspect -> verify -> classify -> synthesize.** Validate `challenges` per
+[shared contract](../shared/review-contract.md).
 
 ### Inspect
 
@@ -55,8 +56,8 @@ Add surface-specific scrutiny only when the diff supplies evidence ([interfaces]
 | Surface | Check |
 |---|---|
 | Customer-facing UI/CLI/report | Render, states, copy, keyboard/a11y, console, viewport |
-| Security/privacy/data loss | Attacker/access, trust boundaries, credential flow, reachable impact, recovery |
-| Documentation/public behavior | Discoverability, defaults/omission, migration/release notes; none for internal-only changes |
+| Security/privacy/data loss | Access, trust boundaries, credentials, impact, recovery |
+| Documentation/public behavior | Discoverability, defaults, migration/release notes when public behavior changes |
 | API/schema/SQL/PostgreSQL | Compatibility, migrations, generated output, actual dialect |
 | Go/concurrency/workflows | Ownership, cancellation, races, retries, idempotency |
 | Dependency/external API | Primary docs, versions/pins, advisories |
@@ -69,7 +70,7 @@ Authorized axes: foreground, fresh contexts; aggregate. Else inline.
 
 ### Classify
 
-Place diff-introduced findings on the tightest changed line; give impact and smallest safe fix.
+Findings: tightest changed line, impact and smallest safe fix.
 
 - **P0**: exposure, data loss, outage, or impossible core flow.
 - **P1**: user regression, broken contract, false success, or major a11y defect.
@@ -81,9 +82,9 @@ without credible risk.
 
 ### Synthesize
 
-Use [communication](../shared/communication.md); keep schema.
+Use [communication](../shared/communication.md).
 Lead with count (including zero). Deduplicate by root cause; name bug class/affected instances.
-For a re-review, use repair delta/prior findings after full coverage; widen for changed assumptions.
+For a re-review, inspect repairs/prior findings after full coverage; widen for changed assumptions.
 Prove dispositions; separate value from defects. Omit praise/unrelated bugs.
 
 ## Deep mode

@@ -22,9 +22,11 @@ Guidance supplies a lens, not permission to execute its delivery or sibling flow
 Explicit-only skills remain human-invoked. Report overlapping root causes once;
 name the primary owner and supporting evidence instead of duplicating findings.
 
-Return one version 1 JSON block per [findings-schema.md](findings-schema.md).
+Return one version 2 JSON block per [findings-schema.md](findings-schema.md).
 Use your dispatched agent name as `reviewer`; an inline owner uses the gate id,
-never claims independent review. Include `testing_gaps` and
+never claims independent review. Include concrete falsification `challenges` with observed evidence and dispositions;
+source traces explain execution limits. Unresolved challenges require `NEEDS_CHANGES`.
+Include `testing_gaps` and
 `simplification_opportunities`, even when empty. A clean result needs `sufficiency`
 tied to inspected sources and proof for this candidate. Include limits explicitly.
 

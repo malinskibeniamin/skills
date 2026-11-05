@@ -54,7 +54,7 @@ fi
 
 # ── Validate schema ──────────────────────────────────────────────
 if ! printf '%s\n' "$json_block" | jq -e -s --arg reviewer "$agent_type" -f "$validator" >/dev/null 2>&1; then
-  reject_report "Invalid reviewer report. Read $findings_schema; return exactly one version 1 JSON report with valid status, findings, evidence, and verdict consistency. Incomplete reviews need an explicit reason, not approval."
+  reject_report "Invalid reviewer report. Read $findings_schema; return exactly one version 2 JSON report with valid status, findings, attempted falsification (challenges), evidence, and verdict consistency. Completed reviews need at least one concrete challenge; unresolved challenges require NEEDS_CHANGES. Incomplete reviews need an explicit reason, not approval."
 fi
 status=$(printf '%s\n' "$json_block" | jq -r '.status')
 finding_count=$(printf '%s\n' "$json_block" | jq '.findings | length')

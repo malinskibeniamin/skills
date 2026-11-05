@@ -57,7 +57,11 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
 3. Load [change evidence](change-evidence.md) and applicable specialist instructions.
    Exercise runnable work with [dogfood](../dogfood/SKILL.md): real user or public entrypoint, intended use and
    a credible failure/recovery path. Static docs/config use the relevant consumer/validator instead.
-4. Load [review](../review/SKILL.md) and apply its diagnostic axes inline. Its read-only
+4. Load [review](../review/SKILL.md) and apply its diagnostic axes inline, starting from
+   the hypothesis that the candidate is wrong. Validate the required falsification
+   receipt through its [existing collector](../review/REFERENCE.md#receipt-validation);
+   fix confirmed defects and replay their counterexamples before a fresh clean receipt.
+   Its read-only
    contract governs that assessment; this author request owns repairing concrete findings.
    Select [risk-based depth](../review/OPERATING-MODEL.md); retain runnable proof and
    recovery limits before asking for human attention. Stop at the first clean pass.

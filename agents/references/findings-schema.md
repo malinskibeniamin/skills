@@ -2,7 +2,7 @@
 
 All eight finding-producing reviewer agents in [the role catalogue](../../review/REVIEWERS.md) MUST output findings as a single JSON block. The evidence-running `verifier` keeps its separate verification receipt; planning hats remain plan-time. This enables programmatic triage, autofix routing, and cross-reviewer deduplication.
 
-The executable contract is [findings-schema.jq](findings-schema.jq), version 1.
+The executable contract is [findings-schema.jq](findings-schema.jq), version 2.
 The bundled SubagentStop hook validates it in either host when the host supplies
 a recognized reviewer event. Native agent output enforcement remains best effort;
 the coordinator must validate reports when no matching hook event is available.
@@ -13,7 +13,7 @@ not recorded as completed coverage. Schema validity proves shape, not truth.
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "reviewer": "code-reviewer",
   "status": "NEEDS_CHANGES",
   "findings": [
@@ -34,6 +34,19 @@ not recorded as completed coverage. Schema validity proves shape, not truth.
       "confidence": 0.85
     }
   ],
+  "challenges": [
+    {
+      "hypothesis": "A deleted account makes the profile crash.",
+      "scenario": "The API returns user: null after account deletion.",
+      "method": "source-trace",
+      "check": "Trace the null API response to src/components/UserProfile.tsx:42.",
+      "expected": "A missing user renders the empty state.",
+      "observation": "The render path unconditionally reads user.name.",
+      "outcome": "confirmed",
+      "finding_ids": ["user-response-1"],
+      "execution_limits": "This read-only pass has source but no runnable API fixture."
+    }
+  ],
   "testing_gaps": [
     "No test for error state when API returns 500",
     "Missing edge case: empty array response"
@@ -52,7 +65,7 @@ a non-empty reason and empty findings; none counts as approval:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "reviewer": "adversarial-reviewer",
   "status": "UNAVAILABLE",
   "reason": "The pinned source snapshot is unavailable.",
@@ -61,7 +74,7 @@ a non-empty reason and empty findings; none counts as approval:
 ```
 
 Completed statuses are `APPROVED`, `CONCERNS`, and `NEEDS_CHANGES`.
-Completed reviews require `findings`, `testing_gaps`, and
+Completed reviews require non-empty `challenges`, plus `findings`, `testing_gaps`, and
 `simplification_opportunities` arrays. Every finding requires all documented
 fields, a positive integer line, boolean `pre_existing`, confidence in [0, 1],
 and defined enum values. The reviewer must match the dispatched role. Unknown
@@ -70,6 +83,28 @@ An introduced P0/P1 finding or failed critical Karpathy check requires
 `NEEDS_CHANGES`; `APPROVED`/`CONCERNS` cannot hide it. All present
 `karpathy_checks` values must be `pass`, `fail`, or `n/a`.
 
+### Falsification ledger
+
+`challenges` records attempts to disprove the change, including hypotheses that did
+not become findings. Each entry requires the non-empty strings `hypothesis`, `scenario`,
+`check`, `expected` and `observation`. `check` names an exact executed command or decisive
+source locations/path; `observation` reports what happened, not a plan or promise.
+
+- `method`: `execution` or `source-trace`. Execution uses `execution_limits: null`;
+  source traces require non-empty `execution_limits` explaining why execution was
+  unavailable or inapplicable. An unrun command alone is not a source trace.
+- `outcome`: `confirmed`, `refuted` or `unresolved`, always about the **defect hypothesis**.
+- `finding_ids`: unique ids from `findings` or `cross_model_findings` when confirmed;
+  at least one is required. Refuted/unresolved entries require `[]`.
+- Any unresolved challenge requires `NEEDS_CHANGES`, even without findings, and remains
+  blocking after an unrelated finding is refuted. Resolve it with new evidence/review.
+
+One entry is the structural minimum, not a coverage or bug quota. Cover materially distinct
+risks in the assigned lens. A clean review may have all hypotheses refuted. Incomplete
+statuses omit challenges or use `[]`; they never count as completed coverage. Version 1
+receipts must be reviewed and re-emitted, not relabeled or filled with invented evidence.
+The validator checks shape/consistency, not whether commands ran or claims are true.
+
 ## Gate receipts
 
 [Review gates](../../review/GATES.md) use the same versioned jq validator through
@@ -77,7 +112,7 @@ An introduced P0/P1 finding or failed critical Karpathy check requires
 The adapter selects gate mode to validate the configured gate id and require a
 non-empty `sufficiency` for clean gate reviews. Native reviewer events retain their
 existing identity, required fields, incomplete statuses and strict verdict checks.
-An approval contradicting introduced blockers, testing gaps or critical checks is
+An approval contradicting introduced blockers, testing gaps, unresolved challenges or critical checks is
 rejected, not silently relabeled. Re-emit a consistent report.
 
 `cross_model_findings`, when present, use the same finding fields and participate

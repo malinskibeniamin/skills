@@ -751,7 +751,24 @@ test("hosted readiness consumes passing, invalid and mismatched gate evidence", 
     writeFileSync(
       input,
       JSON.stringify({
-        schema_version: 1,
+        schema_version: 2,
+        challenges: [
+          {
+            hypothesis:
+              "The supposedly empty candidate contains a behavioral change.",
+            scenario:
+              "Read the captured candidate diff before accepting the fixture.",
+            method: "source-trace",
+            check: "Inspect the plan's change.diff and candidate identity.",
+            expected:
+              "No changed behavior or affected contracts in the fixture.",
+            observation: "The captured fixture has no changed behavior.",
+            outcome: "refuted",
+            finding_ids: [],
+            execution_limits:
+              "This readiness fixture has no runnable behavior change.",
+          },
+        ],
         testing_gaps: [],
         simplification_opportunities: [],
         reviewer: gate.id,

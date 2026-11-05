@@ -1,4 +1,4 @@
-# Version 1 of the reviewer event contract. Slurp exactly one report; the caller
+# Version 2 of the reviewer event contract. Slurp exactly one report; the caller
 # supplies the dispatched reviewer identity. Unknown extension fields are allowed.
 def nonempty: type == "string" and test("\\S");
 def member($choices): . as $value | $choices | index($value) != null;
@@ -31,6 +31,23 @@ def checks:
 def critical_failure:
   .karpathy_checks as $checks
   | any(["hallucinated-api", "confident-wrong-types", "ssrf-url-fetch"][]; $checks[.] == "fail");
+def challenge($findings):
+  type == "object"
+  and (.hypothesis | nonempty)
+  and (.scenario | nonempty)
+  and (.method | member(["execution", "source-trace"]))
+  and (.check | nonempty)
+  and (.expected | nonempty)
+  and (.observation | nonempty)
+  and (.outcome | member(["confirmed", "refuted", "unresolved"]))
+  and (.finding_ids | strings and length == (unique | length))
+  and (if .method == "source-trace" then .execution_limits | nonempty
+    else .execution_limits == null end)
+  and (if .outcome == "confirmed" then
+    (.finding_ids | length > 0)
+    and all(.finding_ids[]; . as $id | any($findings[]; .id == $id))
+  else .finding_ids == [] end);
+def unresolved_challenges: any(.challenges[]; .outcome == "unresolved");
 def completed:
   (.testing_gaps | strings)
   and (.simplification_opportunities | strings)
@@ -38,9 +55,11 @@ def completed:
   and (if has("cross_model_findings") then
     .cross_model_findings | type == "array" and all(.[]; finding)
   else true end)
+  and ((.findings + (.cross_model_findings // [])) as $findings
+    | .challenges | type == "array" and length > 0 and all(.[]; challenge($findings)))
   and checks
   and (if any((.findings + (.cross_model_findings // []))[]; blocking_finding)
-    or critical_failure or (.testing_gaps | length > 0) then
+    or critical_failure or unresolved_challenges or (.testing_gaps | length > 0) then
     .status == "NEEDS_CHANGES"
   else true end)
   and (if gate_report and ((.findings + (.cross_model_findings // [])) | length == 0)
@@ -49,7 +68,7 @@ def completed:
 
 . as $reports | (length == 1 and (.[0] |
   type == "object"
-  and .schema_version == 1
+  and .schema_version == 2
   and .reviewer == $reviewer
   and (.reviewer | if gate_report then test("^[a-z][a-z0-9-]{0,63}$")
     else member(["self-reviewer", "code-reviewer", "adversarial-reviewer", "interface-reviewer", "integration-reviewer", "runtime-reviewer", "contracts-data-reviewer", "performance-reviewer"]) end)
@@ -58,7 +77,7 @@ def completed:
     completed
   elif .status | member(["SKIPPED", "UNAVAILABLE", "FAILED"]) then
     .findings == [] and ((.cross_model_findings // []) == [])
-    and ((.testing_gaps // []) == []) and (.reason | nonempty)
+    and ((.testing_gaps // []) == []) and ((.challenges // []) == []) and (.reason | nonempty)
   else false end)
 )) as $valid
 | if $valid and gate_report then

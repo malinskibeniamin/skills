@@ -6,6 +6,10 @@ approval requirements or merge permission.
 
 ## Objective: does it work?
 
+Start with the working hypothesis **this change is wrong**. Try to falsify its claims,
+not confirm the author's story. This chooses investigative effort, not the verdict:
+accept counterevidence, report only supported defects, and stop at a justified clean pass.
+
 Apply [verifiability over readability](verifiability.md): inspect independently
 rerunnable contract evidence, domain-language alignment and human spot-check access.
 Size, nesting and cyclomatic complexity alone are not defects; measured performance
@@ -19,6 +23,32 @@ belong in residual evidence limits, not speculative findings. A clean pass is va
 Run the repository's deterministic lint, formatting and type checks separately; summarize
 their results without generating duplicate inline findings or restating their rule catalogs.
 Review the correctness of changed checks and what green checks cannot establish.
+
+### Required falsification evidence
+
+Every completed review, including self-review and every applicable gate, records
+`challenges` in the [versioned receipt](../agents/references/findings-schema.md).
+Select concrete counterexamples from changed assumptions and reachable failure paths;
+cover materially distinct risks in the assigned lens rather than filling a quota.
+For each, record the scenario, expected behavior, exact check, actual observation and:
+
+- `confirmed`: the defect hypothesis held; link its finding ids and retain reproduction.
+- `refuted`: observed counterevidence defeated the hypothesis; a clean review is valid.
+- `unresolved`: proof is missing; keep `NEEDS_CHANGES`, not an invented bug or approval.
+
+Execute safe, runnable checks at the real interface. Source traces name decisive locations
+and why execution was unavailable or inapplicable; planned commands and reviewer agreement
+are not observations. Preserve execution/sandbox limits and the pinned candidate.
+Review-only stays read-only. In an authorized fix endpoint, reproduce confirmed defects,
+add a failing regression, repair the root cause, and replay the counterexample; a changed
+candidate needs fresh review, not deletion or refutation of its earlier true finding.
+
+The hook and gate collector reject completed reports without this evidence. Inline
+owners without a matching hook validate the same receipt using the installed
+`scripts/review-results.ts` CLI before reporting completion; use `self-reviewer` for
+ungated inline review. See [receipt validation](../review/REFERENCE.md#receipt-validation).
+Shape validation cannot prove that a check ran or an observation is true. Carry actual
+command output/source proof, disclose limits, and retain the existing retry budget.
 
 ## Subjective: is it the right change?
 

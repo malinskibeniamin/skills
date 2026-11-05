@@ -211,21 +211,19 @@ test("a concurrent ref update is rejected atomically without overwriting it", ()
   // Inject a concurrent writer at the git-process boundary, after final guards.
   writeFileSync(
     join(bin, "git"),
-    `#!${process.execPath}
-const args = process.argv.slice(2);
-const git = ${JSON.stringify(actualGit)};
-if (args[0] === "update-ref") {
-  const writer = Bun.spawnSync([git, "commit", "--allow-empty", "-m", "feat(test): concurrent writer"]);
-  if (writer.exitCode !== 0) process.exit(writer.exitCode ?? 1);
-}
-const result = Bun.spawnSync([git, ...args]);
-process.stdout.write(result.stdout);
-process.stderr.write(result.stderr);
-process.exit(result.exitCode ?? 1);
+    `#!/bin/sh
+set -eu
+if [ "\${1-}" = update-ref ]; then
+  "$TEST_REAL_GIT" commit --allow-empty -m 'feat(test): concurrent writer'
+fi
+exec "$TEST_REAL_GIT" "$@"
 `,
     { mode: 0o755 },
   );
-  const result = f.run(old, "main", { PATH: `${bin}:${Bun.env.PATH}` });
+  const result = f.run(old, "main", {
+    PATH: `${bin}:${Bun.env.PATH}`,
+    TEST_REAL_GIT: actualGit,
+  });
   expect(result.code).toBe(128);
   expect(result.err).toContain("expected");
   expect(f.git("log", "-1", "--format=%s")).toBe(

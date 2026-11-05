@@ -55,9 +55,9 @@ Odpowiadaj z dowodami.
 
 ### 3. Napraw klastry [#3-repair-clusters]
 
-Grupuj przyczyny źródłowe: naprawione (test regresyjny), odrzucone (kontrdowody),
-zablokowane (brak dowodu lub decyzji). Napraw zaakceptowane klastry na ich gałęzi;
-przetestuj i utwórz commit `fix(review): <cluster summary>`.
+Grupuj przyczyny: naprawione (regresja), odrzucone (kontrdowody), zablokowane (brak dowodu/decyzji).
+Na gałęzi autora: najpierw test regresyjny wykazujący błąd -> naprawa -> ponowne sprawdzenie hipotezy -> nowy przegląd.
+Utwórz commit `fix(review): <cluster summary>`.
 
 ### 4. Odpowiedz i rozwiąż [#4-reply-and-resolve]
 

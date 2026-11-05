@@ -30,9 +30,9 @@ jobs:
     # PR portability uses the standard Intel pool after hosted arm64 queue failures.
     # Keep check names and all steps; push, scheduled and manual runs retain arm64.
     runs-on: ${{ matrix.os == 'macos-latest' && github.event_name == 'pull_request' && 'macos-26-intel' || matrix.os }}
-    # Full macOS verification exceeded 20m while shell evals were progressing.
-    # Keep every step and Linux's budget; allow the measured Mac workload to finish.
-    timeout-minutes: ${{ matrix.os == 'macos-latest' && 30 || 20 }}
+    # Full Intel macOS verification hit 30m during shell evals (run 41913328167).
+    # Keep every step and Linux's budget; allow one bounded 45m verification.
+    timeout-minutes: ${{ matrix.os == 'macos-latest' && 45 || 20 }}
     steps:
       - uses: actions/checkout@v7
         with:

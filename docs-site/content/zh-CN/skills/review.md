@@ -45,7 +45,7 @@ type: skill
 
 ## 证据循环 [#evidence-loop]
 
-**检查 -> 验证 -> 分类 -> 综合。**
+**质疑 -> 检查 -> 验证 -> 分类 -> 综合。** 按[共享约定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)校验 `challenges`。
 
 ### 检查 [#inspect]
 
