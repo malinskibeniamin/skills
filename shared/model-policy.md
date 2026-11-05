@@ -16,9 +16,9 @@ launch; an allowed GPT ID is not a Claude CLI model, or vice versa.
 
 The installed `~/.config/frontend-skills/model-routing.json` takes precedence
 over environment or project defaults. Without that profile, `MODEL_ROUTING_FILE`
-can select the canonical live checkout. Dangling profile symlinks fail closed. The
-separate docs-team-standards evaluator supports this personal policy at subject
-and judge dispatch; no personal policy leaves that team's defaults unchanged.
+can select the canonical live checkout. Dangling profile symlinks fail closed.
+External evaluators must invoke the validator before dispatch; installing this
+profile alone does not guard their model calls.
 
 ## Enforcement boundaries
 
