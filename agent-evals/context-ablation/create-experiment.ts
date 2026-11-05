@@ -1,4 +1,5 @@
 // Copyright 2026 Redpanda Data, Inc.
+import { getModelRoute } from "../../scripts/model-policy";
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig } from "@vercel/agent-eval";
 
@@ -15,9 +16,7 @@ export const createExperiment = (source: ContextSource): ExperimentConfig => {
   const agent =
     process.env.ABLATION_AGENT === "claude-code" ? "claude-code" : "codex";
   const effort = process.env.ABLATION_EFFORT ?? "xhigh";
-  const baseModel =
-    process.env.ABLATION_MODEL ??
-    (agent === "codex" ? "gpt-6.1-sol" : "claude-opus-5-5");
+  const baseModel = getModelRoute(agent, process.env.ABLATION_MODEL).model;
   const model =
     agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
   const instructionFile = agent === "codex" ? "AGENTS.md" : "CLAUDE.md";

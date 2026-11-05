@@ -1,8 +1,9 @@
+import { getModelRoute } from "../../scripts/model-policy";
 import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
 export default {
   agent: "claude-code",
-  model: "sonnet",
+  model: getModelRoute("claude-code").model,
   runs: 1,
   timeout: 300,
   sandbox: "docker",

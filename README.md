@@ -652,3 +652,10 @@ writing-for-agents) are inspired by or vendored from [obra/superpowers](https://
 ## Automatic security review: intentionally absent
 
 Automatic model-driven security review (per-edit security-audit hook, the review security hat, auth-path adversarial triggers) was removed by owner decision on 2026-07-10 after persistent false-positive flagging of legitimate cybersecurity work. Deterministic scanning (`/snyk-ux-security`, Biome) remains; `/security-audit` supplies task-scoped guidance and explicitly requested audits, not automatic coverage. Do not assume security coverage from this harness.
+
+### Model selection policy
+
+Maintained experiment configs and direct model-selection checks read
+[`config/model-routing.json`](config/model-routing.json) instead of model aliases.
+See [model launch policy](shared/model-policy.md) for offline checks, personal
+evaluation integration, and the managed/host enforcement boundaries.

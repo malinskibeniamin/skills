@@ -1,3 +1,6 @@
+_saved_routing_home="$HOME"
+_routing_test_home=$(mktemp -d)
+export HOME="$_routing_test_home"
 # Evals for the 2026 w13–w29 event adoption: Setup, UserPromptExpansion,
 # CwdChanged, ConfigChange, TaskCompleted, StopFailure, PermissionDenied,
 # Notification — plus the codex-notify adapter and execpolicy mirror.
@@ -251,7 +254,7 @@ JSON
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"picker","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","requested_model":"opus","source":"picker","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -269,7 +272,7 @@ JSON
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"command","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","requested_model":"opus","source":"command","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -288,11 +291,11 @@ JSON
 {"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"custom-gateway-model","requested_model":"custom-gateway-model","source":"sdk","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":2.5}
 JSON
   )
-  if [ -z "$_out" ]; then
-    echo "  PASS  PreModelSwitch preserves unlisted SDK-selected models"
+  if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+    echo "  PASS  PreModelSwitch denies unlisted SDK-selected models"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  PreModelSwitch blocked an unlisted SDK-selected model: $_out"
+    echo "  FAIL  PreModelSwitch allowed an unlisted SDK-selected model: $_out"
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: PreModelSwitch unlisted SDK route"
   fi
@@ -638,3 +641,6 @@ if [ -n "$_saved_session" ]; then
 else
   unset CLAUDE_SESSION_ID
 fi
+
+export HOME="$_saved_routing_home"
+rm -rf "$_routing_test_home"

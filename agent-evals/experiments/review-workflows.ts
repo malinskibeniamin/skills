@@ -1,3 +1,4 @@
+import { getModelRoute } from "../../scripts/model-policy";
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
@@ -22,7 +23,7 @@ const guidance = Object.fromEntries(
 
 export default {
   agent: "claude-code",
-  model: "opus",
+  model: getModelRoute("claude-code").model,
   agentOptions: { effort: "xhigh" },
   runs: 3,
   earlyExit: false,

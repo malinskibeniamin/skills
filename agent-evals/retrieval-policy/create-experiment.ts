@@ -1,3 +1,4 @@
+import { getModelRoute } from "../../scripts/model-policy";
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
@@ -30,7 +31,7 @@ export function createExperiment(variant: Variant): ExperimentConfig {
 
   return {
     agent: "codex",
-    model: "gpt-6.1-sol?reasoningEffort=xhigh",
+    model: `${getModelRoute("codex").model}?reasoningEffort=${getModelRoute("codex").effort}`,
     evals: ["evergreen-project-recovery", "knowledge-system-audit"],
     runs: 3,
     earlyExit: false,

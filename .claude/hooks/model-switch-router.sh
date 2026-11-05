@@ -13,6 +13,25 @@ case "$event" in
   *) exit 0 ;;
 esac
 
+routing_file="${MODEL_ROUTING_FILE:-$(dirname "$0")/../../config/model-routing.json}"
+personal_policy="$HOME/.config/frontend-skills/model-routing.json"
+if [ -e "$personal_policy" ] || [ -L "$personal_policy" ]; then
+  routing_file="$personal_policy"
+fi
+if [ "$event" = "PreModelSwitch" ]; then
+  requested=$(printf '%s' "$input" | jq -r '.to_model // .new_model // .model // empty')
+  if ! jq -e --arg model "$requested" '
+    (.selection.preferred_models | type == "array" and length > 0)
+    and (.selection.preferred_models | index($model) != null)
+    and (.models[$model] | type == "object")
+    and (.models[$model].status as $status | ["retired", "unsupported"] | index($status) == null)
+  ' "$routing_file" >/dev/null 2>&1; then
+    status=$(jq -r --arg model "$requested" '.models[$model].status // "unlisted"' "$routing_file" 2>/dev/null || printf 'unavailable')
+    jq -cn --arg reason "Model ${requested:-<missing>} is not allowed by the current routing policy (status: $status). No model switch is permitted." '{hookSpecificOutput:{hookEventName:"PreModelSwitch",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+    exit 0
+  fi
+fi
+
 session="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 [ -n "$session" ] || session=$(printf '%s' "$input" | jq -r '.session_id // empty')
 [ -n "$session" ] || exit 0
@@ -22,7 +41,6 @@ mkdir -p "$session_dir" 2>/dev/null || true
 from_model=$(printf '%s' "$input" | jq -r '.from_model // .previous_model // empty')
 to_model=$(printf '%s' "$input" | jq -r '.to_model // .new_model // .model // empty')
 source=$(printf '%s' "$input" | jq -r '.source // "unknown"')
-routing_file="${MODEL_ROUTING_FILE:-$(dirname "$0")/../../config/model-routing.json}"
 route_status=""
 route_work=""
 if [ -n "$to_model" ] && [ -f "$routing_file" ]; then
@@ -125,7 +143,7 @@ if [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
     [ "$route_status" = "eval-gated" ] && work_label="candidate work"
     context="$context Routing record: $route_status${route_work:+; $work_label: $route_work}."
   else
-    context="$context No routing record exists for this model; do not infer a ban."
+    context="$context This model has no current routing record. Select an allowed model before launching more work."
   fi
   context="$context Use /efficient-frontier to validate the active model against config/model-routing.json for the current lifecycle phase; preserve the current owner and delivery endpoint."
   if [ "$source" = "resume" ]; then

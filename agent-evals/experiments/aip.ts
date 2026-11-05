@@ -1,3 +1,4 @@
+import { getModelRoute } from "../../scripts/model-policy";
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig, Sandbox } from "@vercel/agent-eval";
 
@@ -12,7 +13,7 @@ const reference = readFileSync(
 
 export default {
   agent: "claude-code",
-  model: "sonnet",
+  model: getModelRoute("claude-code").model,
   runs: 3,
   earlyExit: false,
   timeout: 900,

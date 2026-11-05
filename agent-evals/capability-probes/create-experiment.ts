@@ -1,3 +1,4 @@
+import { getModelRoute } from "../../scripts/model-policy";
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig } from "@vercel/agent-eval";
 import { z } from "zod";
@@ -15,9 +16,7 @@ const manifest = ManifestSchema.parse(
 const agent =
   process.env.CAPABILITY_AGENT === "claude-code" ? "claude-code" : "codex";
 const effort = process.env.CAPABILITY_EFFORT ?? "max";
-const baseModel =
-  process.env.CAPABILITY_MODEL ??
-  (agent === "codex" ? "gpt-6.1-sol" : "claude-opus-5-5");
+const baseModel = getModelRoute(agent, process.env.CAPABILITY_MODEL).model;
 const model =
   agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
 
