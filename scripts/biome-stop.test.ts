@@ -108,6 +108,19 @@ for (const hook of hooks) {
       );
     });
 
+    test("keeps semantic diagnosis in the lint repair prompt", () => {
+      const f = fixture({ "check:files": "consumer-check" });
+      const result = run(hook, f, {
+        CHECK_EXIT: "1",
+        CHECK_OUTPUT: "no-useless-assignment: launch is overwritten before use",
+      });
+      expect(result.exitCode).toBe(2);
+      const { reason } = JSON.parse(result.stderr.toString());
+      expect(reason).toContain("launch is overwritten before use");
+      expect(reason).toContain("missing use or intended difference");
+      expect(reason).toContain("report any suspected bug");
+    });
+
     test("a silent checker crash is not a pass", () => {
       const f = fixture({ "check:files": "consumer-check" });
       const result = run(hook, f, { CHECK_EXIT: "127" });

@@ -72,7 +72,7 @@ status=0
 output=$(bun run "$check_script" "${flags[@]}" "${changed_files[@]}" 2>&1) || status=$?
 [ "$status" -ne 0 ] || exit 0
 
-message=$(printf 'File check %s failed (exit %s). Fix code or checker setup; keep verification rules intact.\n%s' \
+message=$(printf 'File check %s failed (exit %s). Fix code or checker setup; keep verification rules intact. Before deleting unused code or merging duplicates, check for a missing use or intended difference; report any suspected bug.\n%s' \
   "$check_script" "$status" "$(printf '%s' "$output" | head -30 | cut -c1-300)")
 if type hook_stop_finding &>/dev/null && type hook_stop_enforce &>/dev/null; then
   hook_stop_finding "$message"

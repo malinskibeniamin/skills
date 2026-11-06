@@ -24,6 +24,43 @@ in temporary/ignored scratch and summarize commands, results and material limits
 Persist only requested artifacts, existing required outputs or a reusable maintenance asset.
 Stop when the requested behavior and credible risks are covered; preserve project gates.
 
+## Dead code and duplication
+
+For unused/unreachable code, dead stores, duplicate functions/branches or feature
+retirement, diagnose before deleting, merging or applying an unsafe autofix:
+
+- Trace the surrounding control/data flow. Classify the report as intentional,
+  leftover, suspected bug or uncertain. Check whether a computed/resolved value should
+  replace the original still used downstream; deleting its initializer can hide that bug.
+- Fix an evidenced in-scope bug with a focused regression, explicitly naming the behavior
+  change. Minimal diff means the smallest correct fix, not preserving known wrong behavior.
+  Under an explicit behavior-preserving-only scope, report the suspected bug and location;
+  leave its diagnostic visible rather than silently deleting the clue. Uncertain intent
+  needs evidence, not a speculative rewrite.
+- Remove dispensable bindings. Use the project's unused-name convention for required
+  signature positions or deliberate omission (such as object-rest exclusion), not to hide
+  dead locals. Preserve necessary calls, getter effects and memory-release assignments;
+  a documented side-effect expression is valid, a dummy read/`void` or suppression solely
+  to silence lint is not. Check actual lint/compiler settings; `_` is not portable.
+- Before writing another copy, look for an existing domain helper. Before sharing copies,
+  compare their intended contracts: identical branches may need different results, and
+  independent domains may intentionally look alike. Merge shared knowledge, not syntax;
+  verify each affected case, including differences the copied code may have lost.
+- Treat unused-export/file reports as candidates. Check whole-program references,
+  package entry points/public API, dynamic lookup, registration and import side effects.
+  Absence of incoming graph edges or local references alone does not justify deletion; incomplete
+  coverage stays unknown. Use existing whole-program tooling when available, not a new
+  dependency or broad cleanup by default.
+- For confirmed retired features, remove obsolete implementation and flag paths within
+  scope after checking consumers and mixed-version rollout needs. A disabled flag or
+  unobserved execution alone does not prove retirement; reachable code can still be obsolete.
+
+In the existing PR/handoff, state why deletion/retention/sharing is correct, the behavioral
+check and any suspected bug left unresolved. A clean lint run proves diagnostic clearance,
+not correctness; inspect autofix diffs for hidden renames/deletions too.
+
+Source: [Ultracite's dead-code research](https://www.ultracite.ai/research/dead-code).
+
 ## Keep humans connected
 
 Use the human's domain language in interfaces, types, tests and diagnostics; follow

@@ -85,9 +85,9 @@ The goal is not a percentage -- it's *which untested code is dangerous*.
 
 ## 5. Tech Debt & Architecture
 
-- Duplication: the same logic re-implemented in 3+ places (search for near-identical functions/components); divergent copies that have drifted.
+- Duplication: inspect near-identical functions/components for shared knowledge or unintended drift; identical syntax alone is not an abstraction case. Apply [semantic cleanup](../../shared/verifiability.md#dead-code-and-duplication).
 - Layering violations: UI importing from data layer internals, circular dependencies, "utils" modules that became a junk drawer with high fan-in.
-- Dead code: unexported-and-unused modules, feature flags fully rolled out but still branching, commented-out blocks with no explanation, deps in the manifest no longer imported.
+- Dead-code candidates: unused values/exports/files, retired flag branches and apparently unreferenced dependencies. Apply [semantic cleanup](../../shared/verifiability.md#dead-code-and-duplication): verify intended uses, public/runtime entry points and retirement before recommending deletion.
 - God objects/modules: files an order of magnitude larger than the repo median that everything touches; functions with double-digit parameters or deep conditional nesting.
 - Inconsistent patterns: three ways of doing data fetching / error handling / styling in the same repo -- pick the winner (the one the team converged on most recently) and plan the consolidation.
 - Abstraction mismatches: premature abstractions with a single implementation, or missing abstractions where the same change always requires touching N files in lockstep.
