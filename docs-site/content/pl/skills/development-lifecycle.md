@@ -59,6 +59,8 @@ Jeden właściciel; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowad
 
 Po każdej spójnej partii zmian uruchom formatowanie lub automatyczne poprawki i lintowanie w odpowiednim zakresie, a następnie właściwe kontrole typów i testy. Wyniki zakończonych hooków wykorzystuj ponownie tylko przy identycznej zawartości plików i zakresie kontroli. Sprawdź diff automatycznych poprawek; napraw błędy i uruchom kontrole ponownie. Zachowaj sprawdzanie typów całego projektu, gdy ograniczenie do plików nie jest poprawne.
 
+Przy zmianach krawędzi importów lub diagnozowaniu cykli i plików zbiorczych (barrel) korzystaj z [pętli weryfikacji uwzględniających graf zależności](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels).
+
 ### Zweryfikuj [#verify]
 
 Przed zakończeniem tury implementacji uruchom wymagane przez repozytorium kontrole formatowania, lintowania, typów, testów, kompilacji i analizy statycznej dla dotkniętego zakresu; kontrole wąskiego zakresu w wewnętrznej pętli nigdy nie zastępują wymaganych kontroli końcowych. Dla istotnego, uruchamialnego zachowania załaduj [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md); sprawdź rzeczywisty punkt wejścia oraz jedną wiarygodną ścieżkę błędu lub odzyskiwania. Oceń cel, ograniczenia i wiarygodne ryzyko: pomyślne kontrole nie dowodzą, że zbudowano właściwą rzecz. Niepowodzenie wyznacza następne działanie; naprawiaj i powtarzaj. Niezwiązane błędy stanu wyjściowego zgłaszaj osobno, nigdy jako pełne powodzenie.

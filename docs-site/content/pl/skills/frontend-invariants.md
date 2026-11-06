@@ -26,6 +26,8 @@ Te zasady przetrwały każdą migrację stosu (zestawy UI, routery, warstwy dany
 
 Przy asercjach TypeScript lub poszerzaniu kontraktów korzystaj z [kontroli anti-slop](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md), aby zachować informacje o typach; sam komentarz o bezpieczeństwie nie uzasadnia rzutowania.
 
+Przy zmianach krawędzi importów lub diagnozowaniu cykli i plików zbiorczych (barrel) korzystaj z [pętli weryfikacji uwzględniających graf zależności](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels).
+
 ## Zasada amplifikacji
 Każdy tolerowany antywzorzec, mechanizm obejścia lub wyciszenie to przykład, który kolejna sesja LLM naśladuje i rozpowszechnia. Naprawiaj u źródła; wyciszaj tylko z uzasadnieniem w tym samym wierszu; nigdy nie dopuszczaj „tylko ten jeden raz”.
 

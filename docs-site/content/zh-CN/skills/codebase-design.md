@@ -27,6 +27,8 @@ type: skill
 
 模块应减少调用方需要掌握的知识和协调成本，同时保留所需行为。
 
+更改导入边或处理循环依赖／barrel 文件诊断时，请使用[基于依赖图的检查循环](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels)。
+
 ## 术语表 [#glossary]
 
 严格使用以下术语：

@@ -43,7 +43,9 @@ A single owner; delegation/background need explicit consent. Implement the small
 diff using local conventions. Use [tdd](../tdd/SKILL.md) for uncovered regressions; reuse checks
 otherwise. Re-plan only the affected slice; no speculative abstractions or adjacent cleanup.
 
-Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes; repair/rerun. Reuse hook results only for identical inputs/coverage; keep sound project-wide types.
+Per batch: scoped format/fix + lint -> types/tests. Inspect; repair/rerun. Reuse hooks only for identical inputs/coverage; keep project-wide types.
+
+Imports: [checks](../shared/check-loop.md).
 
 ### Verify
 

@@ -57,6 +57,8 @@ type: skill
 
 每完成一批邏輯完整的編輯，先執行限定範圍的格式化或自動修正與 lint，再執行相關的型別檢查及測試。只有檔案內容與檢查涵蓋範圍完全相同時，才可重用已完成的 hook 結果。檢查自動修正的差異；修正失敗並重新執行。若按檔案限定範圍不可靠，保留整個專案的型別檢查。
 
+變更匯入邊或處理循環相依／barrel 檔案診斷時，請使用[以相依圖為依據的檢查迴圈](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels)。
+
 ### 驗證 [#verify]
 
 交回每個實作回合前，針對受影響範圍執行儲存庫要求的格式化、lint、型別、測試、建置與靜態檢查關卡；內部迴圈的局部檢查絕不取代必要的最終關卡。對實質且可執行的行為載入 [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md)；測試其實際進入點及一條可信的失敗或復原路徑。審查目標、護欄與可信風險：檢查通過不代表建置了正確的東西。失敗成為下一步行動；修正並重複。另行回報無關的基準失敗，絕不將其描述為全部通過。
