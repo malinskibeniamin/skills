@@ -1,42 +1,10 @@
-# Public harness instructions and executable PR-entrypoint reminder.
+# Executable PR-entrypoint routing and context composition.
 
 for command in 'gh pr create --fill' 'gh pr edit 12 --body-file /tmp/body.md' 'gh pr reopen 12' 'gh pr ready 12' 'gh stack submit --auto' 'gh --repo org/repo pr create --fill' 'git push origin feature' 'env GH_HOST=github.com gh pr create --draft'; do
   input=$(jq -nc --arg command "$command" '{tool_name:"Bash",tool_input:{command:$command}}')
   run_hook_eval "$REPO_ROOT/.claude/hooks/pre-bash.sh" "$input" 0 \
-    "Automatic annotation reminder: $command" 'Automatically annotate'
+    "PR evidence reminder: $command" '[pr-evidence]'
 done
-
-# Annotation guidance is model-visible on follow-up pushes, not an optional
-# video-only instruction. This tests emitted context, not hook source text.
-input='{"tool_name":"Bash","tool_input":{"command":"git push origin feature"}}'
-output=$(printf '%s' "$input" | "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>/dev/null)
-if printf '%s' "$output" | jq -e '.hookSpecificOutput.additionalContext
-  | contains("numbered callouts") and contains("legend")
-    and contains("screenshots") and contains("not just video")
-    and contains("no separate request") and contains("refresh")' >/dev/null 2>&1; then
-  echo '  PASS  pushes require annotated screenshots and a legend without a separate request'
-  PASS=$((PASS + 1))
-else
-  echo '  FAIL  push reminder lacks automatic, non-video annotation requirements'
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: automatic visual annotation reminder"
-fi
-
-# Follow-up pushes must route existing session PRs through impact/body upkeep,
-# not just remind authors to attach screenshots at initial publication.
-input='{"tool_name":"Bash","tool_input":{"command":"git push origin feature"}}'
-output=$(printf '%s' "$input" | "$REPO_ROOT/.claude/hooks/pre-bash.sh" 2>/dev/null)
-if printf '%s' "$output" | jq -e '.hookSpecificOutput.additionalContext
-  | contains("existing session PR") and contains("/quantify-impact")
-    and contains("full PR diff") and contains("business value")
-    and contains("concise") and contains("pr/SKILL.md")' >/dev/null 2>&1; then
-  echo '  PASS  existing session PR push reassesses impact and concise description'
-  PASS=$((PASS + 1))
-else
-  echo '  FAIL  existing session PR push lacks impact/description upkeep'
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: existing session PR impact/description upkeep"
-fi
 
 # Successful hooks must return model-visible additionalContext; stderr alone is
 # debug output on some hosts. A later RTK rewrite must survive alongside it.
@@ -90,20 +58,3 @@ for command in 'gh pr view 12' 'gh pr checks 12' 'gh issue create' 'gh stack vie
     PASS=$((PASS + 1))
   fi
 done
-
-run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'Every PR.*quantify-impact' \
-  'every PR automatically assesses impact'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'No size threshold' \
-  'tiny visible changes require evidence'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'shared.*consumers' \
-  'shared UI changes expand the affected surface inventory'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'without snapshot-update' \
-  'accepted baselines must pass a normal visual test run'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Local paths.*not.*reviewer' \
-  'local files cannot substitute for reviewer-visible images'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Re-read.*body' \
-  'publication verifies the actual PR body'
-run_content_eval "$REPO_ROOT/visual-review/SKILL.md" 'merge-base' \
-  'visual review includes committed changes rather than only HEAD worktree edits'
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" 'copy.*styles.*layout' \
-  'visual regression includes small static changes'

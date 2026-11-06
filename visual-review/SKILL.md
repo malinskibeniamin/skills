@@ -7,6 +7,10 @@ Browser-based frontend review: product, design, engineering, and QA hats. [REFER
 
 ## Flow
 
+Apply [proportionate verification](../shared/verifiability.md#proportionate-verification).
+Routine copy/style edits need focused rendering, not a full device/state matrix or report;
+reuse dogfood evidence. Expand only for changed assumptions.
+
 Web UI: load [better-interface](../jakubkrehel-skills/better-interface/SKILL.md).
 
 1. Find: resolve PR base (stack parent) and inspect merge-base...HEAD, staged, unstaged, and relevant untracked changes; `git diff --name-only HEAD` misses commits. Map routes/components to URLs, CLI/reports to commands. Include shadcn/ui or `@/components/ui`, shared consumers, copy, styles, assets, indirect data/config effects. Cover every visible change.
@@ -15,21 +19,23 @@ Web UI: load [better-interface](../jakubkrehel-skills/better-interface/SKILL.md)
 4. review lanes: hierarchy/task flow; accessibility/performance; ship quality/system fit. Scored/repeated comparisons: [calibration](REFERENCE.md#review-calibration).
 5. Hats: Product: user value; Design: hierarchy; Engineering: resilience; QA: reproducible evidence.
 6. Trace UI lifecycle: idle/unrequested -> pending/loading/submitting -> success/error -> settled/dismissed. Require side-effect success confirmed and failed side effects persistent.
-7. Stress: Chromium desktop and Chromium mobile; `Tab, Shift+Tab, Enter, Space, Escape`; loading, empty, error, dense-data; form submit path; notification/toast path; console/network. As risk warrants add Firefox desktop, WebKit, reduced motion, forced colors, text zoom, RTL/localized-long-text, slow network/media throttling, and themes.
+7. Stress affected risks: viewports, keyboard/focus, loading/empty/error/dense-data, forms/toasts, console/network. Expand browsers, motion, colors, zoom, RTL, themes or throttling only when warranted/required.
 8. Close: cite evidence, name design handles, fix/accept P0-P1, and record deterministic Automation candidates.
 
 Content/layout stress: Call the Skill tool with "break-ui". Reuse dogfood fixtures
 and captures; test only uncovered cases. Preserve the read-only or authorized-fix endpoint.
 
-Implemented/release: follow [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Review snapshot diffs before intended baseline updates; rerun normally and refresh after edits. Auto-annotate screenshots/video: numbered callouts + legend; read-only: report gaps. Screenshots are not tests; tests are not before/after evidence.
+Implemented/release: use [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)
+only when helpful/required. Review snapshot diffs before updates; rerun normally.
+Annotate hard-to-find deltas only; read-only: report gaps. Screenshots are not tests.
 
-HTML first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Content stress wins. Accessibility automation is partial. Performance is visual. If seen twice, automate.
+Rendered behavior first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Accessibility automation is partial. Automate worthwhile recurring checks.
 
 `/excalidraw-diagram` as needed; screenshots primary, Mermaid fallback.
 
 ## Output
 
-Use concise Markdown. For release/non-trivial review, write `$TMPDIR/visual-review-<timestamp>.html`.
+Concise Markdown inline; omit empty tables. Separate HTML only when requested.
 
 ```markdown
 ## Visual review

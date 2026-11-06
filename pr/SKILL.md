@@ -66,20 +66,22 @@ Do not widen sharing or execution access just to provide a link. Session length 
 neither correctness nor diligence; verify claims against the current diff and execution evidence.
 
 Place visuals beside their supporting text. Show only load-bearing calls, files, props, states, and boundaries.
-Omit views that add no understanding.
 
 ### Evidence
 
-Concrete evidence that the change works. Show a before and after. Name checks not run and
+Concrete evidence that the change works. Prefer a short command/result; show before/after
+when it clarifies the change, not as an automatic media requirement. Name checks not run and
 remaining uncertainty; passing tests are not evidence of human review or consensus.
 
-For every visible change, automatically annotate the evidence using [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations), not only the video. For broad UI work, map user problem -> surface delta -> evidence -> acceptance using [UI change maps](SUMMARY-VIEWS.md#ui-change-maps).
+Use [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations) for hard-to-find deltas;
+[UI change maps](SUMMARY-VIEWS.md#ui-change-maps) for broad UI only when helpful. Avoid duplicate captures/recaps.
 
-For backend architecture, data flow, API contract, or workflow changes, follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`. Include a focused before/after comparison and editable source link; refresh relevant maintained diagrams. Diagram failures warn and continue, never block the PR or replace test evidence.
+Use [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) only when requested or clearer than prose; refresh stale maintained diagrams.
+Routine changes need no diagram/source files. Rendering failures warn and continue, never block or replace test evidence.
 
-For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the opening sentence so reviewers see the change before reading supporting detail. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
-
-Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
+Select media per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+Record real flows only when interaction/motion needs it or requested; stills/results suffice otherwise.
+Evidence earns its place by the question it answers, not media tier. Keep results concise and actual.
 
 ### Merge Danger
 

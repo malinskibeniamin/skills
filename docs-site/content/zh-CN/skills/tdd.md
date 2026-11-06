@@ -27,7 +27,7 @@ type: skill
 处理 T3 或 Effect 测试时，以 `tdd` 为入口解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；遵循目标项目的时钟、工作器和渲染生命周期契约。
 
 
-TDD 保护有意义的行为。对于领域规则、分支、状态、验证、异步副作用和集成契约，请使用红灯 -> 绿灯 -> 重构。类型、连接、文案和样式，以及保持行为不变的删除，可能只需运行针对性验证。覆盖率绝不是目标。
+遵循[适度验证](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#proportionate-verification)。可信回归需要新覆盖时使用 RED -> GREEN -> REFACTOR；对于已覆盖行为、类型、连接、文案、样式和不改变行为的删除，复用现有检查。不是每次编辑或依赖调用都需要新增测试。覆盖率绝不是目标。
 
 对每个建议的测试接缝，说明它能捕获什么，以及会漏掉什么。
 
@@ -35,6 +35,7 @@ TDD 保护有意义的行为。对于领域规则、分支、状态、验证、�
 
 - **接缝：**在公共边界进行测试。先明确接缝的名称；如果问题本身和现有约定未能清楚表明接缝，请与用户确认预先商定的接缝。不要针对未经确认的内部实现编写测试。请使用 `/codebase-design`，不要为了方便而凭空设计接缝。
 - **同义反复的测试：**预期值需要独立的事实来源：字面值、完整推导的示例、夹具、规范或观测结果。
+- **重复测试依赖：**信任库中已有文档说明的工具函数；仅在领域选择和集成假设引入独立风险时测试它们。扩展现有覆盖，而不是在各层重复同一契约。
 - **源文本代理：**删除那些扫描实现、CSS、标记或配置，并将其中的标记或正则表达式作为运行时证明的测试。如果行为很重要，请在公共接缝处替换这些测试；对于语法，请使用静态分析。仅当内容属于公共输出时，才保留内容断言。
 - **垂直切片：**使用垂直切片：每次完成一个红灯测试及其绿灯实现；批量测试编码的是想象中的行为。
 
@@ -66,7 +67,7 @@ TDD 保护有意义的行为。对于领域规则、分支、状态、验证、�
 
 ## 视觉回归测试 [#visual-regression]
 
-对于任何可见变更，包括文案、样式、布局、资源和状态，请使用现有的截图断言运行器。遵循 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：基准分支截图、共享使用方、经过审查的快照更新、正常重新运行、嵌入图片。不可见的编辑无需截图测试。
+对于视觉风险，复用现有截图断言工具中的相关用例；审查预期更新后正常重跑。仅为可信且未覆盖的回归新增用例。小型文案或样式变更需要检查，不应自动新增快照或测试工具。在对比有助于审查或明确要求时使用 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。不可见变更不需要截图。
 
 ## 完成标准 [#done]
 

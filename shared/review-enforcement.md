@@ -21,11 +21,11 @@ contributor status or automatic PR maintenance.
 
 ## Automatic setup
 
-Automatically set up missing **local** safeguards during authorized implementation/delivery:
-reuse repository-native checks, short `REVIEW.md` guidance for real failure modes and a PR
-template covering Testing, Risk and How to revert. Keep source changes on the owned feature
-branch/PR. Respect read-only/local-only, commit-only and other narrower endpoints.
-Installation/startup alone authorizes no writes. Hooks route guidance, not hosted mutations.
+Reuse existing repository-native checks and review/PR guidance during implementation/delivery.
+Add a local safeguard or guidance file only when requested or needed to prevent a concrete
+failure in scope; a missing `REVIEW.md` or PR template is not itself a gap. Keep changes on
+the owned feature branch/PR. Respect narrower endpoints. Installation/startup alone authorizes
+no writes. Hooks route guidance, not hosted mutations.
 
 Changes to workflows, hosted requirements, approval/ownership policy, paid services or
 credentials require explicit scope. When the owner requests protection setup:

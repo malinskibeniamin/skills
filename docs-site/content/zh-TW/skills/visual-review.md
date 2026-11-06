@@ -24,27 +24,29 @@ type: skill
 
 ## 流程 [#flow]
 
+根據受影響介面與可信風險，依[適度驗證](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#proportionate-verification)調整審查深度。例行文案或樣式變更只需聚焦的畫面檢查，不需要完整裝置與狀態矩陣，也不需要新報告。重用 dogfood 觀察與截圖；僅在假設變更時擴大範圍。
+
 1. **找出介面：** 判定 PR 的基底（適用時使用堆疊中的父項），並檢查合併基底...HEAD，以及已暫存、未暫存和相關的未追蹤變更；僅使用 `git diff --name-only HEAD` 會遺漏已提交的工作。將路由／元件對應至 URL，並將 CLI／報表對應至命令。納入 shadcn/ui 或 `@/components/ui`、共用消費端、文案、樣式、資產，以及間接的資料／設定影響。任何可見變更都不會小到可以忽略。
 2. **建立情境脈絡：** 閱讀權杖／主題及一個介面；判定其屬於品牌或產品語域。
 3. **蒐集證據：** 使用存放庫工具、`scripts/skills-browser.sh`、Playwright、測試資料、螢幕截圖與輸出。僅針對直接指標使用 `/quantify-impact`。
 4. 執行**審查路線：** 評析層級／任務流程；稽核無障礙功能／效能；潤飾發布品質／系統一致性。針對評分比較或重複比較，使用[審查校準](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md#review-calibration)。
 5. **各角色觀點：** 產品：使用者價值；設計：層級／文案／狀態；工程：韌性／平台；QA：可重現的證據／非預期路徑。
 6. **追蹤 UI 生命週期：** 閒置／未請求 -> 等待中／載入中／提交中 -> 成功／錯誤 -> 穩定／已關閉。要求副作用成功時獲得確認，而失敗的副作用會持續顯示。
-7. **壓力測試：** Chromium 桌面版與 Chromium 行動版；`Tab, Shift+Tab, Enter, Space, Escape`；載入、空白、錯誤、密集資料；表單提交路徑；通知／快顯通知路徑；主控台／網路。當風險需要時，加入 Firefox 桌面版、WebKit、減少動態效果、強制色彩、文字縮放、RTL／在地化長文字、慢速網路／媒體節流，以及各種主題。
+7. **壓力測試：**依風險檢查受影響行為：相關檢視區、鍵盤與焦點、載入、空白資料、錯誤、密集資料、表單、通知及主控台／網路。僅在存在可信的受影響風險或專案要求時增加瀏覽器、減少動態效果、強制色彩、縮放、RTL、節流或主題。
 8. **結案：** 引用證據、指出設計調整點、修正或接受 P0-P1，並記錄可確定重現的自動化候選項目。
 
 內容／版面配置壓力測試：使用 Skill 工具呼叫 "break-ui"。重用目前 dogfood 測試資料與螢幕截圖；
 只測試尚未涵蓋的情況。保留唯讀或已獲授權修復的執行邊界。
 
-已實作／發布：遵循 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：以擷取畫面與視覺測試核對每個受影響的介面／狀態，在更新預期的基準前檢查快照差異，依正常方式重新執行，並在編輯後更新證據。螢幕截圖不是視覺測試；通過的測試也不是嵌入式的前後對照證據。 每項可見的 PR 差異都必須遵循[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)，而不只是影片：提供成對的編號標記、變更圖例及原始擷取畫面連結。唯讀審查僅回報缺少或過時的標註；獲授權的作者自動建立或更新標註。
+已實作／發布：只在擷取畫面有助於審查或明確要求時使用 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。在預期更新前審查相關快照差異，再正常重跑。只在需要定位差異時加上標註；唯讀審查回報缺口。截圖不是測試；測試也不是前後比較證據。
 
-HTML 優先。生命週期勝過螢幕截圖。狀態勝過順利路徑。動態效果就是互動。內容壓力測試更有價值。無障礙自動化只能涵蓋部分情況。效能是可見的。若出現兩次，就將其自動化。
+畫面呈現行為優先。生命週期勝過截圖。狀態勝過順利路徑。動態效果就是互動。無障礙自動化只能涵蓋部分情況。當風險足以支持維護成本時，再將重複檢查自動化。
 
 如有需要，使用 `/excalidraw-diagram`；螢幕截圖仍是主要證據，Mermaid 則作為備用方案。
 
 ## 輸出 [#output]
 
-撰寫簡潔的 Markdown。若為發布或非小型審查，建立 `$TMPDIR/visual-review-<timestamp>.html`。
+直接使用簡潔 Markdown，省略空表。只有使用者要求時才另外撰寫 HTML 報告。
 
 ```markdown
 ## Visual review

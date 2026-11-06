@@ -5,8 +5,6 @@ run_content_eval "$REPO_ROOT/CLAUDE.md" "not recaps/offers/non-blocking options"
   "ambient contract rejects non-blocking continuation offers"
 run_content_eval "$REPO_ROOT/CLAUDE.md" "pair status with the next action" \
   "status notes ride with the next action"
-run_content_eval "$REPO_ROOT/CLAUDE.md" "checklist/evidence/pause triggers" \
-  "long runs keep their task checklist in a file"
 run_content_eval "$REPO_ROOT/AGENTS.md" "not recaps/offers/non-blocking options" \
   "Codex parity carries the continuation rule"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "evidence, stop.*acceptance" \

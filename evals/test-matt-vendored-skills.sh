@@ -114,7 +114,6 @@ run_content_eval "$REPO_ROOT/grilling/SKILL.md" "confirmation only when.*request
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "[Uu]ser.*decisions.*theirs" "grilling leaves decisions to the user"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "whole frontier" "grilling interviews round by round"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" "unsettled prerequisite.*rest of the frontier proceeds|unsettled prerequisite delays only its branch" "grilling does not block independent frontier questions"
-run_content_eval "$REPO_ROOT/tdd/SKILL.md" "pre-agreed seams|confirm.*seams|Name the seam; confirm with the user" "TDD tests only agreed seams"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "Tautological" "TDD names tautological tests as anti-pattern"
 run_content_eval "$REPO_ROOT/tdd/tests.md" "Expected value.*implementation|known literal" "tests.md prevents tautological expected values"
 run_content_eval "$REPO_ROOT/review/REFERENCE.md" "smell baseline" "review carries Fowler smell baseline"

@@ -24,27 +24,29 @@ type: skill
 
 ## 流程 [#flow]
 
+根据受影响界面和可信风险，按[适度验证](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#proportionate-verification)调整审查深度。常规文案或样式变更只需聚焦的渲染检查，不需要完整设备和状态矩阵，也不需要新报告。复用 dogfood 观察和截图；仅在假设变化时扩展范围。
+
 1. **查找：**确定 PR 的基准（适用时使用堆叠父分支），检查合并基准...HEAD，以及已暂存、未暂存和相关的未跟踪变更；仅使用 `git diff --name-only HEAD` 会遗漏已提交的工作。将路由/组件映射到 URL，将 CLI/报告映射到命令。包括 shadcn/ui 或 `@/components/ui`、共享使用方、文案、样式、资源，以及间接的数据/配置影响。任何可见变更都不容忽视。
 2. **建立上下文：**读取设计令牌/主题和一个界面；判断其属于品牌表达还是产品表达。
 3. **收集：**使用仓库工具、`scripts/skills-browser.sh`、Playwright、固件、截图和输出。仅对直接指标使用 `/quantify-impact`。
 4. 执行**审查通道：**评议层级与任务流程；审计无障碍与性能；打磨发布质量与系统契合度。对于评分比较或重复比较，使用[审查校准](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md#review-calibration)。
 5. **切换视角：**产品：用户价值；设计：层级、文案、状态；工程：韧性、平台；QA：可复现证据、异常路径。
 6. **追踪 UI 生命周期：**空闲/未请求 -> 待处理/加载中/提交中 -> 成功/错误 -> 已稳定/已关闭。要求成功的副作用已得到确认，失败的副作用会持续显示。
-7. **压力测试：**Chromium 桌面端和 Chromium 移动端；`Tab, Shift+Tab, Enter, Space, Escape`；加载、空数据、错误、密集数据；表单提交路径；通知/toast 路径；控制台/网络。根据风险增加 Firefox 桌面端、WebKit、减少动态效果、强制颜色、文本缩放、RTL/本地化长文本、慢速网络/媒体限速，以及主题。
+7. **压力测试：**按风险检查受影响行为：相关视口、键盘与焦点、加载、空数据、错误、密集数据、表单、通知及控制台/网络。仅在存在可信的受影响风险或项目要求时增加浏览器、减少动态效果、强制颜色、缩放、RTL、限速或主题。
 8. **收尾：**引用证据，明确设计调整抓手，修复或接受 P0-P1，并记录可确定性复现的自动化候选项。
 
 内容/布局压力测试：使用 Skill 工具调用 "break-ui"。复用当前 dogfood 测试数据和截图；
 只测试尚未覆盖的情况。保留只读或已获授权修复的执行边界。
 
-对于已实现/发布模式：遵循 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：将每个受影响的界面/状态与截图和视觉测试逐一核对，在更新预期基线前检查快照差异，按常规方式重新运行，并在编辑后刷新证据。截图不是视觉测试；通过的测试也不是嵌入式的变更前后证据。 每项可见的 PR 差异都必须遵循[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)，而不只是视频：提供成对的编号标记、变更图例及原始截图链接。只读审查仅报告缺失或过时的标注；获授权的作者自动创建或刷新标注。
+已实现或发布：在截图有助于审查或明确要求时使用 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。在预期更新前审查相关快照差异，再正常重跑。仅在需要定位差异时添加标注；只读审查报告缺口。截图不是测试；测试也不是前后对比证据。
 
-HTML 优先。生命周期胜过截图。状态胜过顺利路径。动态效果就是交互。内容压力测试更有效。无障碍自动化只能覆盖一部分。性能具有视觉表现。同一问题出现两次，就将其自动化。
+渲染行为优先。生命周期比截图重要。状态比顺利路径重要。动效就是交互。无障碍自动化只能覆盖一部分。当风险足以支持维护成本时，再将重复检查自动化。
 
 需要时使用 `/excalidraw-diagram`；以截图为主要证据，Mermaid 作为后备方案。
 
 ## 输出 [#output]
 
-编写简洁的 Markdown。对于发布审查或非简单审查，创建 `$TMPDIR/visual-review-<timestamp>.html`。
+直接使用简洁 Markdown，省略空表。仅在用户要求时另写 HTML 报告。
 
 ```markdown
 ## Visual review

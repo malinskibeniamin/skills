@@ -68,7 +68,7 @@ Commit and PR titles state the guarantee after the change, not only the activity
 
 | Craft | Check |
 | --- | --- |
-| `tests-grow-with-code` | Behavior changes ship public-contract tests in the same PR; add cases for independent credible risks, not test/production line ratios or coverage quotas. Substantive code without tests states why (generated, pure move, config only). |
+| `tests-grow-with-code` | Reuse existing public-contract coverage; add a focused regression for an independent credible risk it misses, not for each edit or dependency call. Apply [proportionate verification](../shared/verifiability.md#proportionate-verification); a direct probe or existing check can suffice for routine work. |
 | `test-refusal-and-no-op-paths` | Test what must not happen: rejection, empty input, idle runs, and errors that keep the last good state. Name tests as behavior sentences, such as "idle tick writes nothing". |
 | `reproduce-first` | Shrink the trigger until it runs in milliseconds; show the check failing on the base branch and passing on the change. |
 | `revert-test` | Each new test fails when the fix is reverted. A test that still passes guards nothing. |

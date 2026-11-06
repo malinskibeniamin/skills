@@ -48,7 +48,8 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    repository naming rules. [ETHOS: Worktree Isolation]
    Preserve feature branch names and unrelated work. On an owned feature, routine repairs,
    rebases, commits, pushes and `--force-with-lease` need no extra prompt. Preserve default/shared/foreign/concurrent branches unless explicitly authorized.
-2. For new behavior or repairs, use [TDD](../tdd/SKILL.md) and [check loops](check-loop.md). Run repository-native focused
+2. Select [proportionate verification](verifiability.md#proportionate-verification),
+   using [TDD](../tdd/SKILL.md) for uncovered regressions and [check loops](check-loop.md). Run repository-native focused
    tests, lint, types, build/integration checks; retain warnings, skips and limits.
    Resolve commands and scope from the target's current instructions and scripts using
    [repo navigation](repo-navigation.md). Its package manager, checker and test
@@ -58,9 +59,10 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    Exercise runnable work with [dogfood](../dogfood/SKILL.md): real user or public entrypoint, intended use and
    a credible failure/recovery path. Static docs/config use the relevant consumer/validator instead.
 4. Load [review](../review/SKILL.md) and apply its diagnostic axes inline, starting from
-   the hypothesis that the candidate is wrong. Validate the required falsification
-   receipt through its [existing collector](../review/REFERENCE.md#receipt-validation);
-   fix confirmed defects and replay their counterexamples before a fresh clean receipt.
+   the hypothesis that the candidate is wrong. For routine changes, keep findings and
+   decisive checks inline; no JSON receipt/report file. Use the
+   [existing collector](../review/REFERENCE.md#receipt-validation) when a configured gate
+   or requested structured review requires it. Fix confirmed defects and replay counterexamples.
    Its read-only
    contract governs that assessment; this author request owns repairing concrete findings.
    Select [risk-based depth](../review/OPERATING-MODEL.md); retain runnable proof and

@@ -38,9 +38,11 @@ delegation nor publication permission. Ordinary reviews remain inline.
 
 ## Receipt validation
 
-Before completing an inline review, use the shared
+Routine inline self-review needs only findings, decisive checks and material limits in
+the reply or existing PR; no receipt file or schema-validation ceremony. For an explicitly
+requested structured review, configured gate or dispatched native reviewer, use the shared
 [findings schema](../agents/references/findings-schema.md), including `challenges`.
-With no matching native hook or gate recording, validate directly with the installed CLI:
+When that structured result has no matching native hook or gate recording, validate with the installed CLI:
 
 ```sh
 bun --no-install <harness-root>/scripts/review-results.ts self-reviewer < <receipt.json>

@@ -52,9 +52,9 @@ Jeśli repozytorium używa Changesets, po weryfikacji załaduj [changesets](http
 
 1. Baza: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Kontynuuj pracę w bieżącym PR-ze i zachowaj [metadane](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md), w tym stan szkicu. Tworzenie szkiców PR nie wymaga zatwierdzenia; stosy: `/stacked-prs`.
 2. Dla każdego PR-a załaduj osobno [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md), [wpływ](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) i [opis](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md); zachowaj szkic i przedstaw wartość.
-3. Widoczne zmiany: inwentaryzacja, automatycznie opisane zrzuty ekranu i nagrania przed zmianą i po niej, z numerowanymi oznaczeniami i legendą zmian zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations), sprawdzone migawki oraz przechodzące testy wizualne. Nie potrzeba osobnej prośby o adnotacje. Brak dowodów wymaga zgody użytkownika na odstępstwo przed publikacją.
+3. Widoczne zmiany: sprawdź renderowanie objętych zmianą obszarów i uruchom właściwe istniejące kontrole. Używaj zrzutów lub porównań tylko wtedy, gdy pomagają w przeglądzie albo są wymagane zgodnie z instrukcją; nagrania, adnotacje, nowe migawki i diagramy nie są automatycznymi rezultatami pracy.
 4. Publiczne repozytorium (`gh repo view --json visibility`): przed wypchnięciem usuń wewnętrzne nazwy organizacji, repozytoriów, produktów i osób oraz prywatne linki z commitów, tytułu, opisu i dowodów.
-5. Uwzględnij potwierdzenie dogfood; ponownie odczytaj opis i sprawdź dostęp do obrazów. Edycje unieważniają dowody, których dotyczą.
+5. Podsumuj rozstrzygające kontrole i istotne ograniczenia w opisie; nie twórz osobnego pliku z dowodami. Uwzględnij odpowiednie wyniki dogfood; odczytaj ponownie opis i sprawdź dostęp do dołączonych materiałów. Edycje unieważniają tylko dowody, których dotyczą.
 
 Utrzymanie: [właściciel pętli utrzymania](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance).
 Przed monitorowaniem wybierz natywny mechanizm wznowień; nie uruchamiaj drugiego dispatchera.

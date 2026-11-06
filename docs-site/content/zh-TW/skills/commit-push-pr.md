@@ -49,9 +49,9 @@ type: skill
 
 1. 基底：`"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`。後續工作沿用目前的 PR 與[中繼資料](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿狀態。建立草稿 PR 無須核准；堆疊使用 `/stacked-prs`。
 2. 每個 PR 都應分別載入 [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md)、[影響評估](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)與[內文](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；保留草稿狀態並說明價值。
-3. 可見變更：建立清單，依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自動為前後對照的螢幕擷取畫面與影片加上編號標記及變更圖例，審查快照，並確保視覺測試通過。不需要另外要求標註。缺少證據時，必須在發布前取得使用者的明確豁免。
+3. 可見變更：檢查受影響區域的呈現並執行相關現有檢查。只在有助於審查或參考文件明確要求時使用聚焦截圖或比較；影片、標註、新快照和圖表不是自動交付項目。
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證據中移除內部組織、儲存庫、產品、人員名稱及私人連結。
-5. 附上 dogfood 執行證明；重新讀取內文並確認圖片存取權限。編輯會使證據失效。
+5. 在內文簡述關鍵檢查與重要限制，不另建證據檔案。包含適用的 dogfood 結果；重新讀取內文並確認所附媒體的存取權限。編輯僅使受影響的證據失效。
 
 持續維護由[維護負責流程](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md#automatic-pr-maintenance)統一負責；監看前先選擇原生接續機制，不要重複啟動派送器。
 

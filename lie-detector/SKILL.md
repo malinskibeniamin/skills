@@ -34,11 +34,10 @@ Trace changed paths to caller-visible output; flag unperformed work:
 
 For each added or changed test:
 
-1. In a disposable snapshot per [review isolation](../review/REFERENCE.md#source-snapshots-and-mutation-tests), break the behavior it claims to protect:
-   invert the changed condition, drop the rendered element, or change the user-visible value; wiring-only breaks miss tautologies.
-   Rerun there; leave original files, index, and branch untouched. Still green: the test lies.
-   Count RED only from an assertion, not setup failure. Record the command and failure.
-   Unavailable isolation is a named evidence gap, not permission to mutate the active checkout.
+1. In a disposable snapshot per [review isolation](../review/REFERENCE.md#source-snapshots-and-mutation-tests), break the claimed public behavior, not just wiring.
+   Rerun; leave originals/index/branch untouched. Still green: the test lies. Only assertion
+   failure counts as RED; record command/failure. Missing isolation is a named gap, not
+   permission to mutate the active checkout.
 2. Check survivors against the [test-audit junk patterns](../test-audit/SKILL.md#junk-patterns).
 3. A behavior change with no test that went red and no real-entrypoint replay (`/dogfood`)
    is unproven.
@@ -49,7 +48,9 @@ Flag unexplained out-of-scope behavior changes or weakened guards: deleted, skip
 `@ts-ignore` or lint suppressions; changed defaults, copy, routes, flags, error handling,
 retries, or timeouts; widened exclusions, relaxed compiler/lint rules, or shell/CI failure
 exits turned into success; lockfile or config churn; hand-edited generated files; a visual
-change with no screenshot. Review changed checks/configs separately from the implementation
+change without risk-appropriate rendered verification; screenshots are optional per
+[proportionate verification](../shared/verifiability.md#proportionate-verification).
+Review changed checks/configs separately from the implementation
 they judge; a justified rule correction needs known-bad and valid cases through its real command.
 
 Trace auth-proof creation: casts, unchecked constructors and comments cannot authorize.

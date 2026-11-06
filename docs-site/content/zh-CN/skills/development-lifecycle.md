@@ -47,13 +47,13 @@ type: skill
 
 处理 T3 检出或 Effect 代码时，以 `work` 为入口解析[原生上下文](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；在整个循环中使用返回的目标项目指南和范围检查。
 
-编辑前加载[变更证据路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及适用的负责技能。按比例评估影响；可见编辑前先捕获基线，包括细小文案和共享 UI 的影响。
+加载[变更证据路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及相关负责技能。评估可信风险；仅在视觉对比有用或明确要求时于编辑前捕获基线。复用现有测试、辅助工具和有效证据。
 
 [Figma/图片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 操作 [#act]
 
-一个负责人；委派和后台工作需要用户明确授权。遵循本地惯例，实现所需行为。对于重要行为，加载 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)，在公开契约层面执行 RED -> 最小 GREEN -> REFACTOR；静态连接或保持行为不变的删除可以只进行针对性验证。证据发生变化时，重新规划受影响的部分。除非相邻清理工作会阻碍验证，否则仅将其作为问题报告。
+一个负责人；委派和后台工作需要明确授权。遵循本地惯例，采用能正常工作的最小改动。对可信且尚未覆盖的回归使用 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)；其他情况用现有检查或探针即可。仅重新规划受影响部分；避免推测性抽象和顺手清理。
 
 每完成一批逻辑完整的编辑，先运行限定范围的格式化或自动修复及 lint，再运行相关的类型检查和测试。只有文件内容和检查覆盖范围完全相同时，才可复用已完成的钩子结果。检查自动修复的差异；修复失败并重新运行。当按文件限定范围不可靠时，保留整个项目的类型检查。
 
@@ -67,7 +67,7 @@ type: skill
 
 ## 边界 [#boundaries]
 
-仅对用户保留的决定，或不可逆的生产、法律/隐私、破坏性、高安全风险操作询问。将证据和暂停条件保存在已忽略的 `.context/implementation-notes.md`。
+仅对用户保留的决定，或不可逆的生产、法律、隐私、破坏性及高安全风险操作询问。只有长期任务需要检查点时才复用现有笔记；常规工作无需证据或检查清单文件。
 
 ## 完成 [#completion]
 

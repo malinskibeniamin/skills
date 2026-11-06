@@ -71,15 +71,13 @@ PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前�
 
 ### 证据 [#evidence]
 
-提供变更有效的具体证据，展示变更前后对比。列明未运行的检查和剩余不确定性；测试通过不代表人工审查或共识。
+提供证明变更有效的具体证据。优先简述命令和结果；仅在有助于解释变更时展示前后对比，不将媒体视为自动要求。说明未运行的检查和剩余不确定性；测试通过不能证明人类审查或共识。
 
-对于每项可见变更，按照[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自动标注证据，而不只是视频。 对于大范围 UI 工作，使用 [UI 变更映射](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)串联用户问题 -> 界面变化 -> 证据 -> 验收标准。
+仅在差异难以定位时使用[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。广泛的 UI 工作可在有助于理解时使用 [UI 变更图](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重复截图和独立总结文件。
 
-对于后端架构、数据流、API 契约或工作流变更，请遵循[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指南并调用 `excalidraw-diagram`。提供聚焦的前后对比和可编辑源文件链接；更新相关的持续维护图表。图表失败时报告警告并继续，绝不阻塞 PR，也不能替代测试证据。
+对于需要视觉解释的后端关系，仅在用户要求或比简短文字更清晰时使用[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)。更新已过时的现有维护图表；常规变更不新建图表或源文件。渲染失败应警告后继续，不阻塞 PR，也不替代测试证据。
 
-对于任何前端变更，内嵌播放的真实 UI 流程变更前后对比视频（包含点击、输入和最终状态，绝不能只是静止页面）加上截图，是最高等级的证据，且必须提供。将其紧接在开头一句话之后，让审阅者在阅读补充细节前就能看到变更。按照 [commit-push-pr 可视化证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) 中的说明录制、合成并托管视频。
-
-基于执行的证据次之：测试结果、控制台输出。用伪代码展示此前失败、现在通过的具体测试。
+按 [commit-push-pr 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)选择媒体。只有交互或动效需要，或用户要求时才录制真实流程；其他情况下静态图片和命令结果足够。证据的价值在于回答的问题，不在于媒体等级。测试结果应简洁、真实，不要重构或虚构。
 
 ### 合并风险 [#merge-danger]
 

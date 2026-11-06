@@ -49,13 +49,13 @@ Przed pisaniem przeczytaj zasady właściwe dla danego zakresu i ustal natywne p
 
 Dla checkoutów T3 lub pracy z Effect ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `work`; w całej pętli używaj zwróconych wskazówek projektu i kontroli dla zmienionego zakresu.
 
-Przed edycją załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wpływ proporcjonalnie; przed zmianą widocznego zachowania zarejestruj bazę, także dla drobnego tekstu lub współdzielonego UI.
+Załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wiarygodne ryzyko; zarejestruj bazę przed edycją tylko wtedy, gdy porównanie wizualne jest przydatne lub wymagane. Wykorzystuj istniejące testy, narzędzia pomocnicze i aktualne dowody.
 
 [Figma/obraz](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md).
 
 ### Działaj [#act]
 
-Jeden właściciel zadania; delegowanie i praca w tle wymagają wyraźnej zgody. Zaimplementuj wymagane zachowanie zgodnie z lokalnymi konwencjami. Dla istotnego zachowania załaduj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) i pracuj na poziomie publicznego kontraktu: RED -> najmniejsze GREEN -> REFACTOR; statyczne okablowanie lub usuwanie, które nie zmienia zachowania, może wymagać tylko ukierunkowanej weryfikacji. Gdy ustalenia się zmienią, ponownie zaplanuj odpowiedni fragment. Poboczne porządki zgłoś, chyba że blokują weryfikację.
+Jeden właściciel; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą działającą zmianę zgodnie z lokalnymi konwencjami. Używaj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) dla wiarygodnych regresji nieobjętych testami; w pozostałych przypadkach wystarczą istniejące kontrole lub próby. Planuj ponownie tylko dotknięty fragment; pomijaj spekulacyjne abstrakcje i poboczne porządki.
 
 Po każdej spójnej partii zmian uruchom formatowanie lub automatyczne poprawki i lintowanie w odpowiednim zakresie, a następnie właściwe kontrole typów i testy. Wyniki zakończonych hooków wykorzystuj ponownie tylko przy identycznej zawartości plików i zakresie kontroli. Sprawdź diff automatycznych poprawek; napraw błędy i uruchom kontrole ponownie. Zachowaj sprawdzanie typów całego projektu, gdy ograniczenie do plików nie jest poprawne.
 
@@ -69,7 +69,7 @@ Jeśli brakuje powtarzalnego punktu wejścia, potwierdź działanie za pomocą t
 
 ## Granice [#boundaries]
 
-Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działania produkcyjne, prawne, dotyczące prywatności, usuwania danych lub wysokiego bezpieczeństwa. Dowody i przesłanki wstrzymania zapisuj w ignorowanym `.context/implementation-notes.md`.
+Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działania produkcyjne, prawne, dotyczące prywatności, usuwania danych lub wysokiego bezpieczeństwa. Wykorzystuj istniejące notatki tylko wtedy, gdy długa praca wymaga punktu wznowienia; rutynowe zmiany nie wymagają pliku z dowodami ani listy kontrolnej.
 
 ## Zakończenie [#completion]
 

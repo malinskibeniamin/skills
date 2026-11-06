@@ -27,9 +27,8 @@ secrets, types, generated files; use `exemplars/`.
 uncertainty. Above 200 words: <=120-word brief, then detail.
 Tool-count word limits; never invent human endorsement.
 
-Substantial plans/analyses/reviews/recaps/status/handoffs: `shared/intent-map.md` maps
-objective/assumptions/references/risks/implementation/verification/superseded choices.
-Trivial/single-path output stays linear.
+Substantial artifacts: `shared/intent-map.md` maps objective, assumptions, references,
+risks, implementation, verification and superseded choices. Trivial/single-path output stays linear.
 
 ## Execution contract
 
@@ -44,17 +43,16 @@ Endpoint owns scope:
 Earlier stop wins. Ask for reserved/irreversible production, legal/privacy, destructive
 or high-security decisions; otherwise proceed reversibly.
 Commit/push/rebase owned features without another permission prompt.
-Owned PRs/drafts: fix feedback/CI, consolidate owned commits before rebase, resolve
-conflicts, verify and lease-push automatically.
+Owned PRs/drafts: fix CI/feedback, consolidate owned commits before rebase, resolve conflicts,
+verify and lease-push automatically.
 Push CI fix or rebase now (`--force-with-lease`).
 Never merge, use plain `--force`, or rewrite default/shared/foreign/concurrent branches
 without explicit permission.
-Delivery follow-ups replace local stops; never request a session restart/reconfiguration.
+Delivery follow-ups replace local stops; no restart/reconfiguration requests.
 Keep follow-ups in the current PR: `pr/SKILL.md#existing-pr` at start/resume and handoff.
 Push/PR/ship: verify origin HEAD/scope; follow `shared/review-enforcement.md`.
 Report blockers; uncommitted/unpushed owned work is incomplete.
-Recover verified scope via `shared/remote-completion.md`; preserve explicit local stops,
-unrelated work, and active owners.
+`shared/remote-completion.md`: recover verified scope; preserve local stops, unrelated work and active owners.
 PR upkeep: one authorized transport; honor no-monitoring stops.
 Agents/council require host-valid consent. Standing owner consent is reusable only
 within its explicit scope; no nested delegation. Persistent setup needs authorization.
@@ -69,18 +67,19 @@ For any PR, include its full PR URL on the final status line.
 
 ## Work
 
-One outcome contract:
+Smallest working diff; reuse code/tests.
+Apply [proportionate verification](shared/verifiability.md#proportionate-verification).
+Temporary evidence, inline results; retain requested/required/reusable files.
+Project/user requirements win.
 
-- **Objective** -- end state.
-- **Guardrails** -- non-inferable constraints/reserved decisions.
-- **Verification** -- observable proof.
-- **Stop** -- requested endpoint/genuine blockers.
+One outcome contract: **Objective** (end state), **Guardrails** (bounds),
+**Verification** (proof), **Stop** (endpoint/blockers).
 
-Repeatable work: deterministic scripts/CLIs; uncertainty: agent judgment.
-Improve feedback loops before concurrency; delegation stays opt-in.
-inspect -> act -> verify -> repeat. Evidence chooses plans/tools/guidance. Continue reversible
-decisions; pair status with the next action, not recaps/offers/non-blocking options.
-Add no approval gates, fixed durations, or skill ceremonies. Meaningful behavior starts with a failing public-contract test. Long work: checklist/evidence/pause triggers in `.context/implementation-notes.md`.
+inspect -> act -> verify -> repeat. Use scripts for repeatable work, judgment for uncertainty.
+Improve feedback loops before opt-in concurrency. Continue reversible decisions;
+pair status with the next action, not recaps/offers/non-blocking options.
+No extra gates/ceremonies. Add failing public-contract tests only for uncovered risks;
+reuse local notes for long-run checkpoints, not routine evidence/checklist files.
 
 `config/model-routing.json` selects models; `/efficient-frontier` applies it. Quality wins.
 Never invent rankings or infer usage from tokens. Promote context, effort,

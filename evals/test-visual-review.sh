@@ -46,11 +46,8 @@ else
 fi
 run_content_eval "$SKILL_DIR/SKILL.md" "shadcn/ui|@/components/ui" "visual-review points to shadcn-style UI components"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "shadcn/ui|@/components/ui" "visual-review reference points to shadcn-style UI components"
-run_content_eval "$SKILL_DIR/SKILL.md" "Chromium desktop" "visual-review includes Chromium desktop"
 run_content_eval "$SKILL_DIR/SKILL.md" "Chromium mobile" "visual-review includes mobile viewport"
-run_content_eval "$SKILL_DIR/SKILL.md" "Firefox desktop" "visual-review prefers Firefox"
 run_content_eval "$SKILL_DIR/SKILL.md" "WebKit" "visual-review prefers WebKit"
-run_content_eval "$SKILL_DIR/SKILL.md" "loading, empty, error, dense-data" "visual-review has UI state matrix"
 run_content_eval "$SKILL_DIR/SKILL.md" "ARIA only when needed" "visual-review checks ARIA restraint"
 run_content_eval "$SKILL_DIR/SKILL.md" "safe-area" "visual-review checks mobile safe area"
 run_content_eval "$SKILL_DIR/SKILL.md" "bfcache|back/forward" "visual-review checks navigation state"
@@ -125,15 +122,12 @@ fi
 
 run_content_eval "$REPO_ROOT/shared/change-evidence.md" "Customer-facing surface" "go inspects changed visual surfaces"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "Browser/UI" "go reference documents visual verification evidence"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Only an explicit user waiver' "commit-push-pr requires user waiver for missing visual evidence"
 
 # ── Consolidated Web Weekly visual-review checklist ──────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Tab, Shift\+Tab, Enter, Space, Escape" "visual-review checks keyboard interaction path"
-run_content_eval "$SKILL_DIR/SKILL.md" "form submit path" "visual-review checks form submit path"
 run_content_eval "$SKILL_DIR/SKILL.md" "notification/toast path" "visual-review checks notification/toast path"
 run_content_eval "$SKILL_DIR/SKILL.md" "text zoom|larger default font" "visual-review checks text zoom/font scaling"
 run_content_eval "$SKILL_DIR/SKILL.md" "RTL|localized-long-text" "visual-review checks localized and RTL stress"
-run_content_eval "$SKILL_DIR/SKILL.md" "slow network/media throttling" "visual-review checks slow media/network path"
 run_content_eval "$SKILL_DIR/SKILL.md" "virtual keyboard" "visual-review checks virtual keyboard viewport bugs"
 run_content_eval "$SKILL_DIR/SKILL.md" "writing mode" "visual-review checks writing mode viewport/layout"
 run_content_eval "$SKILL_DIR/SKILL.md" "captions/headers still explain tables" "visual-review checks table semantics"
@@ -158,13 +152,9 @@ run_content_eval "$SKILL_DIR/SKILL.md" "stable aspect ratio" "visual-review chec
 run_content_eval "$SKILL_DIR/SKILL.md" "third-party embeds/scripts" "visual-review checks third-party UI cost"
 run_content_eval "$SKILL_DIR/SKILL.md" "INP/long interaction" "visual-review checks INP/long interaction risk"
 run_content_eval "$SKILL_DIR/SKILL.md" "font loading" "visual-review checks font loading/layout shift"
-run_content_eval "$SKILL_DIR/SKILL.md" "HTML first" "visual-review includes HTML-first heuristic"
 run_content_eval "$SKILL_DIR/SKILL.md" "State beats happy path" "visual-review includes state-over-happy-path heuristic"
 run_content_eval "$SKILL_DIR/SKILL.md" "Motion is interaction" "visual-review includes motion-is-interaction heuristic"
-run_content_eval "$SKILL_DIR/SKILL.md" "Content stress wins" "visual-review includes content stress heuristic"
 run_content_eval "$SKILL_DIR/SKILL.md" "Accessibility automation is partial" "visual-review includes a11y automation limitation heuristic"
-run_content_eval "$SKILL_DIR/SKILL.md" "Performance is visual" "visual-review includes performance-is-visual heuristic"
-run_content_eval "$SKILL_DIR/SKILL.md" "If seen twice, automate" "visual-review includes automation feedback heuristic"
 
 # ── Standalone + ecosystem integration ───────────────────────────
 run_file_eval "$SKILL_DIR/REFERENCE.md" "visual-review REFERENCE.md exists"
@@ -189,7 +179,6 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "can run standalone" "visual-review r
 run_content_eval "$SKILL_DIR/REFERENCE.md" "self-reviewer" "visual-review reference wires self-reviewer"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "code-reviewer" "visual-review reference wires code-reviewer"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/visual-review" "commit-push-pr wires visual-review for frontend changes"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Frontend or customer-facing surface diff -> `/visual-review` and the visual evidence gate' "commit-push-pr review list requires visual-review and visual evidence for customer-facing diffs"
 run_content_eval "$REPO_ROOT/agents/self-reviewer.md" "Visual Review Evidence" "self-reviewer checks visual-review evidence"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Visual Review Evidence" "code-reviewer checks visual-review evidence"
 
@@ -201,7 +190,6 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Checked matrix" "PR evidence contrac
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Every unrun applicable item requires an explicit user waiver" "PR evidence contract requires user-waived gaps"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Automation candidates" "PR evidence contract includes automation candidates"
 run_content_eval "$REPO_ROOT/go/REFERENCE.md" "include verification and real-use evidence in the PR body" "go reference carries visual evidence into PR delivery"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'Follow `visual-review/REFERENCE.md`' "commit-push-pr references deeper visual review evidence"
 run_content_eval "$REPO_ROOT/docs/DEMOS.md" "/visual-review" "demos document standalone visual-review usage"
 
 # ── Customer-facing surface expansion + HTML report ─────────────
@@ -219,7 +207,6 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Product: user value" "visual-review has 
 run_content_eval "$SKILL_DIR/SKILL.md" "Design: hierarchy" "visual-review has design hat"
 run_content_eval "$SKILL_DIR/SKILL.md" "Engineering: resilience" "visual-review has engineering hat"
 run_content_eval "$SKILL_DIR/SKILL.md" "QA: reproducible evidence" "visual-review has QA hat"
-run_content_eval "$SKILL_DIR/SKILL.md" '\$TMPDIR/visual-review-<timestamp>\.html' "visual-review writes temp HTML report"
 run_content_eval "$SKILL_DIR/SKILL.md" "Severity \| Hat \| Surface \| Evidence" "visual-review output uses multi-hat finding schema"
 run_content_eval "$SKILL_DIR/SKILL.md" "P0 blocks use/security/data loss/infinite loop" "visual-review severity includes P0 blocker semantics"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "single self-contained HTML report" "visual-review HTML report is self-contained"
@@ -261,7 +248,6 @@ run_content_eval "$REPO_ROOT/animate/REFERENCE.md" "asymmetric enter/exit timing
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Slop catalog expansion" "visual-review includes expanded slop catalog"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "flat type hierarchy.*AI color palette.*layout property animation" "visual-review slop catalog covers type color and motion smells"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Start warn-only" "visual-review recommends warn-only hook rollout"
-run_content_eval "$REPO_ROOT/shared/change-evidence.md" "rendered states" "go verifies customer-facing surfaces directly"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "customer-facing surface diff" "commit-push-pr requires visual-review for customer-facing surfaces"
 run_content_eval "$REPO_ROOT/agents/references/review-evidence.md" "customer-facing surface" "shared evidence reference covers customer-facing surfaces"
 run_content_eval "$REPO_ROOT/GLOSSARY.md" "Customer-facing surface" "glossary documents customer-facing surface term"
