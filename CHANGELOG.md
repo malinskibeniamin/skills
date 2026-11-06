@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+2026-11-07 -- Use file-backed stdin for hook child dispatch so large payloads and
+children that skip stdin do not cause false failures or Stop-hook loops. Add an
+ignored-SIGPIPE regression covering successful, blocking, and failing children.
+
 ## 4.44.0
 
 2026-11-02 -- Publish the four-source refresh from PR #285 for Claude Code and Codex.

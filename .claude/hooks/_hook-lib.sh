@@ -382,15 +382,18 @@ hook_parse_edit_write() {
     # for its own extension/case gates and only that file's hunk -- a .ts
     # violation cannot hide behind a .md first target. Worst exit wins.
     if [ -n "$_hook_apply_patch_targets" ] && [ -z "${_HOOK_APPLY_PATCH_CHILD:-}" ] && [ -x "$0" ]; then
-      local _apx_worst=0 _apx_rc _apx_t _apx_payload
+      local _apx_worst=0 _apx_rc _apx_t _apx_payload _apx_input
+      _apx_input=$(mktemp) || exit 1
       while IFS= read -r _apx_t; do
         [ -z "$_apx_t" ] && continue
         _apx_payload=$(jq -nc --arg f "$_apx_t" --arg p "$_patch_body" --arg sid "${_hook_session_id:-}" '{tool_name:"Edit",session_id:$sid,tool_input:{file_path:$f,patch:$p}}' 2>/dev/null || true)
         [ -z "$_apx_payload" ] && continue
         _apx_rc=0
-        printf '%s' "$_apx_payload" | _HOOK_APPLY_PATCH_CHILD=1 "$0" || _apx_rc=$?
+        printf '%s' "$_apx_payload" >"$_apx_input" || { rm -f "$_apx_input"; exit 1; }
+        _HOOK_APPLY_PATCH_CHILD=1 "$0" <"$_apx_input" || _apx_rc=$?
         [ "$_apx_rc" -gt "$_apx_worst" ] && _apx_worst=$_apx_rc
       done <<< "$_hook_apply_patch_targets"
+      rm -f "$_apx_input"
       exit "$_apx_worst"
     fi
   fi
@@ -961,8 +964,11 @@ _hook_protocol_parse() {
   [ "${HOOK_PROTOCOL:-}" = "shell" ] && return 1
   command -v bun >/dev/null 2>&1 || return 1
   _hook_protocol_resolve || return 1
-  local out rc=0
-  out=$(printf '%s' "${_hook_input:-}" | _hook_protocol_run "$_hook_protocol_entry" parse 2>/dev/null) || rc=$?
+  local out input_file rc=0
+  input_file=$(mktemp) || return 1
+  printf '%s' "${_hook_input:-}" >"$input_file" || { rm -f "$input_file"; return 1; }
+  out=$(_hook_protocol_run "$_hook_protocol_entry" parse <"$input_file" 2>/dev/null) || rc=$?
+  rm -f "$input_file"
   # Empty output = stdin was not a JSON object; the jq path agrees (every
   # extraction comes back empty), so falling back is correct, just idle.
   [ "$rc" -eq 0 ] && [ -n "$out" ] || return 1

@@ -21,12 +21,14 @@ batch=$(printf '%s' "$input" | jq -c '
   } end
 ' 2>/dev/null || echo '{"tool_calls":[]}')
 
+input_file=$(mktemp)
 out_file=$(mktemp)
 err_file=$(mktemp)
-trap 'rm -f "$out_file" "$err_file"' EXIT
+trap 'rm -f "$input_file" "$out_file" "$err_file"' EXIT
+printf '%s' "$batch" >"$input_file"
 
 status=0
-printf '%s' "$batch" | "$dispatcher" >"$out_file" 2>"$err_file" || status=$?
+"$dispatcher" <"$input_file" >"$out_file" 2>"$err_file" || status=$?
 
 if [ "$status" -eq 2 ]; then
   cat "$err_file" >&2

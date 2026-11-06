@@ -31,6 +31,8 @@ blocks="$tmp_dir/blocks"
 notes="$tmp_dir/notes"
 : >"$blocks"
 : >"$notes"
+# Children may exit without reading stdin; a pipe would misreport printf EPIPE.
+printf '%s' "$input" >"$tmp_dir/input"
 
 extract_message() {
   local file="$1"
@@ -70,7 +72,7 @@ while IFS= read -r script; do
   out="$tmp_dir/${script}.out"
   err="$tmp_dir/${script}.err"
   status=0
-  printf '%s' "$input" | "$child" >"$out" 2>"$err" || status=$?
+  "$child" <"$tmp_dir/input" >"$out" 2>"$err" || status=$?
 
   if [ "$status" -eq 2 ]; then
     message=$(extract_message "$err")
@@ -101,5 +103,5 @@ fi
 
 # Release activity only after every blocking Stop check passed.
 if [ -x "$script_dir/pr-review-auto-hook.sh" ]; then
-  printf '%s' "$input" | "$script_dir/pr-review-auto-hook.sh"
+  "$script_dir/pr-review-auto-hook.sh" <"$tmp_dir/input"
 fi
