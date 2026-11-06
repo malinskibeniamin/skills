@@ -85,6 +85,6 @@ Dowody z wykonania to klasa tuż za nimi: wyniki testów, dane wyjściowe konsol
 
 ### Ryzyko scalenia [#merge-danger]
 
-Wskaż sposób wycofania zmiany. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
+Wskaż sposób wycofania zmiany i określ, czy są to drzwi jednokierunkowe, czy dwukierunkowe. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
 
 Wymień dotkniętych użytkowników, wywołujących, kontrakty i wiarygodne scenariusze awarii, w tym współdzielonych odbiorców.

@@ -83,6 +83,6 @@ Execution-based evidence is A-tier. Test results, console output. Show the exact
 
 ### Merge Danger
 
-Name the rollback path. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
+Name the rollback path and classify the change as a one-way or two-way door. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
 
 Name affected users, callers, contracts, and credible failure modes, including shared consumers.
