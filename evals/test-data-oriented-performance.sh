@@ -1,5 +1,5 @@
-# Public instruction-link contract only: both performance workflows must reach
-# the same maintained guidance. This does not prove optimization quality or speed.
+# Public instruction-link contracts only: performance workflows must reach their
+# shared owners. This does not prove optimization quality, adherence or speed.
 
 if python3 - "$REPO_ROOT" <<'PY'
 from pathlib import Path
@@ -28,11 +28,28 @@ for source, section in routes:
         missing.append(source)
 assert not missing, "Data-oriented guidance unreachable from: " + ", ".join(missing)
 print("  PASS  UX and runtime performance routes reach one data-oriented reference")
+
+experiments = repo / "quantify-impact/REFERENCE.md"
+anchor = "optimization-experiments"
+anchors = {
+    re.sub(r"[^\w\- ]", "", heading.lower()).replace(" ", "-")
+    for heading in re.findall(r"^#+ (.+)$", experiments.read_text(), re.M)
+}
+assert anchor in anchors, "Optimization experiment anchor does not resolve"
+for source in ("quantify-impact/SKILL.md", "ux-performance/SKILL.md", "animation-performance/SKILL.md"):
+    page = repo / source
+    links = {
+        ((page.parent / target.split("#", 1)[0]).resolve(), target.partition("#")[2])
+        for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", page.read_text())
+        if ":" not in target and not target.startswith("#")
+    }
+    assert (experiments, anchor) in links, f"Experiment guidance unreachable from: {source}"
+print("  PASS  optimization entrypoints resolve the shared experiment section")
 PY
 then
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  performance workflows cannot load shared data-oriented guidance"
+  echo "  FAIL  performance workflows cannot load shared guidance"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: shared data-oriented performance routing"
+  ERRORS="$ERRORS\n  FAIL: shared performance routing"
 fi

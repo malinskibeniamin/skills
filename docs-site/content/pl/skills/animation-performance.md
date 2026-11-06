@@ -14,6 +14,9 @@ Znajdź wąskie gardło klatek, zanim zmienisz ruch. Adaptacja umiejętności Em
 [pochodzenie](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md). Audyt kończy się raportem; jawne żądanie poprawki
 prowadzi przez weryfikację i bramki dostarczania projektu.
 
+Przed edycją w ramach optymalizacji lub poprawki przeczytaj wspólną [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
+Określa pierwotny i zaakceptowany stan bazowy, decyzje o zachowaniu lub wycofaniu zmian oraz nierozstrzygnięte tropy.
+
 ## Pętla
 
 1. Zarejestruj wadliwą interakcję: trasę, wielkość danych, mechanizm i właściwości animacji,

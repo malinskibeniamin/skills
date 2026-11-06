@@ -21,7 +21,7 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
 Przed pomiarem lub raportowaniem liczby przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement).
-Dla optymalizacji wydajności przed edycją przeczytaj [eksperymenty optymalizacyjne](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments): zachowaj pierwotny stan bazowy, testuj jedną przyczynę, sprawdzaj równoważność wyników i uwzględnij nierozstrzygnięte tropy przed ogłoszeniem zakończenia.
+Dla optymalizacji wydajności przed edycją przeczytaj [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
 
 Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) obejmuje ocenę wpływu, nawet bez publikacji. Wykorzystuj aktualne dowody; powtarzaj unieważnione porównania. Ocena nie daje zgody na publikację.
 

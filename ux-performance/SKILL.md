@@ -13,30 +13,28 @@ Name before edits:
 - **Milestone:** visible outcome; preserve intended animation, branding, interaction and data semantics via [fidelity assertions](../shared/verification-replay.md).
 - **Primary metric:** elapsed time or resource bound for that milestone.
 - **Worthwhile delta:** set before edits; honor requested scale (1% is not 10x). Repeatable 100 ms can matter.
-- **Endpoint:** audit (read-only), optimize (verified changes through the requested delivery endpoint), or calibrated CI guard.
+- **Endpoint:** read-only audit, optimize through requested delivery, or calibrated CI guard.
 
-For optimization, read the shared [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments)
-before edits. It owns original/accepted baselines, keep/revert decisions, output equivalence,
-the lead checklist and attempt reporting; use the selected tool's manual for mechanics.
+For optimization, read the [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments) before edits.
 
 ## Loop
 
-1. Inventory stack/versions, production build, telemetry, profilers, tests and budgets. Read current first-party docs before framework/library syntax changes.
-2. Measure the baseline before changing code with one production-like scenario/fixture. Save the original build and raw traces in ignored or temporary storage; use [MEASUREMENT.md](MEASUREMENT.md) for field/lab evidence.
-3. Build intent-to-paint waterfall. Mark serial, parallel/off-path, cache state, and critical segments: queue, network/TTFB, download, parse/evaluate, app, React render/commit, layout, paint.
+1. Inventory versions, production build, telemetry, profilers, tests and budgets. Read first-party docs before framework/API changes.
+2. Measure baseline before edits on one production-like scenario/fixture. Keep original build/traces ignored or temporary; [MEASUREMENT.md](MEASUREMENT.md) owns field/lab evidence.
+3. Build intent-to-paint waterfall: queue, network/TTFB, transfer, parse/evaluate, app/render/commit, layout, paint. Mark serial/off-path work and cache state.
 4. Rank bottlenecks; form falsifiable hypotheses. Delete work, shrink input, or remove serialization before tuning; change one causal variable at a time.
 5. Choose a measured [optimization](OPTIMIZATION.md). For CPU/allocation/locality, apply [data-oriented redesign](../shared/data-oriented-performance.md) before caching or offloading.
 6. Pair base/candidate on the same scenario, fixture, machine, browser, build, and cache. Report median/spread; verify fidelity, accessibility, memory, bundle, and errors.
-7. Keep a worthwhile gain. Revert losing/inconclusive owned experiments; distinguish `Value not proven - inconclusive` from a measured regression. Refresh the lead checklist and final output-equivalence checks before reporting the cumulative gain. Never metric-shop.
-8. Prevent recurrence only when requested or CI is the endpoint. [CI.md](CI.md): cheap stable PR checks, noisy/deep nightly checks, real-user monitoring after deploy. Hooks remain advisory until calibrated.
+7. Keep worthwhile, guardrail-safe gains; revert losing/inconclusive owned edits. Report `Value not proven - inconclusive` for noise, regression for losses. Refresh leads/fidelity before cumulative results; never metric-shop.
+8. CI only when requested: [CI.md](CI.md), stable cheap PR checks, noisy/deep nightly checks, real-user monitoring after deploy. Hooks are advisory until calibrated.
 
-For scale/burst/contention/long-session claims, use [STRESS.md](STRESS.md): capacity knee and correctness under pressure.
+For scale/burst/contention/soak claims, use [STRESS.md](STRESS.md): capacity knee and correctness under pressure.
 
-For bundle comparisons/composition, load [bundle analysis](../t3code-skills/bundle-analysis/SKILL.md).
+For bundles, load [bundle analysis](../t3code-skills/bundle-analysis/SKILL.md).
 
 ## Output
 
-Lead with outcome and slowest segment:
+Outcome and slowest segment:
 
 ```md
 Verdict: <measured state or value verdict>

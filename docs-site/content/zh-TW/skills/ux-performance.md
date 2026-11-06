@@ -39,7 +39,6 @@ type: skill
   要求的交付終點，並包含經過驗證的變更；CI 工作只安裝經過校準的檢查。
 
 進行最佳化時，編輯前先閱讀共用的[實驗循環](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
-它負責原始與已接受基準、保留或撤銷決策、輸出等價、線索清單及嘗試報告；具體操作遵循所選工具的手冊。
 
 ## 執行循環 [#loop]
 

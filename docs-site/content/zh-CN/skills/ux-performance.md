@@ -39,7 +39,6 @@ type: skill
   变更，并持续到要求的交付终点；CI 工作只安装校准过的检查。
 
 进行优化时，编辑前先阅读共用的[实验循环](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
-它负责原始和已接受基线、保留或回退决策、输出等价、线索清单及尝试报告；具体操作遵循所选工具的手册。
 
 ## 执行循环 [#loop]
 

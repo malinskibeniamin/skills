@@ -14,6 +14,9 @@ type: "skill"
 參見[來源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。稽核意味著報告；明確的修復請求
 則繼續透過驗證及專案交付檢查。
 
+進行最佳化或修正時，編輯前先閱讀共用的[實驗循環](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
+它負責原始與已接受基準、保留或撤銷決策，以及未解決的線索。
+
 ## 迴圈
 
 1. 記錄故障互動：路由、資料規模、動畫驅動方式/屬性、瀏覽器/裝置、重新整理率，

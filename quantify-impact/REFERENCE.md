@@ -59,12 +59,15 @@ Run the smallest repeatable scenario. Counts such as requests, errors, warnings,
 ### Runtime or noisy
 
 Use the selected measurement tool's current documented protocol when available; otherwise
-use these defaults. Choose run count from noise and stakes, not a single favorable sample.
+use these defaults. Declare the run count/stopping rule before sampling; early stopping
+requires a valid sequential protocol, not a favorable interim result.
 
 1. Run three warm-ups per candidate only for a warm-state claim; reset cold-state trials.
-2. Start with 5 paired before/after runs, alternating order when feasible.
-3. Stop when the delta clearly exceeds run-to-run variance and the pre-registered threshold.
-4. Extend to 10-30 pairs only for ambiguous, noisy, or high-stakes results.
+2. Choose a fixed budget before comparing: 5 paired before/after runs for a stable setup;
+   10-30 pairs when prior noise or stakes justify them.
+3. Alternate base/candidate order when feasible; evaluate at the declared stopping point.
+4. If exploratory runs or adaptive sample counts selected a winner, confirm it with a
+   separate fixed batch before keeping it.
 5. Report median, absolute delta, percentage delta, and spread. Report p95 only when the sample count supports it; never disguise the maximum of five runs as a stable p95.
 6. If the delta is at or below noise, report `inconclusive`, not `faster`.
 
@@ -83,7 +86,9 @@ read their current help/manual instead of copying a tool-specific recipe into th
 
 1. **Freeze the comparison.** Before edits, save the original build/revision, workload,
    environment and output/behavior assertions. Declare primary metric(s), worthwhile delta,
-   noise rule and protected metrics. Keep this original reference for cumulative results.
+   noise rule, protected metrics and run/stopping rule. For deferral, protect affected
+   first-use/end-to-end latency with bounds declared before edits; only the user can accept
+   a tradeoff that relaxes them. Keep this original reference for cumulative results.
    A latest-accepted reference may advance after a verified win, but never replaces the
    original. Changed fixtures, throttling or measurement boundaries need a fresh baseline
    before further edits; disclose the break rather than compare incompatible runs.
@@ -95,10 +100,13 @@ read their current help/manual instead of copying a tool-specific recipe into th
 3. **Change one cause.** State a falsifiable hypothesis and make the smallest reversible
    intervention. Rebuild and run relevant tests, then repeat comparable paired measurements.
    Require every sample to contain all declared primary metrics; missing values are invalid,
-   not zero. Test deferred work at first use as well as startup: moving cost is not deletion.
+   not zero. Retain attempted-trial counts and missing-value reasons. Outcome-dependent
+   failures/timeouts cannot be discarded into a win: resolve them or mark it inconclusive.
+   Test deferred work at first use as well as startup: moving cost is not deletion.
 4. **Keep or revert.** At least one declared primary metric must improve beyond noise
-   and the worthwhile delta; none may regress beyond noise. Protected metrics and behavior
-   must hold against both references. Revert a losing or inconclusive experiment's owned
+   and the worthwhile delta against the latest accepted reference. No primary metric may
+   regress beyond noise against either the original or accepted reference. Protected metrics
+   and behavior must also hold against both. Revert a losing or inconclusive experiment's owned
    edits, preserving unrelated work and earlier verified wins. Advance
    the accepted reference only after these checks; preserve results against both references.
 5. **Verify equivalence.** Compare final output against the original and replay affected

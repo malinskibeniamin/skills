@@ -7,6 +7,9 @@ Find the frame bottleneck before changing motion. Adapted from Emil Kowalski;
 [provenance](../shared/EMIL-SKILLS-CREDITS.md). Audit means report; an explicit fix
 request continues through verification and the project's delivery gates.
 
+For optimization/fixes, read the shared [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments)
+before edits; it owns original/accepted baselines, keep/revert decisions and unresolved leads.
+
 ## Loop
 
 1. Capture the failing interaction: route, data size, animation driver/properties,

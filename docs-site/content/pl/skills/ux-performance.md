@@ -43,8 +43,6 @@ Przed implementacją określ:
   instaluje wyłącznie skalibrowane kontrole.
 
 Dla optymalizacji przed edycją przeczytaj wspólną [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
-Określa pierwotny i zaakceptowany stan bazowy, decyzje o zachowaniu lub wycofaniu zmian,
-równoważność wyników, listę tropów oraz raportowanie prób. Szczegóły wykonania sprawdzaj w instrukcji wybranego narzędzia.
 
 ## Wykonaj pętlę [#loop]
 
