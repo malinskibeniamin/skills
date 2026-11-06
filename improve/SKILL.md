@@ -45,6 +45,7 @@ Use `/improve [quick|standard|deep|security|perf|tests|bugs|docs|dx|dependencies
 - `plan <description>`: investigate enough for one plan.
 - `review-plan <file>`: tighten an existing plan.
 - `execute <plan>`: use `/development-lifecycle`; `/efficient-frontier` lanes still require delegation or `/swarm`.
+- Repeated optimization against a defined eval or visual comparison: recommend [hill-climb](../hill-climb/SKILL.md); execute only under an authorized implementation request, never from Report or Plan mode.
 - `reconcile`: verify DONE plans and refresh, unblock, or retire TODOs.
 
 See `REFERENCE.md` for routing, `EXAMPLES.md` for examples, and `references/closing-the-loop.md` before execute or reconcile.

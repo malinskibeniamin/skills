@@ -5,6 +5,8 @@ description: Measure whether a change made the product or codebase meaningfully 
 
 Before measurements, read [Poteto](../shared/POTETO-NATIVE.md#measurement).
 For performance optimization, read the [experiment loop](REFERENCE.md#optimization-experiments) before edits.
+For repeated candidate search, [hill-climb](../hill-climb/SKILL.md) owns bounded iteration;
+this skill retains measurement validity, worthwhile-delta and guardrail decisions.
 
 Assess every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr), published or not. Reuse valid evidence; rerun invalid comparisons. Assessment grants no publication authority.
 

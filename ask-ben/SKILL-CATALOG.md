@@ -42,6 +42,7 @@
 | `/golang` | Write Go with evidence-backed engineering conventions. |
 | `/grilling` | Stress-test plans, decisions, and ideas. |
 | `/handoff` | Prepare a compact session handoff for another agent. |
+| `/hill-climb` | Improve a defined outcome through bounded evaluation loops. |
 | `/hook-audit` | Audit hook effectiveness, latency, and drift. |
 | `/implement-spec` | Implement a whole spec on one integration branch. |
 | `/improve-animations` | Audit retained motion and plan prioritized improvements. |

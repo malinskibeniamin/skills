@@ -19,6 +19,7 @@ type: skill
 
 量測或報告數值前，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement)。
 進行效能最佳化時，編輯前先閱讀[實驗循環](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
+反覆搜尋候選版本時，由 [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md) 負責有界迭代；本技能仍負責量測有效性、最低有價值改善幅度與護欄判斷。
 
 每次建立或更新 PR，以及[檢查工作階段 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 時，都評估影響，即使不發布。重用有效證據；重跑已失效的比較。評估不授予發布權限。
 

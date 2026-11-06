@@ -35,6 +35,9 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 Load [change evidence](../shared/change-evidence.md) and owners.
 Assess risk; capture bases only for useful/required comparisons. Reuse checks.
 
+For requested hill climbing or repeated optimization against a fixed evaluator, load
+[hill-climb](../hill-climb/SKILL.md); run its bounded search inside this author loop.
+
 [Figma/image](../jakubkrehel-skills/build-design/SKILL.md).
 
 ### Act

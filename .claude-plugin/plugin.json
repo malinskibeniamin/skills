@@ -66,6 +66,7 @@
     "./golang/",
     "./grilling/",
     "./handoff/",
+    "./hill-climb/",
     "./hook-audit/",
     "./improve-codebase-architecture/",
     "./improve/",

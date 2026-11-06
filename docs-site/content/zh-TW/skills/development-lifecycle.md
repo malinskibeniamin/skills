@@ -49,6 +49,8 @@ type: skill
 
 載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)與相關負責技能。評估可信風險；只在視覺比較有用或明確要求時於編輯前擷取基準。重用現有測試、輔助工具與有效證據。
 
+對於明確要求的爬坡，或依固定評估器反覆最佳化的任務，載入 [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md)，並在目前作者循環中執行有界搜尋。
+
 [Figma/圖片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 行動 [#act]

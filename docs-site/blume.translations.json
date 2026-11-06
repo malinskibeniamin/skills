@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "c30bd3d92cd68933",
-      "zh-CN": "c30bd3d92cd68933",
-      "zh-TW": "c30bd3d92cd68933"
+      "pl": "d600c88767e4f93b",
+      "zh-CN": "d600c88767e4f93b",
+      "zh-TW": "d600c88767e4f93b"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "87193efe64897006",
-      "zh-CN": "87193efe64897006",
-      "zh-TW": "87193efe64897006"
+      "pl": "6c44e01ebab72fdb",
+      "zh-CN": "6c44e01ebab72fdb",
+      "zh-TW": "6c44e01ebab72fdb"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -126,9 +126,9 @@
       "zh-TW": "32ba5501fe89d78c"
     },
     "content/skills/development-lifecycle.md": {
-      "pl": "3bc26ea922409d71",
-      "zh-CN": "3bc26ea922409d71",
-      "zh-TW": "3bc26ea922409d71"
+      "pl": "4579fe598e911bed",
+      "zh-CN": "4579fe598e911bed",
+      "zh-TW": "4579fe598e911bed"
     },
     "content/skills/diagnosing-bugs.md": {
       "pl": "2e6dbd80805e266f",
@@ -225,6 +225,11 @@
       "zh-CN": "2c9d0bb2ef198341",
       "zh-TW": "2c9d0bb2ef198341"
     },
+    "content/skills/hill-climb.md": {
+      "pl": "2807db45619b2190",
+      "zh-CN": "2807db45619b2190",
+      "zh-TW": "2807db45619b2190"
+    },
     "content/skills/hook-audit.md": {
       "pl": "aeee84ac8c23a295",
       "zh-CN": "aeee84ac8c23a295",
@@ -246,9 +251,9 @@
       "zh-TW": "847373dbc894186f"
     },
     "content/skills/improve.md": {
-      "pl": "1202c52f5c68230d",
-      "zh-CN": "1202c52f5c68230d",
-      "zh-TW": "1202c52f5c68230d"
+      "pl": "59c7eb2033096062",
+      "zh-CN": "59c7eb2033096062",
+      "zh-TW": "59c7eb2033096062"
     },
     "content/skills/index.mdx": {
       "pl": "c4e30023b068d1cc",
@@ -331,9 +336,9 @@
       "zh-TW": "52567868ca1122d4"
     },
     "content/skills/quantify-impact.md": {
-      "pl": "9bb3e6df69f17f5b",
-      "zh-CN": "9bb3e6df69f17f5b",
-      "zh-TW": "9bb3e6df69f17f5b"
+      "pl": "851d39a6746c9672",
+      "zh-CN": "851d39a6746c9672",
+      "zh-TW": "851d39a6746c9672"
     },
     "content/skills/read-the-damn-docs.md": {
       "pl": "3bc8ed3cdce4dc3e",

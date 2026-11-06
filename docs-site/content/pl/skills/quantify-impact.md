@@ -22,6 +22,7 @@ type: skill
 
 Przed pomiarem lub raportowaniem liczby przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement).
 Dla optymalizacji wydajności przed edycją przeczytaj [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
+Przy wielokrotnym poszukiwaniu kandydatów [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md) odpowiada za ograniczoną iterację; ta umiejętność zachowuje odpowiedzialność za poprawność pomiarów, minimalną wartościową różnicę i ograniczenia.
 
 Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) obejmuje ocenę wpływu, nawet bez publikacji. Wykorzystuj aktualne dowody; powtarzaj unieważnione porównania. Ocena nie daje zgody na publikację.
 

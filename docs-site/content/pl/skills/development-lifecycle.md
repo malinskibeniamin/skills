@@ -51,6 +51,8 @@ Dla checkoutów T3 lub pracy z Effect ustal [kontekst natywny](https://github.co
 
 Załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wiarygodne ryzyko; zarejestruj bazę przed edycją tylko wtedy, gdy porównanie wizualne jest przydatne lub wymagane. Wykorzystuj istniejące testy, narzędzia pomocnicze i aktualne dowody.
 
+Dla zamówionej wspinaczki hill-climb lub powtarzalnej optymalizacji według stałego ewaluatora załaduj [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md); prowadź ograniczone poszukiwanie w tej pętli autora.
+
 [Figma/obraz](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md).
 
 ### Działaj [#act]

@@ -64,6 +64,7 @@ SHORT_DESCRIPTIONS = {
     "golang-review": "Review Go diffs against evidence-backed conventions",
     "grilling": "Stress-test plans, decisions, and ideas",
     "handoff": "Prepare a compact session handoff for another agent",
+    "hill-climb": "Improve a defined outcome through bounded evaluation loops",
     "hook-audit": "Audit hook effectiveness, latency, and drift",
     "improve-codebase-architecture": "Redesign architecture to eliminate classes of errors",
     "improve": "Audit codebases or write requested implementation plans",
