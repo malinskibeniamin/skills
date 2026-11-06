@@ -57,8 +57,9 @@ auto-merge, enqueue, or bypass protection. Unwatch before handing back readiness
 
 ## file-pr
 
-Use upstream's problem-first summary and verified model/harness attribution with
-the host's evidence, risk and rollback sections. Publication stays with
+Use the host's [one-sentence PR opening](communication.md#match-the-artifact); add
+upstream's problem/solution context only when it adds meaning. Keep verified model/harness
+attribution and the host's evidence, risk and rollback sections. Publication stays with
 `commit-push-pr`: check for the current PR, verify, commit, push, create/update,
 read back and enter [automatic maintenance](delivery-workflow.md#automatic-pr-maintenance).
 **Honor requested drafts**; upstream's non-draft default does not apply. A REST fallback

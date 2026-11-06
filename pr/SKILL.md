@@ -18,7 +18,7 @@ At start/resume, after material scope, implementation, or evidence changes, and 
 1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
 2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents. Check visual captures, callouts, and legend for staleness per [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations).
 3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
-4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; replace stale bullets in place with concise change, beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; update the opening sentence to cover the full current change and replace stale bullets in place with concise beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
 5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
 
 ## Body template
@@ -26,38 +26,26 @@ At start/resume, after material scope, implementation, or evidence changes, and 
 Use this template for the PR body:
 
 ```markdown
-## Summary
+<one sentence capturing the entire change and why it matters>
 
-<outcome and why it matters to the affected user or caller>
-<reviewer focus or specific question; say if no special input is needed>
-<smallest useful diagram, diff-sketch, or tree>
-
-## Evidence
-
-<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
-
-- **Before:** <screenshot/output/failing test run>
-  **After:** <screenshot/output/passing test run>
-
-## Merge Danger
-
-**Door:** <one-way or two-way>
-
-<optional: description>
-
-**Blast Radius:** <affected users, callers, or contracts>
-
-<rollback path and unresolved risks, when applicable>
+- Review: <optional focus or decision; omit if none>
+- Testing: <decisive checks and observed results; before -> after; gaps>
+- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
 ```
 
 ## Sections
 
-Skip all preambles and keep prose brief. Use the user's domain language from `GLOSSARY.md`.
+The opening sentence is the required first read, not a preamble; follow the
+[PR attention budget](../shared/communication.md#match-the-artifact). Keep only supporting
+detail below it. The topics below are author guidance, not required PR headings.
+Link or collapse long receipts; retain required visual media inline immediately after the
+opening. Use the user's domain language from `GLOSSARY.md`.
 
 ### Summary
 
-Lead with value and reviewer focus, not a changelog. Separate core changes from generated
-or mechanical files; name useful review entry points without a file-by-file inventory. Distinguish observed results from expectations.
+Add reviewer focus only when useful; do not repeat the opening sentence. Separate core
+changes from generated or mechanical files; name useful review entry points without a
+file-by-file inventory. Distinguish observed results from expectations.
 
 Use the PR body as the operator digest: behavior/value, decisive evidence, domain decisions,
 remaining risk/recovery and next action; link detail for resumption. Separate HTML or visual
@@ -89,12 +77,12 @@ For every visible change, automatically annotate the evidence using [visual anno
 
 For backend architecture, data flow, API contract, or workflow changes, follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) and invoke `excalidraw-diagram`. Include a focused before/after comparison and editable source link; refresh relevant maintained diagrams. Diagram failures warn and continue, never block the PR or replace test evidence.
 
-For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the summary so reviewers see the change before reading about it. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+For any frontend change, a before/after video of the real UI flow (clicks, typing, resulting state; never a still page) playing inline, plus screenshots, is S-tier and required. Put it right after the opening sentence so reviewers see the change before reading supporting detail. Capture, compose, and host it per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
 Execution-based evidence is A-tier. Test results, console output. Show the exact test that now fails and passes, using pseudocode.
 
 ### Merge Danger
 
-Name the rollback path. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
+Name the rollback path and classify the change as a one-way or two-way door. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
 
 Name affected users, callers, contracts, and credible failure modes, including shared consumers.

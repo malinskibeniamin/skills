@@ -44,8 +44,15 @@ If required evidence cannot fit, name the conflict rather than silently dropping
 - **RFC / plan:** problem and stakes -> proposed decision -> alternatives and trade-off ->
   open questions -> verification and rollout. Distinguish proposed from shipped work;
   a retrospective implementation summary is not evidence of prior agreement.
-- **PR:** value and reviewer focus before the change sketch; then observed verification,
-  residual limits, blast radius, and rollback. A file-by-file changelog cannot replace the why.
+- **PR:** always open with one sentence capturing the entire change and why it matters,
+  before headings, metadata, bullets, or visuals. Budget at most **10 seconds** for this
+  first read: a reviewer who reads nothing else should understand the change's meaning.
+  Default to at most three short bullets: essential reviewer context, decisive verification,
+  and material risk/rollback. Omit redundant headings, repeated rationale, and empty sections.
+  Link long evidence or put required receipts in one collapsed `<details>` block; keep
+  test status, material risks, and rollback visible. Required visual media stays inline
+  after the opening. Add prose only for a consequential decision or safety requirement
+  that cannot fit. A file-by-file changelog cannot replace the why.
 - **Review / reply:** findings first, with evidence, consequence, and correction. Reply to
   feedback with the change made, a reasoned disagreement, or a concrete unresolved question;
   paraphrasing the comment is not an answer. Keep value judgments separate from defects.

@@ -100,94 +100,33 @@ CODEOWNERS review routing. It also owns draft deferral and metadata readback/rec
 
 ## PR body template (Phase 5)
 
-Run `/quantify-impact` for every PR, including non-UI changes. Lead with the outcome,
-use short bullets, and omit unused sections. Frontend PRs show before telling: the
-before/after video and screenshot table sit directly under Summary, and prose only names
-what the visuals cannot show. No commit
-dump, boilerplate attribution, repeated rationale, or separate recap artifact. Keep full
-logs/matrices in reviewer-accessible evidence links; keep before/after images in the body.
+Run `/quantify-impact` for every PR, including non-UI changes. Use the
+[compact PR contract](../shared/communication.md#match-the-artifact): one opening sentence
+and only essential supporting bullets. The template is the default, not a checklist of
+sections to expand.
 
 ```
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
-## Summary
-- Lane: <Keep the lights on | Quality of life | Feature | Taste> -- <beneficiary>; trigger: <why now>; see `/product`
-- <observable behavior change and why it matters; 1-3 bullets>
-<optional: the smallest `/pr` summary view (pseudocode, call/component/file tree, Mermaid, or diff sketch) when bullets hide the shape>
+<one sentence capturing the entire change and why it matters>
 
-## Before / after
-<omit entire section if no frontend/customer-facing surface changes -- see Frontend detection below>
-
-**What changed:** <previous behavior> -> <new behavior>. Look at <region/state/timestamp>.
-
-**Video** (previous left, new right): <flow reaching the changed result>
-
-![](<local MP4 path also passed to gh --attach>)
-
-<fallback only when attach is blocked: ![before-after flow](<pinned gif url>)>
-
-| Changed region/state | Previous: <old behavior> | New: <new behavior> | Look here |
-|------|--------|-------|-------|
-| <route/component/state> | ![Before: callout 1, <old result>](<annotated url>) | ![After: callout 1, <new result>](<annotated url>) | 1: <previous -> new; why it matters> |
-
-<For multiple callouts, put a short numbered change legend immediately below the images.>
-<Link full-resolution originals; include focused crops/diff images when needed.>
-
-- Visual regression: `<normal command>` - PASS; <test count and report link>
-- Coverage: <affected views/states, viewports/themes; inventory link if large>
-- Baseline: `<base SHA>` -> `<head SHA>`; <fixture/browser/viewport>
-- Limits: <explicit user-waived gaps only; omit if none>
-
-## Impact
-- <automatic /quantify-impact value assessment; replace with Proven impact below when measured>
-
-## Proven impact
-<omit unless meaningful measured evidence replaces Impact>
-
-| Metric | Before | After | Delta |
-|---|---:|---:|---:|
-| <direct metric> | <base> | <candidate> | <absolute and %> |
-
-- **Value proven:** <product or codebase benefit>
-- Method: <command, fixture/runs, environment, base/candidate>
-<explicit unproven performance claims instead get an Impact bullet: Value not proven + limitation>
-
-## Stack context
-- <stacked PR only: parent, layer position, dependent PRs, draft/ready>
-
-## Merge danger
-- Door: <one-way or two-way: can this be rolled back cheaply? destructive or hard-to-reverse effects are one-way>
-- Blast radius: <who or what breaks if wrong: consumers, layout, data, deploys>
-
-## Reviewer guide
-- <non-trivial diffs only: entry point, deliberate limitation>
-- Riskiest hunk: <the file or hunk to push back on, and the assumption behind it>
-- Not fixed here: <adjacent problems found and deliberately left; omit if none>
-
-## Dogfood evidence
-<omit only when no runnable behavior changed; otherwise copy the current /dogfood receipt>
-
-- Verdict:
-- Entrypoint:
-- Actions and break attempts:
-- Observations:
-- Repairs and replay:
-- Limits:
-
-## Dependency upgrade path
-<omit entire section if no dependency-file diff>
-
-- Upgrade evidence: <what broke / adapted / adopted + verify commands, or skip reason>
-- Packages:
-- SemVer confidence:
-- Risk gate:
-- Security notes:
-
-## Tests
-- <command and actual result; short checklist for remaining manual review only>
-- <changed behavior without visuals: the test that failed before and passes after>
+- Lane: <Keep the lights on | Quality of life | Feature | Taste>; <optional reviewer focus>; see `/product`
+- Testing: <decisive commands/results, before -> after, and gaps>
+- Risk: <door, blast radius, rollout limits, and how to revert>
 EOF
 )"
 ```
+
+Keep required before/after video, annotated screenshot table, numbered callouts, and
+legend inline immediately after the opening for visible changes; follow
+[visual evidence](#frontendcustomer-facing-detection--screenshot-table-phase-5).
+
+Link long logs/matrices and specialist receipts, or put them in one collapsed
+`<details>` block. Retain the current dogfood receipt for runnable changes, dependency
+upgrade evidence for dependency diffs, stack context for dependent PRs, and material
+changed decisions. These are conditional evidence, not default expanded sections.
+Measured impact uses `/quantify-impact`'s `## Proven impact` table and method; unsupported
+performance claims retain `Value not proven`. Keep test status, material risks, and
+rollback visible. No commit dump, repeated rationale, or separate recap artifact.
 
 Use a body file for long bodies rather than fragile shell quoting. For native media, pass
 each referenced local file with `--attach <path>` on create or edit. GitHub CLI rewrites
@@ -206,8 +145,7 @@ endpoint because it can publish every unsubmitted branch.
 
 **Draft mode**: changes look WIP (TODO comments, incomplete impl, test stubs) -> add `--draft`.
 
-Summary, evidence, and merge danger follow `/pr` (vendored from Matt Pocock); this template
-adds the harness's impact, visual, dogfood, dependency, and test sections.
+The compact body follows `/pr`; its conditional evidence requirements still apply.
 
 ## Frontend/customer-facing detection + screenshot table (Phase 5)
 

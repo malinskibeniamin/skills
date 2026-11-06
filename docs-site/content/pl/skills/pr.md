@@ -31,7 +31,7 @@ Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementac
 1. Znajdź otwarte PR-y jawnie powiązane z tą rozmową, sesją lub czatem; w przeciwnym razie sprawdź bieżącą gałąź przez `gh pr view`. Zweryfikuj stan otwarty, repozytorium, gałąź źródłową, bazę i własność. Nie wybieraj niepowiązanego ostatniego PR-a. Brak otwartego PR-a oznacza brak aktualizacji i nie daje zgody na jego utworzenie.
 2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica. Sprawdź aktualność zrzutów, oznaczeń i legendy zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations).
 3. Osobno załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md). Ponownie oceń wartość biznesową i wpływ na produkt lub bazę kodu; wykorzystaj nadal aktualne dowody, powtórz unieważnione porównania i usuń niepoparte twierdzenia. Gdy wartość jest nieznana, napisz `not established`.
-4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj nieaktualny opis w miejscu. Pisz zwięźle: co się zmienia, kto korzysta, dlaczego to ważne, rozstrzygające dowody i istotne ryzyka. Zastępuj nieaktualne punkty; zamiast dopisywać dziennik sesji, podawaj odnośniki do szczegółów. Zachowaj intencję autora i wymagane dowody; pomiń edycję, jeśli opis jest już poprawny.
+4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj pierwsze zdanie tak, aby obejmowało całą aktualną zmianę. Zastępuj nieaktualne punkty zwięzłą informacją o odbiorcy, wartości, rozstrzygających dowodach i istotnych ryzykach. Zachowaj intencję autora i wymagane dowody; podlinkuj szczegóły, pomiń poprawne opisy i nie dodawaj dziennika sesji.
 5. Po edycji ponownie odczytaj opis z serwera i sprawdź, czy opisuje opublikowany stan gałęzi źródłowej. Żądania tylko do odczytu zgłaszają rozbieżności bez edycji. Wyraźny zakaz wypychania lub zakres lokalny odracza publikację; nie opisuj nieopublikowanej pracy jako dostarczonej.
 
 ## Szablon opisu [#body-template]
@@ -39,39 +39,20 @@ Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementac
 Użyj tego szablonu do napisania opisu PR:
 
 ```markdown
-## Summary
+<one sentence capturing the entire change and why it matters>
 
-<outcome and why it matters to the affected user or caller>
-<reviewer focus or specific question; say if no special input is needed>
-<smallest useful diagram, diff-sketch, or tree>
-
-## Evidence
-
-<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
-
-- **Before:** <screenshot/output/failing test run>
-  **After:** <screenshot/output/passing test run>
-
-## Merge Danger
-
-**Door:** <one-way or two-way>
-
-<optional: description>
-
-**Blast Radius:** <affected users, callers, or contracts>
-
-<rollback path and unresolved risks, when applicable>
+- Review: <optional focus or decision; omit if none>
+- Testing: <decisive checks and observed results; before -> after; gaps>
+- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
 ```
 
 ## Sekcje [#sections]
 
-Pomiń wszelkie wstępy i ogranicz opis do minimum. Używaj języka domeny użytkownika z `GLOSSARY.md`.
+Pierwsze zdanie jest wymaganym skrótem, a nie zbędnym wstępem; przestrzegaj [budżetu uwagi dla PR](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact). Poniżej zostaw tylko potrzebne szczegóły. Poniższe tematy to wskazówki dla autora, nie obowiązkowe nagłówki PR. Długie raporty podlinkuj lub zwiń; wymagane materiały wizualne umieść bezpośrednio po pierwszym zdaniu. Używaj języka domeny użytkownika z `GLOSSARY.md`.
 
 ### Podsumowanie [#summary]
 
-Oddziel zmiany główne od plików generowanych lub mechanicznych; wskaż przydatne punkty wejścia do przeglądu bez inwentarza wszystkich plików.
-
-Zacznij od wartości i kwestii wymagających uwagi recenzenta, a nie od listy zmian. Oddziel zaobserwowane wyniki od oczekiwań.
+Wskaż kwestie wymagające uwagi recenzenta tylko wtedy, gdy to przydatne; nie powtarzaj pierwszego zdania. Oddziel zmiany główne od plików generowanych lub mechanicznych; wskaż przydatne punkty wejścia do przeglądu bez inwentarza wszystkich plików. Oddziel zaobserwowane wyniki od oczekiwań.
 
 Opis PR ma być zwięzłym podsumowaniem dla operatora: zachowanie i wartość, rozstrzygające dowody, decyzje domenowe, pozostałe ryzyko i sposób odzyskiwania oraz następne działanie; szczegóły podlinkuj, aby ułatwić wznowienie pracy. Osobne podsumowania HTML lub wizualne wymagają wyraźnej prośby; zachowaj przegląd pełnego diffu i wymagane dowody wizualne.
 
@@ -98,12 +79,12 @@ Dla każdej widocznej zmiany automatycznie dodawaj [adnotacje wizualne](https://
 
 Przy zmianach architektury backendu, przepływu danych, kontraktów API lub przebiegu pracy postępuj zgodnie z [diagramami backendowymi](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) i wywołaj `excalidraw-diagram`. Dodaj zwięzłe porównanie stanu przed i po oraz link do edytowalnego źródła; odśwież odpowiednie utrzymywane diagramy. Błędy diagramów zgłaszaj i kontynuuj pracę; nigdy nie blokują PR ani nie zastępują dowodów z testów.
 
-Przy każdej zmianie we frontendzie nagranie rzeczywistego przebiegu interakcji z interfejsem przed zmianą i po niej (kliknięcia, wpisywanie tekstu, stan wynikowy; nigdy nieruchoma strona), odtwarzane bezpośrednio w opisie, wraz ze zrzutami ekranu stanowi najwyższą klasę dowodów i jest wymagane. Umieść je tuż po podsumowaniu, aby osoby przeglądające PR zobaczyły zmianę, zanim o niej przeczytają. Nagraj, zmontuj i udostępnij je zgodnie z [instrukcjami dotyczącymi dowodów wizualnych w commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+Przy każdej zmianie we frontendzie nagranie rzeczywistego przebiegu interakcji z interfejsem przed zmianą i po niej (kliknięcia, wpisywanie tekstu, stan wynikowy; nigdy nieruchoma strona), odtwarzane bezpośrednio w opisie, wraz ze zrzutami ekranu stanowi najwyższą klasę dowodów i jest wymagane. Umieść je tuż po pierwszym zdaniu, aby osoby przeglądające PR zobaczyły zmianę przed przeczytaniem szczegółów. Nagraj, zmontuj i udostępnij je zgodnie z [instrukcjami dotyczącymi dowodów wizualnych w commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 
 Dowody z wykonania to klasa tuż za nimi: wyniki testów, dane wyjściowe konsoli. Pokaż w pseudokodzie dokładny test, który wcześniej nie przechodził, a teraz przechodzi.
 
 ### Ryzyko scalenia [#merge-danger]
 
-Wskaż sposób wycofania zmiany. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
+Wskaż sposób wycofania zmiany i określ, czy są to drzwi jednokierunkowe, czy dwukierunkowe. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
 
 Wymień dotkniętych użytkowników, wywołujących, kontrakty i wiarygodne scenariusze awarii, w tym współdzielonych odbiorców.

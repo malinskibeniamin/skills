@@ -54,29 +54,11 @@ or retention only with measured evidence; a design score is not business impact.
 
 ### Body structure
 
-Answer the reviewer before they ask. When `/commit-push-pr` owns the template, map these
-answers into its sections.
-
-```md
-## Why
-<who hits this today, what it costs them, and the trigger>
-
-## What
-<the change in 1-3 bullets; the shape if bullets hide it>
-
-## Verification
-<what ran, where (unit, e2e, named integration environment, live), and what was observed>
-<command or real-entrypoint replay; failing on base, passing here; numbers when measured>
-
-## Rollout
-<per environment; default state; rollback in one line>
-
-## Worth reviewing
-- Riskiest hunk: <file or hunk to push back on, and the assumption behind it>
-
-## Not fixed here
-- <adjacent problem found and deliberately left, with where it goes next>
-```
+Use the [PR body template](../pr/SKILL.md#body-template), including during publication.
+The opening carries the beneficiary, change, and why now. Supporting bullets carry
+verification and risk/rollback; add a review focus only when it changes the reviewer's
+decision. Link acceptance criteria, rollout detail, and deferred work instead of repeating
+them as a section inventory.
 
 History is part of the product: bisectable commits, refactors before behavior, fixes
 squashed into the commit that introduced them, no fixup commits in review.
