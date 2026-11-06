@@ -30,6 +30,8 @@ Projektuj **głębokie moduły**: dużo zachowań za małym interfejsem w dobrze
 
 Moduł powinien ograniczać wiedzę i koordynację wymaganą od kodu wywołującego, zachowując wymagane zachowanie.
 
+Przy zmianach krawędzi importów lub diagnozowaniu cykli i plików zbiorczych (barrel) korzystaj z [pętli weryfikacji uwzględniających graf zależności](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels).
+
 ## Słownik [#glossary]
 
 Używaj dokładnie tych terminów:

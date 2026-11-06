@@ -13,6 +13,8 @@ Override conflicting `/stack-registry` mechanics. Fix at source; suppress only w
 For TypeScript assertions/widened contracts, use [anti-slop](../shared/anti-slop.md):
 preserve type evidence; safety comments do not justify casts.
 
+Imports: [checks](../shared/check-loop.md).
+
 ## Rendering
 
 1. Never lie: no fake defaults, lossy display of undecodable data, or truthiness hiding numeric zero. Degraded states name possible causes, preserve the reported reason, and offer retry.
@@ -31,7 +33,7 @@ Editable server defaults: read [override guidance](WRITABLE-DERIVED-STATE.md).
 ## Design system
 
 8. Use color/spacing/type tokens; round one-offs to scale, never hardcode existing tokens.
-9. Fix shared components at source; no forks, inline restyles, or deep selectors. Keep feature-specific rows beside their feature, not as single-consumer primitive variants. Verify computed styles across cascade layers and combined flag/theme/interaction variants; low specificity alone does not guarantee utility precedence. A temporary fork needs a named defect and upstream ticket.
+9. Fix shared components at source; no forks, inline restyles, or deep selectors. Keep feature rows local, not as single-consumer primitive variants. Verify computed styles across layers and combined flag/theme/interaction variants; low specificity alone does not guarantee utility precedence. Temporary forks need a named defect and upstream ticket.
 10. Search first; fix APIs repeatedly misused by consumers.
 
 ## Interaction
@@ -48,4 +50,4 @@ Editable server defaults: read [override guidance](WRITABLE-DERIVED-STATE.md).
 17. Keep PRs single-purpose; migrations migrate; deferrals link tickets; dependency bumps and registry syncs ship separately.
 18. Use precise names: no route/file/label acronyms; booleans are predicates.
 19. Cite owners for domain inheritance, units, names and SLAs; never assume UI truth.
-20. Review security: no secrets in history; redact logs/replays/dumps; authz fails closed; reads never mutate; audit URL persistence leaks.
+20. Security: no secrets in history; redact logs/replays/dumps; authz fails closed; reads never mutate; audit URL persistence leaks.

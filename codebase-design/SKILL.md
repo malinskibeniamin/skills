@@ -8,7 +8,9 @@ On interface/type/shared-state changes, read [Poteto](../shared/POTETO-NATIVE.md
 Design **deep modules**: substantial behavior behind a small, independently testable interface. Apply [verifiability](../shared/verifiability.md): caller leverage and locality, not implementation size.
 Use `GLOSSARY.md` terms, via `GLOSSARY-MAP.md` when present; respect ADRs.
 
-A module should reduce caller knowledge and coordination while preserving required behavior.
+Reduce caller knowledge/coordination; preserve required behavior.
+
+Imports: [checks](../shared/check-loop.md).
 
 ## Glossary
 

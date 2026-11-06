@@ -23,6 +23,8 @@ type: skill
 
 遇到 TypeScript 断言或被放宽的契约时，使用 [anti-slop 检查](https://github.com/malinskibeniamin/skills/blob/main/shared/anti-slop.md)保留类型证据；仅有安全性注释不足以证明断言合理。
 
+更改导入边或处理循环依赖／barrel 文件诊断时，请使用[基于依赖图的检查循环](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels)。
+
 ## 放大效应原则
 每一个被容忍的反模式、逃生舱或抑制措施，都会成为下一次 LLM 会话模仿和传播的训练样本。应从源头修复；只有在同一行说明理由时才能抑制；绝不允许“仅此一次”。
 
