@@ -31,7 +31,7 @@ Korzystaj z `GLOSSARY.md` i odpowiednich ADR-ów. Jeśli istnieje `GLOSSARY-MAP.
 Dla testów T3 lub Effect ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context) z punktem wejścia `tdd`; przestrzegaj kontraktów projektu dotyczących zegara, procesów roboczych i cyklu życia renderowania.
 
 
-TDD chroni istotne zachowanie. Stosuj RED -> GREEN -> REFACTOR w przypadku reguł domenowych, rozgałęzień, stanów, walidacji, efektów asynchronicznych i kontraktów integracji. Typy, połączenia, teksty i style oraz usuwanie niezmieniające zachowania mogą wymagać ukierunkowanej weryfikacji. Pokrycie nigdy nie jest celem.
+Stosuj [weryfikację proporcjonalną do ryzyka](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#proportionate-verification). Używaj RED -> GREEN -> REFACTOR, gdy wiarygodna regresja wymaga nowego pokrycia; wykorzystuj istniejące kontrole dla już pokrytych zachowań, typów, połączeń, tekstów, stylów i usuwania niezmieniającego zachowania. Nie każda edycja ani wywołanie zależności wymaga nowego testu. Pokrycie nigdy nie jest celem.
 
 Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jakie pomija.
 
@@ -39,6 +39,7 @@ Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jaki
 
 - **Punkty styku:** testuj na publicznych granicach. Najpierw nazwij punkt styku; potwierdź z użytkownikiem wcześniej uzgodnione punkty, jeśli problem i konwencja nie wskazują ich jednoznacznie. Nie testuj niepotwierdzonych elementów wewnętrznych. Użyj `/codebase-design`, zamiast wymyślać punkt styku dla wygody.
 - **Testy tautologiczne:** oczekiwane wartości wymagają niezależnego źródła prawdy: literału, rozwiązanego przykładu, danych testowych, specyfikacji lub obserwacji.
+- **Ponowne testowanie zależności:** ufaj udokumentowanym narzędziom bibliotek; testuj nasze decyzje domenowe i założenia integracji tylko wtedy, gdy wnoszą odrębne ryzyko. Rozszerzaj istniejące pokrycie zamiast powtarzać ten sam kontrakt w kolejnych warstwach.
 - **Przybliżenia oparte na tekście źródłowym:** usuń testy, które przeszukują implementację, CSS, znaczniki lub konfigurację pod kątem tokenów lub wyrażeń regularnych i traktują je jako dowód zachowania w czasie działania. Zastąp je testami publicznego punktu styku, gdy zachowanie ma znaczenie; użyj analizy statycznej dla składni. Zachowaj asercje treści tylko dla publicznych wyników.
 - **Przekroje pionowe:** stosuj przekroje pionowe: za każdym razem jeden test RED i implementacja GREEN; testy tworzone zbiorczo utrwalają wyobrażone zachowanie.
 
@@ -70,7 +71,7 @@ Powtórz tylko dla kolejnego kontraktu lub niezależnego, wiarygodnego ryzyka. P
 
 ## Regresja wizualna [#visual-regression]
 
-Dla każdej widocznej zmiany, w tym tekstów, stylów, układu, zasobów i stanów, użyj istniejącego narzędzia do asercji zrzutów ekranu. Postępuj zgodnie z instrukcją [Dowody wizualne w PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5): zrzut bazowy, współdzieleni odbiorcy, sprawdzone aktualizacje migawek, standardowe ponowne uruchomienie, osadzone obrazy. Niewidoczne zmiany nie wymagają testu zrzutu ekranu.
+Dla ryzyk wizualnych wykorzystuj właściwe przypadki w istniejącym narzędziu do asercji zrzutów; sprawdzaj zamierzone aktualizacje i uruchamiaj testy ponownie w normalnym trybie. Dodawaj przypadek tylko dla wiarygodnej regresji bez pokrycia. Drobne zmiany tekstów lub stylów wymagają inspekcji, a nie automatycznie nowych migawek lub narzędzia. Używaj [dowodów wizualnych PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5), gdy porównanie pomaga w przeglądzie lub jest wymagane. Niewidoczne zmiany nie wymagają zrzutów.
 
 ## Po zakończeniu [#done]
 

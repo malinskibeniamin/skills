@@ -71,15 +71,13 @@ type: skill
 
 ### 證據 [#evidence]
 
-提供變更有效的具體證據，呈現變更前後對照。列明未執行的檢查與剩餘不確定性；測試通過不代表人工審查或共識。
+提供證明變更有效的具體證據。優先簡述指令與結果；只在有助於解釋變更時展示前後比較，不將媒體視為自動要求。說明未執行的檢查與剩餘不確定性；測試通過不代表人類審查或共識。
 
-針對每項可見變更，依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)自動標註證據，而不只是影片。 對於大範圍 UI 工作，使用 [UI 變更對照](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)串聯使用者問題 -> 介面變化 -> 證據 -> 驗收條件。
+只在差異難以定位時使用[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。大範圍 UI 工作可在有助於理解時使用 [UI 變更圖](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重複截圖與獨立回顧檔案。
 
-對於後端架構、資料流程、API 契約或工作流程變更，請遵循[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指引並呼叫 `excalidraw-diagram`。提供聚焦的前後對照與可編輯原始檔連結；更新相關的持續維護圖表。圖表失敗時回報警告並繼續，絕不阻擋 PR，也不能取代測試證據。
+對於需要視覺解釋的後端關係，只在使用者要求或比簡短文字更清楚時使用[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)。更新已過時的現有維護圖表；例行變更不新建圖表或原始檔。繪製失敗應警告後繼續，不阻擋 PR，也不取代測試證據。
 
-對於任何前端變更，可直接在頁面內播放的實際 UI 流程前後對照影片（包含點擊、輸入及操作後的狀態，絕不能只是靜止頁面）搭配截圖，是最高等級且必備的證據。將其緊接在開頭一句話之後，讓審查者在閱讀補充細節前先看到變更。依照 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)的指引錄製、編排並託管。
-
-以執行為基礎的證據次之：測試結果、主控台輸出。以虛擬碼呈現先前失敗、現在通過的確切測試。
+依 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)選擇媒體。只有互動或動態效果需要，或使用者要求時才錄製真實流程；其他情況靜態圖片與指令結果已足夠。證據的價值在於回答的問題，而非媒體等級。測試結果應簡潔、真實，不要重新建構或虛構。
 
 ### 合併風險 [#merge-danger]
 

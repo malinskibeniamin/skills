@@ -83,11 +83,12 @@ Owners: [TDD](../tdd/SKILL.md), [test audit](../test-audit/SKILL.md), [dogfood](
 [blast radius](../blast-radius/SKILL.md), [create verifier](../create-verification-skill/SKILL.md),
 [maintain verifier](../maintain-verification-skill/SKILL.md), [formal laws](../bend-laws/SKILL.md).
 
-For changed behavior, use a public-contract regression that fails for the intended reason
-and survives internal refactoring. This harness's TDD requirements win over upstream's
-narrower opt-in policy. Prove the result at the real entrypoint and keep the smallest
-rerunnable decisive check. Missing runtime prerequisites are coverage gaps, not reasons
-to weaken journeys. Prefer the existing project verifier; maintain it when it drifts.
+Apply [proportionate verification](verifiability.md#proportionate-verification): reuse
+existing checks, adding a public-contract regression only for a credible uncovered risk.
+When added, it must fail for the intended reason and survive internal refactoring.
+Prove the result at the relevant entrypoint with the smallest decisive check; keep output
+temporary unless it has a concrete maintenance purpose. Missing runtime prerequisites are
+coverage gaps, not passing evidence. Prefer the existing project verifier.
 
 When the task explicitly asks for formal verification or a checked statechart, select the
 tool for the property and stated bounds, then replay model counterexamples against real

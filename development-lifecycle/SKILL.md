@@ -33,13 +33,15 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 (`work`); use target guidance/scoped checks.
 
 Load [change evidence](../shared/change-evidence.md) and owners.
-Assess impact; capture base before visible edits, even tiny copy/shared-UI.
+Assess risk; capture bases only for useful/required comparisons. Reuse checks.
 
 [Figma/image](../jakubkrehel-skills/build-design/SKILL.md).
 
 ### Act
 
-A single owner; delegation/background work need explicit consent. Implement requested behavior using local conventions. Load [tdd](../tdd/SKILL.md): public contract, RED -> smallest GREEN -> REFACTOR; wiring/behavior-preserving deletion: focused checks. Re-plan the affected slice with evidence; adjacent cleanup only for verification.
+A single owner; delegation/background need explicit consent. Implement the smallest functional
+diff using local conventions. Use [tdd](../tdd/SKILL.md) for uncovered regressions; reuse checks
+otherwise. Re-plan only the affected slice; no speculative abstractions or adjacent cleanup.
 
 Each edit batch: scoped format/fix + lint -> relevant types/tests. Inspect fixes; repair/rerun. Reuse hook results only for identical inputs/coverage; keep sound project-wide types.
 
@@ -51,7 +53,9 @@ Fix causes, not gates: never weaken checks/tests/strictness to pass. Bad rules n
 
 ## Boundaries
 
-Ask only for user-reserved decisions or irreversible production, legal/privacy, destructive, or high-security actions. Track evidence/pause triggers in `.context/implementation-notes.md`.
+Ask only for user-reserved decisions or irreversible production, legal/privacy, destructive,
+or high-security actions. Reuse local notes only when a long task needs a checkpoint;
+routine work needs no evidence/checklist file.
 
 ## Completion
 

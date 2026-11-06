@@ -27,7 +27,7 @@ type: skill
 處理 T3 或 Effect 測試時，以 `tdd` 為入口解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；遵循目標專案的時鐘、工作器和渲染生命週期契約。
 
 
-TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、非同步副作用及整合契約，使用 RED -> GREEN -> REFACTOR。型別、串接、文案／樣式，以及不改變行為的刪除，可能只需要執行聚焦驗證。涵蓋率絕不是目標。
+遵循[適度驗證](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#proportionate-verification)。可信回歸需要新增涵蓋時使用 RED -> GREEN -> REFACTOR；對於已涵蓋行為、型別、串接、文案、樣式及不改變行為的刪除，重用現有檢查。不是每次編輯或相依套件呼叫都需要新測試。涵蓋率絕不是目標。
 
 針對每個建議的測試接縫，說明它能捕捉什麼，以及會漏掉什麼。
 
@@ -35,6 +35,7 @@ TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、�
 
 - **接縫：**在公開邊界進行測試。先記下接縫；若問題與慣例未能明確指出接縫，請向使用者確認事先議定的接縫。不得針對未經確認的內部實作進行測試。請使用 `/codebase-design`，不要為了方便而憑空建立接縫。
 - **恆真式測試：**預期值必須具備獨立的事實來源：常值、完整推導的範例、測試資料、規格或觀察到的行為。
+- **重複測試相依套件：**信任程式庫已有文件說明的工具函式；只在領域選擇與整合假設引入獨立風險時測試它們。擴充現有涵蓋，而非在各層重複相同契約。
 - **原始文字替代測試：**刪除會掃描實作、CSS、標記或設定，並將權杖或正規表示式視為執行階段行為證明的測試。若行為確實重要，請改為在公開接縫進行測試；若是語法，請使用靜態分析。只有在公開輸出時，才保留內容斷言。
 - **垂直切片：**使用垂直切片：每次完成一個 RED 測試與 GREEN 實作；批次撰寫的測試會編碼想像中的行為。
 
@@ -66,7 +67,7 @@ TDD 保護有意義的行為。針對領域規則、分支、狀態、驗證、�
 
 ## 視覺迴歸測試 [#visual-regression]
 
-對於任何可見變更，包括文案、樣式、版面配置、素材及狀態，請使用現有的螢幕截圖斷言執行器。遵循 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)：基準擷取、共用取用端、經審查的快照更新、正常重新執行、嵌入圖片。不可見的編輯不需要螢幕截圖測試。
+針對視覺風險，重用現有截圖斷言工具中的相關案例；審查預期更新後正常重跑。只為可信且未涵蓋的回歸新增案例。小型文案或樣式變更需要檢查，不應自動新增快照或測試工具。在比較有助於審查或明確要求時使用 [PR 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。不可見變更不需要截圖。
 
 ## 完成條件 [#done]
 

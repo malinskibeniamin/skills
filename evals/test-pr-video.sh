@@ -135,20 +135,3 @@ FLOW
   fi
   rm -rf "$work"
 fi
-
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'before/after video' \
-  'PR reference requires a before/after video for frontend changes'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'scripts/pr-video.sh' \
-  'PR reference names the video compose and publish script'
-run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" 'video' \
-  'commit-push-pr gate includes video evidence'
-run_content_eval "$REPO_ROOT/pr/SKILL.md" 'video' \
-  'pr body guidance ranks video evidence'
-run_content_eval "$REPO_ROOT/.claude/hooks/pr-evidence-nudge.sh" 'video' \
-  'PR entrypoint reminder mentions the video'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'user-attachments' \
-  'PR reference embeds the MP4 as a native GitHub attachment player'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'flow file' \
-  'PR reference requires a scripted interaction flow, not a static take'
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'HyperFrames' \
-  'PR reference frames real recordings with HyperFrames'

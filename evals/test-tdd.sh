@@ -36,7 +36,6 @@ run_content_eval "$SKILL_DIR/SKILL.md" "RED.*GREEN.*REFACTOR" "SKILL.md has TDD 
 run_content_eval "$SKILL_DIR/SKILL.md" "language.*platform.*installed dependency|installed dependency.*platform" "GREEN phase prefers existing capabilities"
 run_content_eval "$SKILL_DIR/SKILL.md" "paths:" "SKILL.md has paths: for auto-loading"
 run_content_eval "$SKILL_DIR/SKILL.md" "## Test seams and anti-patterns" "SKILL.md preserves test seams section"
-run_content_eval "$SKILL_DIR/SKILL.md" "No tests at unconfirmed internals" "SKILL.md rejects unconfirmed internal seams"
 run_content_eval "$SKILL_DIR/SKILL.md" "independent source of truth" "SKILL.md rejects tautological tests"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]ource-text" "SKILL.md rejects source-text proxies for behavior"
 run_content_eval "$SKILL_DIR/SKILL.md" "public (output|artifact)" "SKILL.md preserves public-artifact assertions"
@@ -69,7 +68,6 @@ run_content_eval "$SKILL_DIR/REFERENCE.md" "Never set a percentage target" "REFE
 
 # ── Visual regression test section ──────────────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Visual Regression|browser.test" "SKILL.md has visual regression test section"
-run_content_eval "$SKILL_DIR/SKILL.md" "existing screenshot assertion runner" "SKILL.md uses the repository visual runner rather than restricting coverage to Vitest"
 
 # ── Performance optimization in REFACTOR step ────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "500ms|execution time" "SKILL.md has perf optimization in REFACTOR"

@@ -73,15 +73,13 @@ Pomiń widoki, które nie pomagają zrozumieć zmiany.
 
 ### Dowody [#evidence]
 
-Konkretne dowody, że zmiana działa. Pokaż stan przed i po. Wymień niewykonane kontrole i pozostałe niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
+Konkretne dowody, że zmiana działa. Preferuj krótkie polecenie i wynik; pokazuj porównanie przed i po, gdy wyjaśnia zmianę, nie jako automatyczny wymóg multimediów. Wymień niewykonane kontrole i pozostałe niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
 
-Dla każdej widocznej zmiany automatycznie dodawaj [adnotacje wizualne](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations) do dowodów, nie tylko do nagrania. Przy szerokich zmianach interfejsu powiąż problem użytkownika -> zmianę widocznego obszaru -> dowody -> kryterium akceptacji, korzystając z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps).
+Używaj [adnotacji wizualnych](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations) tylko wtedy, gdy trudno znaleźć różnicę. Przy szerokich zmianach UI korzystaj z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps), gdy ułatwiają zrozumienie; unikaj powielonych zrzutów i osobnych podsumowań.
 
-Przy zmianach architektury backendu, przepływu danych, kontraktów API lub przebiegu pracy postępuj zgodnie z [diagramami backendowymi](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) i wywołaj `excalidraw-diagram`. Dodaj zwięzłe porównanie stanu przed i po oraz link do edytowalnego źródła; odśwież odpowiednie utrzymywane diagramy. Błędy diagramów zgłaszaj i kontynuuj pracę; nigdy nie blokują PR ani nie zastępują dowodów z testów.
+Dla relacji backendowych wymagających wyjaśnienia wizualnego używaj [diagramów backendowych](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) tylko na prośbę lub gdy są czytelniejsze niż zwięzły tekst. Aktualizuj utrzymywane diagramy, gdy są nieaktualne; nie twórz plików diagramów i źródeł dla rutynowych zmian. Błędy renderowania zgłaszaj i kontynuuj; nie blokują PR ani nie zastępują wyników testów.
 
-Przy każdej zmianie we frontendzie nagranie rzeczywistego przebiegu interakcji z interfejsem przed zmianą i po niej (kliknięcia, wpisywanie tekstu, stan wynikowy; nigdy nieruchoma strona), odtwarzane bezpośrednio w opisie, wraz ze zrzutami ekranu stanowi najwyższą klasę dowodów i jest wymagane. Umieść je tuż po pierwszym zdaniu, aby osoby przeglądające PR zobaczyły zmianę przed przeczytaniem szczegółów. Nagraj, zmontuj i udostępnij je zgodnie z [instrukcjami dotyczącymi dowodów wizualnych w commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
-
-Dowody z wykonania to klasa tuż za nimi: wyniki testów, dane wyjściowe konsoli. Pokaż w pseudokodzie dokładny test, który wcześniej nie przechodził, a teraz przechodzi.
+Dobieraj materiały według [dowodów wizualnych commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Nagrywaj rzeczywisty przebieg tylko wtedy, gdy wymaga tego interakcja lub ruch albo gdy o to poproszono; w pozostałych przypadkach wystarczą obrazy i wyniki poleceń. Dowód jest przydatny ze względu na pytanie, na które odpowiada, a nie klasę medium. Podawaj zwięzłe, rzeczywiste wyniki testów, nie rekonstrukcje.
 
 ### Ryzyko scalenia [#merge-danger]
 

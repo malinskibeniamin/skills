@@ -5,6 +5,9 @@ how many skills the user named. Load only applicable owners through
 [skill mechanics](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 Review collects and evaluates evidence without editing or publishing unless explicitly asked.
 An author request owns implementation and publication only through its requested endpoint.
+Apply [proportionate verification](verifiability.md#proportionate-verification) before
+selecting owners. The table routes relevant expertise, not a checklist of artifacts:
+reuse current checks; create output only for a concrete risk, explanation or explicit requirement.
 
 | Changed behavior / needed explanation | Owner and completion evidence |
 |---|---|
@@ -16,28 +19,21 @@ An author request owns implementation and publication only through its requested
 | GitHub Actions jobs, actions, permissions or events | [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md): trigger, checkout, credentials, untrusted inputs and least-privilege checks |
 | JavaScript workspace-package registration, exports or publication status | [Package development](../t3code-skills/package-development/SKILL.md): repo-native registration, focused tests and intended packed contents |
 | Checked-in third-party code, skills, assets or generated snapshots | [Vendored assets](../t3code-skills/vendored-assets/SKILL.md): pinned provenance, retained licenses, deterministic regeneration and consumer checks |
-| Customer-facing surface | [visual-review](../visual-review/SKILL.md): inspect rendered states, interaction, accessibility and current captures; load the [PR evidence procedure](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) for comparable before/after and normal visual-test PASS |
+| Customer-facing surface | [visual-review](../visual-review/SKILL.md): inspect affected rendered behavior; use the [PR evidence procedure](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) when captures/comparisons help review or are required |
 | Web UI motion changed or requested | [animate](../animate/SKILL.md): inspect purpose, interruption, keyboard/touch and reduced motion; [remove-animations](../remove-animations/SKILL.md) for subtraction-only cleanup, [improve-animations](../improve-animations/SKILL.md) for a prioritized audit/roadmap, [animation-performance](../animation-performance/SKILL.md) for measured frame problems |
 | Mobile web viewport, keyboard, touch, safe-area or PWA behavior | [mobile-native](../mobile-native/SKILL.md): reproduce the phone/browser symptom, preserve zoom and native activation; distinguish emulation from physical-device evidence, not a React Native or Swift route |
 | Content/layout stress or overflow at valid data bounds | [break-ui](../break-ui/SKILL.md): schema-backed fixtures through the real component; reuse dogfood captures and keep audit requests read-only |
 | Sonner toast setup, styling or lifecycle | [ask-sonner](../ask-sonner/SKILL.md): installed types and existing Toaster wrapper, one notification per operation, settled outcome and persistent error path; other toast libraries keep their existing owner |
-| Architecture, API contract, data flow or workflow relationships changed | [excalidraw-diagram](../excalidraw-diagram/SKILL.md) and its [PR comparison](../excalidraw-diagram/PR-WORKFLOW.md): focused base/candidate diagram beside source/test evidence; skip relationship-preserving mechanical edits |
+| Architecture, API contract, data flow or workflow relationships need visual explanation | [excalidraw-diagram](../excalidraw-diagram/SKILL.md) and its [PR comparison](../excalidraw-diagram/PR-WORKFLOW.md): only when requested or clearer than a short explanation; no automatic diagram/source files |
 | Logic, ownership or code shape needs a small explanation | [show-me](../show-me/SKILL.md): smallest useful diff sketch, tree or Mermaid; omit visuals that add no understanding |
 | PR creation/update | [pr](../pr/SKILL.md): value, reviewer focus, before/after evidence, risk and rollback; separate core changes from generated/mechanical files |
 
-For authors, capture the actual base before editing visible behavior, or reconstruct it from
-that revision without disturbing the current worktree. Publication follows the existing PR
-media procedure: real UI recordings, then `scripts/pr-video.sh` composition and accessible
-hosting. Follow [review-video storytelling](../commit-push-pr/VIDEO.md): show a real
-action and consequence, use a captioned single take for a new capability, and add a
-source-grounded execution model only when it clarifies what happens. Inspect source
-idle spans and watch the whole rendered MP4; cursor/overlay motion is not activity.
-Videos explain the old/new result at matched steps; stills and synthetic explainers
-are not recordings of actual product behavior. A CLI/report uses its real terminal/output
-surface, not an invented browser UI. Follow the existing procedure's evidence gates and limits.
-For every visible PR delta, automatically produce [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations)
-on screenshots and other visual evidence, not just video; keep callout IDs and the change
-legend current across authoring, review, and PR updates.
+Prefer a short inline result over an evidence file. For useful visual comparisons,
+capture the actual base/candidate without disturbing the active worktree. Reuse a focused
+screenshot pair; add annotations only when the delta is hard to find. Record video only
+when motion/interaction cannot be explained adequately by stills or it is requested.
+Then follow [review-video storytelling](../commit-push-pr/VIDEO.md) and the existing
+capture/hosting procedure. Use real product/terminal output, not synthetic proof.
 
 A request to build product motion is different from a request to animate an explanation.
 Do not add UI animations, generated images or extra movies merely to decorate a PR.
@@ -49,7 +45,8 @@ capabilities, use those available owners; do not assume they ship with this harn
 cannot replace real captures, tests or measurements. Interactive planning remains with
 [visual-plan](../visual-plan/SKILL.md) when the task actually calls for that planning surface.
 
-Refresh affected artifacts after edits or base changes; reuse still-current evidence across
+Refresh retained artifacts after edits or base changes; reuse still-current evidence across
 self-review and publication. Missing or inaccessible evidence stays an explicit limit, never
 fabricated proof. Excalidraw rendering failures warn and continue under its nonblocking contract;
-other required PR evidence keeps its existing blocker/waiver behavior.
+explicitly required project/user evidence keeps its blocker/waiver behavior. Optional
+media tooling gaps do not block an otherwise verified change.

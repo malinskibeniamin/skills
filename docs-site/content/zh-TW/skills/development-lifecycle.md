@@ -47,13 +47,13 @@ type: skill
 
 處理 T3 簽出或 Effect 程式碼時，以 `work` 為入口解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)；在整個循環中使用回傳的目標專案指南和範圍檢查。
 
-編輯前載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及適用的負責技能。按比例評估影響；可見編輯前先擷取基準，包括細小文案和共用 UI 的影響。
+載入[變更證據路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)與相關負責技能。評估可信風險；只在視覺比較有用或明確要求時於編輯前擷取基準。重用現有測試、輔助工具與有效證據。
 
 [Figma/圖片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 行動 [#act]
 
-一位負責者；委派與背景工作需要使用者明確授權。遵循本地慣例，實作必要行為。對實質行為載入 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)，在公開契約層級執行 RED -> 最小 GREEN -> REFACTOR；靜態接線或維持行為不變的刪除僅需進行聚焦驗證。當證據改變時，重新規劃受影響的部分。除非會阻礙驗證，否則相鄰的清理工作僅需回報。
+單一負責人；委派與背景工作需要明確同意。依本地慣例實作可正常運作的最小差異。對可信且尚未涵蓋的回歸使用 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)；其他情況使用現有檢查或探測即可。僅重新規劃受影響部分；避免推測性抽象與順手清理。
 
 每完成一批邏輯完整的編輯，先執行限定範圍的格式化或自動修正與 lint，再執行相關的型別檢查及測試。只有檔案內容與檢查涵蓋範圍完全相同時，才可重用已完成的 hook 結果。檢查自動修正的差異；修正失敗並重新執行。若按檔案限定範圍不可靠，保留整個專案的型別檢查。
 
@@ -67,7 +67,7 @@ type: skill
 
 ## 界線 [#boundaries]
 
-僅對使用者保留的決定，或不可逆的正式環境、法律/隱私、破壞性、高安全風險操作詢問。將證據和暫停條件保存在已忽略的 `.context/implementation-notes.md`。
+僅針對使用者保留的決策，或不可逆的正式環境、法律、隱私、破壞性及高安全風險操作詢問。只有長期任務需要檢查點時才沿用現有筆記；例行工作不需要證據或檢查清單檔案。
 
 ## 完成 [#completion]
 

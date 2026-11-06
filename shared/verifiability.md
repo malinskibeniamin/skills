@@ -5,6 +5,25 @@ by how reliably its behavior can be verified, not how quickly its implementation
 can be read. Agents should gather executable evidence: run focused tests, probe the
 public interface and inspect observed results instead of relying on source fluency.
 
+## Proportionate verification
+
+Choose the cheapest check that can catch a credible failure in the changed contract.
+Reuse existing tests and current results; add one focused regression only for an uncovered
+risk. A routine edit may need only existing checks or a direct inspection/probe. Escalate
+for shared contracts, security, money, data loss or difficult recovery, not by test quotas.
+
+Test our decisions, transformations and integration assumptions, not a dependency's
+documented behavior (for example date-fns formatting or lodash/ramda helpers). Avoid
+self-comparisons, duplicate layers and wrappers/seams added only to make tests possible.
+When a new test is warranted, show it fails for the intended regression before the fix.
+
+Inspect changed UI; retain a focused screenshot/comparison only when it resolves a visual
+question or helps review. Video, annotations, diagrams, reports and replay files are
+conditional tools, not automatic deliverables. Reuse captures across checks; keep output
+in temporary/ignored scratch and summarize commands, results and material limits inline.
+Persist only requested artifacts, existing required outputs or a reusable maintenance asset.
+Stop when the requested behavior and credible risks are covered; preserve project gates.
+
 ## Keep humans connected
 
 Use the human's domain language in interfaces, types, tests and diagnostics; follow

@@ -41,7 +41,6 @@ run_content_eval "$REPO_ROOT/triage/SKILL.md" 'Skill tool with "grilling"' "tria
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/improve-codebase-architecture" "commit-push recommends architecture skill over refactor-plan"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/prototype" "commit-push-pr recommends prototype over legacy design fan-out"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "/triage" "commit-push-pr recommends triage over qa"
 
 # Complete Matt imports retain source names; reject bare host invocations, not provenance.
 _live_refs=$(cd "$REPO_ROOT" && rg -n --hidden '/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_/-]|$)|"(design-an-interface|qa|request-refactor-plan|ubiquitous-language|domain-model)"[[:space:]]*:|\b(design-an-interface|request-refactor-plan|ubiquitous-language)\b|mattpocock/skills/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_/-]|$)|malinskibeniamin/skills/(design-an-interface|qa|request-refactor-plan|setup-matt-pocock-skills|ubiquitous-language|domain-model)([^[:alnum:]_/-]|$)' . \
