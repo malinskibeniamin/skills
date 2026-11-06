@@ -21,7 +21,7 @@ type: skill
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/quantify-impact.excalidraw)
 
 Przed pomiarem lub raportowaniem liczby przeczytaj [adaptację Poteto](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement).
-
+Dla optymalizacji wydajności przed edycją przeczytaj [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
 
 Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) obejmuje ocenę wpływu, nawet bez publikacji. Wykorzystuj aktualne dowody; powtarzaj unieważnione porównania. Ocena nie daje zgody na publikację.
 
@@ -34,10 +34,10 @@ Każde utworzenie lub zaktualizowanie PR-a i [sprawdzenie PR-a sesji](https://gi
    - Baza kodu: niezależnie weryfikowalne kontrakty, koordynacja zmian, zależności, ostrzeżenia, wycieki, rozmiar pakietu i koszt kompilacji lub testów. Sam rozmiar ani wskaźniki złożoności cyklomatycznej nie dowodzą poprawy; stosuj [weryfikowalność](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md).
 4. **Proporcjonalny rygor:** zdanie w przypadku oczywistej wartości; deterministyczne odtworzenie lub zliczenie w przypadku poprawności; kontrolowany test porównawczy par według [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md) w przypadku czasu działania; jawne deklaracje poprawy wydajności zawsze wymagają pomiaru.
 5. **Dane bazowe:** wykonaj pomiar przed rozpoczęciem kodowania lub odtwórz stan punktu wspólnego scalania. Użyj tego samego scenariusza, zestawu danych, konfiguracji i tej samej maszyny dla wersji bazowej i kandydującej.
-6. **Porównanie:** tylko metryki przekraczające próg obejmują surowe wartości przed zmianą i po niej, różnicę bezwzględną i procentową, metodę, środowisko oraz poziom szumu. Pomiń liczby poniżej progu lub mieszczące się w granicach normalnej zmienności. Testy niezmienników ani wskaźniki zastępcze nie są dowodami poprawy wydajności.
+6. **Porównanie:** tylko metryki przekraczające próg uzasadniają deklarowany wpływ: surowe wartości przed zmianą i po niej, różnicę bezwzględną i procentową, metodę, środowisko oraz poziom szumu. Próby nierozstrzygnięte lub wycofane zachowaj w diagnostycznym rejestrze eksperymentów, nie w tabeli potwierdzonego wpływu. Testy niezmienników ani wskaźniki zastępcze nie są dowodami poprawy wydajności.
 7. **Decyzja:**
    - Wartościowa poprawa: `Value proven`.
-   - Niejednoznaczna lub pomijalna jawna deklaracja poprawy wydajności: `Value not proven`; bez minimalnych różnic ani dobierania metryk pod oczekiwany wynik. Dopuść jedną korektę opartą na dowodach, a następnie porzuć zmiany lub zamknij PR.
+   - Niejednoznaczna lub pomijalna jawna deklaracja poprawy wydajności: `Value not proven`; bez minimalnych różnic ani dobierania metryk pod oczekiwany wynik. Dopuść jedną korektę tej hipotezy opartą na dowodach, a następnie ją porzuć; inne tropy optymalizacji poparte dowodami pozostają otwarte.
    - Brak przydatnej metryki i brak deklaracji poprawy wydajności: zwykłe podsumowanie wartości, bez artefaktu wpływu.
    - Pogorszenie: napraw, zawęź zakres lub zatrzymaj prace.
 

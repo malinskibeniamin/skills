@@ -58,10 +58,16 @@ Run the smallest repeatable scenario. Counts such as requests, errors, warnings,
 
 ### Runtime or noisy
 
-1. Run three warm-ups per candidate.
-2. Start with 5 paired before/after runs, alternating order when feasible.
-3. Stop when the delta clearly exceeds run-to-run variance and the pre-registered threshold.
-4. Extend to 10-30 pairs only for ambiguous, noisy, or high-stakes results.
+Use the selected measurement tool's current documented protocol when available; otherwise
+use these defaults. Declare the run count/stopping rule before sampling; early stopping
+requires a valid sequential protocol, not a favorable interim result.
+
+1. Run three warm-ups per candidate only for a warm-state claim; reset cold-state trials.
+2. Choose a fixed budget before comparing: 5 paired before/after runs for a stable setup;
+   10-30 pairs when prior noise or stakes justify them.
+3. Alternate base/candidate order when feasible; evaluate at the declared stopping point.
+4. If exploratory runs or adaptive sample counts selected a winner, confirm it with a
+   separate fixed batch before keeping it.
 5. Report median, absolute delta, percentage delta, and spread. Report p95 only when the sample count supports it; never disguise the maximum of five runs as a stable p95.
 6. If the delta is at or below noise, report `inconclusive`, not `faster`.
 
@@ -69,8 +75,57 @@ Use paired inputs and the same scenario. Separate cold-start and warm-cache clai
 
 For optimization, define [feature-fidelity assertions](../shared/verification-replay.md)
 before measuring; dropping intended behavior is a regression, not a faster equivalent.
-For repeated attempts, retain [progress evidence](../shared/progress-evidence.md) with the
-best verified result, failed hypothesis and next discriminating experiment.
+For repeated attempts, use the experiment loop below and retain compact
+[progress evidence](../shared/progress-evidence.md), not a second mandatory artifact.
+
+## Optimization experiments
+
+Use for measured page, service/runtime startup, interaction, throughput, resource or
+compiler-cost optimization. Use the target's existing build, tests and measurement tools;
+read their current help/manual instead of copying a tool-specific recipe into the task.
+
+1. **Freeze the comparison.** Before edits, save the original build/revision, workload,
+   environment and output/behavior assertions. Declare primary metric(s), worthwhile delta,
+   noise rule, protected metrics and run/stopping rule. For deferral, protect affected
+   first-use/end-to-end latency with bounds declared before edits; only the user can accept
+   a tradeoff that relaxes them. Keep this original reference for cumulative results.
+   A latest-accepted reference may advance after a verified win, but never replaces the
+   original. Changed fixtures, throttling or measurement boundaries need a fresh baseline
+   before further edits; disclose the break rather than compare incompatible runs.
+2. **Track leads, not just wins.** Source warnings, cold bytes, import graphs and profiles
+   suggest experiments; they do not prove a speedup. Keep one compact checklist of applicable
+   signals/leads: `OPEN`, `clear` or `UNKNOWN`, bound to the measured revision/scenario.
+   Check gating bottlenecks before downstream tuning. One empty profiler does not clear
+   other signals; a faster baseline does not itself close a lead.
+3. **Change one cause.** State a falsifiable hypothesis and make the smallest reversible
+   intervention. Rebuild and run relevant tests, then repeat comparable paired measurements.
+   Require every sample to contain all declared primary metrics; missing values are invalid,
+   not zero. Retain attempted-trial counts and missing-value reasons. Outcome-dependent
+   failures/timeouts cannot be discarded into a win: resolve them or mark it inconclusive.
+   Test deferred work at first use as well as startup: moving cost is not deletion.
+4. **Keep or revert.** At least one declared primary metric must improve beyond noise
+   and the worthwhile delta against the latest accepted reference. No primary metric may
+   regress beyond noise against either the original or accepted reference. Protected metrics
+   and behavior must also hold against both. Revert a losing or inconclusive experiment's owned
+   edits, preserving unrelated work and earlier verified wins. Advance
+   the accepted reference only after these checks; preserve results against both references.
+5. **Verify equivalence.** Compare final output against the original and replay affected
+   interactions with [fidelity assertions](../shared/verification-replay.md). A faster broken
+   result is invalid. Static rendered-output parity does not cover login, clicks or live
+   data. Only the user can accept an intended difference or authorize a comparison mask;
+   repair mismatches rather than self-approving, masking or replacing the original to pass.
+6. **Close honestly.** Refresh applicable signals on the final candidate. Every remaining
+   `OPEN` lead needs measured evidence or a concrete constraint and next action. Missing,
+   stale or unsupported signals remain `UNKNOWN`, never clear. Distinguish verified gains,
+   completed investigation and constrained/partial coverage; claim no unqualified completion
+   with unexplained leads or unknowns. Stay within the requested scope and endpoint.
+
+Report original-to-final numbers with method/noise, each tried change (kept and reverted)
+with its delta and verdict, and the file/reason each kept change is safe. Use a compact
+diagnostic attempt record; identify its comparison reference and label within-noise values
+as inconclusive, not gains. Include final fidelity status and unresolved leads/limits.
+Keep raw traces and samples in ignored or temporary storage; lab deltas support only the
+tested machine/scenario, not a real-user or production claim.
 
 ## Interpretation
 
@@ -79,7 +134,12 @@ best verified result, failed hypothesis and next discriminating experiment.
 - Primary unchanged: **Value not proven**.
 - Guardrail materially regresses: **Value not proven -- regression**.
 
-Do not select a replacement metric after seeing results. A new metric requires a new thesis and baseline. One evidence-driven revision is reasonable; after another miss, recommend scrap or close the PR. Negative research is useful; preserve its method and `Value not proven` conclusion in the PR/issue, while keeping suppressed raw measurements in the local evidence artifact.
+Do not select a replacement metric after seeing results. A new metric requires a new thesis
+and baseline. One evidence-driven revision is reasonable; after another miss, scrap that
+hypothesis. In scoped multi-lead optimization, proceed to a distinct supported lead rather
+than stop at the first failed experiment. Narrow or close the PR when no feasible useful
+lead remains. Negative research is useful; preserve its method and `Value not proven`
+conclusion in the PR/issue, while keeping suppressed raw measurements in local evidence.
 
 ## Output filter
 
@@ -93,11 +153,15 @@ There is no universal percentage cutoff. The scenario and decision determine wha
 
 - Suppress every below-threshold or within-noise metric, even when another metric qualifies.
 - Suppress negligible guardrail movement entirely. Do not show its raw values or emit a `Guardrail held` line solely because it was measured.
-- Keep suppressed raw output in `.context/impact/<change>/` when it helps reproduce or audit the work; do not promote it into PR feedback.
+- Keep suppressed raw output in `.context/impact/<change>/` when it helps reproduce or audit the work; do not promote it into PR impact claims.
 - If no metric qualifies and the change makes an explicit performance claim, state **Value not proven** without listing the negligible deltas.
 - If no metric qualifies and there is no explicit performance claim, omit the quantified impact section and use a normal value summary.
 
 Do not round a negligible delta into apparent significance, combine several immaterial metrics into a value claim, or publish a metric merely because the tooling produced it.
+
+This filter governs claimed impact, not the diagnostic experiment record above or an
+explicitly requested attempt report. Those retain failed/within-noise deltas with their
+verdicts so rejected experiments remain visible without becoming improvement claims.
 
 ## Existing CI regression budgets
 

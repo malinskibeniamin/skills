@@ -39,8 +39,10 @@ Przed implementacją określ:
 - **Minimalną wartościową zmianę**: ustal ją przed edycją i respektuj żądaną skalę
   (1% to nie 10x). Powtarzalna poprawa o 100 ms może mieć znaczenie.
 - **Punkt końcowy**: audyt, optymalizację lub instalację kontroli regresji. Audyt zwraca
-  ustalenia bez edycji; optymalizacja trwa do zweryfikowanych zmian lokalnych; praca CI
+  ustalenia bez edycji; optymalizacja obejmuje zweryfikowane zmiany aż do żądanego etapu dostarczenia; praca CI
   instaluje wyłącznie skalibrowane kontrole.
+
+Dla optymalizacji przed edycją przeczytaj wspólną [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
 
 ## Wykonaj pętlę [#loop]
 
@@ -48,8 +50,8 @@ Przed implementacją określ:
    profilery, testy, budżety i wersje zainstalowanych pakietów. Przed zmianą składni frameworka
    lub biblioteki przeczytaj aktualną dokumentację źródłową.
 2. **Zmierz stan bazowy przed zmianą kodu**. Odtwórz ten sam scenariusz i fixture w kompilacji
-   zbliżonej do produkcyjnej. Gdy `.context/` jest ignorowany, zapisz surowe ślady w
-   `.context/ux-performance/<journey>/`. Połącz dowody terenowe i laboratoryjne zgodnie z
+   zbliżonej do produkcyjnej. Zachowaj pierwotną kompilację i surowe ślady w ignorowanym lub
+   tymczasowym miejscu. Połącz dowody terenowe i laboratoryjne zgodnie z
    [MEASUREMENT.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/MEASUREMENT.md).
 3. **Zbuduj waterfall** od intencji do narysowanego wyniku. Oznacz zależności szeregowe, pracę
    równoległą i poza ścieżką, stan pamięci podręcznej oraz najdłuższe odcinki ścieżki
@@ -64,10 +66,10 @@ Przed implementacją określ:
 6. **Zweryfikuj** stan bazowy i kandydata przy tym samym scenariuszu, fixture, komputerze,
    przeglądarce, kompilacji i stanie pamięci podręcznej. Użyj sparowanych przebiegów; raportuj
    medianę i rozrzut. Ponownie sprawdź poprawność, dostępność, pamięć, bundle i błędy.
-7. **Zdecyduj**. Zachowaj wyraźny, wartościowy zysk. Jeśli wynik mieści się w wariancji,
-   przenosi koszt gdzie indziej lub pogarsza zabezpieczenie, zgłoś
-   `Value not proven — inconclusive` i wycofaj spekulacyjną złożoność. Nie dobieraj metryk
-   po poznaniu wyniku.
+7. **Zdecyduj**. Zachowaj wartościowy zysk. Wycofaj własne przegrywające lub nierozstrzygnięte
+   eksperymenty; odróżniaj `Value not proven - inconclusive` od zmierzonej regresji.
+   Przed raportowaniem łącznego zysku odśwież listę tropów i końcowe kontrole równoważności wyników.
+   Nie dobieraj metryk po poznaniu wyniku.
 8. **Zapobiegaj nawrotom** tylko na żądanie lub gdy punkt końcowy obejmuje CI. Użyj
    [CI.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/CI.md), aby umieścić stabilne, tanie kontrole w pull requestach, hałaśliwe i głębokie kontrole nocą,
    a monitoring rzeczywistych użytkowników po wdrożeniu. Hooki są opcjonalne i doradcze,

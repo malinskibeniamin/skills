@@ -86,7 +86,10 @@ handler followed by a large render or layout is still a slow interaction.
 
 ## Select tools by question
 
-Use installed tools first; verify current CLI/API syntax from first-party docs.
+Use installed tools first; read their current help/manual for the supported measurement
+protocol and verify CLI/API syntax from first-party docs. Tool-specific mechanics belong
+there; the shared [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments)
+owns comparison validity and completion.
 
 | Question | Best first evidence |
 |---|---|
@@ -113,13 +116,19 @@ Lighthouse cannot measure field INP without real interaction.
    auth, and service dependencies. Compare like cache states.
 4. Validate the sensor with a positive control when possible: intentionally add delay or
    retention and confirm the metric moves.
-5. For noisy runtime measurements, run three warm-ups where warm-up is part of the claim,
-   then start with five paired base/candidate runs. Alternate order. Extend to 10-30 pairs
-   when variance or stakes demand it.
+5. Follow the shared loop's predeclared run/stopping rule. For noisy runtime measurements,
+   run three warm-ups only for a warm-state claim, then choose five paired base/candidate
+   runs or 10-30 pairs based on prior noise/stakes. Alternate order; confirm an exploratory
+   winner with a separate fixed batch rather than stopping on a favorable interim result.
 6. Report raw samples, median, absolute and relative delta, and spread. Use p95/p99 only
    with enough samples. A maximum from five runs is not a stable p95.
 7. Inspect trace shape as well as the total. A faster median that worsens tail latency,
    errors, layout stability, memory, or accessibility is not a clean win.
+
+For a load-time claim, protect both first content and useful/largest content so a cheaper
+placeholder cannot win by delaying the real page. Check rendered output against the original
+build at the same representative routes/viewports, then replay affected interactions.
+After deferral, measure the first interaction/request that now pays for the deferred work.
 
 ## Diagnose memory over time
 
@@ -134,7 +143,8 @@ Playwright is available.
 ## Evidence record
 
 Keep raw JSON, HAR, trace, profiler export, screenshots, commands, and environment metadata
-under `.context/ux-performance/<journey>/`. Summarize:
+under `.context/ux-performance/<journey>/` only when ignored; otherwise use temporary storage.
+Include the shared loop's attempt record and lead checklist for optimization. Summarize:
 
 ```md
 Journey: <start -> useful outcome>

@@ -14,6 +14,9 @@ type: "skill"
 参见[来源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。审计意味着报告；明确的修复请求
 则继续通过验证及项目交付检查。
 
+进行优化或修复时，编辑前先阅读共用的[实验循环](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
+它负责原始和已接受基线、保留或回退决策，以及未解决的线索。
+
 ## 循环
 
 1. 记录故障交互：路由、数据规模、动画驱动方式/属性、浏览器/设备、刷新率，

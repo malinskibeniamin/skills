@@ -35,15 +35,17 @@ type: skill
 - **主要指标**：该里程碑的直接耗时或资源上限。
 - **最小有效变化**：编辑前确定，并遵守要求的提升幅度（1% 不等于 10x）。
   可重复的 100 毫秒改进可能有价值。
-- **终点**：审计、优化或安装回归检查。审计只返回发现，不编辑代码；优化持续到本地
-  变更验证完成；CI 工作只安装校准过的检查。
+- **终点**：审计、优化或安装回归检查。审计只返回发现，不编辑代码；优化包含经验证的
+  变更，并持续到要求的交付终点；CI 工作只安装校准过的检查。
+
+进行优化时，编辑前先阅读共用的[实验循环](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
 
 ## 执行循环 [#loop]
 
 1. **盘点**真实技术栈、生产构建路径、现有遥测、分析器、测试、预算和已安装包版本。
    更改框架或库语法前，先阅读当前的第一方文档。
-2. **改代码前测量基线**。在接近生产的构建中复现相同场景和固定数据。当 `.context/`
-   被忽略时，把原始跟踪保存到 `.context/ux-performance/<journey>/`。按
+2. **改代码前测量基线**。在接近生产的构建中复现相同场景和固定数据。将原始构建和
+   原始跟踪保存在被忽略的目录或临时位置。按
    [MEASUREMENT.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/MEASUREMENT.md) 合并真实用户和实验室证据。
 3. **建立瀑布图**，从用户意图一直到结果完成绘制。标记串行依赖、并行或非关键路径工作、
    缓存状态和最长的关键路径区段。把时间归因到排队、网络和 TTFB、下载、解析和执行、
@@ -54,8 +56,9 @@ type: skill
    先采用[面向数据的重新设计](https://github.com/malinskibeniamin/skills/blob/main/shared/data-oriented-performance.md)，再考虑缓存或卸载工作。
 6. **验证**基线和候选方案：使用相同场景、固定数据、机器、浏览器、构建和缓存状态。
    使用配对运行，报告中位数和离散程度。重新检查正确性、无障碍、内存、bundle 和错误护栏。
-7. **决策**。只保留明确且有价值的收益。若结果落在方差内、把成本转移到别处或破坏护栏，
-   报告 `Value not proven — inconclusive` 并撤销推测性复杂度。不要事后挑选指标。
+7. **决策**。保留有价值的收益。回退自己负责的失败或结果不明确的实验；区分
+   `Value not proven - inconclusive` 与测得的退化。在报告累计收益前，刷新线索清单及
+   最终输出等价检查。不要事后挑选指标。
 8. 仅在用户要求或终点包含 CI 时**防止复发**。按 [CI.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/CI.md) 把稳定廉价的检查放进 pull request，把噪声大或深入的检查放到夜间任务，并在部署后进行真实用户监控。Hook 在校准前只能作为可选建议。
 
 当性能主张涉及规模、突发负载、资源争用或长会话时，使用
