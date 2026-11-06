@@ -905,9 +905,8 @@ async function tick(dryRun: boolean) {
           } catch (error) {
             exit = 1;
             writeFileSync(
-              log,
+              fd,
               `Runner failed: ${error instanceof Error ? error.message : String(error)}\n`,
-              { flag: "a" },
             );
           } finally {
             closeSync(fd);

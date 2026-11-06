@@ -1501,3 +1501,42 @@ test("successful owner must remain acknowledged when configure briefly owns stat
   expect(count).toBe(1);
   expect(Object.keys(after.seen)).not.toHaveLength(0);
 }, 15000);
+
+test("runner failures write the opened log inode, not a replacement symlink", () => {
+  const f = fixture();
+  f.bind();
+  const home = f.env.PR_REVIEW_AUTO_HOME;
+  const victim = join(home, "victim.txt");
+  const original = join(home, "original.log");
+  const preload = join(home, "spawn-failure.ts");
+  writeFileSync(victim, "unchanged\n");
+  writeFileSync(
+    preload,
+    `
+import { readdirSync, renameSync, symlinkSync } from "node:fs";
+import { join } from "node:path";
+Bun.spawn = () => {
+  const home = ${JSON.stringify(home)};
+  const name = readdirSync(home).find((name) => name.startsWith("run-") && name.endsWith(".log"));
+  if (!name) throw Error("Missing opened runner log");
+  const log = join(home, name);
+  renameSync(log, ${JSON.stringify(original)});
+  symlinkSync(${JSON.stringify(victim)}, log);
+  throw Error("Fixture runner unavailable");
+};
+`,
+  );
+  const result = Bun.spawnSync(
+    [process.execPath, "--preload", preload, entry, "tick"],
+    {
+      cwd: f.root,
+      env: f.env,
+    },
+  );
+  expect(result.exitCode).toBe(1);
+  expect(readFileSync(victim, "utf8")).toBe("unchanged\n");
+  expect(readFileSync(original, "utf8")).toContain(
+    "Runner failed: Fixture runner unavailable",
+  );
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(true);
+});
