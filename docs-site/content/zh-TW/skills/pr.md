@@ -29,7 +29,7 @@ type: skill
 1. 尋找與此對話、工作階段或聊天明確關聯的已開啟 PR；否則透過 `gh pr view` 檢查目前分支。確認開啟狀態、儲存庫、來源分支、基底分支及歸屬；不可選擇無關的近期 PR。沒有已開啟的 PR 就無須維護，也不代表可以建立 PR。
 2. 將已發布的說明與**完整 PR 差異**、原始目標及目前的驗證結果比對，而非只看最近一輪對話或提交。對堆疊 PR，逐一對照父分支評估受影響的層級。 依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)檢查擷取畫面、標記及圖例是否過時。
 3. 個別載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新評估商業價值及產品或程式碼庫影響；重用仍有效的證據、重跑已失效的比較，並移除缺乏依據的主張。價值未知時，明確寫出 `not established`。
-4. 對已獲授權的修改或交付工作，一併更新受影響的擷取畫面、標記及圖例；原地更新過時說明。保持簡潔：變更內容、受益對象、重要性、關鍵證據及實質風險。替換過時項目；連結至詳細資料，而非附加工作階段紀錄。保留人類作者的意圖及必要證據；已經準確時不做編輯。
+4. 對已獲授權的修改或交付工作，一併更新受影響的擷取畫面、標記及圖例；更新開頭一句話，使其涵蓋目前完整變更，並原地替換過時項目，精簡說明受益對象、價值、關鍵證據及實質風險。保留作者意圖及必要證據；連結至詳細資料、略過準確的說明，不附加工作階段紀錄。
 5. 編輯後重新讀取託管平台上的內文，確認其描述的是已發布的來源分支狀態。唯讀要求僅回報偏差，不進行編輯。明確要求僅本機修改或禁止推送時，延後發布；不可將尚未發布的工作描述為已交付。
 
 ## 內文範本 [#body-template]
@@ -37,39 +37,20 @@ type: skill
 使用以下範本撰寫 PR 說明：
 
 ```markdown
-## Summary
+<one sentence capturing the entire change and why it matters>
 
-<outcome and why it matters to the affected user or caller>
-<reviewer focus or specific question; say if no special input is needed>
-<smallest useful diagram, diff-sketch, or tree>
-
-## Evidence
-
-<visible changes: before/after flow video playing inline (user-attachments URL), then annotated screenshot table with numbered callouts and a change legend>
-
-- **Before:** <screenshot/output/failing test run>
-  **After:** <screenshot/output/passing test run>
-
-## Merge Danger
-
-**Door:** <one-way or two-way>
-
-<optional: description>
-
-**Blast Radius:** <affected users, callers, or contracts>
-
-<rollback path and unresolved risks, when applicable>
+- Review: <optional focus or decision; omit if none>
+- Testing: <decisive checks and observed results; before -> after; gaps>
+- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
 ```
 
 ## 各區段 [#sections]
 
-省略所有開場白並保持文字精簡。使用 `GLOSSARY.md` 中使用者的領域語言。
+開頭一句話是必要的首讀摘要，不是多餘的開場白；遵循 [PR 注意力預算](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact)。下方只保留必要的補充細節。以下主題是給作者的指引，不是 PR 必備的標題。較長的紀錄應透過連結提供或摺疊呈現；必要的視覺媒體應緊接開頭一句話內嵌呈現。使用 `GLOSSARY.md` 中使用者的領域語言。
 
 ### 摘要 [#summary]
 
-區分核心變更與產生或機械性檔案；指出有用的審查入口，不逐一羅列檔案。
-
-先說明價值與審查重點，而不是羅列變更。區分已觀察到的結果和預期。
+僅在有幫助時補充審查重點，不要重複開頭一句話。區分核心變更與產生或機械性檔案；指出有用的審查入口，不逐一羅列檔案。區分已觀察到的結果和預期。
 
 將 PR 內文作為操作者的精簡摘要：行為與價值、關鍵證據、領域決策、剩餘風險與復原方式，以及下一步行動；透過連結提供詳細資料，以利恢復工作。獨立的 HTML 或視覺回顧產物需要明確要求；仍須審查完整差異並提供必要的視覺證據。
 
@@ -96,7 +77,7 @@ type: skill
 
 對於後端架構、資料流程、API 契約或工作流程變更，請遵循[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)指引並呼叫 `excalidraw-diagram`。提供聚焦的前後對照與可編輯原始檔連結；更新相關的持續維護圖表。圖表失敗時回報警告並繼續，絕不阻擋 PR，也不能取代測試證據。
 
-對於任何前端變更，可直接在頁面內播放的實際 UI 流程前後對照影片（包含點擊、輸入及操作後的狀態，絕不能只是靜止頁面）搭配截圖，是最高等級且必備的證據。將其放在摘要正下方，讓審查者在閱讀說明前先看到變更。依照 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)的指引錄製、編排並託管。
+對於任何前端變更，可直接在頁面內播放的實際 UI 流程前後對照影片（包含點擊、輸入及操作後的狀態，絕不能只是靜止頁面）搭配截圖，是最高等級且必備的證據。將其緊接在開頭一句話之後，讓審查者在閱讀補充細節前先看到變更。依照 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)的指引錄製、編排並託管。
 
 以執行為基礎的證據次之：測試結果、主控台輸出。以虛擬碼呈現先前失敗、現在通過的確切測試。
 
