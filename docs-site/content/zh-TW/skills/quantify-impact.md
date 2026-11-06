@@ -18,7 +18,7 @@ type: skill
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/quantify-impact.excalidraw)
 
 量測或報告數值前，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement)。
-
+進行效能最佳化時，編輯前先閱讀[最佳化實驗](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)：保留原始基準，每次檢驗一個原因，驗證輸出等價，並在宣告完成前交代未解決的線索。
 
 每次建立或更新 PR，以及[檢查工作階段 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 時，都評估影響，即使不發布。重用有效證據；重跑已失效的比較。評估不授予發布權限。
 
@@ -31,10 +31,10 @@ type: skill
    - 程式碼庫：可獨立驗證的契約、變更協調、相依套件、警告、資源洩漏、套件大小及建置／測試成本。僅憑大小或循環複雜度評分無法證明改善；遵循[可驗證性](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md)。
 4. **相稱的嚴謹程度：**顯而易見的價值只需一句話；正確性使用確定性的重現或計數；執行期使用受控的配對 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md) 基準測試；明確的效能主張一律測量。
 5. **基準：**在撰寫程式碼前進行測量，或重建合併基準。使用相同的情境、測試資料、設定與機器執行基準版本和候選版本。
-6. **比較：**只有超過門檻的指標，才回報原始的變更前後數值、絕對與百分比差異、方法、環境和雜訊。省略低於門檻或落在正常變異範圍內的數字。不變性測試或代理指標不代表效能主張。
+6. **比較：**只有超過門檻的指標才能作為影響主張：原始的變更前後數值、絕對與百分比差異、方法、環境和雜訊。將結果不明確或已撤銷的嘗試保留在診斷性實驗紀錄中，而非已證實影響的表格中。不變性測試或代理指標不代表效能主張。
 7. **做出決定：**
    - 明確且值得的改善：`Value proven`。
-   - 明確的效能主張只有不明確或微不足道的改善：`Value not proven`；不要公布微小差異或到處挑選指標。允許根據證據修訂一次，之後放棄或關閉。
+   - 明確的效能主張只有不明確或微不足道的改善：`Value not proven`；不要公布微小差異或到處挑選指標。允許針對該假設根據證據修訂一次，之後放棄該假設；其他有證據支持的獨立最佳化線索仍保持開放。
    - 沒有實用的指標，也沒有明確的效能主張：使用一般的價值摘要，不產生影響成品。
    - 發生退步：修正、縮小範圍或停止。
 

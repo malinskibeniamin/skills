@@ -36,14 +36,17 @@ type: skill
 - **最小有價值變化**：編輯前設定，並遵守要求的改善幅度（1% 不等於 10x）。
   可重複的 100 毫秒改善可能有價值。
 - **終點**：稽核、最佳化或安裝退步檢查。稽核只回傳發現而不編輯；最佳化持續到
-  本機變更驗證完成；CI 工作只安裝經過校準的檢查。
+  要求的交付終點，並包含經過驗證的變更；CI 工作只安裝經過校準的檢查。
+
+進行最佳化時，編輯前先閱讀共用的[實驗循環](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
+它負責原始與已接受基準、保留或撤銷決策、輸出等價、線索清單及嘗試報告；具體操作遵循所選工具的手冊。
 
 ## 執行循環 [#loop]
 
 1. **盤點**真實技術堆疊、正式環境建置路徑、現有遙測、分析工具、測試、預算及已安裝
    套件版本。變更框架或函式庫語法前，先閱讀目前的第一方文件。
-2. **變更程式碼前測量基準**。在接近正式環境的建置中重現相同情境與固定資料。當
-   `.context/` 被忽略時，將原始追蹤存到 `.context/ux-performance/<journey>/`。依照
+2. **變更程式碼前測量基準**。在接近正式環境的建置中重現相同情境與固定資料。
+   將原始建置與原始追蹤保存在被忽略的目錄或暫存位置。依照
    [MEASUREMENT.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/MEASUREMENT.md) 結合真實使用者與實驗室證據。
 3. **建立瀑布圖**，從使用者意圖一路到結果完成繪製。標記串行相依、平行或非關鍵路徑
    工作、快取狀態及最長的關鍵路徑區段。將時間歸因到排隊、網路與 TTFB、下載、解析
@@ -54,8 +57,9 @@ type: skill
    先採用[資料導向的重新設計](https://github.com/malinskibeniamin/skills/blob/main/shared/data-oriented-performance.md)，再考慮快取或卸載工作。
 6. **驗證**基準與候選方案：使用相同情境、固定資料、機器、瀏覽器、建置及快取狀態。
    使用配對執行，回報中位數與離散程度。重新檢查正確性、無障礙、記憶體、bundle 與錯誤護欄。
-7. **決策**。只保留明確且有價值的收益。若結果落在變異範圍內、將成本移到別處或破壞
-   護欄，回報 `Value not proven — inconclusive` 並撤銷推測性複雜度。不要事後挑選指標。
+7. **決策**。保留有價值的收益。撤銷自己負責的失敗或結果不明確的實驗；區分
+   `Value not proven - inconclusive` 與測得的退步。回報累計收益前，重新檢查線索清單及
+   最終輸出等價。不要事後挑選指標。
 8. 只在使用者要求或終點包含 CI 時**防止復發**。依照 [CI.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/CI.md) 將穩定且低成本的檢查放進 pull request，把雜訊大或深入的檢查放到夜間工作，並在部署後進行真實使用者監控。Hook 在校準前只能作為選用建議。
 
 當效能主張涉及規模、突發負載、資源競爭或長時間工作階段時，請使用

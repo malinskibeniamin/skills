@@ -18,7 +18,7 @@ type: skill
 [打开可编辑的 Excalidraw 源文件](/diagrams/skills/quantify-impact.excalidraw)
 
 测量或报告数值前，请阅读 [Poteto 适配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#measurement)。
-
+进行性能优化时，编辑前先阅读[优化实验](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)：保留原始基线，每次检验一个原因，验证输出等价，并在宣告完成前交代未解决的线索。
 
 每次创建或更新 PR，以及[检查会话 PR](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md#existing-pr) 时，都评估影响，即使不发布。复用有效证据；重跑已失效的比较。评估不授予发布权限。
 
@@ -31,10 +31,10 @@ type: skill
    - 代码库：可独立验证的契约、变更协调、依赖项、警告、泄漏、产物体积和构建/测试成本。仅凭大小或圈复杂度评分不能证明改进；遵循[可验证性](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md)。
 4. **与变更相称的严谨程度：**对于显而易见的价值，用一句话说明；对于正确性，使用确定性的复现或计数；对于运行时性能，按照 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md) 进行受控的配对基准测试；对于明确的性能主张，始终进行测量。
 5. **记录基线：**在编码前测量，或重建准确的合并基线。使用相同的场景、夹具、配置和机器运行基线版本与候选版本。
-6. **比较：**仅对超过阈值的指标报告原始的变更前后数据、绝对变化量和百分比变化、方法、环境及噪声。隐藏低于阈值或处于正常波动范围内的数字。不变性测试或代理指标不属于性能主张。
+6. **比较：**只有超过阈值的指标才能作为影响主张：原始的变更前后数据、绝对变化量和百分比变化、方法、环境及噪声。将结果不明确或已回退的尝试保留在诊断性实验记录中，而不是已证实影响的表格中。不变性测试或代理指标不属于性能主张。
 7. **作出决定：**
    - 有价值的改进：`Value proven`。
-   - 明确的性能主张结果不明确或可忽略：`Value not proven`；不报告微小变化量，也不要反复挑选指标。允许进行一次由证据驱动的修订，之后放弃或关闭。
+   - 明确的性能主张结果不明确或可忽略：`Value not proven`；不报告微小变化量，也不要反复挑选指标。允许针对该假设进行一次由证据驱动的修订，之后放弃该假设；其他有证据支持的独立优化线索仍保持开放。
    - 没有有用的指标且没有性能主张：使用常规的价值摘要，不生成影响证据产物。
    - 出现退化：修复、缩小范围或停止。
 

@@ -4,6 +4,9 @@ description: Measure whether a change made the product or codebase meaningfully 
 ---
 
 Before measurements, read [Poteto](../shared/POTETO-NATIVE.md#measurement).
+For performance optimization, read [optimization experiments](REFERENCE.md#optimization-experiments)
+before edits: preserve the original baseline, test one cause, verify equivalent output,
+and account for unresolved leads before claiming completion.
 
 Assess impact, published or not, for every PR creation/update and [session PR check](../pr/SKILL.md#existing-pr). Reuse valid evidence; rerun invalid ones. Assessment grants no publishing authority.
 
@@ -16,10 +19,10 @@ Assess impact, published or not, for every PR creation/update and [session PR ch
    - Codebase: verifiable contracts, change coordination, dependencies, warnings, leaks, bundle/build/test cost; follow [verifiability](../shared/verifiability.md), not size/complexity scores.
 4. **Proportional rigor:** sentence for obvious value; deterministic repro/count for correctness; controlled paired [REFERENCE.md](REFERENCE.md) benchmark for runtime; always measure explicit performance claims.
 5. **Base:** measure before coding or reconstruct merge-base. Use the same scenario, fixture, config, and machine for base/candidate.
-6. **Compare:** only threshold-clearing metrics report raw before/after, absolute/percent delta, method, environment, and noise. Suppress below-threshold/within-variance numbers. Invariant tests/proxies are not performance claims.
+6. **Compare:** only threshold-clearing metrics become claimed impact: raw before/after, absolute/percent delta, method, environment, and noise. Keep inconclusive/reverted attempts in the diagnostic experiment record, not the proven-impact table. Invariant tests/proxies are not performance claims.
 7. **Decide:**
    - Worthwhile gain: `Value proven`.
-   - Ambiguous/negligible explicit performance claim: `Value not proven`; no micro-deltas or metric-shopping. Allow one evidence-driven revision, then scrap/close.
+   - Ambiguous/negligible explicit performance claim: `Value not proven`; no micro-deltas or metric-shopping. Allow one evidence-driven revision of that hypothesis, then scrap it; distinct evidence-backed optimization leads remain open.
    - No useful metric and no performance claim: normal value summary, no impact artifact.
    - Regression: fix, narrow, or stop.
 

@@ -86,7 +86,10 @@ handler followed by a large render or layout is still a slow interaction.
 
 ## Select tools by question
 
-Use installed tools first; verify current CLI/API syntax from first-party docs.
+Use installed tools first; read their current help/manual for the supported measurement
+protocol and verify CLI/API syntax from first-party docs. Tool-specific mechanics belong
+there; the shared [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments)
+owns comparison validity and completion.
 
 | Question | Best first evidence |
 |---|---|
@@ -121,6 +124,11 @@ Lighthouse cannot measure field INP without real interaction.
 7. Inspect trace shape as well as the total. A faster median that worsens tail latency,
    errors, layout stability, memory, or accessibility is not a clean win.
 
+For a load-time claim, protect both first content and useful/largest content so a cheaper
+placeholder cannot win by delaying the real page. Check rendered output against the original
+build at the same representative routes/viewports, then replay affected interactions.
+After deferral, measure the first interaction/request that now pays for the deferred work.
+
 ## Diagnose memory over time
 
 Warm through lazy initialization and bounded caches, then repeat one SPA round trip in the
@@ -134,7 +142,8 @@ Playwright is available.
 ## Evidence record
 
 Keep raw JSON, HAR, trace, profiler export, screenshots, commands, and environment metadata
-under `.context/ux-performance/<journey>/`. Summarize:
+under `.context/ux-performance/<journey>/` only when ignored; otherwise use temporary storage.
+Include the shared loop's attempt record and lead checklist for optimization. Summarize:
 
 ```md
 Journey: <start -> useful outcome>
