@@ -62,8 +62,8 @@ _probe_output="$_probe_tmp/output"
 if PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" \
   FAKE_CLAUDE_VERSION=2.1.258 "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 \
   && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 2 ] \
-  && grep -q '^codex|gpt-6.1-sol|max|' "$_probe_log" \
-  && grep -q '^claude-code|claude-opus-5-5|max|' "$_probe_log"; then
+  && grep -q '^codex|gpt-6.1-sol|xhigh|' "$_probe_log" \
+  && grep -q '^claude-code|claude-opus-5-5|xhigh|' "$_probe_log"; then
   echo "  PASS  capability runner compares only Sol and Opus"
   PASS=$((PASS + 1))
 else
@@ -99,9 +99,9 @@ else
   ERRORS="$ERRORS\n  FAIL: capability-probe Claude preflight"
 fi
 
-if CAPABILITY_AGENT=codex CAPABILITY_MODEL=gpt-6.1-sol CAPABILITY_EFFORT=max bun -e '
+if CAPABILITY_AGENT=codex CAPABILITY_MODEL=gpt-6.1-sol CAPABILITY_EFFORT=xhigh bun -e '
   const config = (await import("./agent-evals/capability-probes/create-experiment.ts")).default;
-  if (config.model !== "gpt-6.1-sol?reasoningEffort=max") process.exit(1);
+  if (config.model !== "gpt-6.1-sol?reasoningEffort=xhigh") process.exit(1);
   if (config.runs !== 3) process.exit(1);
   if (JSON.stringify(config.evals) !== JSON.stringify(["research-data-synthesis", "evergreen-project-recovery"])) process.exit(1);
 ' >/dev/null 2>&1; then
@@ -143,9 +143,9 @@ for _agent in codex claude-code; do
   if env -u CAPABILITY_MODEL -u CAPABILITY_EFFORT CAPABILITY_AGENT="$_agent" bun -e '
     const { strict: assert } = await import("node:assert");
     const config = (await import("./agent-evals/capability-probes/create-experiment.ts")).default;
-    const expected = process.env.CAPABILITY_AGENT === "codex" ? "gpt-6.1-sol?reasoningEffort=max" : "claude-opus-5-5";
+    const expected = process.env.CAPABILITY_AGENT === "codex" ? "gpt-6.1-sol?reasoningEffort=xhigh" : "claude-opus-5-5";
     assert.equal(config.model, expected);
-    if (config.agent === "claude-code") assert.equal(config.agentOptions?.effort, "max");
+    if (config.agent === "claude-code") assert.equal(config.agentOptions?.effort, "xhigh");
   ' >/dev/null 2>&1; then
     echo "  PASS  $_agent capability defaults use the preferred pair"
     PASS=$((PASS + 1))
@@ -153,5 +153,21 @@ for _agent in codex claude-code; do
     echo "  FAIL  $_agent capability defaults use another model"
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: $_agent capability defaults"
+  fi
+done
+
+# Reject overrides before creating a model-backed experiment; no inference runs here.
+for _case in 'codex|gpt-6-astra|xhigh' 'codex|gpt-6.1-sol|high' 'codex|gpt-6.1-sol|max' 'claude-code|claude-sonnet-5-5|xhigh' 'claude-code|claude-opus-5-5|high'; do
+  IFS='|' read -r _agent _model _effort <<< "$_case"
+  if CAPABILITY_AGENT="$_agent" CAPABILITY_MODEL="$_model" CAPABILITY_EFFORT="$_effort" bun -e '
+    try { await import("./agent-evals/capability-probes/create-experiment.ts"); process.exit(1); }
+    catch(error) { if(!String(error).includes("Model policy:")) throw error; }
+  ' >/dev/null 2>&1; then
+    echo "  PASS  experiment rejects $_agent / $_model / $_effort"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  experiment permits $_agent / $_model / $_effort"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: disallowed experiment route $_case"
   fi
 done

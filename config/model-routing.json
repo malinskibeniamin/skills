@@ -44,8 +44,9 @@
     }
   },
   "efforts": {
+    "allowed": ["xhigh"],
     "never": ["max"],
-    "reason": "Owner rule: max is for benchmarking only; the benchmark suites may still sweep it, routing never selects it."
+    "reason": "Owner rule: xhigh only, including benchmarks. Historical score evidence is not routing permission."
   },
   "model_switch": {
     "deny_statuses": ["retired", "unsupported"],

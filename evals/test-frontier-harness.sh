@@ -59,11 +59,11 @@ run_json_eval '.schema_version == 2
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
 run_json_eval 'any(.capabilities.codex.models[];
-  .id == "gpt-6.1-sol" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
-  "agent-evals/context-ablation/manifest.json" "ablation includes every GPT-6.1 Sol effort"
+  .id == "gpt-6.1-sol" and .efforts == ["xhigh"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation restricts GPT-6.1 Sol to xhigh"
 run_json_eval 'any(.capabilities["claude-code"].models[];
-  .id == "claude-opus-5-5" and .efforts == ["low", "medium", "high", "xhigh", "max"])' \
-  "agent-evals/context-ablation/manifest.json" "ablation includes every Opus 5.5 effort"
+  .id == "claude-opus-5-5" and .efforts == ["xhigh"])' \
+  "agent-evals/context-ablation/manifest.json" "ablation restricts Opus 5.5 to xhigh"
 
 run_content_eval "evals/run.sh" 'HOOK_METRICS_DISABLED=1' "fixture evals cannot pollute production telemetry"
 run_content_eval ".claude/hooks/skill-fire-log.sh" 'HOOK_METRICS_DISABLED' "skill telemetry honors isolation"
