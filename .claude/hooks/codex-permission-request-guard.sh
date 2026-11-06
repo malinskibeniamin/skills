@@ -42,13 +42,17 @@ _extract_message() {
   done
 }
 
+input_file=$(mktemp)
+trap 'rm -f "$input_file"' EXIT
+printf '%s' "$input" >"$input_file"
+
 for script in $candidates; do
   path="$hook_dir/$script"
   [ -x "$path" ] || continue
 
   output=""
   status=0
-  output=$(printf '%s' "$input" | "$path" 2>&1 >/dev/null) || status=$?
+  output=$("$path" <"$input_file" 2>&1 >/dev/null) || status=$?
 
   denied=false
   if [ "$status" -eq 2 ]; then

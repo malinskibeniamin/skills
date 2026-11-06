@@ -26,7 +26,10 @@ if ! command -v python3 >/dev/null 2>&1; then
   unavailable
   exit 0
 fi
-if output=$(printf '%s' "$input" | python3 "$hook_dir/../../scripts/quota-guard.py" "${1:-claude}" "$event" 2>/dev/null); then
+input_file=$(mktemp) || { unavailable; exit 0; }
+trap 'rm -f "$input_file"' EXIT
+printf '%s' "$input" >"$input_file" || { unavailable; exit 0; }
+if output=$(python3 "$hook_dir/../../scripts/quota-guard.py" "${1:-claude}" "$event" <"$input_file" 2>/dev/null); then
   [ -z "$output" ] || printf '%s\n' "$output"
 else
   unavailable
