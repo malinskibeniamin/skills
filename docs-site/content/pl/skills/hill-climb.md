@@ -14,7 +14,7 @@ Optymalizuj artefakt, nie jego sędziego. Preferuj wykonywalne dowody; kalibruj 
 
 ## Współpracuj z istniejącymi właścicielami [#compose-with-existing-owners]
 
-Załaduj poniższych [właścicieli](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies); zachowaj jedną pętlę i wspólny budżet:
+Załaduj tylko właściwych [właścicieli](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies); zachowaj jedną pętlę i wspólny budżet:
 
 - [Cykl rozwoju](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/SKILL.md) odpowiada za implementację i dostarczenie. Raporty, plany i recenzje nie zmieniają źródeł, poza zamówionymi artefaktami planu; [improve](https://github.com/malinskibeniamin/skills/blob/main/improve/SKILL.md) może zalecić wspinaczkę bez jej rozpoczynania.
 - [Quantify impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md) odpowiada za metryki, minimalne wartościowe różnice i szum.
@@ -27,8 +27,8 @@ Użyj istniejącego kontraktu zadania lub krótkiej notatki w bieżącym kontek�
 
 - **Cel:** beneficjent, oczekiwany rezultat, główna metryka lub nazwane kategorie oceny, warunek akceptacji i minimalna wartościowa poprawa. Sama liczba nie stanowi wartości.
 - **Ograniczenia:** chronione zachowanie, dostępność, bezpieczeństwo, dozwolony zakres edycji i limity zasobów. Zachowaj niezwiązane zmiany oraz pierwotny punkt końcowy użytkownika.
-- **Weryfikacja:** polecenie ewaluatora lub protokół wizualny, dane testowe, środowisko, pierwotna rewizja i najlepszy zaakceptowany kandydat, czyli bieżący wariant odniesienia. Zachowaj oba punkty odniesienia.
-- **Koniec:** żądany punkt końcowy, budżet ewaluacji i reguła zatrzymania przy braku postępu. Bez podanego budżetu wykonaj najwyżej trzy iteracje kandydatów; zarezerwuj w nim potwierdzenie. Nadal obowiązują ciaśniejsze limity recenzentów, czasu, użycia lub kosztu; pomocnicze mechanizmy dzielą ten budżet.
+- **Weryfikacja:** polecenie ewaluatora lub protokół wizualny, dane testowe, środowisko, pierwotna rewizja i najlepszy potwierdzony kandydat, czyli bieżący wariant odniesienia. Zachowaj oba punkty odniesienia.
+- **Koniec:** punkt końcowy, skończony budżet ewaluacji i zasobów oraz reguła zatrzymania przy braku postępu. Domyślnie wykonaj najwyżej trzy próby kandydatów, zaakceptowane lub nie; jedna interwencja liczy się raz niezależnie od liczby plików. Pomiary bazy, ponowienia i potwierdzenie zużywają budżet ewaluacji i zasobów. Przed każdą próbą zarezerwuj środki na potwierdzenie; jeśli ich nie wystarczy, zakończ poszukiwanie. Ciaśniejsze limity użytkownika, recenzentów i hosta nadal obowiązują. Nowa baza nie zeruje liczników.
 
 Jeżeli nie istnieje wiarygodny ewaluator, utwórz najmniejszy weryfikator w dozwolonym zakresie albo wskaż brakujący warunek. Nie zastępuj oczekiwanego rezultatu łatwym wskaźnikiem zastępczym. Jeżeli baza już spełnia cel, potwierdź to i zakończ bez spekulacyjnych edycji.
 
@@ -44,24 +44,36 @@ Wybierz właściwą ścieżkę. Zachowaj stałe wejścia w porównywalnych runda
 
 Dla upoważnionych niezależnych recenzji wizualnych użyj świeżych kontekstów z tymi samymi artefaktami, kryteriami, intencją, ograniczeniami, wynikami kontroli i otwartymi ustaleniami. Nie ujawniaj pożądanej oceny liczbowej, wcześniejszych ocen ani preferowanego zwycięzcy. W miarę możliwości używaj neutralnych etykiet kandydatów. Żądaj porównań opartych na dowodach i konkretnych usterek. Oceny liczbowe podawaj wyłącznie na żądanie i traktuj je zawsze jako pomocnicze. Samoocena w głównym kontekście nie jest ani ślepa, ani niezależna.
 
-Oceń ponownie niezmieniony punkt odniesienia, aby wykryć dryf sędziego. Jeśli niezmienione wejścia otrzymują istotnie różne oceny, zbadaj to lub zgłoś niepewność zamiast ogłaszać zwycięstwo. Naprawa ewaluatora albo zmiana kryteriów, danych testowych, modelu lub środowiska rozpoczyna porównanie z nową bazą. Nie łącz jego ocen ze starym trendem i nie osłabiaj testów, aby uzyskać wynik pozytywny.
+Oceń ponownie niezmieniony punkt odniesienia, aby wykryć dryf sędziego. Jeśli niezmienione wejścia otrzymują istotnie różne oceny, zbadaj to lub zgłoś niepewność zamiast ogłaszać zwycięstwo. Naprawa ewaluatora albo zmiana kryteriów, danych testowych, modelu lub środowiska rozpoczyna porównanie z nową bazą. Nie łącz jego ocen ze starym trendem i nie osłabiaj testów, aby uzyskać wynik pozytywny. Skalibruj nowego lub zastępującego, upoważnionego sędziego na niezmienionych punktach odniesienia; przechowuj wyniki każdego sędziego oddzielnie.
 
 ## Wspinaj się [#climb]
 
 1. **Postaw hipotezę:** wybierz jedno potwierdzone wąskie gardło lub konkretną wadę jakości. Przewidź, jak mała odwracalna zmiana poprawi cel bez naruszenia ograniczeń.
 2. **Zmień:** wykonaj wyłącznie tę interwencję we właściwym przepływie pracy. Zachowaj możliwość odzyskania bieżącego wariantu odniesienia. Nie edytuj wejść objętych oceną podczas pracy recenzentów.
 3. **Oceń:** uruchom właściwe kontrole i zamrożony ewaluator dla dokładnie tego kandydata. Wykorzystuj ważne dowody. Uczciwie zapisuj nieważne próbki, błędy i niedostępny zakres oceny.
-4. **Zachowaj albo wycofaj:** zaakceptuj tylko wartościową, udowodnioną poprawę z zachowaniem ograniczeń względem oryginału i bieżącego wariantu odniesienia. Wycofuj tylko własne zmiany przegranego eksperymentu. Zachowaj wcześniejsze udowodnione poprawy i cudzą pracę. Remis, zaszumione oceny i brak wyników nie oznaczają poprawy.
-5. **Zapisz:** prowadź zwięzły rejestr rund: tożsamość kandydata, hipoteza, dowody/różnica, wynik ograniczeń, zachowanie/wycofanie i otwarte ustalenia. Użyj ignorowanego lub tymczasowego miejsca tylko wtedy, gdy przebieg tego wymaga. Nie twórz rutynowych zrzutów audytu ani osobnych PR-ów dla każdej rundy.
+4. **Potwierdź, potem zachowaj:** wartościowa poprawa przekraczająca szum i spełniająca ograniczenia względem oryginału i bieżącego wariantu odniesienia jest prowizoryczna, dopóki nie potwierdzi jej świeża, z góry ustalona partia ewaluacji. Dopiero wtedy zaktualizuj bieżący wariant odniesienia. Nieudane lub niejednoznaczne potwierdzenie odrzuca próbę; wycofuj tylko jej własne zmiany, zachowując potwierdzony wariant odniesienia i cudzą pracę. Remis i brak wyników nie oznaczają poprawy.
+5. **Zapisz:** prowadź zwięzły rejestr rund: tożsamość kandydata, hipoteza, dowody/różnica, wynik ograniczeń, zachowanie/wycofanie, pozostały budżet i otwarte ustalenia. Użyj ignorowanego lub tymczasowego miejsca tylko wtedy, gdy przebieg tego wymaga. Nie twórz rutynowych zrzutów audytu ani osobnych PR-ów dla każdej rundy.
 
-Zakończ wcześniej po potwierdzonej akceptacji, wyczerpaniu budżetu, dwóch kolejnych kandydatach bez poprawy albo przy zewnętrznej blokadzie lub decyzji zastrzeżonej dla właściciela. Wyższa ocena sama nie rozwiązuje istotnej usterki. Zastój lub wyczerpanie budżetu oznacza nieosiągnięty cel, nie akceptację. Zachowaj i opisz najlepszego zweryfikowanego kandydata, zamiast po cichu rozszerzać zakres lub podnosić cel.
+Zakończ po potwierdzonej akceptacji, wyczerpaniu budżetu, dwóch kolejnych kandydatach bez poprawy albo przy zewnętrznej blokadzie lub decyzji zastrzeżonej dla właściciela.
+
+| Dowód przy zakończeniu | Raport |
+|---|---|
+| Aktualne potwierdzenie spełnia cel i wszystkie ograniczenia | `met`; zachowaj potwierdzony wariant odniesienia. |
+| Prawidłowe ewaluacje nie osiągają celu przed limitem lub zastojem | `unmet`; zachowaj najlepszy potwierdzony wariant, nie ostatnią próbę. |
+| Brakujący lub nieprawidłowy ewaluator, dryf albo niedostępny wymagany zakres oceny | `unverified`; zachowaj wariant odniesienia i wskaż brakujący dowód. |
+
+Wyższa ocena nie rozwiązuje istotnej usterki. Zachowaj pierwotny zakres i cel; diagnozuj nieważne ewaluacje zamiast powtarzać ocenę niezmienionego kandydata aż do uzyskania pozytywnego wyniku.
 
 Dla optymalizacji promptów lub opisów narzędzi najpierw potwierdź poprawność zachowania we wszystkich zadeklarowanych trasach. Następnie zamroź przechodzący zestaw testów jako ograniczenie i stopniowo zmniejszaj kontekst. Ponawiaj przypadki kontrolne i wydzielone. Oddziel te etapy; krótsze instrukcje pogarszające wybór narzędzi przegrywają. Użyj [pisania dla agentów](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL.md). Zmiany trasowania modeli lub kontekstu zachowują [bramkę ewaluacji efficient frontier](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/SKILL.md#promotion).
 
 ## Potwierdź i przekaż wynik [#confirm-and-hand-off]
 
-Potwierdź wynik nową, z góry ustaloną partią ewaluacji, a nie wyłącznie zwycięskimi próbkami eksploracyjnymi. Powtórz odpowiednie kontrole funkcjonalne i wizualne oraz porównaj z oryginałem. Jawnie wskaż brak niezależnego pokrycia. Konsensus lub docelowa ocena nie zastępuje weryfikacji ani zgody człowieka.
+Wykorzystuj istniejące potwierdzenie tylko dla niezmienionych wejść. Powtórz unieważnione kontrole funkcjonalne i wizualne względem oryginału. Jawnie wskaż brak niezależnego pokrycia; konsensus lub oceny nie zastępują weryfikacji ani zgody człowieka.
 
 Podaj wynik i stan celu, dowody od oryginału do końcowego wariantu, zachowane i wycofane eksperymenty, pozostałe ograniczenia oraz powód zakończenia pętli. Kontynuuj do punktu końcowego użytkownika poprzez istniejącego właściciela dostarczenia. Sam hill-climb nie daje zgody na PR, scalanie, wdrożenie ani monitoring.
+
+Przykłady:
+- `/hill-climb improve sidebar readability against the supplied screenshots; preserve keyboard flows; 3 candidates; local only; no delegates`
+- `/hill-climb reduce tool-description tokens while preserving the existing tool-choice eval across supported routes; 3 candidates; local only; no delegates`
 
 Źródło: [omówienie Theo](https://x.com/theo/status/2118465321032106235), 13:04–20:44 (porównania i dryf ocen), 26:21–30:27 (najpierw ewaluacja, potem kompresja).
