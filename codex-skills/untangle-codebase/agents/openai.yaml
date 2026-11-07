@@ -1,0 +1,5 @@
+interface:
+  display_name: "Untangle Codebase"
+  short_description: "Untangle coupling, duplication, workarounds and surplus code"
+policy:
+  allow_implicit_invocation: false

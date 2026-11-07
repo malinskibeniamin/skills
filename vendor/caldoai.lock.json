@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/caldoai/skills",
+  "revision": "f3cf47774975a7d9fca45730babf4ff7ad765ada",
+  "license": "MIT",
+  "files": {
+    "LICENSE": {
+      "blob_sha": "0f255b7e8b17e994384d1b981fc1a2d4a27d7bde",
+      "sha256": "cbe11503c54a6eeecf65772e66fbbca7a37750bff9812c742b11dca47ceb539c",
+      "mode": "100644"
+    },
+    "skills/untangle-codebase/SKILL.md": {
+      "blob_sha": "102ff57803e504876f6eb9b412e4eb0f6c576350",
+      "sha256": "b4eb6b5130c38ca04532601e99d2d174cf4faa4df520b5b7ba609e8707e55761",
+      "mode": "100644"
+    }
+  }
+}

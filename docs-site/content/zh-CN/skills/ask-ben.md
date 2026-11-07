@@ -259,6 +259,7 @@ type: skill
 | `/modernize` | 重新评估并安全更新较旧的 PR。 |
 | `/sol-loop` | 执行明确请求且轮数受限的 Sol 审查循环。 |
 | `/takeover` | 完成接手的工作，同时保留原贡献者署名。 |
+| `/untangle-codebase` | 梳理耦合、重复逻辑、变通方案与冗余代码。 |
 | `/upgrade-dependency` | 升级依赖项并调整每个受影响的调用位置。 |
 | `/ux-copy` | 编写和审查简洁、客观的产品界面文案。 |
 | `/ux-performance` | 审计并优化真实 Web 用户体验性能。 |

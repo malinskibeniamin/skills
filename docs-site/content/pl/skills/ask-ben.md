@@ -259,6 +259,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/modernize` | Ponowna ocena i bezpieczne odświeżenie starszego PR-a. |
 | `/sol-loop` | Jawnie zamówiona, ograniczona pętla przeglądu przez Sol. |
 | `/takeover` | Kończenie odziedziczonej pracy z zachowaniem uznania dla współtwórców. |
+| `/untangle-codebase` | Porządkowanie powiązań, duplikacji, obejść i zbędnego kodu. |
 | `/upgrade-dependency` | Aktualizowanie zależności i dostosowywanie wszystkich miejsc jej użycia. |
 | `/ux-copy` | Pisanie i recenzja zwięzłych, rzeczowych tekstów interfejsu produktu. |
 | `/ux-performance` | Audytowanie i optymalizowanie rzeczywistej wydajności UX aplikacji internetowych. |

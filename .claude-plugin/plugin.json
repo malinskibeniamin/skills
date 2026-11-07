@@ -121,6 +121,7 @@
     "./to-spec/",
     "./to-tickets/",
     "./triage/",
+    "./untangle-codebase/",
     "./upgrade-dependency/",
     "./ux-copy/",
     "./ux-performance/",
