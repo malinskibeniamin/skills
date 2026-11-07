@@ -1,5 +1,5 @@
 ---
-description: "整理整個程式碼庫或指定範圍內洩漏的抽象、複製貼上的邏輯、暫時替代方案及多餘包裝，同時保留預期行為。"
+description: "整理洩漏的抽象、重複邏輯、暫時替代方案與多餘包裝。"
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["untangle codebase"]}
 sidebar: {"label":"/untangle-codebase"}

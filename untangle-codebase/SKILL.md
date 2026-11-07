@@ -1,6 +1,6 @@
 ---
 name: untangle-codebase
-description: Untangle leaky abstractions, copy-paste logic, temporary workarounds and useless wrappers across a codebase or focused area, preserving intended behavior.
+description: Untangle leaky abstractions, duplication, temporary workarounds and useless wrappers.
 disable-model-invocation: true
 argument-hint: "[optional area or concern; comments/tests opt-in; endpoint]"
 ---
@@ -39,8 +39,7 @@ Ask **should these pieces change together?** Inventory evidenced problems within
   and feature logic scattered by technical layer.
 - **Needless links:** callers reaching into internals, stable domains depending on volatile
   implementations, caller-specific parameters and shallow abstractions leaking changes.
-- **Surplus:** pass-through wrappers, speculative extension points/configuration and
-  apparently unused code.
+- **Surplus:** pass-through wrappers, speculative extension points/configuration and apparently unused code.
 - **Special cases:** one-value branches, caller exceptions, swallowed errors, sleeps,
   retries, disabled tests and temporary workarounds. Trace the requirement or external
   constraint each protects; their presence alone is not a defect.
@@ -56,8 +55,7 @@ scratch, not a new repository report by default.
 
 Group related findings under the smallest root-cause fix. Put knowledge that changes
 together with its owner; separate independent reasons to change. Prefer stable domain
-interfaces over volatile implementation details. Use
-[codebase design](../codebase-design/SKILL.md) when choosing module boundaries.
+interfaces over volatile implementation details. Use [codebase design](../codebase-design/SKILL.md) for module boundaries.
 
 Compare the proposal with leaving the code alone: name the coordination cost or failure
 it removes and the contracts it must retain. A wrapper may own validation, authorization,
@@ -98,5 +96,4 @@ Repair confirmed in-scope findings and stop at the first clean scoped review wit
 baseline behavior preserved and required checks passing. Retain justified exceptions;
 report unknowns, coverage gaps and out-of-scope opportunities without expanding the task.
 Summarize the root-cause fixes, preserved constraints, verification and remaining limits,
-then complete only the requested delivery endpoint. Claim no speed, token or defect
-reduction without measurement.
+then complete only the requested delivery endpoint. Claim no speed, token or defect reduction without measurement.

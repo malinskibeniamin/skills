@@ -1,5 +1,5 @@
 ---
-description: "梳理整个代码库或指定范围内泄漏的抽象、复制粘贴逻辑、临时变通方案和多余封装，同时保持预期行为。"
+description: "梳理泄漏的抽象、重复逻辑、临时变通方案和多余封装。"
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["untangle codebase"]}
 sidebar: {"label":"/untangle-codebase"}

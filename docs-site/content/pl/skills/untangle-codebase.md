@@ -1,5 +1,5 @@
 ---
-description: "Uporządkuj nieszczelne abstrakcje, powieloną logikę, tymczasowe obejścia i zbędne opakowania w bazie kodu lub wskazanym obszarze, zachowując zamierzone zachowanie."
+description: "Porządkuj nieszczelne abstrakcje, duplikację, tymczasowe obejścia i zbędne opakowania."
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["untangle codebase"]}
 sidebar: {"label":"/untangle-codebase"}
