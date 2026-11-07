@@ -235,6 +235,7 @@
 | `/modernize` | Reassess and safely refresh an older PR. |
 | `/sol-loop` | Run an explicitly requested bounded Sol review loop. |
 | `/takeover` | Finish inherited work while preserving contributor credit. |
+| `/untangle-codebase` | Untangle coupling, duplication, workarounds and surplus code. |
 | `/upgrade-dependency` | Upgrade a dependency and adapt every affected call site. |
 | `/ux-copy` | Write and review concise, factual product UI copy. |
 | `/ux-performance` | Audit and optimize real web UX performance. |

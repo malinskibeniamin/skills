@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "c30bd3d92cd68933",
-      "zh-CN": "c30bd3d92cd68933",
-      "zh-TW": "c30bd3d92cd68933"
+      "pl": "827b76e5e77ea5c3",
+      "zh-CN": "827b76e5e77ea5c3",
+      "zh-TW": "827b76e5e77ea5c3"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "87193efe64897006",
-      "zh-CN": "87193efe64897006",
-      "zh-TW": "87193efe64897006"
+      "pl": "7eb520b1d22ef743",
+      "zh-CN": "7eb520b1d22ef743",
+      "zh-TW": "7eb520b1d22ef743"
     },
     "content/skills/ask-sonner.md": {
       "pl": "c112e65dfef02e57",
@@ -514,6 +514,11 @@
       "pl": "2eed45b84c139154",
       "zh-CN": "2eed45b84c139154",
       "zh-TW": "2eed45b84c139154"
+    },
+    "content/skills/untangle-codebase.md": {
+      "pl": "e3d0cb93bf4446c0",
+      "zh-CN": "e3d0cb93bf4446c0",
+      "zh-TW": "e3d0cb93bf4446c0"
     },
     "content/skills/upgrade-dependency.md": {
       "pl": "846e30b76575eda8",

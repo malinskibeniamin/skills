@@ -934,6 +934,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Ready for human / closed",
     ],
   },
+  "untangle-codebase": {
+    kind: "feedback-loop",
+    nodes: [
+      "Scope + behavior baseline",
+      "Hidden links / needless links / surplus",
+      "Root-cause redesign",
+      "Verify slices + scoped review",
+    ],
+  },
   "upgrade-dependency": {
     kind: "transformation-map",
     nodes: [

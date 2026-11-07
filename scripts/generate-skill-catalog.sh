@@ -120,6 +120,7 @@ SHORT_DESCRIPTIONS = {
     "to-spec": "Turn the conversation into a tracker-ready spec",
     "to-tickets": "Split a plan into tracer-bullet tickets with blockers",
     "triage": "Prepare issues for reliable agent or human execution",
+    "untangle-codebase": "Untangle coupling, duplication, workarounds and surplus code",
     "upgrade-dependency": "Upgrade a dependency and adapt every affected call site",
     "ux-copy": "Write and review concise, factual product UI copy",
     "ux-performance": "Audit and optimize real web UX performance",
