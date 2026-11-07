@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import type { ExperimentConfig } from "@vercel/agent-eval";
 import { z } from "zod";
+import { selectModelRoute } from "../model-policy.ts";
 
 const ManifestSchema = z.object({
   automated_tasks: z.array(z.string().min(1)).min(1),
@@ -12,14 +13,11 @@ const manifest = ManifestSchema.parse(
     readFileSync("agent-evals/capability-probes/manifest.json", "utf8"),
   ),
 );
-const agent =
-  process.env.CAPABILITY_AGENT === "claude-code" ? "claude-code" : "codex";
-const effort = process.env.CAPABILITY_EFFORT ?? "max";
-const baseModel =
-  process.env.CAPABILITY_MODEL ??
-  (agent === "codex" ? "gpt-6.1-sol" : "claude-opus-5-5");
-const model =
-  agent === "codex" ? `${baseModel}?reasoningEffort=${effort}` : baseModel;
+const { agent, model, effort } = selectModelRoute(
+  process.env.CAPABILITY_AGENT,
+  process.env.CAPABILITY_MODEL,
+  process.env.CAPABILITY_EFFORT,
+);
 
 export default {
   agent,

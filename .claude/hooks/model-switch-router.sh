@@ -4,8 +4,8 @@ set -eo pipefail
 # Enforce explicit routing policy before a switch, then hand the active model
 # the current routing contract. Both events feed later hook metrics.
 input=$(cat 2>/dev/null || echo '{}')
-command -v jq >/dev/null 2>&1 || exit 0
-printf '%s' "$input" | jq -e 'type == "object"' >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || { echo 'Model policy: jq is required to verify admission.' >&2; exit 2; }
+printf '%s' "$input" | jq -e 'type == "object"' >/dev/null 2>&1 || { echo 'Model policy: invalid hook input.' >&2; exit 2; }
 
 event=$(printf '%s' "$input" | jq -r '.hook_event_name // empty')
 case "$event" in
@@ -15,28 +15,51 @@ esac
 
 session="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 [ -n "$session" ] || session=$(printf '%s' "$input" | jq -r '.session_id // empty')
-[ -n "$session" ] || exit 0
-
-session_dir="/tmp/hook-session-${session}"
-mkdir -p "$session_dir" 2>/dev/null || true
+session_dir=""
+if [ -n "$session" ]; then
+  session_dir="/tmp/hook-session-${session}"
+  mkdir -p "$session_dir" 2>/dev/null || true
+fi
 from_model=$(printf '%s' "$input" | jq -r '.from_model // .previous_model // empty')
 to_model=$(printf '%s' "$input" | jq -r '.to_model // .new_model // .model // empty')
+effort=$(printf '%s' "$input" | jq -r '
+  if .effort != null and (.effort | type) != "object" then ""
+  elif .effort.level != null then
+    if (.effort.level | type) == "string" then .effort.level else "" end
+  else env.CLAUDE_EFFORT // empty end')
 source=$(printf '%s' "$input" | jq -r '.source // "unknown"')
 routing_file="${MODEL_ROUTING_FILE:-$(dirname "$0")/../../config/model-routing.json}"
 route_status=""
 route_work=""
-if [ -n "$to_model" ] && [ -f "$routing_file" ]; then
+deny_reason=""
+if [ ! -f "$routing_file" ] || ! jq -e '
+    (.selection.preferred_models | type == "array" and length > 0)
+    and (.efforts.allowed // [.quality_first.default.effort]) == ["xhigh"]
+  ' "$routing_file" >/dev/null 2>&1; then
+  deny_reason="Model policy: cannot verify the approved models and xhigh effort in config/model-routing.json."
+else
   route_status=$(jq -r --arg model "$to_model" '.models[$model].status // empty' "$routing_file" 2>/dev/null || true)
   route_work=$(jq -r --arg model "$to_model" '.models[$model].work // [] | join(", ")' "$routing_file" 2>/dev/null || true)
+  if [ -n "$route_status" ] && jq -e --arg status "$route_status" \
+    '(.model_switch.deny_statuses // []) | index($status) != null' \
+    "$routing_file" >/dev/null 2>&1; then
+    deny_reason="Model $to_model is marked $route_status in config/model-routing.json."
+  elif ! jq -e --arg model "$to_model" \
+    '.selection.preferred_models | index($model) != null' \
+    "$routing_file" >/dev/null 2>&1; then
+    deny_reason="Model $to_model is prohibited; only the configured Opus 5.5 and GPT-6.1 Sol routes are allowed."
+  elif [ "$effort" != "xhigh" ]; then
+    deny_reason="Model $to_model requires xhigh effort; reported effort is ${effort:-unknown}."
+  fi
 fi
 
-if [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
+if [ -n "$session_dir" ] && [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
   printf '%s\n' "$to_model" > "$session_dir/current-model" 2>/dev/null || true
-elif [ -n "$from_model" ] && [ ! -s "$session_dir/current-model" ]; then
+elif [ -n "$session_dir" ] && [ -n "$from_model" ] && [ ! -s "$session_dir/current-model" ]; then
   printf '%s\n' "$from_model" > "$session_dir/current-model" 2>/dev/null || true
 fi
 
-if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
+if [ -n "$session" ] && [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
   metrics_dir="${HOOK_METRICS_DIR:-$HOME/.claude/hook-metrics}"
   if mkdir -p "$metrics_dir" 2>/dev/null; then
     harness_version="${HARNESS_VERSION:-}"
@@ -75,12 +98,8 @@ if [ "${HOOK_METRICS_DISABLED:-0}" != "1" ]; then
   fi
 fi
 
-if [ "$event" = "PreModelSwitch" ] && [ -n "$route_status" ] \
-  && jq -e --arg status "$route_status" \
-    '(.model_switch.deny_statuses // []) | index($status) != null' \
-    "$routing_file" >/dev/null 2>&1; then
-  reason="Model $to_model is marked $route_status in config/model-routing.json."
-  jq -cn --arg reason "$reason" '{
+if [ "$event" = "PreModelSwitch" ] && [ -n "$deny_reason" ]; then
+  jq -cn --arg reason "$deny_reason" '{
     hookSpecificOutput: {
       hookEventName: "PreModelSwitch",
       permissionDecision: "deny",
@@ -120,7 +139,9 @@ fi
 
 if [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
   context="Active model changed from ${from_model:-unknown} to $to_model (source: $source). This supersedes earlier model-switch notices."
-  if [ -n "$route_status" ]; then
+  if [ -n "$deny_reason" ]; then
+    context="$context $deny_reason Select an approved model at xhigh before continuing."
+  elif [ -n "$route_status" ]; then
     work_label="qualified work"
     [ "$route_status" = "eval-gated" ] && work_label="candidate work"
     context="$context Routing record: $route_status${route_work:+; $work_label: $route_work}."

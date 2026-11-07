@@ -52,11 +52,11 @@ fi
 _expected_cells="$_ablation_tmp/expected.log"
 : > "$_expected_cells"
 for _variant in bare guardrails lean current; do
-  for _effort in low medium high xhigh max; do
+  for _effort in xhigh; do
     printf 'codex|gpt-6.1-sol|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
-  for _effort in low medium high xhigh max; do
+  for _effort in xhigh; do
     printf 'claude-code|claude-opus-5-5|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
@@ -87,10 +87,10 @@ else
 fi
 
 if ABLATION_AGENT=claude-code ABLATION_MODEL=claude-opus-5-5 \
-  ABLATION_EFFORT=medium bun -e '
+  ABLATION_EFFORT=xhigh bun -e '
     const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
     const config = createExperiment(null);
-    if (config.model !== "claude-opus-5-5" || config.agentOptions?.effort !== "medium") process.exit(1);
+    if (config.model !== "claude-opus-5-5" || config.agentOptions?.effort !== "xhigh") process.exit(1);
   ' >/dev/null 2>&1; then
   echo "  PASS  experiment receives the runner's exact Claude model and effort"
   PASS=$((PASS + 1))
@@ -101,10 +101,10 @@ else
 fi
 
 if ABLATION_AGENT=codex ABLATION_MODEL=gpt-6.1-sol \
-  ABLATION_EFFORT=max bun -e '
+  ABLATION_EFFORT=xhigh bun -e '
     const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
     const config = createExperiment(null);
-    if (config.model !== "gpt-6.1-sol?reasoningEffort=max") process.exit(1);
+    if (config.model !== "gpt-6.1-sol?reasoningEffort=xhigh") process.exit(1);
   ' >/dev/null 2>&1; then
   echo "  PASS  experiment preserves the exact GPT-6.1 Sol model and effort"
   PASS=$((PASS + 1))
@@ -136,3 +136,19 @@ else
 fi
 
 rm -rf "$_ablation_tmp"
+
+# Reject overrides before creating a model-backed experiment; no inference runs here.
+for _case in 'codex|gpt-6-astra|xhigh' 'codex|gpt-6.1-sol|high' 'codex|gpt-6.1-sol|max' 'claude-code|claude-sonnet-5-5|xhigh' 'claude-code|claude-opus-5-5|high'; do
+  IFS='|' read -r _agent _model _effort <<< "$_case"
+  if ABLATION_AGENT="$_agent" ABLATION_MODEL="$_model" ABLATION_EFFORT="$_effort" bun -e '
+    try { const {createExperiment}=await import("./agent-evals/context-ablation/create-experiment.ts"); createExperiment(null); process.exit(1); }
+    catch(error) { if(!String(error).includes("Model policy:")) throw error; }
+  ' >/dev/null 2>&1; then
+    echo "  PASS  experiment rejects $_agent / $_model / $_effort"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  experiment permits $_agent / $_model / $_effort"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: disallowed experiment route $_case"
+  fi
+done

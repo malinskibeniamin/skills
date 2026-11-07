@@ -80,9 +80,9 @@ pair status with the next action, not recaps/offers/non-blocking options.
 No extra gates/ceremonies. Add failing public-contract tests only for uncovered risks;
 reuse local notes for long-run checkpoints, not routine evidence/checklist files.
 
-`config/model-routing.json` selects models; `/efficient-frontier` applies it. Quality wins.
-Never invent rankings or infer usage from tokens. Promote context, effort,
-or models only through `agent-evals/context-ablation/`.
+Quality-first: `config/model-routing.json`, `/efficient-frontier`.
+Only Opus 5.5/Sol 6.1 xhigh; block other routes. No rankings/token-based usage guesses.
+Promote models/effort/context only via `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generated files
 (`*.gen.*`, `*_pb.*`, `*_connectquery.*`, or an `@generated`/`DO NOT EDIT` header).

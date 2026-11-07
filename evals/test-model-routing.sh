@@ -26,6 +26,7 @@ if jq -e '.policy == "quality-first"
   and .quality_first.ui_policy.min_taste == 8
   and (.quality_first.ui_policy | has("non_claude_fallback") | not)
   and ([.quality_first.ui_owners[] as $m | .models[$m].scores.taste >= 8] | all)
+  and .efforts.allowed == ["xhigh"]
   and .efforts.never == ["max"]
   and ([del(.models[].score_evidence) | .. | strings | select(. == "max")] | length == 1)
   and .models["claude-opus-5-5"].status == "primary"
