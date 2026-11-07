@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "f1090bec277140d02ed202440185ad9d02ac1490",
+  "revision": "c8a79627b59d72d764d6ab6f2c87c09a48169833",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "66ad84c9c7b0788c0de803eb1ba44ba39de327c475e73781ddd620a040dca9a8",
+      "sha256": "dbbc8ba08c08104945e3eac7e4fc9cdaba49ff8a16208d0892c3cc544b760e24",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -56,6 +56,14 @@
     },
     "skills/break-ui/SKILL.md": {
       "sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+      "mode": 420
+    },
+    "skills/choreograph/RECIPES.md": {
+      "sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
+      "mode": 420
+    },
+    "skills/choreograph/SKILL.md": {
+      "sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
       "mode": 420
     },
     "skills/emil-design-eng/SKILL.md": {
