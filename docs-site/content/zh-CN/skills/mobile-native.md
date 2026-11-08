@@ -1,10 +1,17 @@
 ---
-description: "修复手机网页的视口、触摸、安全区域、键盘、滚动和 PWA 浏览器界面问题。用于手机特有的网页行为，不用于 React Native 或 Swift。"
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["mobile native"]}
-sidebar: {"label":"/mobile-native"}
-title: "/mobile-native"
-type: "skill"
+description: 修复手机网页的视口、触摸、安全区域、键盘、滚动和 PWA 浏览器界面问题。用于手机特有的网页行为，不用于 React Native 或 Swift。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - mobile native
+sidebar:
+  label: /mobile-native
+title: /mobile-native
+type: skill
 ---
 ![“/mobile-native”技能示意图](/diagrams/skills/mobile-native.svg)
 
@@ -16,7 +23,7 @@ type: "skill"
 改编自 Emil Kowalski；参见[来源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
 审查请求保持只读；修复遵循项目 TDD 和交付检查。
 
-## 诊断与范围
+## 诊断与范围 [#diagnose-and-scope]
 
 确认报告中的手机/浏览器、布局、输入路径、键盘/PWA 模式和受支持设备。
 先复现，再修改默认值。使用能力查询而不是 user-agent 嗅探；触摸和鼠标可同时存在。
@@ -38,7 +45,10 @@ type: "skill"
 键盘、手势、过度滚动和 PWA 细节参见 [PLATFORM.md](https://github.com/malinskibeniamin/skills/blob/main/mobile-native/PLATFORM.md)。
 使用可选 viewport/meta 功能前，先检查当前浏览器支持情况。
 
-## 保留功能
+自定义拖拽、滑动、抽屉跟踪、松手物理效果或取消行为加载
+[gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md)；本技能仍负责浏览器与视口问题。
+
+## 保留功能 [#preserve-function]
 
 - 保留 `width=device-width, initial-scale=1`、双指缩放和大字号。
   不要设置 `user-scalable=no`，也不要用 `maximum-scale=1` 限制缩放。
@@ -51,7 +61,7 @@ type: "skill"
 - 保留复制/选择、链接上下文菜单、焦点环和语义控件角色。
   监听器保持被动，除非有范围明确的取消需求。
 
-## 验证
+## 验证 [#verify]
 
 重放触摸与键盘路径、双指缩放/200% 文字、竖屏/横屏、打开键盘、地址栏展开/收起、
 嵌套滚动及支持的亮色/暗色/PWA 模式。浏览器模拟只验证布局；记录哪些行为已在真机确认。

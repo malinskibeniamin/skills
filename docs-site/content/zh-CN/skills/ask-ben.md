@@ -61,6 +61,7 @@ type: skill
 | `/frontend-invariants` | 不随技术栈变化而过时的前端恒久原则。 |
 | `/frontend-starter-kit` | 初始化标准前端工具链和质量门禁。 |
 | `/full-send` | 推进到已授权合并的作者交付预设。 |
+| `/gestures` | 构建直接跟踪、感知速度且可中断的网页手势。 |
 | `/go` | 达到已验证 PR 就绪状态的作者交付预设。 |
 | `/golang-review` | 根据有证据支持的约定审查 Go 差异。 |
 | `/golang` | 按照有证据支持的工程约定编写 Go。 |

@@ -61,6 +61,7 @@ type: skill
 | `/frontend-invariants` | 不受技術堆疊更迭影響的長青前端原則。 |
 | `/frontend-starter-kit` | 建立標準前端工具鏈與關卡的初始環境。 |
 | `/full-send` | 推進到已授權合併的作者交付預設。 |
+| `/gestures` | 建立直接追蹤、感知速度且可中斷的網頁手勢。 |
 | `/go` | 達到已驗證 PR 就緒狀態的作者交付預設。 |
 | `/golang-review` | 依據有實證支持的慣例審查 Go 差異。 |
 | `/golang` | 依循有實證支持的工程慣例撰寫 Go。 |

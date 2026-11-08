@@ -1,5 +1,7 @@
 ---
-description: 建置、審查或規劃有明確目的的網頁 UI 動效。適用於過渡、緩動、彈簧、手勢、動效稽核及動畫機會；不用於影片製作或原生應用。
+description: >-
+  建立、審查或規劃有明確目的的網頁 UI 動效：轉場、緩動、彈簧、編排、錯開時序、檢視切換與動效稽核。直接操作使用
+  gestures；不適用於影片或原生應用程式。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -42,6 +44,8 @@ type: skill
    支援的入場過渡用 `@starting-style`；命令式控制用 WAAPI；
    手勢、版面配置或退場生命週期用已安裝的彈簧/動效函式庫。
    使用函式庫專有 API 前，先閱讀已安裝的型別和最新官方文件。
+   拖曳、滑動與抽屜物理效果請載入 [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md)；它負責追蹤、
+   放開速度、阻力、捲動協調與重新抓取的連續性。
 4. 優先顯式指定 `transform`/`opacity` 過渡。從當前值重新設定目標；
    退場完成前保留狀態，並處理打斷和解除安裝清理。錨定介面從觸發點縮放；居中對話方塊保持居中。
 5. 複用token。新增token及元件起始值參見 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/animate/REFERENCE.md)；
@@ -51,6 +55,10 @@ type: skill
    用 `(hover: hover) and (pointer: fine)` 限定懸停效果。
 7. 在真實入口測試進入/退出、快速反轉、重複觸發、鍵盤、減少動態效果和觸控路徑。
    記錄實際觀察，以及仍需裝置驗證的部分。
+
+多個元素回應同一事件時，閱讀[編排](https://github.com/malinskibeniamin/skills/blob/main/animate/REFERENCE.md#choreography)：
+決定哪些保持靜止，讓關聯部分一起執行，只為有意義的相依關係排序。保持互動立即可用；
+防止過期的非同步接續重新啟動已取消的序列。
 
 ## 審查與規劃 [#review-and-planning]
 

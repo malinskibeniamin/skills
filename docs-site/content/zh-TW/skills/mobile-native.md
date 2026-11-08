@@ -1,10 +1,17 @@
 ---
-description: "修復手機網頁的檢視區、觸控、安全區域、鍵盤、滾動和 PWA 瀏覽器介面問題。用於手機特有的網頁行為，不用於 React Native 或 Swift。"
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["mobile native"]}
-sidebar: {"label":"/mobile-native"}
-title: "/mobile-native"
-type: "skill"
+description: 修復手機網頁的檢視區、觸控、安全區域、鍵盤、滾動和 PWA 瀏覽器介面問題。用於手機特有的網頁行為，不用於 React Native 或 Swift。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - mobile native
+sidebar:
+  label: /mobile-native
+title: /mobile-native
+type: skill
 ---
 ![「/mobile-native」技能示意圖](/diagrams/skills/mobile-native.svg)
 
@@ -16,7 +23,7 @@ type: "skill"
 改編自 Emil Kowalski；參見[來源](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md)。
 審查請求保持只讀；修復遵循專案 TDD 和交付檢查。
 
-## 診斷與範圍
+## 診斷與範圍 [#diagnose-and-scope]
 
 確認報告中的手機/瀏覽器、版面配置、輸入路徑、鍵盤/PWA 模式和受支援裝置。
 先復現，再修改預設值。使用能力查詢而不是 user-agent 嗅探；觸控和滑鼠可同時存在。
@@ -38,7 +45,10 @@ type: "skill"
 鍵盤、手勢、過度滾動和 PWA 細節參見 [PLATFORM.md](https://github.com/malinskibeniamin/skills/blob/main/mobile-native/PLATFORM.md)。
 使用可選 viewport/meta 功能前，先檢查當前瀏覽器支援情況。
 
-## 保留功能
+自訂拖曳、滑動、抽屜追蹤、放開物理效果或取消行為請載入
+[gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md)；本技能仍負責瀏覽器與檢視區問題。
+
+## 保留功能 [#preserve-function]
 
 - 保留 `width=device-width, initial-scale=1`、雙指縮放和大字號。
   不要設定 `user-scalable=no`，也不要用 `maximum-scale=1` 限制縮放。
@@ -51,7 +61,7 @@ type: "skill"
 - 保留複製/選擇、連結上下文選單、焦點環和語義控制元件角色。
   監聽器保持被動，除非有範圍明確的取消需求。
 
-## 驗證
+## 驗證 [#verify]
 
 重放觸控與鍵盤路徑、雙指縮放/200% 文字、豎屏/橫屏、開啟鍵盤、位址列展開/收起、
 巢狀滾動及支援的亮色/暗色/PWA 模式。瀏覽器模擬只驗證版面配置；記錄哪些行為已在真機確認。
