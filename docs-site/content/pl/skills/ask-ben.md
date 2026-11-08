@@ -67,6 +67,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/golang` | Pisanie kodu Go zgodnie z konwencjami inżynierskimi opartymi na dowodach. |
 | `/grilling` | Rygorystyczne sprawdzanie planów, decyzji i pomysłów. |
 | `/handoff` | Przygotowywanie zwięzłego przekazania sesji innemu agentowi. |
+| `/hill-climb` | Doskonalenie określonego wyniku poprzez ograniczone pętle oceny. |
 | `/hook-audit` | Audytowanie skuteczności, opóźnień i rozbieżności hooków. |
 | `/implement-spec` | Implementacja całej specyfikacji na jednej gałęzi integracyjnej. |
 | `/improve-animations` | Audytuj zachowany ruch i planuj ulepszenia według priorytetów. |

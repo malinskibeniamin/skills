@@ -49,6 +49,8 @@ type: skill
 
 加载[变更证据路由](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md)及相关负责技能。评估可信风险；仅在视觉对比有用或明确要求时于编辑前捕获基线。复用现有测试、辅助工具和有效证据。
 
+依据固定评估反复优化时，加载 [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md)。
+
 [Figma/图片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 操作 [#act]

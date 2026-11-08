@@ -137,6 +137,12 @@ disposition. Deduplicate by root cause; prove fixed or rejected dispositions and
 retain unresolved objections. Use the existing [finding contract](../agents/references/findings-schema.md)
 for structured reports, not a second scoring schema. Agreement is not proof.
 
+For an explicitly requested [hill climb](../hill-climb/SKILL.md), that skill owns candidate
+selection and the round budget; council/sol-loop supplies review within it, not a nested
+retry loop. Keep the rubric and reference artifacts stable. Independent evaluation briefs
+omit target ratings and previous scores, but retain constraints, checks and open findings.
+Scores remain advisory; retain this contract's evidence and authorization requirements.
+
 Classify by credible consequence, reachability and recovery, not frequency or diff
 size alone. A demonstrated authorization failure or irreversible loss remains
 serious on an uncommon path; in upstream terminology it is a blocker or should,

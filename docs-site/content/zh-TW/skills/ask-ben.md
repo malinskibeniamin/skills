@@ -67,6 +67,7 @@ type: skill
 | `/golang` | 依循有實證支持的工程慣例撰寫 Go。 |
 | `/grilling` | 對計畫、決策與構想進行壓力測試。 |
 | `/handoff` | 準備精簡的工作階段交接資料，供另一個代理程式使用。 |
+| `/hill-climb` | 透過有界評估循環改善明確的目標。 |
 | `/hook-audit` | 稽核掛鉤的成效、延遲與偏移。 |
 | `/implement-spec` | 在一個整合分支上實作完整規格。 |
 | `/improve-animations` | 稽核保留的動效，按優先順序規劃改善。 |

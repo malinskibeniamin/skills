@@ -56,6 +56,7 @@ type: skill
 - `/improve plan <description>`：略過廣泛稽核；進行足以撰寫單一計畫的調查。
 - `/improve review-plan <file>`：評析並完善現有計畫。
 - `/improve execute <plan>`：將計畫交給目前的單一負責人，並遵循 `/development-lifecycle`。僅在明確委派或使用 `/swarm` 後才可使用 `/efficient-frontier` 工作分流；絕不合併。
+- 評估或視覺比較搜尋：[hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md)。
 - `/improve reconcile`：驗證 DONE 計畫、更新已偏離現況的 TODO、解除待辦事項的阻礙或將其退場。
 - 僅在明確要求時新增 `--issues`；接著使用 `gh issue create` 發布計畫。
 
