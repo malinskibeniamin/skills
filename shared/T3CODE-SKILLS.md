@@ -39,6 +39,9 @@ as well as executable assets. Include every skill-local reference and helper, re
 executable modes, and pin the source revision plus file digests. Generated discovery
 is output, not an editing surface. Preserve local adaptations outside the snapshot.
 Use the target's existing import/check commands; change no runtime hooks by default.
+When its importer supports source verification, compare the snapshot's complete inventory,
+bytes and modes with the recorded commit in a trusted separate upstream checkout.
+A local digest check alone proves consistency with the lock, not with upstream.
 
 ## test-development
 

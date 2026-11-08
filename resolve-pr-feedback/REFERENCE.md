@@ -4,7 +4,9 @@
 
 Read outside-diff findings and expanded review bodies, not only inline threads or a bot's
 latest summary. Record the reviewed SHA and paused/skipped coverage: "no new findings" on an
-older build does not review the current head. Outdated lines do not prove a finding was fixed.
+older build does not review the current head. Assess every unresolved finding against the
+current source, including comments from before the latest push; timestamp alone cannot
+drop a finding. Outdated lines do not prove a finding was fixed.
 Keep code disposition, hosted resolution, and reviewer freshness distinct; verify each
 against the current candidate before claiming completeness.
 

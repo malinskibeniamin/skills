@@ -4,6 +4,7 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -27,7 +28,8 @@ METADATA = {
 
 
 def git(source, *args):
-    return subprocess.check_output(["git", "-C", str(source), *args])
+    return subprocess.check_output(["git", "-C", str(source), *args],
+                                   env={**os.environ, "GIT_NO_LAZY_FETCH": "1"})
 
 
 def inventory(root):
@@ -81,16 +83,16 @@ def managed_paths(repo):
             raise ValueError(f"Managed path must not be a symlink: {name}")
 
 
-def check(repo):
+def check(repo, source=None):
     managed_paths(repo)
     lock = json.loads((repo / "vendor/tstack.lock.json").read_text())
     if lock["repository"] != REPOSITORY or not re.fullmatch(r"[0-9a-f]{40}", lock["revision"]):
         raise ValueError("Invalid upstream provenance")
-    source = repo / "vendor/tstack"
-    files = inventory(source)
+    snapshot = repo / "vendor/tstack"
+    files = inventory(snapshot)
     if files != lock["files"]:
         raise ValueError("Snapshot bytes, executable modes or inventory drifted")
-    skills = discover({p: ((source / p).read_bytes(), r["mode"]) for p, r in files.items()})
+    skills = discover({p: ((snapshot / p).read_bytes(), r["mode"]) for p, r in files.items()})
     if skills != lock["skills"]:
         raise ValueError("Skill metadata drifted")
     expected = {f'{s["name"]}/SKILL.md': {"sha256": hashlib.sha256(adapter(s).encode()).hexdigest(), "mode": 0o644}
@@ -101,12 +103,18 @@ def check(repo):
     registered = [p for p in entries if p.startswith("./tstack-skills/") or Path(p).name in METADATA]
     if sorted(registered) != sorted(s["registration"] for s in skills):
         raise ValueError("Each tstack skill must have exactly one host owner")
+    if source is not None:
+        committed = read_payload(source, lock["revision"])
+        expected_source = {p: {"sha256": hashlib.sha256(data).hexdigest(), "mode": mode}
+                           for p, (data, mode) in committed.items()}
+        if files != expected_source:
+            raise ValueError("Snapshot does not match committed source at locked revision")
+        print(f'OK: committed source matches pin {lock["revision"]}')
     print(f'OK: 9 skills, 8 adapters; {len(files)} files verified (pin {lock["revision"]})')
     return lock
 
 
-def install(repo, source, revision):
-    managed_paths(repo)
+def read_payload(source, revision):
     if not re.fullmatch(r"[0-9a-f]{40}", revision):
         raise ValueError("Revision must be a full lowercase commit SHA")
     if git(source, "rev-parse", f"{revision}^{{commit}}").decode().strip() != revision:
@@ -123,6 +131,12 @@ def install(repo, source, revision):
         if PurePosixPath(path).is_absolute() or ".." in PurePosixPath(path).parts or kind != "blob" or mode not in ("100644", "100755"):
             raise ValueError(f"Unsafe upstream entry: {path}")
         payload[path] = (git(source, "cat-file", "blob", oid), int(mode[-3:], 8))
+    return payload
+
+
+def install(repo, source, revision):
+    managed_paths(repo)
+    payload = read_payload(source, revision)
     skills = discover(payload)
     destination = repo / "vendor/tstack"
     adapters = repo / "tstack-skills"
@@ -160,9 +174,8 @@ def install(repo, source, revision):
         (directory / "SKILL.md").write_text(adapter(skill))
         (directory / "SKILL.md").chmod(0o644)
     lock_path.write_text(json.dumps(lock, indent=2) + "\n")
-    registrations = retained + [s["registration"] for s in skills if s["name"] != "full-send"]
-    if manifest["skills"] != registrations:
-        manifest["skills"] = registrations
+    if not previous:
+        manifest["skills"] = retained + [s["registration"] for s in skills if s["name"] != "full-send"]
         manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     check(repo)
 
@@ -170,14 +183,14 @@ def install(repo, source, revision):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--source", type=Path, help="separate upstream Git checkout")
+    parser.add_argument("--source", type=Path, help="separate upstream Git checkout; with --check, verify the locked commit")
     parser.add_argument("--revision", help="reviewed immutable commit SHA")
     parser.add_argument("--check", action="store_true", help="verify local snapshot without writing or networking")
     args = parser.parse_args()
     if args.check:
-        if args.source or args.revision:
-            parser.error("--check reads local state; omit --source and --revision")
-        check(args.repo_root.resolve())
+        if args.revision:
+            parser.error("--check uses the locked revision; omit --revision")
+        check(args.repo_root.resolve(), args.source.resolve() if args.source else None)
     else:
         if not args.source or not args.revision:
             parser.error("refresh requires --source and --revision")

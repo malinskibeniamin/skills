@@ -27,6 +27,7 @@ python3 scripts/vendor-tstack.py \
 bash scripts/generate-skill-catalog.sh
 bash scripts/generate-hook-configs.sh
 python3 scripts/vendor-tstack.py --check
+python3 scripts/vendor-tstack.py --check --source /path/to/tstack
 bash evals/run.sh tstack-vendored-skills
 bash evals/run.sh packaging-integrity
 bun run lint:fix
@@ -34,7 +35,13 @@ bun run type:check
 ```
 
 A repeated import at the same pin must be byte- and mode-identical. The importer
-owns `vendor/tstack`, its lock, eight `tstack-skills` adapters and their Claude
+preserves existing registration order and manifest formatting. Verify the locked
+revision directly against committed source with `--check --source`; it ignores
+source HEAD and dirty files, makes no writes and does not fetch. Without `--source`,
+checks establish local lock consistency only. Hydrate incomplete upstream clones
+before import or verification; missing objects fail rather than fetching on demand.
+Resolve a trusted upstream checkout before making an upstream-integrity claim.
+The importer owns `vendor/tstack`, its lock, eight `tstack-skills` adapters and their Claude
 registrations. Catalog generation owns Codex proxies/metadata and router discovery;
 hook-config generation owns derived manifest counts. Keep host composition and
 this notice outside the immutable snapshot.
