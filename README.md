@@ -581,7 +581,7 @@ host adapter is registered; no browser, runtime dependency or connector is insta
 
 `/cli-for-agents` adds Cursor's guidance for non-interactive, composable CLIs through a host-safe adapter. [Pinned sources, licenses, selection, and refresh](shared/CURSOR-SKILLS-CREDITS.md) cover the Cursor recheck; provider-specific integrations and duplicate workflows remain unregistered.
 
-The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **61 skills** from pstack **0.15.36** (58 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`ae5650febf4320793844c12c4adaa937f417f8da`](https://github.com/cursor/plugins/tree/ae5650febf4320793844c12c4adaa937f417f8da/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json). This refresh advances the monorepo pin; pstack's source tree and version are unchanged.
+The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **61 skills** from pstack **0.15.36** (58 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`6b0300214a09fd6029cfb7077043125758cd1fd2`](https://github.com/cursor/plugins/tree/6b0300214a09fd6029cfb7077043125758cd1fd2/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json). This refresh advances the monorepo pin; pstack's source tree and version are unchanged.
 
 The packaged stack includes `/poteto-statechart` and `/poteto-ketchup-video`, including statechart scripts and fixtures. Both remain explicit-only; importing them runs no verifier, renderer, setup or installer.
 
@@ -598,6 +598,15 @@ bash scripts/generate-skill-catalog.sh
 bunx biome format --write .claude-plugin/plugin.json
 python3 scripts/vendor-poteto.py --check-routing
 ```
+
+Refreshes retain surviving registration positions alongside other vendor groups, remove
+retired adapters and insert new registrations after the existing Poteto entries. A no-op
+refresh causes no registration churn. The routing check validates section targets as well
+as file paths and source coverage; it does not prove instruction adherence. Native diagnosis
+and resilience reviews apply pstack's premise-reset and partial-write recovery guidance.
+
+After editing native owners, run their scoped evals, `bash evals/run.sh token-budget`,
+and `bun run docs:translate:check`; skill text budgets and localized pages are separate gates.
 
 The command discovers every skill recursively, copies the complete source tree unchanged, records file hashes and executable permissions, and generates namespaced adapters and Claude registrations. The catalog generator then derives Codex proxies and router entries from that inventory. Vendored Cursor runtime code is not reformatted or checked against this repository's toolchain.
 

@@ -8,6 +8,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 
 REPOSITORY = "https://github.com/cursor/plugins"
@@ -223,6 +224,30 @@ def check(repo, *, allow_legacy_descriptions=False):
     print(f'OK: {len(skills)} Poteto skills; {len(files)} upstream files match {lock["revision"]}')
 
 
+def section_anchors(path):
+    """Collect the harness's ATX section anchors outside fenced examples."""
+    anchors = set()
+    fence = None
+    for line in path.read_text().splitlines():
+        if fence:
+            if re.fullmatch(rf" {{0,3}}{re.escape(fence[0])}{{{len(fence)},}}\s*", line):
+                fence = None
+            continue
+        opening = re.match(r"^ {0,3}(`{3,}|~{3,})", line)
+        if opening:
+            fence = opening[1]
+            continue
+        heading = re.match(r"^ {0,3}#{1,6}\s+(.+?)(?:\s+#+)?$", line)
+        if heading:
+            slug = re.sub(r"[^\w -]", "", heading[1].lower()).replace(" ", "-")
+            anchor, suffix = slug, 0
+            while anchor in anchors:
+                suffix += 1
+                anchor = f"{slug}-{suffix}"
+            anchors.add(anchor)
+    return anchors
+
+
 def check_routing(repo):
     """Validate the published instruction graph, not model adherence to it."""
     native = repo / "shared/POTETO-NATIVE.md"
@@ -238,11 +263,14 @@ def check_routing(repo):
         links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", body)
         paths = set()
         for link in links:
-            if "://" in link or link.startswith("#"):
+            if "://" in link:
                 continue
-            path = (native.parent / link.split("#", 1)[0]).resolve()
+            target, _, fragment = link.partition("#")
+            path = (native.parent / target).resolve() if target else native
             if not path.is_relative_to(repo) or not path.is_file():
                 raise ValueError(f"Broken Poteto reference: {link}")
+            if fragment and unquote(fragment) not in section_anchors(path):
+                raise ValueError(f"Broken Poteto section: {link}")
             paths.add(path)
         sources = paths & expected
         if not sources:
@@ -308,9 +336,23 @@ def install(repo, source, revision):
     lock = {"repository": REPOSITORY, "subdirectory": "pstack", "revision": revision,
             "version": version, "skills": skills, "files": files}
     lock_path.write_text(json.dumps(lock, indent=2, ensure_ascii=False) + "\n")
-    manifest["skills"] = [entry for entry in manifest["skills"] if not entry.startswith("./poteto-skills/")]
-    manifest["skills"].extend(registration(skill) for skill in skills)
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    pending = {registration(skill) for skill in skills}
+    registrations = []
+    insertion = None
+    for entry in manifest["skills"]:
+        if not entry.startswith("./poteto-skills/"):
+            registrations.append(entry)
+            continue
+        if entry in pending:
+            registrations.append(entry)
+            pending.remove(entry)
+        insertion = len(registrations)
+    if insertion is None:
+        insertion = len(registrations)
+    registrations[insertion:insertion] = [registration(skill) for skill in skills if registration(skill) in pending]
+    if registrations != manifest["skills"]:
+        manifest["skills"] = registrations
+        manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     check(repo)
 
 

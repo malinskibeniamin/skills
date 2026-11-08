@@ -9,6 +9,7 @@ From the repository root:
 
 ```sh
 bun install --frozen-lockfile
+bun run docs:translate:check
 bun run docs:check
 bun run docs:build
 bun run docs:audit

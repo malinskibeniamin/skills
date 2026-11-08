@@ -131,6 +131,33 @@ class PotetoSyncTest(unittest.TestCase):
         self.install()
         self.assertEqual(self.sync("--check").returncode, 0)
 
+    def test_refresh_keeps_registration_positions_across_other_vendor_groups(self):
+        self.install()
+        path = self.repo / ".claude-plugin/plugin.json"
+        manifest = json.loads(path.read_text())
+        manifest["skills"].insert(2, "./matt-skills/matt-tdd/")
+        manifest["skills"].append("./t3code-skills/vendored-assets/")
+        path.write_text(json.dumps(manifest, indent=4) + "\n")
+        before = path.read_bytes()
+        self.install()
+        self.assertEqual(path.read_bytes(), before, "No-op imports must not move registrations")
+
+        (self.source / "skills/tdd/SKILL.md").unlink()
+        self.write_source(
+            "skills/why/SKILL.md",
+            "---\nname: why\ndescription: Explain a recorded design decision.\n---\nBody\n",
+        )
+        self.install()
+        self.assertEqual(json.loads(path.read_text())["skills"], [
+            "./tdd/", "./poteto-skills/poteto-setup-benny/", "./matt-skills/matt-tdd/",
+            "./poteto-skills/poteto-mode/", "./poteto-skills/poteto-why/",
+            "./t3code-skills/vendored-assets/",
+        ])
+        self.assertFalse((self.repo / "poteto-skills/poteto-tdd").exists())
+        before = path.read_bytes()
+        self.install()
+        self.assertEqual(path.read_bytes(), before)
+
     def test_adapter_metadata_is_bounded_without_rewriting_upstream(self):
         source = self.write_source(
             "skills/tdd/SKILL.md",
@@ -182,6 +209,46 @@ class PotetoSyncTest(unittest.TestCase):
         result = self.sync("--check-routing")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Broken Poteto reference", result.stderr)
+
+    def test_native_routing_checks_section_targets_not_only_files(self):
+        self.install()
+        native = self.repo / "shared/POTETO-NATIVE.md"
+        native.parent.mkdir()
+        guide = self.repo / "shared/recovery.md"
+        guide.write_text("# Recovery\n\n## Retry safely\n\nReconcile observed state.\n")
+        sources = ", ".join(
+            f"[{skill['name']}](../vendor/pstack/{skill['source']})"
+            for skill in json.loads((self.repo / "vendor/pstack.lock.json").read_text())["skills"]
+        )
+        guidance = (
+            "# Native Poteto composition\n\n## Verification\n\n"
+            "Owner: [TDD](../tdd/SKILL.md).\n\n"
+            "See [this branch](#verification).\n\n"
+            "Read [recovery](recovery.md#retry-safely).\n\n"
+            f"Sources: {sources}.\n"
+        )
+        native.write_text(guidance)
+        (self.repo / "tdd/SKILL.md").write_text(
+            "Read [verification](../shared/POTETO-NATIVE.md#verification).\n"
+        )
+        self.assertEqual(self.sync("--check-routing").returncode, 0)
+        native.write_text(guidance.replace("#retry-safely", "#missing-section"))
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Broken Poteto section: recovery.md#missing-section", result.stderr)
+
+        native.write_text(guidance.replace(
+            "[this branch](#verification)", "[this branch](#missing-local-section)"
+        ))
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Broken Poteto section: #missing-local-section", result.stderr)
+
+        native.write_text(guidance)
+        guide.write_text("# Recovery\n\n```md\n## Retry safely\n```\n")
+        result = self.sync("--check-routing")
+        self.assertNotEqual(result.returncode, 0, "A fenced example is not a navigable heading")
+        self.assertIn("Broken Poteto section", result.stderr)
 
     def test_refresh_includes_measurement_and_correction_skills(self):
         additions = ["benchmark-checklist", "correct", "principle-explain-the-number"]
