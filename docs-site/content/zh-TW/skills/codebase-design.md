@@ -27,6 +27,8 @@ type: skill
 
 模組應減少呼叫端必須掌握的知識與協調成本，同時保留必要行為。
 
+變更匯入邊或處理循環相依／barrel 檔案診斷時，請使用[以相依圖為依據的檢查迴圈](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels)。
+
 ## 詞彙表 [#glossary]
 
 請精確使用：

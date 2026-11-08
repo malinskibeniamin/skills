@@ -71,6 +71,38 @@ run_content_eval "$SCRIPT" "components/ui" "hook auto-detects components/ui"
 run_content_eval "$SCRIPT" "hook_(block|stop_block|stop_finding)|decision.*block|exit 2|stop-findings" "hook blocks on unfixable errors"
 run_content_eval "$SCRIPT" "hook_session_changed_files" "hook uses session-scoped file detection"
 
+# Instruction routing only; this does not measure agents' lint-repair behavior.
+if python3 - "$REPO_ROOT" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+repo = Path(sys.argv[1]).resolve()
+reference = repo / "shared/check-loop.md"
+routes = (
+    "development-lifecycle/SKILL.md",
+    "frontend-invariants/SKILL.md",
+    "codebase-design/SKILL.md",
+    "frontend-starter-kit/references/biome/README.md",
+)
+for source in routes:
+    page = repo / source
+    links = {
+        (page.parent / target.split("#", 1)[0]).resolve()
+        for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", page.read_text())
+        if ":" not in target and not target.startswith("#")
+    }
+    assert reference.is_file() and reference in links, f"Check-loop guidance unreachable from {source}"
+print("  PASS  authoring, architecture and Biome routes reach shared check-loop guidance")
+PY
+then
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  shared check-loop guidance routing"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: shared check-loop guidance routing"
+fi
+
 # ── Stop hook behavioral tests ──────────────────────────────────
 
 # biome-autofix.sh should exit 0 when no JS/TS files changed (clean repo)

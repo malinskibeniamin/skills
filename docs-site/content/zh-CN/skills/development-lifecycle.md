@@ -57,6 +57,8 @@ type: skill
 
 每完成一批逻辑完整的编辑，先运行限定范围的格式化或自动修复及 lint，再运行相关的类型检查和测试。只有文件内容和检查覆盖范围完全相同时，才可复用已完成的钩子结果。检查自动修复的差异；修复失败并重新运行。当按文件限定范围不可靠时，保留整个项目的类型检查。
 
+更改导入边或处理循环依赖／barrel 文件诊断时，请使用[基于依赖图的检查循环](https://github.com/malinskibeniamin/skills/blob/main/shared/check-loop.md#import-cycles-and-barrels)。
+
 ### 验证 [#verify]
 
 交回每个实现回合前，针对受影响范围运行仓库要求的格式化、lint、类型、测试、构建和静态检查门禁；内循环的局部检查绝不替代必需的最终门禁。对重要的可运行行为加载 [dogfood](https://github.com/malinskibeniamin/skills/blob/main/dogfood/SKILL.md)；验证其实际入口以及一个可信的失败或恢复路径。审查目标、约束和可信风险：检查通过并不证明构建了正确的东西。失败成为下一步操作；修复并重复。单独报告无关的基线失败，绝不将其描述为全部通过。
