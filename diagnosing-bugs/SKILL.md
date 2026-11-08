@@ -3,7 +3,7 @@ name: diagnosing-bugs
 description: Diagnosis loop for hard bugs and performance regressions. Use when asked to diagnose or debug, or when a hard bug needs a reproducible feedback loop.
 ---
 
-When investigating a concrete defect or failed repair, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#review-and-diagnosis).
+For defects or failed repairs, read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
 Skip a phase only with reason. Use `GLOSSARY.md` (follow `GLOSSARY-MAP.md` when present) and ADRs; for third-party, API, or version drift, Call the Skill tool with "read-the-damn-docs" before ranking hypotheses.
 Other hosts: [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
@@ -40,7 +40,7 @@ For nondeterministic bugs, raise the reproduction rate: repeat under controlled 
 Without a loop, stop, list attempts, and request the missing environment, redacted artifact, or safe temporary instrumentation permission.
 
 ### Completion criterion: a tight loop that goes red
-Phase 1 ends only when you can name one command already run at least once, with redacted invocation and output, that is:
+Name one command already run at least once, with redacted invocation and output:
 
 - **Red-capable:** drives the actual path and asserts the user's exact symptom.
 - **Deterministic:** returns the same verdict, or a pinned high reproduction rate.
@@ -69,6 +69,7 @@ Discard claims without a testable prediction.
 
 ## Phase 4 -- Instrument
 Map each probe to one prediction. Change one variable at a time.
+Two repairs sharing a premise fail the same gate: return to Phase 3; run Poteto's premise probe before retrying.
 
 1. Prefer debugger/REPL. React: [inspection](../shared/react-devtools.md).
 2. Log only boundaries that distinguish hypotheses.
@@ -89,7 +90,7 @@ exists, record that architecture gap. Otherwise:
 4. Call the Skill tool with "dogfood" for the identical user journey, then re-run the original unminimised Phase 1 loop.
 
 ## Phase 6 -- Cleanup
-Complete every item before declaring the diagnosis done:
+Before declaring done:
 
 - `/dogfood` confirms the exact user reproduction no longer fails; the original loop passes.
 - The regression test passes, or the missing seam is documented.

@@ -1,13 +1,21 @@
 ---
-title: /resilience-review
 description: >-
   Przeprowadź uporządkowany według ryzyka przegląd Murphy’ego, gdy wiarygodna
   awaria może spowodować utratę danych, naruszenie bezpieczeństwa lub
   prywatności, nieodwracalne działanie, złamanie kontraktów albo prawdopodobną
   sytuację bez wyjścia dla użytkownika.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - resilience review
 sidebar:
   label: /resilience-review
+title: /resilience-review
+type: skill
 ---
 ![Diagram umiejętności /resilience-review](/diagrams/skills/resilience-review.svg)
 
@@ -17,7 +25,7 @@ Przy zmianach interfejsów, typów lub współdzielonego stanu przeczytaj [adapt
 
 Przegląd Murphy’ego pod kątem wiarygodnych ryzyk, a nie wyczerpujące wyszukiwanie przypadków brzegowych.
 
-## Najpierw dowody
+## Najpierw dowody [#evidence-first]
 
 Ryzyko jest wiarygodne, gdy potwierdza je granica zaufania, nieodwracalny skutek,
 określony kontrakt, zaobserwowany incydent, potwierdzona skala lub prawdopodobna ścieżka użytkownika.
@@ -30,7 +38,7 @@ wyraźnie poprosi o agentów lub wywoła `/swarm`.
 - **Czas:** zduplikowane lub wykonane w niewłaściwej kolejności zadania, które mogą uszkodzić dane lub wprowadzić w błąd.
 - **System:** awaria zależności, która narusza wymagany kontrakt.
 - **Stan:** niemożliwy stan, do którego prowadzi prawdopodobna ścieżka.
-- **Odzyskiwanie:** zwykły użytkownik może utknąć lub otrzymać fałszywe potwierdzenie sukcesu.
+- **Odzyskiwanie:** zwykły użytkownik może utknąć lub otrzymać fałszywe potwierdzenie sukcesu; w przypadku zapisów, które można ponawiać, sprawdź ponowne uruchomienie i wznowienie po częściowym zapisie zgodnie z wczytanymi wytycznymi Poteto dotyczącymi odzyskiwania.
 
 Dla każdego wiarygodnego problemu podaj dowody, warunek wyzwalający, oczekiwane zachowanie, najmniejsze
 zabezpieczenie i najmniejszy test publicznego kontraktu. Brak dowodów oznacza brak problemu.
@@ -42,7 +50,7 @@ obserwowalności.
 Użyj `/read-the-damn-docs`, gdy zachowanie zewnętrzne określa ryzyko. Potwierdź rzeczywiste
 usterki za pomocą `/diagnosing-bugs`, a następnie dodaj jeden niezaliczony test regresji. Użyj
 `/visual-review` tylko dla widocznego dla klienta procesu odzyskiwania.
-## Wynik
+## Wynik [#output]
 ```md
 ## Resilience review
 Risk surface:

@@ -8,7 +8,7 @@ requests it. Preserve the selected model, endpoint, read-only scope and permissi
 boundaries; no section grants delegation, setup, tool installation or background work.
 
 The [lock](../vendor/pstack.lock.json) owns the current revision. Verify complete
-source coverage and reciprocal owner links with
+source coverage, section targets and reciprocal owner links with
 `python3 scripts/vendor-poteto.py --check-routing`. This checks instruction wiring,
 not whether a model followed it. Reuse guidance already loaded; skip unrelated sections.
 
@@ -42,8 +42,11 @@ When interfaces, types or shared state change, sketch caller success and failure
 implementation. Put domain rules in the owning data shape, parse external data at the
 seam, and trust validated internal types. Prefer deletion and fewer layers over a new
 wrapper. Migrate internal callers before deleting the old API; preserve required public
-compatibility. Isolate independent writers before introducing locks. For retries and
-partial failures, derive the next action from observed state and prove reruns converge.
+compatibility. Isolate independent writers before introducing locks. For retryable writes,
+derive the next action from observed state; probe a second run and recovery after a
+meaningful partial write. Leftover locks, claimed jobs and temporary files need a stale-state
+test that remains valid wherever the prior run stopped; their presence alone proves neither
+liveness nor completion. Verify reconciliation preserves completed effects without duplicates.
 Use the [curated structural probe](POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)
 on the relevant invariant. Preserve useful rationale and external constraints in comments;
 encode recurring enforceable rules instead of blindly deleting their explanation.
@@ -116,9 +119,11 @@ the real interface. Execute the check when safe and available; distinguish sourc
 findings from unexecuted hypotheses under the review owner's evidence rules. Deduplicate
 root causes and retain exact commands/results. Review stays read-only; fixes need author
 scope. Debug from the first incorrect transition rather than adding symptom guards.
-After two failed repairs sharing a premise, write that premise down and test it before
-another repair. Adversarial axes run inline unless delegation was explicitly requested;
-do not import upstream's automatic worktrees, reviewer panel or agents.
+After two failed repairs sharing a premise, write it down and predict an observation that
+would differ if it were false. Run that probe before another repair; compare which cases
+fail, not only failure size. Follow the result back to the cause rather than adding cleanup
+that repeatedly compensates for it. Adversarial axes run inline unless delegation was
+explicitly requested; do not import upstream's automatic worktrees, reviewer panel or agents.
 
 Sources: [interrogate](../vendor/pstack/skills/interrogate/SKILL.md),
 [root causes](../vendor/pstack/skills/principle-fix-root-causes/SKILL.md),

@@ -116,6 +116,7 @@ jest niedostępny, kontynuuj zgodnie z kolejnością opartą na dowodach.
 
 ## Faza 4 -- Dodaj instrumentację
 Każda sonda musi odpowiadać konkretnej prognozie z fazy 3. **Zmieniaj jedną zmienną naraz.**
+Gdy dwie poprawki oparte na tej samej przesłance nie przejdą tej samej bramki, wróć do fazy 3; przed kolejną próbą uruchom sondę rozróżniającą hipotezy zgodnie z wczytanymi wytycznymi Poteto.
 
 1. **Inspekcja w debuggerze / REPL**, jeśli środowisko ją obsługuje. Jeden punkt przerwania może zastąpić dziesięć logów.
    Przy hipotezach dotyczących stanu, właścicieli komponentów lub kosztu renderowania w React przeczytaj opcjonalną ścieżkę [inspekcji React w czasie działania](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md); przed użyciem sprawdź dostępne możliwości.
