@@ -8,9 +8,12 @@ import sys
 
 repo = pathlib.Path(sys.argv[1]).resolve()
 routes = {
-    "shared/change-evidence.md": ("mobile-native", "break-ui", "ask-sonner", "remove-animations", "improve-animations"),
-    "visual-review/REFERENCE.md": ("animate", "animation-vocabulary", "mobile-native", "ask-sonner"),
-    "prototype/UI.md": ("animate", "break-ui", "mobile-native"),
+    "shared/change-evidence.md": ("mobile-native", "break-ui", "ask-sonner", "remove-animations", "improve-animations", "gestures"),
+    "visual-review/REFERENCE.md": ("animate", "animation-vocabulary", "mobile-native", "ask-sonner", "gestures"),
+    "prototype/UI.md": ("animate", "break-ui", "mobile-native", "gestures"),
+    "animate/SKILL.md": ("gestures",),
+    "mobile-native/SKILL.md": ("gestures",),
+    "ask-sonner/SKILL.md": ("gestures",),
     "ux-performance/OPTIMIZATION.md": ("animation-performance",),
 }
 missing = []

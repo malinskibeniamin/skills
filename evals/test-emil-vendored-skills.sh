@@ -10,7 +10,7 @@ import sys
 repo = pathlib.Path(sys.argv[1]).resolve()
 selected = (
     "animate", "remove-animations", "improve-animations", "animation-performance", "animation-vocabulary",
-    "mobile-native", "break-ui", "ask-sonner",
+    "mobile-native", "break-ui", "ask-sonner", "gestures",
 )
 registered = json.loads((repo / ".claude-plugin/plugin.json").read_text())["skills"]
 catalog = (repo / "ask-ben/SKILL-CATALOG.md").read_text()
@@ -82,7 +82,7 @@ with tempfile.TemporaryDirectory(prefix="emil-refresh-test-") as temporary:
     (source / "skills/remove-animations/SKILL.md").write_text("dirty working tree is not a reviewed input")
     target = root / "target"
     target.mkdir()
-    for name in ("animate", "remove-animations", "improve-animations", "animation-performance", "animation-vocabulary", "mobile-native", "break-ui", "ask-sonner"):
+    for name in ("animate", "remove-animations", "improve-animations", "animation-performance", "animation-vocabulary", "mobile-native", "break-ui", "ask-sonner", "gestures"):
         (target / name).mkdir()
     args = ("--repo-root", target, "--source", source, "--revision", revision)
     run(*args)

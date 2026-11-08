@@ -1,10 +1,19 @@
 ---
-description: "设置、设计或排查 Sonner React 通知：Toaster 位置、promise/loading 生命周期、重复消息、主题、portal 和自定义内容。"
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["ask sonner"]}
-sidebar: {"label":"/ask-sonner"}
-title: "/ask-sonner"
-type: "skill"
+description: >-
+  设置、设计或排查 Sonner React 通知：Toaster 位置、promise/loading 生命周期、重复消息、主题、portal
+  和自定义内容。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ask sonner
+sidebar:
+  label: /ask-sonner
+title: /ask-sonner
+type: skill
 ---
 ![“/ask-sonner”技能示意图](/diagrams/skills/ask-sonner.svg)
 
@@ -15,7 +24,7 @@ type: "skill"
 使用版本相关的属性或返回值前，先阅读已安装类型和最新[官方文档](https://sonner.emilkowal.ski)；
 这里是指导，不是冻结的 API 规范。
 
-## 集成
+## 集成 [#integration]
 
 - 复用项目的 Toaster 封装，通常位于 `@/components/ui/`。在稳定的应用根节点挂载一次，
   放在会裁剪或建立堆叠上下文的祖先之外。额外的 Toaster 需要受支持且明确的定向机制；
@@ -28,7 +37,7 @@ type: "skill"
 - 重要的失败/恢复状态既要内联持久显示，也可用临时通知。
   加载提示、乐观启动或被吞掉的拒绝均不代表成功。
 
-## 诊断
+## 诊断 [#diagnosis]
 
 | 症状 | 修改前检查 |
 |---|---|
@@ -40,8 +49,9 @@ type: "skill"
 | 样式丢失 | 已安装包的 CSS 导出和框架样式表生命周期 |
 | 类名未生效 | 层叠/图层和封装配置；在所属位置限制覆盖范围 |
 | 手机重叠 | 受支持的偏移属性、安全区域、键盘和摆放位置 |
+| 滑动跳变、忽略快速甩动或无法重新抓取 | 现有 Sonner 手势驱动与 CSS 覆盖；加载 [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md)，不要增加竞争的拖拽处理器 |
 
-## 样式与验证
+## 样式与验证 [#styling-and-verification]
 
 先用封装的变体/令牌；在源头修正选择器优先级，不要散布 `!important`。
 只有已安装 API 支持所需行为时，才考虑 `unstyled` 或 `toast.custom`。

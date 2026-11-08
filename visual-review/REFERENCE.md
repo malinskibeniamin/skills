@@ -178,6 +178,8 @@ observed state and existing tokens, then replay the affected interaction.
 ## Component craft heuristics
 
 Toast, Drawer, Hold-to-delete, and clip-path components need interaction review, not screenshot review.
+For direct-manipulation defects, load [gestures](../gestures/SKILL.md): verify tracking,
+signed release velocity, re-grab/cancel, scroll arbitration and non-drag alternatives.
 For Sonner-specific setup, styling or lifecycle problems, load
 [ask-sonner](../ask-sonner/SKILL.md) and keep the installed wrapper/API as owner;
 other toast libraries do not trigger a Sonner migration. For mobile-web viewport,

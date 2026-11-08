@@ -1,10 +1,19 @@
 ---
-description: "Konfiguruj, stylizuj lub diagnozuj powiadomienia Sonner w React: położenie Toastera, cykle promise/loading, duplikaty, motyw, portale i własną treść."
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["ask sonner"]}
-sidebar: {"label":"/ask-sonner"}
-title: "/ask-sonner"
-type: "skill"
+description: >-
+  Konfiguruj, stylizuj lub diagnozuj powiadomienia Sonner w React: położenie
+  Toastera, cykle promise/loading, duplikaty, motyw, portale i własną treść.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ask sonner
+sidebar:
+  label: /ask-sonner
+title: /ask-sonner
+type: skill
 ---
 ![Diagram umiejętności /ask-sonner](/diagrams/skills/ask-sonner.svg)
 
@@ -15,7 +24,7 @@ Adaptacja umiejętności Emila Kowalskiego; [pochodzenie](https://github.com/mal
 Przed użyciem właściwości lub wartości zwracanych zależnych od wersji przeczytaj zainstalowane typy
 oraz aktualną [oficjalną dokumentację](https://sonner.emilkowal.ski); to wskazówki, nie zamrożona specyfikacja API.
 
-## Integracja
+## Integracja [#integration]
 
 - Użyj nakładki Toaster projektu, zwykle w `@/components/ui/`. Zamontuj ją raz w stabilnym
   korzeniu aplikacji, poza przodkami przycinającymi lub tworzącymi kontekst warstw. Dodatkowe Toastery
@@ -28,7 +37,7 @@ oraz aktualną [oficjalną dokumentację](https://sonner.emilkowal.ski); to wska
 - Ważny stan błędu i odzyskiwania pokazuj również stale w interfejsie, nie tylko w chwilowym powiadomieniu.
   Ładowanie, optymistyczny start i połknięte odrzucenie nie oznaczają sukcesu.
 
-## Diagnoza
+## Diagnoza [#diagnosis]
 
 | Objaw | Co sprawdzić przed zmianą |
 |---|---|
@@ -40,8 +49,9 @@ oraz aktualną [oficjalną dokumentację](https://sonner.emilkowal.ski); to wska
 | Brak stylów | Eksport CSS zainstalowanego pakietu i cykl arkuszy stylów frameworka |
 | Ignorowane klasy | Kaskada/warstwy i konfiguracja nakładki; poprawka w jej właścicielu |
 | Nakładanie na telefonie | Obsługiwane przesunięcia, bezpieczny obszar, klawiatura i położenie |
+| Przesunięcie skacze, ignoruje szybkie ruchy lub nie daje się ponownie chwycić | Istniejący mechanizm gestów Sonnera i nadpisania CSS; wczytaj [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md) bez dodawania konkurencyjnej obsługi przeciągania |
 
-## Styl i weryfikacja
+## Styl i weryfikacja [#styling-and-verification]
 
 Najpierw używaj wariantów/tokenów nakładki; poprawiaj specyficzność u źródła zamiast rozrzucać
 `!important`. Rozważ `unstyled` lub `toast.custom` tylko wtedy, gdy zainstalowane API obsługuje

@@ -49,11 +49,56 @@ Scaling changes children and does not reserve layout space. It cannot replace ev
 height/width change; keep actual flow correct and measure the smallest necessary layout animation.
 Never replace a dialog, drawer, or toast primitive with a visual-only recipe.
 
-For gesture work, preserve velocity across retargeting, arbitrate scroll versus drag,
-capture/release pointers, handle `pointercancel` and multiple pointers, and clean up listeners.
-Use the installed library's spring model; do not mix physical and duration-based parameters.
-Upstream's duration-based starting point is `duration: 0.5, bounce: 0.2` where supported.
-Avoid bounce on dense data surfaces; test on the target device.
+For direct manipulation, load [gestures](../gestures/SKILL.md) for track/release physics,
+scroll arbitration, cancellation and re-grab continuity. Keep those rules with that owner.
+
+## Choreography
+
+When several elements respond to one event, first reduce the moving parts. Assign the
+lead, support, decoration and static roles; not every role needs an animation. A moving
+panel usually carries already-visible content instead of adding a second child entrance.
+
+| Relationship | Choose when | Watch for |
+|---|---|---|
+| Together | One visual object or state change | Container, content and overlay should not drift into separate timing families |
+| Overlap | Order explains reading hierarchy or cause while both can coexist | Cap the total timeline, not just the delay per item |
+| Sequence | Concurrent rich views obscure meaning or visibly collide | The wait must explain the change, not gate an unrelated action |
+| Carry | A parent can supply the shared spatial move | Nested transforms, clipping and layout ownership |
+
+- Default frequent menus, command palettes, keyboard-triggered UI and returning data
+  to together/instant. For an occasional stagger, 30-80 ms gaps are candidates; bound
+  the **last delay plus duration**, so a long list cannot produce a waiting queue.
+  Vary hierarchy where useful; uniform timing is not inherently a defect.
+- Keep secondary accents tied to the cause, impact or settle of the lead, not arbitrary
+  timers. Repeated activation should not replay an unnecessary buildup. Exit related
+  items together rather than reverse-staggering the user's departure.
+- For a removing item whose siblings should close the gap immediately, consider
+  Motion's `popLayout`. Its exiting node leaves flow; preserve the containing block,
+  measurements and ref requirements for custom children. Avoid absolute positioning
+  as a blanket fix for intentional flow or focus behavior.
+- A view swap can crossfade concurrently; Motion's default `sync` already runs enter
+  and exit together. `popLayout` additionally changes flow. Use `wait` only for a
+  meaningful sequential swap (it supports one child), not as a default for all morphs.
+  Read the installed API and [AnimatePresence docs](https://motion.dev/docs/react-animate-presence).
+- Keep stable keys and direction data available to exiting children. Navigation direction
+  follows the product's spatial model and RTL, not a hardcoded forward-equals-left rule.
+  Size-dependent timing can be clamped; a few finite transitions can use explicit tokens.
+  Measure previous bounds outside render; do not mutate refs in `useMemo` to track history.
+- Prefer declarative CSS/variants for simple relationships; use imperative sequences only
+  for genuine cross-event dependencies. Stop old controls **before** starting new work.
+  Give each run an identity/cancellation signal; after every await, check it is still
+  current before chaining, committing state or starting an idle loop. Stopping animation
+  alone does not invalidate its async continuation. Clean up timers/controls on unmount.
+- Keep one semantic interactive view. Any decorative crossfade duplicate is inert,
+  hidden from assistive technology and stripped of duplicate IDs/active controls.
+  Never gate a valid click on a decorative hover buildup finishing.
+- Reduced motion collapses spatial movement and delays; appear together or change
+  instantly. Meaningful explanatory steps can remain discrete without animated travel.
+
+For a complex sequence, a small inline timeline (element, role, start, duration,
+relationship) can expose waits before implementation. Skip empty roles and output quotas.
+Replay rapid Next/Back, close/reopen, content resize and unmount mid-sequence; inspect
+normal speed first, then scrub only the moments needed to resolve perceived continuity.
 
 ## Rendering cautions
 

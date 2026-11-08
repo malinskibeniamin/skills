@@ -297,6 +297,16 @@ if result is not None: print(json.dumps(result))
         self.assertEqual(result['status'],'changed')
         self.assertEqual((self.repo/'vendor/emil/resource.txt').read_text(),'Required source resource')
 
+    def test_emil_refresh_can_retain_the_gestures_license_without_replacing_its_owner(self):
+        self.write(self.repo, 'gestures/SKILL.md', 'Local gesture adaptation\n')
+        helper = self.repo/'scripts/vendor-emil.py'
+        helper.write_text(helper.read_text()+"\nif not a.check:\n    (a.repo_root/'gestures/LICENSE').write_text('Retained Emil license\\n')\n")
+        self.commit(self.repo)
+        result = self.result('--apply')
+        self.assertEqual(next(s for s in result['sources'] if s['name'] == 'emil')['status'], 'updated')
+        self.assertEqual((self.repo/'gestures/LICENSE').read_text(), 'Retained Emil license\n')
+        self.assertEqual((self.repo/'gestures/SKILL.md').read_text(), 'Local gesture adaptation\n')
+
     def test_explicit_lease_preserves_a_concurrent_push_after_ownership_check(self):
         env=self.transport()
         result=self.hosted(env)

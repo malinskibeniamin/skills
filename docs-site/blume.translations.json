@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "c30bd3d92cd68933",
-      "zh-CN": "c30bd3d92cd68933",
-      "zh-TW": "c30bd3d92cd68933"
+      "pl": "e7f55f6d41d64838",
+      "zh-CN": "e7f55f6d41d64838",
+      "zh-TW": "e7f55f6d41d64838"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -36,9 +36,9 @@
       "zh-TW": "5e5505d3572147b3"
     },
     "content/skills/animate.md": {
-      "pl": "e16ae6ec0d10a650",
-      "zh-CN": "e16ae6ec0d10a650",
-      "zh-TW": "e16ae6ec0d10a650"
+      "pl": "5969970001d018d0",
+      "zh-CN": "5969970001d018d0",
+      "zh-TW": "5969970001d018d0"
     },
     "content/skills/animation-performance.md": {
       "pl": "a523cd133d56c12b",
@@ -51,14 +51,14 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "87193efe64897006",
-      "zh-CN": "87193efe64897006",
-      "zh-TW": "87193efe64897006"
+      "pl": "e512873c7cbba0da",
+      "zh-CN": "e512873c7cbba0da",
+      "zh-TW": "e512873c7cbba0da"
     },
     "content/skills/ask-sonner.md": {
-      "pl": "c112e65dfef02e57",
-      "zh-CN": "c112e65dfef02e57",
-      "zh-TW": "c112e65dfef02e57"
+      "pl": "9241334c08338154",
+      "zh-CN": "9241334c08338154",
+      "zh-TW": "9241334c08338154"
     },
     "content/skills/bazel.md": {
       "pl": "70e8cc5e9da8e617",
@@ -200,6 +200,11 @@
       "zh-CN": "25a26500b45b2be1",
       "zh-TW": "25a26500b45b2be1"
     },
+    "content/skills/gestures.md": {
+      "pl": "0e247ea84d48fd77",
+      "zh-CN": "0e247ea84d48fd77",
+      "zh-TW": "0e247ea84d48fd77"
+    },
     "content/skills/go.md": {
       "pl": "f9baa22ee4adb6ea",
       "zh-CN": "f9baa22ee4adb6ea",
@@ -281,9 +286,9 @@
       "zh-TW": "80bd709e07ad337d"
     },
     "content/skills/mobile-native.md": {
-      "pl": "84f4a828887b2c1b",
-      "zh-CN": "84f4a828887b2c1b",
-      "zh-TW": "84f4a828887b2c1b"
+      "pl": "a54eed56ec477c59",
+      "zh-CN": "a54eed56ec477c59",
+      "zh-TW": "a54eed56ec477c59"
     },
     "content/skills/plan-arbiter.md": {
       "pl": "9c83755af0bff887",

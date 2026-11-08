@@ -1,10 +1,20 @@
 ---
-description: "Naprawiaj mobilne problemy WWW z viewportem, dotykiem, bezpiecznym obszarem, klawiaturą, przewijaniem i interfejsem przeglądarki/PWA. Dotyczy zachowań WWW na telefonie, nie React Native ani Swift."
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["mobile native"]}
-sidebar: {"label":"/mobile-native"}
-title: "/mobile-native"
-type: "skill"
+description: >-
+  Naprawiaj mobilne problemy WWW z viewportem, dotykiem, bezpiecznym obszarem,
+  klawiaturą, przewijaniem i interfejsem przeglądarki/PWA. Dotyczy zachowań WWW
+  na telefonie, nie React Native ani Swift.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - mobile native
+sidebar:
+  label: /mobile-native
+title: /mobile-native
+type: skill
 ---
 ![Diagram umiejętności /mobile-native](/diagrams/skills/mobile-native.svg)
 
@@ -16,7 +26,7 @@ Usuwaj tarcie przeglądarki/platformy bez wyłączania dostępności. Adaptacja 
 Emila Kowalskiego; [pochodzenie](https://github.com/malinskibeniamin/skills/blob/main/shared/EMIL-SKILLS-CREDITS.md).
 Przegląd pozostaje tylko do odczytu; poprawki przechodzą przez TDD i bramki dostarczania projektu.
 
-## Diagnoza i zakres
+## Diagnoza i zakres [#diagnose-and-scope]
 
 Ustal zgłoszony telefon/przeglądarkę, układ, sposób wprowadzania danych, tryb klawiatury/PWA i obsługiwane
 urządzenia. Odtwórz problem przed zmianą domyślnych ustawień. Używaj zapytań o możliwości zamiast rozpoznawania
@@ -38,7 +48,10 @@ user-agenta; dotyk i mysz mogą współistnieć. Istniejące elementy UI i token
 Przeczytaj [PLATFORM.md](https://github.com/malinskibeniamin/skills/blob/main/mobile-native/PLATFORM.md) o klawiaturze, gestach, overscroll i PWA.
 Przed opcjonalnymi funkcjami viewport/meta sprawdź bieżące wsparcie przeglądarek.
 
-## Zachowaj funkcje
+Dla własnego śledzenia przeciągania, przesuwania i arkuszy, fizyki puszczenia lub anulowania wczytaj
+[gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md); ten skill nadal odpowiada za przeglądarkę i viewport.
+
+## Zachowaj funkcje [#preserve-function]
 
 - Zachowaj `width=device-width, initial-scale=1`, pinch zoom i duży tekst.
   Nie ustawiaj `user-scalable=no` ani limitu `maximum-scale=1`.
@@ -51,7 +64,7 @@ Przed opcjonalnymi funkcjami viewport/meta sprawdź bieżące wsparcie przegląd
 - Zachowaj kopiowanie/zaznaczanie, menu kontekstowe linków, pierścienie fokusu i semantyczne role kontrolek.
   Nasłuchiwanie pozostaje pasywne, chyba że wąsko uzasadnione anulowanie wymaga inaczej.
 
-## Weryfikacja
+## Weryfikacja [#verify]
 
 Odtwórz ścieżki dotyku i klawiatury, pinch zoom/tekst 200%, pion/poziom, otwartą klawiaturę,
 rozwijanie/zwijanie paska adresu, zagnieżdżone przewijanie i obsługiwane tryby jasny/ciemny/PWA.

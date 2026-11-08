@@ -1,8 +1,8 @@
 ---
 description: >-
-  Twórz, oceniaj lub planuj celowy ruch w interfejsie WWW. Używaj do przejść,
-  krzywych przyspieszenia, sprężyn, gestów, audytów ruchu i szukania okazji do
-  animacji; nie do produkcji wideo ani aplikacji natywnych.
+  Twórz, oceniaj lub planuj celowy ruch w interfejsie WWW: przejścia, krzywe,
+  sprężyny, choreografię, kaskady, zmiany widoków i audyty ruchu. Bezpośrednią
+  manipulację obsługuje gestures; nie dotyczy wideo ani aplikacji natywnych.
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -46,6 +46,8 @@ nie z animacji UI. `/demo` nadal wymaga wywołania przez użytkownika; ten odno�
    `@starting-style` dla obsługiwanych przejść wejścia; WAAPI do sterowania imperatywnego;
    zainstalowaną bibliotekę sprężyn/ruchu do gestów, układu lub cykli wyjścia.
    Przed użyciem API biblioteki przeczytaj zainstalowane typy i aktualną oficjalną dokumentację.
+   Dla fizyki przeciągania, przesuwania i arkuszy wczytaj [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md); ten skill odpowiada za śledzenie,
+   prędkość puszczenia, opór, rozstrzyganie przewijania i ciągłość ponownego chwytania.
 4. Preferuj jawne przejścia `transform`/`opacity`. Zmieniaj cel od bieżącej wartości;
    utrzymuj stan wyjścia do zakończenia i sprzątaj po przerwaniu lub odmontowaniu.
    Skaluj zakotwiczone powierzchnie względem ich wyzwalacza; wyśrodkowane dialogi pozostają wyśrodkowane.
@@ -56,6 +58,11 @@ nie z animacji UI. `/demo` nadal wymaga wywołania przez użytkownika; ten odno�
    znaczenie bez animacji. Ogranicz hover przez `(hover: hover) and (pointer: fine)`.
 7. W rzeczywistym punkcie wejścia sprawdź wejście/wyjście, szybkie odwrócenie, wielokrotne uruchomienie,
    klawiaturę, ograniczony ruch i dotyk. Zapisz obserwacje i to, co wymaga urządzenia.
+
+Gdy wiele elementów reaguje na jedno zdarzenie, przeczytaj
+[choreografię](https://github.com/malinskibeniamin/skills/blob/main/animate/REFERENCE.md#choreography): wybierz, co pozostaje nieruchome, uruchamiaj powiązane części razem
+i ustawiaj sekwencję tylko dla znaczących zależności. Interakcja pozostaje natychmiastowa;
+zabezpiecz anulowaną sekwencję przed ponownym uruchomieniem przez nieaktualne kontynuacje asynchroniczne.
 
 ## Przegląd i planowanie [#review-and-planning]
 

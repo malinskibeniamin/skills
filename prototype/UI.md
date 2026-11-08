@@ -55,7 +55,8 @@ Draft each variant. Hold each one to:
 Variants must be **structurally different** -- different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
 
 Load only guidance needed by the prototype question: [animate](../animate/SKILL.md)
-for motion variants, [break-ui](../break-ui/SKILL.md) for realistic
+for motion variants, [gestures](../gestures/SKILL.md) for drag/swipe/sheet variants
+with track/release and cancellation behavior, [break-ui](../break-ui/SKILL.md) for realistic
 data/layout stress, and [mobile-native](../mobile-native/SKILL.md) for phone-specific
 web behavior. Reuse project primitives and tokens; do not add motion or a new library
 just to make variants different. Keep the retention policy in [SKILL.md](SKILL.md).

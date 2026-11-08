@@ -61,6 +61,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/frontend-invariants` | Ponadczasowe zasady frontendowe, które przetrwają zmiany stosu technologicznego. |
 | `/frontend-starter-kit` | Inicjalizowanie standardowego zestawu narzędzi frontendowych i bramek jakości. |
 | `/full-send` | Preset autora do autoryzowanego scalenia. |
+| `/gestures` | Twórz bezpośrednie, uwzględniające prędkość i przerywalne gesty w aplikacjach WWW. |
 | `/go` | Preset autora do zweryfikowanej gotowości PR. |
 | `/golang-review` | Przeglądanie zmian w Go zgodnie z konwencjami opartymi na dowodach. |
 | `/golang` | Pisanie kodu Go zgodnie z konwencjami inżynierskimi opartymi na dowodach. |

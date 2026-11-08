@@ -61,6 +61,7 @@
     "./frontend-invariants/",
     "./frontend-starter-kit/",
     "./full-send/",
+    "./gestures/",
     "./go/",
     "./golang-review/",
     "./golang/",

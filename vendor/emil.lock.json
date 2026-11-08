@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "f1090bec277140d02ed202440185ad9d02ac1490",
+  "revision": "5206a950b715e0cabe7043ea0b2304332b91494e",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "66ad84c9c7b0788c0de803eb1ba44ba39de327c475e73781ddd620a040dca9a8",
+      "sha256": "356a21d2351566743a38d78f8388ef1768762f3724e1257137aee278ee04a9b2",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -58,12 +58,24 @@
       "sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
       "mode": 420
     },
+    "skills/choreograph/RECIPES.md": {
+      "sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
+      "mode": 420
+    },
+    "skills/choreograph/SKILL.md": {
+      "sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+      "mode": 420
+    },
     "skills/emil-design-eng/SKILL.md": {
       "sha256": "965cc3108047a1f68e504977ae7816c66115b202a32e7509c0b8305314839c54",
       "mode": 420
     },
     "skills/find-animation-opportunities/SKILL.md": {
       "sha256": "d52a377819b84a71930f0c822cfe2849f40301605a2d5c7eccbfa3b257700df2",
+      "mode": 420
+    },
+    "skills/gestures/SKILL.md": {
+      "sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
       "mode": 420
     },
     "skills/improve-animations/AUDIT.md": {
