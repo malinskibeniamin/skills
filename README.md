@@ -9,6 +9,10 @@ delegation, browser takeover, background wakeups, or unrequested shipping.
 
 ## Install
 
+**Multiple machines:** [revision-based Claude/Codex sync](docs/MACHINE-SYNC.md)
+provides one bootstrap, bundle-integrity checks, rollback, and opt-in macOS login/daily updates.
+Native hook trust and machine/project settings stay local.
+
 Run inside [Claude Code](https://docs.anthropic.com/en/docs/claude-code) session (start with `claude` in terminal):
 
 ```bash
