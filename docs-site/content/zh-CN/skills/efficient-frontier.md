@@ -42,6 +42,4 @@ type: skill
 当前的 `xhigh` 默认值是所有者的明确选择，不是基于基准测试的晋升。
 在未经请求的默认值变更前运行 `agent-evals/context-ablation/`：每次改变一个上下文组，保持任务和评分不变，只在质量相当的结果中选择更低成本。将胜出策略记录到 `config/model-routing.json`。
 
-仅在编写已授权的委派任务包时，读取 [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md)。
-
-[来源协调说明](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#selection)保留本地路由，而不采用上游重命名后的低成本模型编排器。
+[任务包和来源](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md): 仅用于已获授权的委派。

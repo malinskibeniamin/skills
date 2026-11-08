@@ -20,45 +20,26 @@ type: skill
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/agent-watchdog.excalidraw)
 
-Przeczytaj `references/builder-upstream.md`, gdy audyt jest złożony lub artefakt źródłowy jest niejednoznaczny.
+Przed audytem przeczytaj [protokół audytu](https://github.com/malinskibeniamin/skills/blob/main/agent-watchdog/references/audit.md); przy złożonym lub niejednoznacznym audycie przeczytaj `references/builder-upstream.md`.
+Korzystaj z autoryzowanych źródeł i rzeczywiście dostępnych narzędzi hosta. Prowadź analizę samodzielnie; dodatkowi agenci, monitorowanie, dostęp do produkcji i zapisy wymagają osobnej autoryzacji.
 
-Korzystaj wyłącznie z autoryzowanych źródeł i rzeczywiście dostępnych możliwości hosta. Prowadź analizę samodzielnie; dodatkowi agenci, monitorowanie, dostęp do produkcji i zapisy wymagają osobnej autoryzacji.
+## Tryby [#modes]
 
-## Tryby
-
-- **Tylko obserwacja**: monitoruj sesję, PR, gałąź, przebieg CI lub transkrypcję aż do osiągnięcia stanu końcowego. Nie wprowadzaj zmian.
-- **Audyt**: porównaj żądanie, transkrypcję, różnice, testy, CI, komentarze, zrzuty ekranu i końcowe deklaracje. Nie wprowadzaj zmian.
-- **Audyt i poprawki**: najpierw przeprowadź audyt, a następnie wprowadź niewielkie poprawki dotyczące wyraźnych, autoryzowanych braków.
-- **Porównanie**: porównaj wielu agentów lub wiele sesji pod kątem tego samego pierwotnego żądania.
-- **Przejęcie**: wyraźne żądanie przejęcia zablokowanej pracy; postępuj zgodnie z [references/takeover.md](https://github.com/malinskibeniamin/skills/blob/main/agent-watchdog/references/takeover.md), a następnie realizuj zadanie do żądanego punktu końcowego. Nie ogranicza się to do łatania poprzedniego podejścia.
+- **Tylko obserwacja:** monitoruj sesję, PR, gałąź, CI lub transkrypcję do stanu końcowego; nie wprowadzaj zmian.
+- **Audyt:** porównaj żądanie, dowody, diff, testy, CI, komentarze i deklaracje; nie wprowadzaj zmian.
+- **Audyt i poprawki:** przeprowadź audyt, a następnie wprowadź wąskie, autoryzowane poprawki.
+- **Porównanie:** oceniaj agentów lub sesje względem jednego żądania.
+- **Przejęcie:** wyraźne żądanie przejęcia zablokowanej pracy; postępuj zgodnie z [zasadami przejęcia](https://github.com/malinskibeniamin/skills/blob/main/agent-watchdog/references/takeover.md) do żądanego punktu końcowego, nie ograniczając się do poprzedniego podejścia.
 
 Jeśli uprawnienia do edycji są niejasne, domyślnie przeprowadź tylko audyt.
 
-## Przebieg pracy
+## Przebieg pracy [#workflow]
 
-W trybie przejęcia użyj jego dokumentu referencyjnego zamiast poniższych kroków audytu i niewielkich poprawek.
+Przy przejęciu użyj jego dokumentu referencyjnego; w pozostałych przypadkach:
 
-1. Zidentyfikuj każdy cel: identyfikator sesji, transkrypcję, adres URL wątku, PR, gałąź, commit, przebieg CI, zgłoszenie, link do Slacka lub wklejone podsumowanie.
-2. Odtwórz pierwotne żądanie i ograniczenia; w miarę możliwości sformułuj własne hipotezy przed przeczytaniem wniosków obserwowanego agenta.
-3. Samodzielnie zbadaj źródłowe dowody dotyczące tego samego problemu, a następnie porównaj je z diffem, kontrolami i deklaracjami agenta. Zaznacz wcześniejsze zapoznanie się z materiałem; taka analiza w tym samym kontekście nie jest niezależną recenzją ani przeglądem innej rodziny modeli.
-4. Sklasyfikuj każdy problem jako: `Gap`, `Bug`, `Verification miss`, `Scope drift` lub `No issue`.
-5. Jeśli masz uprawnienia, poprawiaj tylko wyraźne braki; nigdy nie cofaj niepowiązanych zmian ani nie przełączaj gałęzi bez wyraźnej prośby.
-6. Zgłoś dokładne dowody, różnice wymagające działania, nierozwiązane ryzyka i następne działanie. Przerywaj pracującemu agentowi tylko w sprawie błędu bieżącego kroku, poprawki lub blokady; pozostałe zweryfikowane braki zbierz na następny punkt kontrolny i nie powielaj uwag.
-
-Dla zakończonych worktree sprawdź oczekujące pliki i rzeczywisty zdalny HEAD zgodnie z [weryfikacją zdalnego dostarczenia](https://github.com/malinskibeniamin/skills/blob/main/shared/remote-completion.md). Tryby tylko do odczytu raportują braki; autoryzowane przejęcie obejmuje weryfikację, commit i push.
-
-[Źródła i odświeżanie](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md).
-
-## Wynik
-
-```md
-## Agent watchdog
-Target: <artifact>
-Mode: watch|audit|audit-and-fix|compare
-Contract: <what the user asked>
-Evidence checked: <files/commands/CI/comments>
-Findings:
-- <Gap|Bug|Verification miss|Scope drift|No issue>: <evidence and required action>
-Fixes made: <if any>
-Still open: <blockers or risks>
-```
+1. Ustal cel, pierwotne żądanie i ograniczenia; najpierw sformułuj własne hipotezy.
+2. Zbadaj źródłowe dowody; porównaj diff, kontrole i deklaracje agenta.
+3. Zaznacz wcześniejsze zapoznanie się z materiałem; analiza w tym samym kontekście nie jest niezależną recenzją ani przeglądem innej rodziny modeli.
+4. Klasyfikuj jako `Gap|Bug|Verification miss|Scope drift|No issue`.
+5. Naprawiaj tylko autoryzowane braki; nigdy nie cofaj niepowiązanych zmian ani nie przełączaj gałęzi bez wyraźnej prośby.
+6. Zgłoś dokładne dowody, różnice wymagające działania, ryzyka i następny krok; przy przekazywaniu uwag, zakończonych worktree i formacie wyniku stosuj protokół audytu.

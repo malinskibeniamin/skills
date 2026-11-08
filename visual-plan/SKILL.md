@@ -6,8 +6,8 @@ description: Create interactive Agent-Native visual plans with diagrams, file ma
 Translate upstream `npx @agent-native/core` to `bunx @agent-native/core`.
 
 Before edits, read `references/agent-native-plan.md` for contract, MCP, blocks, surfaces, comments, privacy, and quality.
-Apply [host compatibility](../shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)
-before upstream tool, delegation, publication, or installation recipes.
+Before upstream recipes, apply
+[host rules](../shared/BUILDER-SKILLS-CREDITS.md#host-compatibility).
 
 Load only when relevant: `references/connection.md` for connector/fallback; `references/local-files.md` private/offline; `references/wireframe.md` HTML/CSS; `references/canvas.md` prototype surface; `references/document-quality.md` standalone gates; `references/exemplar.md` structure.
 

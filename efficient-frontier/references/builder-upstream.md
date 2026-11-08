@@ -20,3 +20,8 @@ Useful stop conditions:
 
 Parallel lanes own distinct files or remain report-only. Return status, summary, changed
 files, commands, findings, residual risk, blockers, and next action.
+
+## Source reconciliation
+
+[Builder source selection](../../shared/BUILDER-SKILLS-CREDITS.md#selection) preserves
+local routing instead of upstream's renamed cheap-model orchestrator.

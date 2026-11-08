@@ -45,7 +45,4 @@ Pomiar hosta `/stay-within-limits` określa limit; w przeciwnym razie jest niezn
 Obecne ustawienia `xhigh` są jawnym wyborem właściciela, nie wynikiem awansu na podstawie benchmarków.
 Przed niezamówioną zmianą ustawień domyślnych uruchom `agent-evals/context-ablation/`: porównuj jedną grupę kontekstu naraz, zachowuj te same zadania i kryteria oceny oraz wybieraj niższy koszt tylko spośród wyników o równoważnej jakości. Zapisz zwycięską politykę w `config/model-routing.json`.
 
-Przeczytaj [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md) tylko podczas tworzenia
-zatwierdzonego pakietu delegacji.
-
-[Uzgodnienie źródeł](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#selection) zachowuje lokalne reguły routingu zamiast przemianowanego orkiestratora tanich modeli upstream.
+[Pakiet i źródła](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md): wyłącznie autoryzowane delegowanie.
