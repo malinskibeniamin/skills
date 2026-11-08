@@ -77,6 +77,10 @@ def main():
         b = p.chromium.launch(args=["--no-sandbox", "--font-render-hinting=none"])
         page = b.new_page(viewport={"width": 1200, "height": 1000}, device_scale_factor=scale)
         page.goto(src.as_uri())
+        # .scroller clips a canvas wider than the viewport
+        width = page.evaluate("document.querySelector('.canvas')?.offsetWidth ?? 0")
+        if width + 100 > 1200:
+            page.set_viewport_size({"width": width + 100, "height": 1000})
         page.wait_for_timeout(1000)  # let embedded fonts settle
         page.add_style_tag(content=SQUARE_CORNERS)
         if single:

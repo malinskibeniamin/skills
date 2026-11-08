@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/jakubkrehel/skills",
-  "revision": "592aedc44d7d5b3e29740984252902f3e5402a1c",
+  "revision": "60bf140e43c98b248e6594487384ec967e89d98a",
   "skills": [
     {
       "name": "better-accessibility",
@@ -371,7 +371,7 @@
       "mode": 420
     },
     "skills/state-machine/switcher.md": {
-      "sha256": "32f0f1c82362557bfc7f83554359883b0c3d931d578ec8a7a390529699973c6d",
+      "sha256": "d6603f2512bc544f86c2d585399791d7f0e6dde50c6b32ad795d899df55a4377",
       "mode": 420
     },
     "skills/teardown/SKILL.md": {
@@ -757,7 +757,7 @@
       "mode": 420
     },
     "skills/state-machine/switcher.md": {
-      "sha256": "32f0f1c82362557bfc7f83554359883b0c3d931d578ec8a7a390529699973c6d",
+      "sha256": "d6603f2512bc544f86c2d585399791d7f0e6dde50c6b32ad795d899df55a4377",
       "mode": 420
     },
     "skills/teardown/SKILL.md": {

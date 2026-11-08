@@ -57,7 +57,7 @@ unused clone destination, updating the lookup paths. Do not delete or reset them
    **Never read this generated reference whole.**
 3. `.repos/effect/migration/*.md`: load a topic guide when a mapping needs a
    structural rewrite, not just a rename.
-4. `.repos/effect/packages/*/src/`, including `unstable/`: confirm the replacement's
+4. `.repos/effect/packages/*/src/`: confirm the replacement's
    real signature before using it.
 5. `.repos/effect-v3`: escalation only for unclear old semantics.
 

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/caru-ini/stack-diagram",
-  "revision": "188f43b7c4f1725a0948feef8b94a199d07e6e0d",
+  "revision": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
   "files": {
     "LICENSE": {
       "sha256": "7b153fc3f5f1ccce2b9ac98a35301c666c025db85d6c44565e13304774d144a9",
@@ -11,7 +11,7 @@
       "mode": 420
     },
     "skills/stack-diagram/SKILL.md": {
-      "sha256": "d36ac9af42505898d7b5082699b4b3cf5a88eb13544f288916a628157b0f0d81",
+      "sha256": "991a4c80e942200441ad80f3e06440af0e33ab35b6ea20a0573d40c6adcd05a9",
       "mode": 420
     },
     "skills/stack-diagram/assets/fonts/Geist.woff2": {
@@ -55,11 +55,11 @@
       "mode": 420
     },
     "skills/stack-diagram/assets/template.html": {
-      "sha256": "2dfca0d37d585a2495112922018bd635e65eaa3b9187e4bb8e7671845adb36b9",
+      "sha256": "ea333400a25e58008e4ef98dd052a7a1de3271cea4f0a5ab2f2f3d3445fad02f",
       "mode": 420
     },
     "skills/stack-diagram/references/geometry.md": {
-      "sha256": "e4d4298577da1b4fea78b1b153589bc7ab77dc6c88b21bc074da8c63fb7aa71d",
+      "sha256": "0b823440933abb5c1c25dbd19f98e74bf3289e89b4adecb970c5e99c56e09f6e",
       "mode": 420
     },
     "skills/stack-diagram/references/tsx.md": {
@@ -71,11 +71,15 @@
       "mode": 420
     },
     "skills/stack-diagram/scripts/fetch_icons.py": {
-      "sha256": "86945599389af5943ac44e5fc70b49c676fa5d837692a8bbd4583c0dd6156c27",
+      "sha256": "d6abcda84a0ed16f8cc1ebd0075dcb06c502bec5c06e5748f2a4774d26c61370",
       "mode": 420
     },
     "skills/stack-diagram/scripts/render_png.py": {
-      "sha256": "b60b03b9937142c4bb842c4adedca786df45420b0236de2351fe3ed87d8a7db7",
+      "sha256": "588873e0441cf4e796a1f916e00f90975c23c952def4a9477f01ef8ebb0f206b",
+      "mode": 420
+    },
+    "skills/stack-diagram/scripts/share.py": {
+      "sha256": "a363482a18f6c0b2aab0b690cdb5bc02d6213c54fca158e1814082c5ba0bf4cc",
       "mode": 420
     }
   }

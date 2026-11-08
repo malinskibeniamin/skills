@@ -1,11 +1,19 @@
 ---
-title: /visual-plan
 description: >-
   使用圖表、檔案對應圖、附註程式碼與 UI 審查，建立互動式 Agent-Native 視覺計畫。適用於規劃非簡單的產品、UI、架構、資料、API
   或互相競爭的方案。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual plan
 sidebar:
   label: /visual-plan
+title: /visual-plan
+type: skill
 ---
 ![「/visual-plan」技能的圖表](/diagrams/skills/visual-plan.svg)
 
@@ -16,6 +24,8 @@ sidebar:
 ## 必要參考資料
 
 建立或更新視覺計畫前，請先閱讀 `references/agent-native-plan.md`。此文件定義完整的 Agent-Native 計畫契約、Plan MCP 用法、區塊目錄要求、視覺介面選擇、留言回饋迴圈、本機檔案隱私模式，以及文件品質規則。
+
+套用上游工具、委派、發布或安裝步驟前，先遵循[宿主相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)。
 
 僅在相關時閱讀以下文件：
 

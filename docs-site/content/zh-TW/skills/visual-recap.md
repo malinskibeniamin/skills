@@ -1,9 +1,17 @@
 ---
-title: /visual-recap
 description: 為 PR、分支、提交或差異建立互動式視覺摘要。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual recap
 sidebar:
   label: /visual-recap
+title: /visual-recap
+type: skill
 ---
 ![「/visual-recap」技能示意圖](/diagrams/skills/visual-recap.svg)
 
@@ -14,6 +22,8 @@ sidebar:
 ## 必要參考資料
 
 建立摘要前，請先閱讀 `references/agent-native-recap.md`。該文件定義了完整的視覺摘要建立規範、禁止行內嵌入規則、Plan MCP URL 規則、差異至區塊的對應方式、遮蔽處理、安全性可見度、僅限本機檔案的隱私模式，以及審查意見回饋迴圈。
+
+套用上游工具、委派、發布或安裝步驟前，先遵循[宿主相容規則](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)。
 
 僅在相關時閱讀以下文件：
 

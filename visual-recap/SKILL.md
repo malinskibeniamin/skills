@@ -7,6 +7,8 @@ disable-model-invocation: true
 Translate upstream `npx @agent-native/core` to `bunx @agent-native/core`.
 
 Before recap, read `references/agent-native-recap.md`; it owns create-visual-recap, never-inline, Plan MCP URL, diff blocks, redaction, security, local privacy, feedback.
+Apply [host compatibility](../shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)
+before upstream tool, delegation, publication, or installation recipes.
 
 Load only when needed: `references/connection.md` for connector/reconnect/fallback; `references/local-files.md` for local-only; `references/wireframe.md` for visible UI diffs.
 

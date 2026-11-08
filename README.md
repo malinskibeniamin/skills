@@ -124,7 +124,9 @@ harness neither starts REA nor installs native engines or changes client setting
 containers, orthogonal arrows, and light/dark themes. It produces self-contained
 HTML, PNG or React/TSX from the complete pinned
 [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram) skill. Python 3.9+
-and network access fetch logos; PNG verification also needs Playwright/Chromium.
+and network access fetch logos, including official cloud-product icons; PNG verification
+also needs Playwright/Chromium. Gallery publishing requires an explicit request and
+approval of the exact public payload; importing or rendering runs no gallery code.
 No dependencies install automatically. Use `/excalidraw-diagram` for hand-drawn
 editable diagrams. [Licenses and refresh](vendor/stack-diagram-NOTICE.md).
 
@@ -565,7 +567,7 @@ their historical filenames.
 
 Eight focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) are adapted locally: `/animate`, `/remove-animations`, `/improve-animations`, `/animation-performance`, `/animation-vocabulary`, `/mobile-native`, `/break-ui`, and `/ask-sonner`. Use `/remove-animations` -> `/improve-animations` -> `/animation-performance` to subtract unnecessary motion, plan improvements to what remains, then diagnose measured frame problems. `/animate` owns implementation, diff review and opportunity searches; existing design/prototype workflows remain owners. Complete upstream sources are pinned offline with a repeatable importer, not fetched at runtime. The fixed library picker and native Swift/Expo skills are not installed. [Selection, pinned sources, compatibility changes, and refresh steps](shared/EMIL-SKILLS-CREDITS.md).
 
-Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`).
+Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`). [Builder source selection and compatibility](shared/BUILDER-SKILLS-CREDITS.md) preserve local owners, model routing, permissions, and publication boundaries.
 
 `/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses
 its page tools; without a request it only opens the page. For building or auditing

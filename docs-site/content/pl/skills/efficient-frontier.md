@@ -1,12 +1,20 @@
 ---
-title: /efficient-frontier
 description: >-
   Stosuj routing modeli oparty na ewaluacjach i planuj budżet wyraźnie
   zatwierdzonych fal agentów bez odbierania właścicielowi prawa do podejmowania
   decyzji.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - efficient frontier
 sidebar:
   label: /efficient-frontier
+title: /efficient-frontier
+type: skill
 ---
 ![Diagram umiejętności /efficient-frontier](/diagrams/skills/efficient-frontier.svg)
 
@@ -28,14 +36,13 @@ Przed wyborem modelu przeczytaj [zasady wyboru narzędzi](https://github.com/mal
 
 Implementację prowadzi jeden właściciel; bez delegacji wykonuj ścieżki samodzielnie. Zatwierdzone ścieżki otrzymują ograniczony cel, dane wejściowe, wyłączenia, dowody i warunek zakończenia. Właściciel zachowuje odpowiedzialność za architekturę, priorytety, ryzyko, syntezę i akceptację.
 
-## Limity
+## Limity [#capacity]
 
 Pomiar hosta `/stay-within-limits` określa limit; w przeciwnym razie jest nieznany. Nigdy nie szacuj go na podstawie tokenów ani kosztu. Limit wyklucza ścieżki, nigdy nie obniża jakości.
 
-## Zatwierdzanie
+## Zatwierdzanie [#promotion]
 
 Obecne ustawienia `xhigh` są jawnym wyborem właściciela, nie wynikiem awansu na podstawie benchmarków.
 Przed niezamówioną zmianą ustawień domyślnych uruchom `agent-evals/context-ablation/`: porównuj jedną grupę kontekstu naraz, zachowuj te same zadania i kryteria oceny oraz wybieraj niższy koszt tylko spośród wyników o równoważnej jakości. Zapisz zwycięską politykę w `config/model-routing.json`.
 
-Przeczytaj [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md) tylko podczas tworzenia
-zatwierdzonego pakietu delegacji.
+[Pakiet i źródła](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md): wyłącznie autoryzowane delegowanie.

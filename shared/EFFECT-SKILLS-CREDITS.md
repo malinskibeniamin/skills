@@ -2,15 +2,15 @@
 
 `effect-ts` and `effect-v3-to-v4` are adapted from
 [Effect-TS/skills](https://github.com/Effect-TS/skills), pinned at
-`2309e6f27d9955b434c0e3f394b945c136e89fd2` (2026-08-27).
+`155c50c911f9c99c294ef8a4461981c5bbe6453e` (reviewed 2026-11-08).
 
 ## Upstream sources
 
-- [skills/effect-ts/SKILL.md](https://github.com/Effect-TS/skills/blob/2309e6f27d9955b434c0e3f394b945c136e89fd2/skills/effect-ts/SKILL.md)
+- [skills/effect-ts/SKILL.md](https://github.com/Effect-TS/skills/blob/155c50c911f9c99c294ef8a4461981c5bbe6453e/skills/effect-ts/SKILL.md)
   maps to `effect-ts/SKILL.md`.
-- [skills/effect-v3-to-v4/SKILL.md](https://github.com/Effect-TS/skills/blob/2309e6f27d9955b434c0e3f394b945c136e89fd2/skills/effect-v3-to-v4/SKILL.md)
+- [skills/effect-v3-to-v4/SKILL.md](https://github.com/Effect-TS/skills/blob/155c50c911f9c99c294ef8a4461981c5bbe6453e/skills/effect-v3-to-v4/SKILL.md)
   maps to `effect-v3-to-v4/SKILL.md` and `effect-v3-to-v4/REFERENCE.md`.
-- [LICENSE](https://github.com/Effect-TS/skills/blob/2309e6f27d9955b434c0e3f394b945c136e89fd2/LICENSE)
+- [LICENSE](https://github.com/Effect-TS/skills/blob/155c50c911f9c99c294ef8a4461981c5bbe6453e/LICENSE)
   is reproduced below for both skills.
 
 ## Local adaptations
@@ -23,6 +23,10 @@
   are preserved instead of automatically deleting stale directories.
 - Required project tests and quality gates remain completion requirements, unlike
   upstream's type-check-only done condition.
+
+The refresh targets stable Effect 4.x, replaces prerelease `effect/unstable/*`
+imports with GA paths, and retains upstream JSDoc stability caveats. No dependency
+is installed or upgraded by refreshing these instructions.
 
 ## Refresh
 

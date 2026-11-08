@@ -19,10 +19,10 @@ type: skill
 
 ## 安裝 Effect [#install-effect]
 
-使用儲存庫的套件管理器。對於新的 v4 設定，上游使用候選發行渠道：
+使用儲存庫的套件管理器。對於全新設定，上游以目前的穩定版本為目標：
 
 ```sh
-bun add effect@rc
+bun add effect@latest
 ```
 
 除非使用者要求升級，否則保留既有的 Effect 版本。對於 v3 到 v4 的升級，使用 `/effect-v3-to-v4`，而不是將其視為全新安裝。
@@ -30,7 +30,7 @@ bun add effect@rc
 在 monorepo 中，如需從 `node_modules/effect` 存取原始碼與代理指引，可在根目錄安裝 Effect 作為開發依賴：
 
 ```sh
-bun add -D effect@rc
+bun add -D effect@latest
 ```
 
 在匯入 Effect 的套件中保留執行時期依賴。加入下方指令前，確認 `node_modules/effect/AGENTS.md` 與 `node_modules/effect/src` 存在；若不存在，回報已安裝的版本與缺少的檔案。

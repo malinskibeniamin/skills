@@ -1,13 +1,21 @@
 ---
-title: /test-audit
 description: >-
   Oceniaj wartość testów. Używaj podczas przeglądów, przeszukiwania lub usuwania
   testów o niskiej wartości, powielających inne testy lub zależnych od
   implementacji oraz punktów dostępu w kodzie produkcyjnym istniejących
   wyłącznie na potrzeby testów, a także przy kwalifikowaniu nowych testów.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - test audit
 sidebar:
   label: /test-audit
+title: /test-audit
+type: skill
 ---
 ![Diagram umiejętności /test-audit](/diagrams/skills/test-audit.svg)
 
@@ -100,9 +108,10 @@ Preferuj zmniejszenie łącznej liczby wierszy kodu produkcyjnego. Nie dodawaj t
 1. Zatrzymaj procesy obserwujące zmiany i uruchamiające testy przed usunięciem lub przeniesieniem testów; ich wyniki podczas usuwania nie stanowią dowodu.
 2. Uruchom minimalny zestaw testów odpowiedzialnego komponentu i komponentów pokrewnych za pomocą ukierunkowanego polecenia repozytorium, takiego jak `bunx vitest run <path>` lub `go test ./<pkg>`.
 3. W przypadku usuniętych wyszukiwań w kodzie lub asercji dotyczących planu uruchom skrypt wykonywalny albo przebieg próbny odpowiadający za rzeczywisty kontrakt.
-4. Uruchom `bun run lint:fix`, `bun run type:check`, `git diff --check` oraz kontrolę zmienionych plików uruchamianą przez CI.
-5. Sprawdź `git diff --numstat`; raportuj kod produkcyjny i narzędzia osobno od testów i ich kodu pomocniczego.
-6. Po końcowych zmianach audytowych uruchom `/review`.
+4. Przed dostarczeniem partii usunięć uruchom skonfigurowane w repozytorium kontrole zależności, nieużywanych plików i eksportów we wszystkich wymaganych fazach. Usunięte testy mogą osierocić pliki pomocnicze, zależności i eksporty, których zwykłe CI dla PR nie wykrywa. Używaj istniejących poleceń; nie instaluj nowego analizatora tylko na potrzeby audytu i zgłaszaj brakujący zakres kontroli.
+5. Uruchom `bun run lint:fix`, `bun run type:check`, `git diff --check` oraz kontrolę zmienionych plików uruchamianą przez CI.
+6. Sprawdź `git diff --numstat`; raportuj kod produkcyjny i narzędzia osobno od testów i ich kodu pomocniczego.
+7. Po końcowych zmianach audytowych uruchom `/review`.
 
 ## Włączanie zmian i kontynuacja [#landing-and-continuation]
 

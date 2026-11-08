@@ -19,10 +19,10 @@ type: skill
 
 ## 安装 Effect [#install-effect]
 
-使用仓库的包管理器。对于新的 v4 配置，上游使用候选发布渠道：
+使用仓库的包管理器。对于全新配置，上游以当前稳定版本为目标：
 
 ```sh
-bun add effect@rc
+bun add effect@latest
 ```
 
 除非用户要求升级，否则保留已有的 Effect 版本。对于 v3 到 v4 的升级，使用 `/effect-v3-to-v4`，而不是将其视为全新安装。
@@ -30,7 +30,7 @@ bun add effect@rc
 在 monorepo 中，如需从 `node_modules/effect` 访问源码和智能体指南，可在根目录安装 Effect 作为开发依赖：
 
 ```sh
-bun add -D effect@rc
+bun add -D effect@latest
 ```
 
 在导入 Effect 的包中保留运行时依赖。添加下方指令前，确认 `node_modules/effect/AGENTS.md` 和 `node_modules/effect/src` 存在；若不存在，报告已安装的版本和缺失文件。

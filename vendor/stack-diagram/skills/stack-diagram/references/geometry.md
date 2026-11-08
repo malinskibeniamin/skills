@@ -45,7 +45,7 @@ Two layers of defense are built into the template — keep them:
 <text class="el a" x="227" y="142" text-anchor="middle">HTTPS</text>
 ```
 
-There is a single arrowhead marker, `#ar`. It fills with `context-stroke`, so it takes the color of whichever line uses it, in both themes — don't add per-color markers.
+The arrowhead marker is `#ar`. It fills with `context-stroke`, so it takes the color of whichever line uses it, in both themes — don't add per-color markers. AWS diagrams use `#open`, the same way.
 
 - Horizontal edge label: centered above the line, `y = lineY - 8`
 - Vertical edge label: right of the line, `x = lineX + 10`, vertically mid-segment

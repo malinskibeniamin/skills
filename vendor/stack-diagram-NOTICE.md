@@ -1,9 +1,9 @@
 # Stack-diagram source and refresh
 
 The complete skill from [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram)
-is pinned to [commit `188f43b7c4f1725a0948feef8b94a199d07e6e0d`](https://github.com/caru-ini/stack-diagram/tree/188f43b7c4f1725a0948feef8b94a199d07e6e0d).
-All 18 skill-local files plus the root LICENSE are copied byte-for-byte: entrypoint,
-references, three Python helpers, HTML template, generic pictograms and bundled fonts.
+is pinned to [commit `1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838`](https://github.com/caru-ini/stack-diagram/tree/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838).
+All 19 skill-local files plus the root LICENSE are copied byte-for-byte: entrypoint,
+references, four Python helpers, HTML template, generic pictograms and bundled fonts.
 Upstream promotional screenshots, README, workflow and Git configuration are excluded;
 none is needed by the skill. No logos are bundled or fetched during installation.
 
@@ -21,6 +21,15 @@ and the [adapter](../stack-diagram/SKILL.md) live outside the snapshot. Claude's
 manifest is the registration owner; the catalog generator derives Codex discovery.
 No hooks, installs, browsers, network calls or background work activate on import.
 
+The 2026-11-08 refresh adds official AWS, Google Cloud and Azure icon-package
+lookup, matching cloud-group styling, and wider-canvas PNG rendering. Cloud icon
+packages are fetched only during an explicitly scoped diagram task and stay
+outside the repository; the original font, skill and root licenses are unchanged.
+The new `share.py` gallery helper remains complete upstream source, not an enabled
+publication workflow. Host compatibility suppresses unsolicited gallery offers
+and requires an explicit request plus exact-content approval before any upload
+or identity disclosure. Importing or rendering a diagram executes no gallery code.
+
 ## Review and refresh
 
 Review the upstream commit diff, skill-local inventory, licenses, script behavior
@@ -30,7 +39,7 @@ and network sources before selecting a new full SHA. Then use a separate clone:
 git clone https://github.com/caru-ini/stack-diagram /tmp/stack-diagram-upstream
 python3 scripts/vendor-stack-diagram.py \
   --source /tmp/stack-diagram-upstream \
-  --revision 188f43b7c4f1725a0948feef8b94a199d07e6e0d
+  --revision 1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh stack-diagram-vendored-skills
 ```

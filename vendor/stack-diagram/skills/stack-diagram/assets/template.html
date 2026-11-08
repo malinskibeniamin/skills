@@ -32,7 +32,7 @@
   --font-body: "Hiragino Sans", "Yu Gothic UI", "Noto Sans CJK JP", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
-  --radius-card: 10px; --radius-tile: 8px;
+  --radius-card: 10px; --radius-tile: 12px;
   /* translucent veil behind node label text: matches paper on plain canvas, blends into
      group tints instead of punching an off-color rectangle through them */
   --color-veil: oklch(98.5% 0.004 250 / .78);
@@ -69,7 +69,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { overflow-x: clip; }
 body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); padding: var(--space-xl) var(--space-lg) var(--space-2xl); }
-.page { max-width: 1000px; margin: 0 auto; }
+.page { width: fit-content; max-width: 100%; margin: 0 auto; }
 
 .head { display:grid; grid-template-columns: 1fr auto; gap: var(--space-lg); align-items:end;
   padding-bottom: var(--space-md); border-bottom: 1px solid var(--color-rule-2); margin-bottom: var(--space-lg); }
@@ -97,15 +97,35 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 .g-label img { width: 14px; height: 14px; }
 /* group labels sit on the group's tint, not on a white tile: in the dark theme swap in the brand's own
    dark-theme logo (lt/dk pair), or give a mark with black parts a white plate */
-.g-label img.dk { display:none; }
-[data-theme="dark"] .g-label img.lt { display:none; }
-[data-theme="dark"] .g-label img.dk { display:block; }
+.g-label img.dk, .tile img.dk { display:none; }
+[data-theme="dark"] .g-label img.lt, [data-theme="dark"] .tile img.lt { display:none; }
+[data-theme="dark"] .g-label img.dk, [data-theme="dark"] .tile img.dk { display:block; }
 [data-theme="dark"] .g-label img.plate { background:#fff; border-radius:3px; padding:2px; width:18px; height:18px; }
 .group.ga { border:1.5px solid var(--color-g1); background: var(--color-g1-tint); }
 .group.ga-nested { border:1.5px dashed var(--color-g1-soft); }
 .group.gb { border:1.5px solid var(--color-accent-soft); background: var(--color-accent-tint); }
 .group.ga > .g-label, .group.ga-nested > .g-label { color: var(--color-g1-ink); }
 .group.gb > .g-label { color: var(--color-accent); }
+.group.aws { border:1.5px solid var(--color-ink); border-radius:0; }
+.group.aws > .g-label { top:-1.5px; left:-1.5px; gap:8px; color: var(--color-ink); }
+.group.aws > .g-label img { width:30px; height:30px; }
+.group.aws.az > .g-label { top:8px; left:12px; }
+.group.aws.region, .group.aws.az { border-color:#00A4A6; border-style:dashed; }
+.group.aws.vpc { border-color:#8C4FFF; }
+.group.aws.private { border-color:#00A4A6; }
+.group.aws.public { border-color:#7AA116; }
+.group.gcp { border:1.5px solid #4285F4; border-radius:6px; }
+.group.azure { border:1.5px solid #0078D4; border-radius:6px; }
+.group.gcp > .g-label, .group.azure > .g-label { gap:8px; color: var(--color-ink); }
+.group.gcp > .g-label img, .group.azure > .g-label img { width:20px; height:20px; }
+.group.gcp.region, .group.azure.region { border-color: var(--color-rule-2); background: var(--color-paper-2); }
+.group.gcp.vpc { border:1.5px dashed var(--color-ink-2); }
+.group.gcp.subnet { border:1px dashed var(--color-neutral); }
+.group.gcp.zone { border-color:#34A853; }
+.group.azure.rg { border:1.5px dashed #0096D7; }
+.group.azure.vnet { border:1.5px solid #A4CBFB; }
+.group.azure.subnet { border:1px solid #A4CBFB; }
+.group.azure.zone { border-color:#FFD965; }
 
 .node { position:absolute; width:132px; text-align:center; }
 .tile { width:60px; height:60px; margin:0 auto; border-radius: var(--radius-tile);
@@ -115,16 +135,20 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 .tile img { width:34px; height:34px; object-fit:contain; }
 .tile.wide img { width:44px; }                       /* wide-aspect logos */
 .tile.dark { background: var(--color-graphite); border-color: var(--color-graphite); }  /* white/light logos */
+.tile.bare { background:none; border:none; box-shadow:none; }
+.tile.bare img { width:60px; height:60px; }
+.tile.bare.res img { width:44px; height:44px; }
 .node .name { font-family: var(--font-display); font-weight:600; font-size:13px; margin-top: var(--space-sm); letter-spacing:0; }
 .node .role { font-family: var(--font-mono); font-size:9.5px; color: var(--color-muted); margin-top:2px; }
 /* veil behind label spans: crossing edges/grid fade behind text; translucent so it
    blends into group tints (a solid paper rectangle looks pasted-on inside tinted groups) */
 .node .name span, .node .role span { background: var(--color-veil); backdrop-filter: blur(1.5px);
-  padding: 0 var(--space-xs); border-radius: 3px; }
+  padding: 0 var(--space-xs); border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
 svg.edges { position:absolute; inset:0; width:1000px; height:540px; pointer-events:none; }
 .e  { stroke: var(--color-accent); stroke-width:1.6; fill:none; }   /* primary flow */
 .n  { stroke: var(--color-neutral); stroke-width:1.4; fill:none; }  /* internal */
+path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
 .dash { stroke-dasharray:4 5; }                                     /* dev / deploy */
 .el { font-family: var(--font-mono); font-size:10.5px; fill: var(--color-neutral);
   paint-order: stroke; stroke: var(--color-paper); stroke-width:4px; stroke-linejoin:round; }  /* halo */
@@ -163,6 +187,9 @@ svg.edges { position:absolute; inset:0; width:1000px; height:540px; pointer-even
          group-label icon with a dark variant (fetch_icons saved <name>_dark):
            <img class="lt" src="%%ICON_<name>%%" alt=""><img class="dk" src="%%ICON_<name>_dark%%" alt="">
          no dark variant but the mark has black parts: <img class="plate" ...>
+         AWS groups: "group aws" (AWS Cloud), or add region | az | vpc | private | public
+         Google Cloud groups: "group gcp", or add region | vpc | subnet | zone
+         Azure groups: "group azure", or add rg | region | vnet | subnet | zone
          geometry rules: references/geometry.md -->
     <div class="group ga" style="left:252px; top:60px; width:325px; height:210px;">
       <div class="g-label"><img src="%%ICON_vendor%%" alt="">Vendor Cloud</div>
@@ -174,10 +201,13 @@ svg.edges { position:absolute; inset:0; width:1000px; height:540px; pointer-even
     <!-- EDGES ============================================================= -->
     <svg class="edges" viewBox="0 0 1000 540" aria-hidden="true">
       <defs>
-        <!-- one marker for all edges: context-stroke inherits the line's color, so
-             theme switches (incl. dark) recolor arrowheads automatically -->
+        <!-- context-stroke inherits the line's color, so theme switches (incl. dark)
+             recolor arrowheads automatically. #open is for AWS diagrams -->
         <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/>
+        </marker>
+        <marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="context-stroke" stroke-width="1.5"/>
         </marker>
       </defs>
       <path class="e" d="M148 150 H306" marker-end="url(#ar)"/>
@@ -188,7 +218,7 @@ svg.edges { position:absolute; inset:0; width:1000px; height:540px; pointer-even
     </svg>
 
     <!-- NODES ============================================================= -->
-    <!-- node: left = centerX-66; tile classes: (default) | wide | dark -->
+    <!-- node: left = centerX-66; tile classes: (default) | wide | dark | bare | bare res -->
     <div class="node" style="left:46px;top:120px">
       <div class="tile"><img src="%%ICON_client%%" alt=""></div>
       <div class="name"><span>User</span></div><div class="role"><span>browser</span></div>
