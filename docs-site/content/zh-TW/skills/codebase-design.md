@@ -77,4 +77,4 @@ type: skill
 
 不採用以行數衡量深度、將介面視為 TypeScript 關鍵字，以及含糊的邊界措辭。
 
-請閱讀 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md)，了解相依性、接縫與測試規範；並閱讀 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)，了解平行設計。
+整理結構或設計相依關係與測試時，閱讀 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md#change-locality)；比較替代方案時，閱讀 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)。

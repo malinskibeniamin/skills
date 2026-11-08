@@ -21,6 +21,9 @@ run_content_eval "$CBD_DIR/SKILL.md" "[Dd]eletion test" "codebase-design describ
 run_content_eval "$CBD_DIR/SKILL.md" "interface is the test surface" "codebase-design asserts interface=test surface"
 run_content_eval "$CBD_DIR/SKILL.md" "One adapter.*hypothetical seam.*Two adapters.*real" "codebase-design has one-vs-two-adapters rule"
 run_content_eval "$CBD_DIR/SKILL.md" "Boundary: use seam|Avoid: boundary" "codebase-design rejects boundary as overloaded"
+run_content_eval "$CBD_DIR/SKILL.md" "DEEPENING.md#change-locality" "design loads structural cleanup at its existing companion"
+run_content_eval "$CBD_DIR/DEEPENING.md" "## Change locality" "design diagnoses change coordination at the existing owner"
+run_content_eval "$CBD_DIR/DEEPENING.md" "replacement.*checks pass" "deepening preserves old coverage until replacement checks pass"
 
 # ── consumers invoke shared design skill ──────────────────────────
 run_content_eval "$ICA_DIR/SKILL.md" "/?codebase-design" "architecture skill invokes codebase-design"

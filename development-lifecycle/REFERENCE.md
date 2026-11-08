@@ -45,6 +45,15 @@ implementation detail into a user decision.
 
 If a feedback loop is slow or noisy, improve it before expanding the fix.
 
+## Refactor branch
+
+1. Capture intended behavior and a credible failure/recovery case at the public interface before edits; reuse existing checks.
+2. Use [change locality](../codebase-design/DEEPENING.md#change-locality) to identify the coordination problem; group symptoms under the smallest requirement-led fix in existing task notes.
+3. Migrate callers before removing superseded internals. Remove a workaround only when the replacement meets its requirement; retain external constraints and useful invariants.
+4. Keep broad comment/test pruning outside the refactor unless explicitly requested; use [test audit](../test-audit/SKILL.md) for pruning. Necessary test updates must preserve coverage, not erase regressions.
+5. Replay contract checks after each slice. Under behavior-preserving scope, report newly discovered bugs separately rather than silently changing behavior.
+6. Finish when the scoped structural problem is resolved and verification passes; justified exceptions and unrelated opportunities need no further cleanup loop.
+
 ## Meaningful behavior branch
 
 Use RED -> GREEN -> REFACTOR:

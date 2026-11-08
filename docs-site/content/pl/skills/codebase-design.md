@@ -80,4 +80,4 @@ Relacje: Moduł ma jeden Interfejs; Głębokość mierzy się względem niego; S
 
 Odrzuć głębokość mierzoną liczbą wierszy, interfejs rozumiany jako słowo kluczowe TypeScript oraz nieprecyzyjne użycie terminu granica.
 
-Przeczytaj [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md), aby poznać zasady dotyczące zależności, szwów i testowania, oraz [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md), aby poznać równoległe projekty.
+Przeczytaj [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md#change-locality) przy porządkowaniu struktury oraz projektowaniu zależności i testów; [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md) przy porównywaniu wariantów.
