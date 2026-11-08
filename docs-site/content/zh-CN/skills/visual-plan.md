@@ -1,11 +1,19 @@
 ---
-title: /visual-plan
 description: >-
   使用图表、文件映射、带注释的代码和 UI 审查创建交互式 Agent-Native 可视化计划。适用于规划非简单的产品、UI、架构、数据、API
   或竞争方案。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual plan
 sidebar:
   label: /visual-plan
+title: /visual-plan
+type: skill
 ---
 ![展示 /visual-plan 技能的图表](/diagrams/skills/visual-plan.svg)
 
@@ -16,6 +24,8 @@ sidebar:
 ## 必需的参考资料
 
 在创建或更新可视化计划之前，请阅读 `references/agent-native-plan.md`。该文件规定了完整的 Agent-Native 计划契约、Plan MCP 用法、块目录要求、可视化界面选择、评论循环、本地文件隐私模式以及文档质量规则。
+
+应用上游工具、委派、发布或安装步骤前，先遵循[宿主兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)。
 
 仅在相关时阅读以下资料：
 

@@ -28,4 +28,6 @@ Capacity: `/stay-within-limits` host meter, else unknown. Never infer from token
 `xhigh` is owner-selected, not benchmark-promoted.
 Before unrequested default changes run `agent-evals/context-ablation/`: vary one context group, fix tasks/scoring, prefer lower cost only among quality-equivalent results. Record winner in routing config.
 
-[Builder](references/builder-upstream.md): authorized delegation only.
+[Delegation packet](references/builder-upstream.md): authorized delegation only.
+[Source reconciliation](../shared/BUILDER-SKILLS-CREDITS.md#selection) preserves
+local routing instead of upstream's renamed cheap-model orchestrator.

@@ -1,9 +1,17 @@
 ---
-title: /visual-recap
 description: Utwórz interaktywne podsumowanie wizualne dla PR, gałęzi, commita lub diffu.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual recap
 sidebar:
   label: /visual-recap
+title: /visual-recap
+type: skill
 ---
 ![Diagram umiejętności /visual-recap](/diagrams/skills/visual-recap.svg)
 
@@ -14,6 +22,8 @@ Lokalne nadpisanie: zamień przykłady z nadrzędnego źródła używające `npx
 ## Wymagane materiały referencyjne
 
 Przed utworzeniem podsumowania przeczytaj `references/agent-native-recap.md`. Ten dokument określa pełny kontrakt tworzenia podsumowania wizualnego, regułę never-inline, reguły adresów URL Plan MCP, mapowanie diffów na bloki, anonimizację, widoczność kwestii bezpieczeństwa, tryb prywatności plików lokalnych oraz pętlę informacji zwrotnej z przeglądu.
+
+Przed zastosowaniem instrukcji upstream dotyczących narzędzi, delegowania, publikacji lub instalacji przeczytaj [zasady zgodności z hostem](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility).
 
 Poniższe dokumenty czytaj tylko wtedy, gdy są istotne:
 

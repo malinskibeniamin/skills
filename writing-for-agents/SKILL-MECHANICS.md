@@ -23,6 +23,15 @@ Split a model-invoked skill when it has a distinct leading word that should trig
 
 When user-invoked skills exceed what a human can remember, add one user-invoked router that names them and explains when to use each. The router can recommend but cannot autonomously invoke another user-invoked skill.
 
+## Bundled helpers
+
+Invoke bundled helpers with their declared interpreter (`bash scripts/check.sh`,
+`node scripts/check.mjs`, or `python3 scripts/check.py`) rather than assuming the
+host preserved executable bits. Use the repository's actual runtime and command.
+This adapts the packaging guidance in
+[Superpowers writing-skills at `22f0b463`](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/writing-skills/SKILL.md);
+its test/delegation policies do not replace this harness's owners or consent rules.
+
 ## Navigation pointers
 
 For repo guidance, use [repo navigation](../shared/repo-navigation.md). Put task ->

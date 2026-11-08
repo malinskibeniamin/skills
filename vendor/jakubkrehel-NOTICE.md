@@ -1,8 +1,8 @@
 # Jakub Krehel interface skills
 
 All 14 skill entrypoints and references come unchanged from
-[jakubkrehel/skills](https://github.com/jakubkrehel/skills/tree/592aedc44d7d5b3e29740984252902f3e5402a1c),
-commit `592aedc44d7d5b3e29740984252902f3e5402a1c` (plugin version 1.17.0).
+[jakubkrehel/skills](https://github.com/jakubkrehel/skills/tree/60bf140e43c98b248e6594487384ec967e89d98a),
+commit `60bf140e43c98b248e6594487384ec967e89d98a` (plugin version 1.17.0).
 The snapshot contains all 94 skill-local files, including references, OpenAI
 metadata, viewer assets, generators and tests, plus README and LICENSE: 96 files.
 Three teardown helper/test files receive the reviewed
@@ -11,6 +11,15 @@ worker origins, numeric debugging ports and drawing IDs, escapes script-delimite
 in CDP code data, and makes the test's script matcher case-insensitive. No scanner
 exclusions or alert dismissals are used. This supersedes the initial raw-copy plan;
 all other source bytes and the MIT notice remain unchanged.
+
+This is the latest compatible 14-skill revision reviewed on 2026-11-08.
+All existing skill files match upstream HEAD
+[`157da62016338e8693dcff93d47154a9e36f2157`](https://github.com/jakubkrehel/skills/tree/157da62016338e8693dcff93d47154a9e36f2157);
+later commits add only the separate AFK/away workflow and its README entry.
+That unattended, cross-project workflow is outside this refresh's existing
+selection. It is not imported or registered, and the importer's unknown-skill
+guard remains intact. The refreshed state switcher removes font-weight changes
+that shift button text; existing host owners and invocation policies are unchanged.
 
 Copyright (c) 2026 Jakub Krehel. The original [MIT license](jakubkrehel/LICENSE)
 remains beside the source. The import excludes upstream root agent instructions,
@@ -32,7 +41,7 @@ Update the importer's reviewed inventory and compatibility only when required.
 git clone https://github.com/jakubkrehel/skills /tmp/jakubkrehel-skills
 python3 scripts/vendor-jakubkrehel.py \
   --source /tmp/jakubkrehel-skills \
-  --revision 592aedc44d7d5b3e29740984252902f3e5402a1c
+  --revision 60bf140e43c98b248e6594487384ec967e89d98a
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh jakubkrehel-vendored-skills
 ```

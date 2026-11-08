@@ -1,15 +1,25 @@
 ---
-title: /agent-watchdog
-description: "依據原始要求與即時證據稽核另一個代理。適用於工作階段、PR、分支、比較、已授權的修正或接手停滯工作。"
-type: skill
+description: 依據原始要求與即時證據稽核另一個代理。適用於工作階段、PR、分支、比較、已授權的修正或接手停滯工作。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - agent watchdog
 sidebar:
   label: /agent-watchdog
+title: /agent-watchdog
+type: skill
 ---
 ![「/agent-watchdog」技能圖解](/diagrams/skills/agent-watchdog.svg)
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/agent-watchdog.excalidraw)
 
 當稽核較為複雜或來源成品語意不明時，請閱讀 `references/builder-upstream.md`。
+
+僅使用已獲授權的來源與宿主實際提供的能力。自行進行調查；額外代理、監看、正式環境存取與寫入操作都需要個別授權。
 
 ## 模式
 
@@ -26,11 +36,15 @@ sidebar:
 接手模式請使用其參考文件，而不是下方僅限小範圍稽核修正的步驟。
 
 1. 確認每個目標：工作階段 ID、逐字稿、討論串 URL、PR、分支、提交、CI 執行、議題、Slack 連結或貼上的摘要。
-2. 重建約定：原始要求、範圍變更、限制、隱含的驗收條件、最終聲明與注意事項。
-3. 檢視證據，而非憑感覺判斷：已變更的檔案、周邊程式碼、實際命令輸出、CI、螢幕截圖、尚未解決的留言、部署日誌。
+2. 重建原始要求與限制；盡可能在閱讀被觀察代理的結論前，先提出自己的假設。
+3. 自行檢查同一問題的第一手證據，再與代理的差異、檢查與聲明進行對照。註明先前已接觸過哪些資料；在同一上下文中進行的調查不構成獨立審查或跨模型家族審查。
 4. 將每個問題分類為：`Gap`、`Bug`、`Verification miss`、`Scope drift` 或 `No issue`。
 5. 若已獲授權，僅修正明確的缺漏；除非使用者要求，否則絕不還原不相關的工作或切換分支。
-6. 回報狀態，並附上確切的檔案、命令、未解決的風險與下一步行動。
+6. 回報確切證據、需要採取行動的差異、未解決風險與下一步行動。僅在目前步驟存在缺陷、需要修正或遇到阻礙時中斷正在執行的代理；將其他已驗證的缺漏彙整到下一個檢查點，避免重複提示。
+
+對於已完成的工作樹，依照[遠端交付驗證](https://github.com/malinskibeniamin/skills/blob/main/shared/remote-completion.md)檢查待處理檔案與實際遠端 HEAD。唯讀模式僅回報缺漏；已獲授權的接手需要完成驗證、提交與推送。
+
+[來源與更新步驟](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md)。
 
 ## 輸出
 

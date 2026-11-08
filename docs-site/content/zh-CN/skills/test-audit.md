@@ -1,9 +1,17 @@
 ---
-title: /test-audit
 description: 审查测试的价值。适用于审查、排查或精简低价值、重复或与实现耦合的测试及其专供测试使用的生产代码接口，或对新测试进行准入检查。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - test audit
 sidebar:
   label: /test-audit
+title: /test-audit
+type: skill
 ---
 ![/test-audit 技能示意图](/diagrams/skills/test-audit.svg)
 
@@ -96,9 +104,10 @@ sidebar:
 1. 删除或移动测试前，停止测试监视进程；跨越删除操作产生的监视输出不能作为证据。
 2. 使用仓库的针对性命令，运行负责相关行为的代码及同类代码的最小测试集，例如 `bunx vitest run <path>` 或 `go test ./<pkg>`。
 3. 对于已删除的源码文本搜索或计划断言，运行负责真实契约的可执行脚本或试运行。
-4. 运行 `bun run lint:fix`、`bun run type:check`、`git diff --check`，以及 CI 针对已更改文件运行的检查。
-5. 检查 `git diff --numstat`；将生产代码和工具代码与测试及测试支持代码分开报告。
-6. 完成最终审计编辑后，运行 `/review`。
+4. 在交付删除批次前，在所需阶段运行仓库已配置的依赖、未使用文件和导出检查。删除测试可能遗留失去使用者的支持文件、依赖和导出，而普通 PR CI 未必能发现。使用现有命令；不要仅为审计安装新分析器，并报告缺失的检查覆盖。
+5. 运行 `bun run lint:fix`、`bun run type:check`、`git diff --check`，以及 CI 针对已更改文件运行的检查。
+6. 检查 `git diff --numstat`；将生产代码和工具代码与测试及测试支持代码分开报告。
+7. 完成最终审计编辑后，运行 `/review`。
 
 ## 提交与后续工作 [#landing-and-continuation]
 

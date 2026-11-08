@@ -1,9 +1,17 @@
 ---
-title: /test-audit
 description: 稽核測試的價值。適用於檢視、全面檢查或刪減低價值、重複或與實作耦合的測試，以及它們在正式程式碼中僅供測試使用的介面，或為新測試把關。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - test audit
 sidebar:
   label: /test-audit
+title: /test-audit
+type: skill
 ---
 ![/test-audit 技能示意圖](/diagrams/skills/test-audit.svg)
 
@@ -96,9 +104,10 @@ sidebar:
 1. 刪除或移動測試前，先停止測試監看程序；橫跨刪除操作的監看輸出不能作為證據。
 2. 使用儲存庫的針對性指令，執行負責元件與同類元件的最小範圍測試，例如 `bunx vitest run <path>` 或 `go test ./<pkg>`。
 3. 對於移除的原始碼文字搜尋或計畫斷言，請執行負責真實契約的可執行指令碼或試執行。
-4. 執行 `bun run lint:fix`、`bun run type:check`、`git diff --check`，以及 CI 對變更檔案執行的關卡檢查。
-5. 檢查 `git diff --numstat`；將正式程式碼／工具與測試及測試支援程式碼分開回報。
-6. 完成最後的稽核編輯後，執行 `/review`。
+4. 交付刪除批次前，於必要階段執行儲存庫已設定的相依性、未使用檔案與匯出檢查。刪除測試可能留下失去使用者的支援檔案、相依性與匯出，而一般 PR CI 未必能發現。使用現有指令；不要僅為了稽核安裝新的分析器，並回報缺少的檢查涵蓋範圍。
+5. 執行 `bun run lint:fix`、`bun run type:check`、`git diff --check`，以及 CI 對變更檔案執行的關卡檢查。
+6. 檢查 `git diff --numstat`；將正式程式碼／工具與測試及測試支援程式碼分開回報。
+7. 完成最後的稽核編輯後，執行 `/review`。
 
 ## 提交與後續作業 [#landing-and-continuation]
 

@@ -1,6 +1,6 @@
 # Evals for the OpenClaw test-audit backport and harness composition.
 
-OPENCLAW_SHA="80930af448ebabc84174146b56bc106d37fab3b4"
+OPENCLAW_SHA="89ba6b0f12ff337b6f60dc162391575e5999873e"
 SKILL="$REPO_ROOT/test-audit/SKILL.md"
 CAMPAIGN="$REPO_ROOT/test-audit/CAMPAIGN.md"
 
@@ -37,3 +37,7 @@ run_content_eval "$SKILL" "/commit-push-pr" "test-audit lands through /commit-pu
 run_content_eval "$CAMPAIGN" "explicit.*delegat|/swarm" "campaign lanes parallelize only on explicit delegation"
 run_content_eval "$REPO_ROOT/tdd/SKILL.md" "\\.\\./test-audit/SKILL\\.md#authoring-gate" "tdd routes new tests through the test-audit authoring gate"
 run_content_eval "$REPO_ROOT/scripts/generate-skill-catalog.sh" '"test-audit":' "skill catalog has a test-audit short description"
+
+# Removal campaigns must detect newly orphaned support and require current proof.
+run_content_eval "$SKILL" 'dependency, unused-file, and export' "test pruning checks newly orphaned dependencies, files, and exports"
+run_content_eval "$CAMPAIGN" 'same merged head' "campaign CI proof binds to the merged candidate"

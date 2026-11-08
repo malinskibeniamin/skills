@@ -1,9 +1,17 @@
 ---
-title: /visual-recap
 description: 为 PR、分支、提交或差异创建交互式可视化回顾。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual recap
 sidebar:
   label: /visual-recap
+title: /visual-recap
+type: skill
 ---
 ![/visual-recap 技能示意图](/diagrams/skills/visual-recap.svg)
 
@@ -14,6 +22,8 @@ sidebar:
 ## 必需参考资料
 
 创建回顾之前，请阅读 `references/agent-native-recap.md`。该文件定义了完整的可视化回顾创建规范、禁止内联规则、Plan MCP URL 规则、差异到块的映射、脱敏、安全可见性、本地文件隐私模式以及审查反馈循环。
+
+应用上游工具、委派、发布或安装步骤前，先遵循[宿主兼容规则](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility)。
 
 仅在相关时阅读以下内容：
 

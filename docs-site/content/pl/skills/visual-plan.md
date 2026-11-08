@@ -1,13 +1,21 @@
 ---
-title: /visual-plan
 description: >-
   Twórz interaktywne, natywne dla agentów plany wizualne z diagramami, mapami
   plików, kodem z adnotacjami i przeglądem interfejsu. Używaj podczas planowania
   nietrywialnych produktów, interfejsów, architektury, danych, API lub
   konkurencyjnych opcji.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - visual plan
 sidebar:
   label: /visual-plan
+title: /visual-plan
+type: skill
 ---
 ![Diagram umiejętności /visual-plan](/diagrams/skills/visual-plan.svg)
 
@@ -18,6 +26,8 @@ Lokalne nadpisanie: zamień przykłady z nadrzędnego źródła zawierające `np
 ## Wymagane materiały referencyjne
 
 Przed utworzeniem lub aktualizacją planu wizualnego przeczytaj `references/agent-native-plan.md`. Plik ten definiuje pełny kontrakt planu natywnego dla agentów, sposób użycia Plan MCP, wymagania dotyczące katalogu bloków, wybór powierzchni wizualnej, cykl komentarzy, tryb prywatności plików lokalnych oraz reguły jakości dokumentu.
+
+Przed zastosowaniem instrukcji upstream dotyczących narzędzi, delegowania, publikacji lub instalacji przeczytaj [zasady zgodności z hostem](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#host-compatibility).
 
 Poniższe materiały przeczytaj tylko wtedy, gdy są istotne:
 

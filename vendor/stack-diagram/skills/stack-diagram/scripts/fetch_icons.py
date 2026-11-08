@@ -8,6 +8,9 @@ Spec forms:
   name              -> slug == name          (e.g. hono)
   name:slug         -> different slug        (e.g. betterauth:better-auth)
   name=URL          -> explicit URL          (e.g. orpc=https://orpc.unnoq.com/logo.webp)
+  name:aws/Service  -> official AWS icon     (e.g. lambda:aws/AWS-Lambda)
+  name:gcp/Product  -> official Google Cloud icon (e.g. run:gcp/Cloud-Run)
+  name:azure/Service -> official Azure icon  (e.g. vault:azure/Key-Vaults)
 
 Sources tried in order:
   1. svgl              api.svgl.app?search={s} -> route (light variant when split)
@@ -17,22 +20,151 @@ Sources tried in order:
 simple-icons is deliberately not a source: its glyphs are monochrome redraws, not the
 official marks. When every source misses, pass the official file as name=URL.
 
+aws/ specs and the slugs aws, amazonwebservices and aws-* skip the chain and read AWS's own
+package (aws.amazon.com/architecture/icons): gilbarbara's aws-* files keep an older color set.
+
+gcp/ specs and the slugs gcp-* and google-cloud-* do the same with Google's packages
+(cloud.google.com/icons). The slugs gcp and google-cloud are the Google Cloud mark, through the chain.
+
+azure/ specs and the slugs azure, microsoft-azure and azure-* do the same with Microsoft's package
+(learn.microsoft.com/azure/architecture/icons).
+
 svgl is matched by normalized title equality (search is fuzzy — a loose match would
 silently ship the wrong brand's logo, so non-exact hits fall through to next source).
 
 Writes OUTDIR/<name>.<ext> and OUTDIR/manifest.json, plus OUTDIR/<name>_dark.<ext> when
-svgl has a dark-theme variant (for group labels). Flags white/near-white fills
+the source has a dark-theme variant (for group labels). Flags white/near-white fills
 (use a dark tile for those). Never modifies icon colors.
 """
-import base64, json, pathlib, re, sys, urllib.request, urllib.error, urllib.parse
+import base64, functools, http.client, io, json, pathlib, re, sys, urllib.request, urllib.error, urllib.parse, zipfile
 
 UA = {"User-Agent": "Mozilla/5.0 (stack-diagram-skill)"}
 NAME_RE = re.compile(r"[A-Za-z0-9_-]+")   # becomes a filename and an %%ICON_<name>%% token
+AWS_ICONS_PAGE = "https://aws.amazon.com/architecture/icons/"
+AWS_PACKAGE_RE = re.compile(r"""(?:https:)?//[\w.-]+\.awsstatic\.com/[^"'\s]+/Icon-package_[^"'\s/]+\.zip""")
+AWS_ICON_RE = re.compile(r"Architecture-Service-Icons_[^/]+/[^/]+/64/Arch_(.+)_64\.svg"
+                         r"|Architecture-Group-Icons_[^/]+/(.+)_32\.svg"
+                         r"|Resource-Icons_[^/]+/Res_General-Icons/Res_48_Light/Res_(.+)_48_Light\.svg")
+AWS_ALIASES = {
+    "s3": "Amazon-Simple-Storage-Service", "glacier": "Amazon-Simple-Storage-Service-Glacier",
+    "sqs": "Amazon-Simple-Queue-Service", "sns": "Amazon-Simple-Notification-Service",
+    "ses": "Amazon-Simple-Email-Service", "ecs": "Amazon-Elastic-Container-Service",
+    "eks": "Amazon-Elastic-Kubernetes-Service", "ecr": "Amazon-Elastic-Container-Registry",
+    "elb": "Elastic-Load-Balancing", "alb": "Elastic-Load-Balancing", "nlb": "Elastic-Load-Balancing",
+    "iam": "AWS-Identity-and-Access-Management", "kms": "AWS-Key-Management-Service",
+    "msk": "Amazon-Managed-Streaming-for-Apache-Kafka", "opensearch": "Amazon-OpenSearch-Service",
+    "vpc": "Virtual-private-cloud-VPC",
+}
+GCP_PACKAGES = ("https://services.google.com/fh/files/misc/core-products-icons.zip",
+                "https://services.google.com/fh/files/misc/category-icons.zip")
+GCP_ICON_RE = re.compile(r"(?:Unique|Category) Icons/([^/]+)/SVG/[^/]+\.svg")
+# Icon folder -> products, from Google's guide on cloud.google.com/icons; its bare "SQL" row is left out so gcp/sql is Cloud SQL
+GCP_PRODUCTS = {
+    "Agents": "AI Applications & Agents, AI Testing agent, Automotive AI agent, Code Documentation agent, "
+              "Deep Research agent, Food ordering AI agent, Idea Generation agent, Customer Engagement Suite, "
+              "Conversational Agents, Agent Assist, Conversational Insights, Contact Center as a Service",
+    "AI _ Machine Learning": "AI and Machine Learning, Advanced Agent Modeling, AI Hub, AI Platform, "
+              "AI Platform Unified, AutoML, AutoML Natural Language, AutoML Tables, AutoML Translation, "
+              "AutoML Video Intelligence, AutoML Vision, Cloud GPU, Cloud Healthcare API, Cloud Natural Language API, "
+              "Cloud Optimization AI, Cloud Optimization AI FleetRouting API, Cloud TPU, Cloud Translation API, "
+              "Cloud Vision API, Data Labeling, Dialogflow ES, Document AI, Genomics, Healthcare NLP API, "
+              "Media Translation API, Recommendations AI, Speech to Text, Tensorflow Enterprise, Text To Speech, "
+              "Visual Inspection AI",
+    "Collaboration": "Google Workspace",
+    "Compute": "Batch, Container Optimized OS, GCE Systems Management, Migrate To Virtual Machines, "
+               "OS Config Management, OS Inventory Management, OS Patch Management, VMware Engine",
+    "Containers": "Backup for GKE, Knative serving, Migrate To Containers",
+    "Data Analytics": "Analytics Hub, BigLake, Cloud Composer, Cloud Data Fusion, Data Catalog, Data Layers, "
+                      "Data Loss Prevention API, Dataflow, Dataplex, Datapol, Dataprep, Dataproc, Dataproc Metastore, "
+                      "Datashare, Datastream, Pub/Sub",
+    "Databases": "Bare Metal Solution, Bigtable, Database Center, Database Migration Service, Datastore, Firestore, "
+                 "Memorystore",
+    "Developer Tools": "Cloud Code, Cloud Deployment Manager, Cloud Scheduler, Cloud Shell, Cloud Tasks, "
+                       "Cloud Workstations, Runtime Config, Service Catalog, Tools For Powershell",
+    "DevOps": "Artifact Registry, Cloud Build, Cloud Deploy, Container Registry",
+    "Hybrid & Multicloud": "Hybrid and Multicloud",
+    "Integration Services": "Advanced API Security, API Analytics, Application Integration, Cloud API Gateway, "
+                            "Cloud APIs, Cloud Endpoints, Connectors, Developer Portal, Eventarc, Workflows",
+    "Management Tools": "Carbon Footprint, Producer Portal",
+    "Maps & Geospatial": "Maps and Geospatial, Earth Engine, Google Earth, Google Maps Platform",
+    "Marketplace": "Google Cloud Marketplace",
+    "Migration": "Migrate For Compute Engine, Transfer Appliance",
+    "Networking": "Cloud Armor, Cloud CDN, Cloud DNS, Cloud Domains, Cloud Firewall Rules, Cloud IDS, "
+                  "Cloud Interconnect, Cloud Load Balancing, Load Balancer, Cloud NAT, Cloud Network, Cloud Router, "
+                  "Cloud VPN, Connectivity Test, Data Transfer, Network Connectivity Center, "
+                  "Network Intelligence Center, Network Security, Network Tiers, Network Topology, Packet Mirroring, "
+                  "Partner Interconnect, Premium Network Tier, Private Connectivity, Private Service Connect, Routes, "
+                  "Service Mesh, Virtual Private Cloud, VPC",
+    "Observability": "Cloud Audit Logs, Cloud Logging, Cloud Monitoring, Error Reporting, "
+                     "Google Cloud Observability, Profiler, Trace",
+    "Operations": "App Hub, Backup and DR, Capacity Planner, Performance Dashboard, Personalized Service Health",
+    "Security Identity": "Security and Identity, Access Context Manager, Asset Inventory, Assured Workloads, "
+                         "BeyondCorp, Binary Authorization, Certificate Authority Service, Certificate Manager, "
+                         "Cloud Asset Inventory, Cloud External Key Manager, Cloud HSM, Cloud Security Scanner, "
+                         "Identity and Access Management, IAM, Identity Aware Proxy, IAP, Identity Platform, "
+                         "Key Access Justifications, Key Management Service, KMS, "
+                         "Managed Service For Microsoft Active Directory, Phishing Protection, Policy Analyzer, "
+                         "Recaptcha Enterprise, Risk Manager, Secret Manager, Security Key Enforcement, Web Risk, "
+                         "Web Security Scanner, Workload Identity Federation",
+    "Serverless Computing": "Serverless, App Engine, Cloud Functions, Cloud Run functions",
+    "Storage": "Filestore, Google Cloud NetApp Volumes, Local SSD, Parallelstore, Storage Transfer Service",
+    "Web & Mobile": "Web and Mobile",
+    "Web3": "Blockchain Node Engine, Blockchain RPC",
+    "AlloyDB": "AlloyDB Omni",
+    "BigQuery": "BigQuery Functions, BigQuery Omni",
+    "Cloud Spanner": "Spanner",
+    "Cloud Storage": "GCS",
+    "Compute Engine": "GCE",
+    "Distributed Cloud": "Google Distributed Cloud",
+    "GKE": "Google Kubernetes Engine, Kubernetes Engine",
+    "Hyperdisk": "Persistent Disk",
+    "Looker": "Looker Studio, Looker Studio Pro",
+    "Security Operations": "Google Security Operations, SecOps",
+    "Threat Intelligence": "Google Threat Intelligence",
+}
+AZURE_ICONS_PAGE = "https://learn.microsoft.com/en-us/azure/architecture/icons/"
+AZURE_PACKAGE_RE = re.compile(r"https://arch-center\.azureedge\.net/icons/Azure_Public_Service_Icons_V\d+\.zip")
+AZURE_ICON_RE = re.compile(r"Azure_Public_Service_Icons/Icons/[^/]+/\d+\s*-icon-service-(.+)\.svg")
+AZURE_ALIASES = {
+    "webapp": "App-Services", "functions": "Function-Apps", "azurefunctions": "Function-Apps",
+    "aks": "Kubernetes-Services", "vm": "Virtual-Machine", "vmss": "VM-Scale-Sets",
+    "containerapp": "Container-Apps-Environments", "containerapps": "Container-Apps-Environments",
+    "acr": "Container-Registries", "aci": "Container-Instances", "staticwebapp": "Static-Apps",
+    "staticwebapps": "Static-Apps", "frontdoor": "Front-Door-and-CDN-Profiles",
+    "appgateway": "Application-Gateways", "lb": "Load-Balancers", "vnet": "Virtual-Networks",
+    "nsg": "Network-Security-Groups", "waf": "Web-Application-Firewall-Policies(WAF)", "dns": "DNS-Zones",
+    "expressroute": "ExpressRoute-Circuits", "trafficmanager": "Traffic-Manager-Profiles",
+    "vpngateway": "Virtual-Network-Gateways", "storage": "Storage-Accounts", "blob": "Storage-Accounts",
+    "blobstorage": "Storage-Accounts", "cosmos": "Azure-Cosmos-DB", "redis": "Azure-Managed-Redis",
+    "managedredis": "Azure-Managed-Redis", "postgres": "Azure-Database-PostgreSQL-Server",
+    "postgresql": "Azure-Database-PostgreSQL-Server", "mysql": "Azure-Database-MySQL-Server",
+    "eventgrid": "Event-Grid-Topics", "apim": "API-Management-Services", "apimanagement": "API-Management-Services",
+    "foundry": "AI-Foundry", "aisearch": "Cognitive-Search", "search": "Cognitive-Search",
+    "appinsights": "Application-Insights", "loganalytics": "Log-Analytics-Workspaces",
+    "datafactory": "Data-Factories", "synapse": "Azure-Synapse-Analytics", "resourcegroup": "Resource-Groups",
+    "rg": "Resource-Groups", "managedidentity": "Managed-Identities",
+}
+PACKAGES = {}
 
 def get(url, timeout=15):
     req = urllib.request.Request(url, headers=UA)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read()
+
+def read(url):
+    """Bytes of url; '<package URL>#<member>' reads from the already-downloaded zip."""
+    zip_url, _, member = url.partition("#")
+    return PACKAGES[zip_url].read(member) if zip_url in PACKAGES else get(url)
+
+def package_from_page(page, link_re):
+    """Download the zip a page links to, which changes with each release, and return its URL.
+    It is read once per run and stays in memory."""
+    link = link_re.search(get(page).decode("utf-8", "ignore"))
+    if not link:
+        raise OSError(f"no icon package link on {page}")
+    url = urllib.parse.urljoin(page, link.group())
+    PACKAGES[url] = zipfile.ZipFile(io.BytesIO(get(url)))
+    return url
 
 def looks_svg(b): return b.lstrip()[:200].lstrip().startswith((b"<svg", b"<?xml", b"<!DOC"))
 def ext_of(b, url):
@@ -82,10 +214,113 @@ def svgl_lookup(slug):
                 return route, None
     return None
 
+@functools.lru_cache(maxsize=1)
+def aws_index():
+    """AWS's icon package as {normalized name: (name, url, dark url or None)}."""
+    url = package_from_page(AWS_ICONS_PAGE, AWS_PACKAGE_RE)
+    files = set(PACKAGES[url].namelist())
+    index = {}
+    for f in sorted(files):
+        m = AWS_ICON_RE.fullmatch(f)
+        if m:
+            # the General- prefix keeps General-Shield from taking the short name of AWS-Shield
+            name = m.group(1) or m.group(2) or f"General-{m.group(3)}"
+            dark = f.replace("_Light", "_Dark") if m.group(3) else f[:-4] + "_Dark.svg"
+            index.setdefault(norm(name), (name, f"{url}#{f}", f"{url}#{dark}" if dark in files else None))
+    return index
+
+def aws_sources(query):
+    """Exact match on the package's names or an acronym, with the AWS-/Amazon- prefix optional.
+    A miss lists every name: a partial match could ship the wrong service's icon."""
+    try:
+        index = aws_index()
+    except (OSError, zipfile.BadZipFile, http.client.HTTPException) as e:
+        print(f"AWS  icon package unavailable: {e}")
+        return []
+    q = norm(AWS_ALIASES.get(norm(query), query))
+    hit = index.get(q) or next((v for k, v in index.items() if re.sub(r"^(aws|amazon)", "", k) == q), None)
+    if hit:
+        return [("aws", hit[1], hit[2])]
+    print(f"AWS  {query!r} is not a name in the package. Names: {', '.join(sorted(v[0] for v in index.values()))}")
+    return []
+
+@functools.lru_cache(maxsize=1)
+def gcp_index():
+    """Google's core and category icons as {normalized folder name: (folder name, url)}."""
+    index = {}
+    for url in GCP_PACKAGES:
+        PACKAGES[url] = zipfile.ZipFile(io.BytesIO(get(url)))
+        for f in PACKAGES[url].namelist():
+            m = GCP_ICON_RE.fullmatch(f)
+            if m:
+                index[norm(m.group(1))] = (m.group(1), f"{url}#{f}")
+    return index
+
+def gcp_sources(query):
+    """Exact match on a product or icon name, with the Cloud/Google prefix optional. Most products
+    share their category's icon. A miss lists every name, as for AWS."""
+    try:
+        index = gcp_index()
+    except (OSError, zipfile.BadZipFile, http.client.HTTPException) as e:
+        print(f"GCP  icon packages unavailable: {e}")
+        return []
+    products = {p: icon for icon, names in GCP_PRODUCTS.items() for p in names.split(", ")}
+    targets = {k: k for k in index} | {norm(p): norm(icon) for p, icon in products.items()}
+    q = norm(query)
+    hit = index.get(targets.get(q) or next((v for k, v in targets.items() if re.sub(r"^(google|cloud)+", "", k) == q), None))
+    if hit:
+        return [("gcp", hit[1], None)]
+    names = sorted({v[0] for v in index.values()} | set(products), key=str.lower)
+    print(f"GCP  {query!r} is not a product or icon name. Names: {', '.join(names)}")
+    return []
+
+@functools.lru_cache(maxsize=1)
+def azure_index():
+    """Microsoft's icon package as {normalized name: (name, url)}. A name can sit in several folders."""
+    url = package_from_page(AZURE_ICONS_PAGE, AZURE_PACKAGE_RE)
+    index = {}
+    for f in sorted(PACKAGES[url].namelist()):
+        m = AZURE_ICON_RE.fullmatch(f)
+        if m:
+            index.setdefault(norm(m.group(1)), (m.group(1).strip(), f"{url}#{f}"))
+    return index
+
+def azure_sources(query):
+    """Exact match on the package's names or a short form, with the Azure-/Microsoft- prefix and a
+    plural s optional. A miss lists every name, as for AWS."""
+    try:
+        index = azure_index()
+    except (OSError, zipfile.BadZipFile, http.client.HTTPException) as e:
+        print(f"Azure icon package unavailable: {e}")
+        return []
+    q = norm(AZURE_ALIASES.get(norm(query), query))
+    short = lambda s: re.sub(r"^(azure|microsoft)|s$", "", s)
+    hit = index.get(q) or next((v for k, v in index.items() if short(k) == short(q)), None)
+    if hit:
+        return [("azure", hit[1], None)]
+    print(f"Azure {query!r} is not a name in the package. Names: {', '.join(sorted(v[0] for v in index.values()))}")
+    return []
+
 def sources(slug):
     # concept icons: slug "lucide/<icon-name>" -> Lucide line icon (browse: lucide.dev/icons)
     if slug.startswith("lucide/"):
         return [("lucide", f"https://cdn.jsdelivr.net/npm/lucide-static/icons/{slug[7:]}.svg", None)]
+    if slug.startswith("aws/"):
+        return aws_sources(slug[4:])
+    if norm(slug) in ("aws", "amazonwebservices"):
+        return aws_sources("AWS-Cloud-logo")
+    if slug[:4].lower() == "aws-":
+        return aws_sources(slug[4:])
+    if norm(slug) in ("azure", "microsoftazure"):
+        return azure_sources("Azure-A")
+    azure = re.fullmatch(r"azure[/-](.+)", slug, re.IGNORECASE)
+    if azure:
+        return azure_sources(azure.group(1))
+    if norm(slug) in ("gcp", "googlecloudplatform"):
+        slug = "google-cloud"
+    gcp = re.fullmatch(r"(?:gcp/|gcp-|google-cloud-)(.+)", slug, re.IGNORECASE)
+    if gcp:
+        return gcp_sources(gcp.group(1))
     out = []
     svgl = svgl_lookup(slug)
     if svgl:
@@ -117,7 +352,7 @@ def main():
         got = None
         for src, url, dark_url in tries:
             try:
-                b = get(url)
+                b = read(url)
             except (urllib.error.URLError, urllib.error.HTTPError, OSError):
                 continue
             ext = ext_of(b, url)
@@ -145,13 +380,13 @@ def main():
                              "actually white overall. Never recolor.")
         if dark_url:
             try:
-                db = get(dark_url)
+                db = read(dark_url)
             except (urllib.error.URLError, urllib.error.HTTPError, OSError):
                 db = b""
             dext = ext_of(db, dark_url) if len(db) >= 50 else None
             if dext:
                 dpath = outdir / f"{name}_dark.{dext}"
-                dpath.write_bytes(db); entry["dark_file"] = dpath.name
+                dpath.write_bytes(db); entry["dark_file"] = dpath.name; entry["dark_url"] = dark_url
         manifest[name] = entry
         flag = " [WHITE FILL -> dark tile]" if entry.get("white_fill") else ""
         if "dark_file" in entry:

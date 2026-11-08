@@ -1,6 +1,6 @@
 # Effect skills are distributed through both plugin surfaces from local copies.
 
-EFFECT_SHA="2309e6f27d9955b434c0e3f394b945c136e89fd2"
+EFFECT_SHA="155c50c911f9c99c294ef8a4461981c5bbe6453e"
 
 for skill in effect-ts effect-v3-to-v4; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "vendored Effect skill exists: $skill"
@@ -22,3 +22,8 @@ run_content_eval "$REPO_ROOT/shared/EFFECT-SKILLS-CREDITS.md" 'Copyright \(c\) 2
 run_content_eval "$REPO_ROOT/shared/EFFECT-SKILLS-CREDITS.md" 'skills/effect-ts/SKILL\.md' "Effect setup has an upstream refresh source"
 run_content_eval "$REPO_ROOT/shared/EFFECT-SKILLS-CREDITS.md" 'skills/effect-v3-to-v4/SKILL\.md' "Effect migration has an upstream refresh source"
 run_content_eval "$REPO_ROOT/README.md" 'Effect-TS/skills' "README identifies Effect vendoring"
+
+# Public setup and migration recipes must match Effect's GA package surface.
+run_content_eval "$REPO_ROOT/effect-ts/SKILL.md" 'bun add effect@latest' "new Effect setup targets the stable channel"
+run_content_eval "$REPO_ROOT/effect-v3-to-v4/REFERENCE.md" 'effect/unstable/http.*effect/http' "migration removes unsupported prerelease import paths"
+run_content_eval "$REPO_ROOT/effect-v3-to-v4/REFERENCE.md" '@stability experimental.*patch' "migration preserves experimental API stability caveat"

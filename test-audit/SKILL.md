@@ -83,13 +83,13 @@ Choose one coherent owner-boundary batch. Delete obsolete test-only exports, glo
 Prefer net-negative production LOC. Do not add replacement tests that restate the same implementation, and do not convert uncertain candidates into cleanup to increase deletion counts.
 
 ## Validation
-
 1. Stop test watchers before deleting or moving tests; watcher output across removals is not proof.
 2. Run the smallest owner and sibling tests with the repository's focused command, such as `bunx vitest run <path>` or `go test ./<pkg>`.
 3. For removed source greps or plan assertions, run the executable script or dry run that owns the real contract.
-4. Run `bun run lint:fix`, `bun run type:check`, `git diff --check`, and the changed-files gate CI runs.
-5. Inspect `git diff --numstat`; report production/tooling separately from tests and test support.
-6. After final audit edits, run `/review`.
+4. Before landing removal batches, run the repository's configured dependency, unused-file, and export checks across their required phases. Deleted tests can orphan support files, dependencies, and exports that ordinary PR CI misses. Use existing commands; do not install a new analyzer merely for the audit, and report missing coverage.
+5. Run `bun run lint:fix`, `bun run type:check`, `git diff --check`, and the changed-files gate CI runs.
+6. Inspect `git diff --numstat`; report production/tooling separately from tests and test support.
+7. After final audit edits, run `/review`.
 
 ## Landing and continuation
 

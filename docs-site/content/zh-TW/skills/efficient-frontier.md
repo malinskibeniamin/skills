@@ -1,9 +1,17 @@
 ---
-title: /efficient-frontier
 description: 套用以評估為依據的模型路由，並明確控管已獲授權的代理程式執行批次預算，同時不將判斷權移出負責人手中。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - efficient frontier
 sidebar:
   label: /efficient-frontier
+title: /efficient-frontier
+type: skill
 ---
 ![「/efficient-frontier」技能示意圖](/diagrams/skills/efficient-frontier.svg)
 
@@ -25,13 +33,15 @@ sidebar:
 
 由一位負責人實作；未委派時自行執行各路徑。已授權路徑有範圍明確的目標、輸入、排除事項、證據及停止條件。負責人保留架構、優先順序、風險、整合及驗收責任。
 
-## 容量
+## 容量 [#capacity]
 
 容量以 `/stay-within-limits` 主機計量為準；否則未知。絕不根據 token 或成本推斷。容量只能排除路徑，不能降低品質。
 
-## 晉升
+## 晉升 [#promotion]
 
 目前的 `xhigh` 預設值是擁有者的明確選擇，不是依據基準測試的晉升。
 在未經要求的預設值變更前執行 `agent-evals/context-ablation/`：每次改變一個上下文群組，保持工作與評分不變，只在品質相當的結果中選擇更低成本。將勝出策略記錄到 `config/model-routing.json`。
 
 僅在撰寫已獲授權的委派套件時，才讀取 [references/builder-upstream.md](https://github.com/malinskibeniamin/skills/blob/main/efficient-frontier/references/builder-upstream.md)。
+
+[來源協調說明](https://github.com/malinskibeniamin/skills/blob/main/shared/BUILDER-SKILLS-CREDITS.md#selection)保留本機路由，而不採用上游重新命名後的低成本模型協調器。

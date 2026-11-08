@@ -4,6 +4,8 @@ description: Audit another agent against the original request and live evidence.
 ---
 
 Read `references/builder-upstream.md` for complex/ambiguous audits.
+Use only authorized sources and live host capabilities. Investigate inline; extra
+agents, monitoring, production access, and writes need their own authorization.
 
 ## Modes
 
@@ -20,11 +22,22 @@ Default audit-only when edit authority is unclear.
 For takeover, use its reference instead of the narrow audit-and-fix steps below.
 
 1. Resolve target: session/transcript/thread/PR/branch/commit/CI/issue/link/summary.
-2. Reconstruct original ask, scope changes, constraints, implied criteria, claims, caveats.
-3. Inspect files, surrounding code, command output, CI, screenshots, comments, deploy logs.
+2. Reconstruct the original ask and constraints; form your own hypotheses before
+   reading the watched agent's conclusions when possible.
+3. Independently inspect primary evidence for the same problem, then compare it
+   with the agent's diff, checks, and claims. Mark prior exposure; this inline
+   investigation is not an independent reviewer or model-family pass.
 4. Classify `Gap|Bug|Verification miss|Scope drift|No issue`.
 5. If authorized, fix only clear gaps; never revert unrelated work or move branches unasked.
-6. Report exact evidence, unresolved risks, next action.
+6. Report exact evidence, actionable differences, unresolved risks, and next action.
+   Interrupt a live agent only for a current-step defect, correction, or blocker;
+   batch other verified gaps at its next checkpoint and avoid duplicate notes.
+
+For completed worktrees, verify pending files and actual remote HEAD per
+[remote completion](../shared/remote-completion.md). Read-only modes report gaps;
+authorized recovery owns verification, commit, and push.
+
+[Sources and refresh](../shared/BUILDER-SKILLS-CREDITS.md).
 
 ```md
 ## Agent watchdog

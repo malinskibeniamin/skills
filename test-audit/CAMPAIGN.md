@@ -55,7 +55,9 @@ Done when each repaired defect has a failing control and a passing candidate on 
 
 ## 8. Reconcile and hand off
 
-Campaigns outlive many default-branch commits. Merge the default branch rather than rebasing a long, many-commit campaign. When the default branch modified a file the campaign deleted, keep the deletion. Port the new contract into the keeper instead, and confirm every new regression the default branch added still has a home. Rerun the whole subsystem suite and repeat live proof on the merged head.
+Campaigns outlive many default-branch commits. Merge the default branch rather than rebasing a long, many-commit campaign. When the default branch modified a file the campaign deleted, keep the deletion. Port the new contract into the keeper instead, and confirm every new regression the default branch added still has a home.
+
+When PR CI runs the broad subsystem suite on the same merged head, local reruns can focus on tests touched by integration or failed in CI. Missing, pending, stale, or narrower CI is not broad proof: run the whole subsystem suite locally instead. Repeat live proof when merged inputs affect the live contract, and preserve any stricter repository gates.
 
 Expect review tooling to see a truncated file list on a diff this large. Record maintainer decisions for generic compatibility flags in the PR evidence rather than editing gates.
 

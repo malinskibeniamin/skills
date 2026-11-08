@@ -7,11 +7,11 @@ description: Use when setting up a repository that uses the Effect TypeScript li
 
 ## Install Effect
 
-Use the repository's package manager. For a new v4 setup, upstream uses the
-release-candidate channel:
+Use the repository's package manager. For a new setup, upstream targets the
+current stable release:
 
 ```sh
-bun add effect@rc
+bun add effect@latest
 ```
 
 Preserve an existing Effect version unless an upgrade was requested. For a v3-to-v4
@@ -21,7 +21,7 @@ In a monorepo, install Effect as a root dev dependency when needed to expose the
 source and agent guide from `node_modules/effect`:
 
 ```sh
-bun add -D effect@rc
+bun add -D effect@latest
 ```
 
 Keep runtime dependencies in the packages that import Effect. Verify that
