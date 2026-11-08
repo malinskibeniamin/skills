@@ -15,7 +15,7 @@ from pathlib import Path, PurePosixPath
 REPOSITORY = "https://github.com/emilkowalski/skills"
 ADAPTED = (
     "animate", "remove-animations", "improve-animations", "animation-performance",
-    "animation-vocabulary", "mobile-native", "break-ui", "ask-sonner",
+    "animation-vocabulary", "mobile-native", "break-ui", "ask-sonner", "gestures",
 )
 ROOT_FILES = {"LICENSE", "README.md", "performance-cheatsheet.md", "ui-cheatsheet.md"}
 

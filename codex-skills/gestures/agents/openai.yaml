@@ -1,0 +1,3 @@
+interface:
+  display_name: "Gestures"
+  short_description: "Build direct, velocity-aware and interruptible web gestures"

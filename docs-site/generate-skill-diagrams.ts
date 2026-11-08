@@ -136,6 +136,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Instant feedback",
     ],
   },
+  gestures: {
+    kind: "feedback-loop",
+    nodes: [
+      "Reuse gesture primitive",
+      "Track pointer directly",
+      "Resolve release velocity",
+      "Catch, cancel + verify",
+    ],
+  },
   "remove-animations": {
     kind: "decision-tree",
     nodes: [

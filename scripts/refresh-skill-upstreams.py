@@ -24,7 +24,7 @@ SOURCES = (
      ('skills/', 'LICENSE', 'README.md', 'performance-cheatsheet.md', 'ui-cheatsheet.md')),
 )
 EMIL = ('animate', 'remove-animations', 'improve-animations', 'animation-performance',
-        'animation-vocabulary', 'mobile-native', 'break-ui', 'ask-sonner')
+        'animation-vocabulary', 'mobile-native', 'break-ui', 'ask-sonner', 'gestures')
 REPORT = 'reports/skill-updates.md'
 BRANCH = 'ben-malinski/maintenance/priority-skill-updates'
 

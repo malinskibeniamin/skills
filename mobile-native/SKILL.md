@@ -34,6 +34,8 @@ sniffing; touch and mouse can coexist. Existing UI primitives and tokens remain 
 
 Read [PLATFORM.md](PLATFORM.md) for keyboard, gesture, overscroll, and PWA details.
 Check current browser support before applying optional viewport/meta features.
+For custom drag/swipe/sheet tracking, release physics or cancellation, load
+[gestures](../gestures/SKILL.md); this skill retains browser/viewport ownership.
 
 ## Preserve function
 

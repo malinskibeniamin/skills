@@ -33,6 +33,7 @@ using version-dependent props or return values; this is guidance, not a frozen A
 | Lost styles | Installed package CSS export and framework stylesheet lifecycle |
 | Classes ignored | Cascade/layers and wrapper configuration; scope override at its owner |
 | Mobile overlap | Supported offset props, safe area, keyboard and placement |
+| Swipe jumps, ignores flicks or cannot be caught | Existing Sonner gesture driver and CSS overrides; load [gestures](../gestures/SKILL.md) without adding a competing drag handler |
 
 ## Styling and verification
 

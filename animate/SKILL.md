@@ -1,6 +1,6 @@
 ---
 name: animate
-description: "Build, review, or plan purposeful web UI motion. Use for transitions, easing, springs, gestures, motion audits, or animation opportunities; not video production or native apps."
+description: "Build, review, or plan purposeful web UI motion: transitions, easing, springs, choreography, staggers, view swaps, and motion audits. Use gestures for direct manipulation; not video or native apps."
 ---
 
 Choose motion that explains a state change without delaying the user's task.
@@ -27,6 +27,8 @@ not UI animation. `/demo` remains user-invoked; this pointer grants no publicati
    `@starting-style` for supported entry transitions; WAAPI for imperative control;
    an installed spring/motion library for gestures, layout, or exit lifecycles.
    Read installed types and current official docs before using library-specific APIs.
+   For drag/swipe/sheet physics, load [gestures](../gestures/SKILL.md); it owns tracking,
+   release velocity, resistance, scroll arbitration and re-grab continuity.
 4. Prefer explicit `transform`/`opacity` transitions. Retarget from the current value;
    preserve exit state until completion and handle interruption/unmount cleanup.
    Scale anchored surfaces from their trigger; keep centered dialogs centered.
@@ -39,6 +41,11 @@ not UI animation. `/demo` remains user-invoked; this pointer grants no publicati
    meaning available without animation. Gate hover with `(hover: hover) and (pointer: fine)`.
 7. Exercise enter/exit, rapid reversal, repeated activation, keyboard, reduced motion,
    and touch paths at the real entrypoint. Record what was observed and what needs a device.
+
+For multiple elements responding to one event, read
+[choreography](REFERENCE.md#choreography): choose what stays still, run related parts
+together, and sequence only meaningful dependencies. Keep interaction immediate;
+prevent stale async continuations from restarting a canceled sequence.
 
 ## Review and planning
 

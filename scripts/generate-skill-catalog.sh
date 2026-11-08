@@ -59,6 +59,7 @@ SHORT_DESCRIPTIONS = {
     "frontend-invariants": "Timeless frontend principles that outlive stacks",
     "frontend-starter-kit": "Bootstrap the standard frontend toolchain and gates",
     "full-send": "Author delivery preset through an authorized merge",
+    "gestures": "Build direct, velocity-aware and interruptible web gestures",
     "go": "Author delivery preset for verified PR readiness",
     "golang": "Write Go with evidence-backed engineering conventions",
     "golang-review": "Review Go diffs against evidence-backed conventions",
