@@ -8,6 +8,63 @@ echo "╔═══════════════════════�
 echo "║          Cross-Hook Integration Tests                    ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 
+# A successful child may exit before reading stdin. Claude ignores SIGPIPE,
+# so a large piped payload used to turn printf's EPIPE into a false failure.
+echo ""
+echo "━━━ stop-dispatch.sh: large payload, ignored SIGPIPE ━━━"
+_setup_session
+_stop_root=$(mktemp -d)
+_stop_hooks="$_stop_root/.claude/hooks"
+mkdir -p "$_stop_hooks"
+cp "$HOOKS_DIR/stop-dispatch.sh" "$_stop_hooks/stop-dispatch.sh"
+printf '%s\n' '{"x-stop-dispatch":["registry-check.sh","test-perf-stop.sh","payload-check.sh","payload-check.sh"]}' > "$_stop_root/skill-manifest.json"
+for _child in registry-check.sh test-perf-stop.sh; do
+  printf '#!/bin/bash\nexit 0\n' > "$_stop_hooks/$_child"
+  chmod +x "$_stop_hooks/$_child"
+done
+cat > "$_stop_hooks/payload-check.sh" <<'EOF'
+#!/bin/bash
+jq -e -s 'length == 1 and (.[0].last_assistant_message | length == 250000)' >/dev/null
+EOF
+chmod +x "$_stop_hooks/payload-check.sh"
+printf '#!/bin/bash\ntouch "%s/tail-ran"\nexit 0\n' "$_stop_root" > "$_stop_hooks/pr-review-auto-hook.sh"
+chmod +x "$_stop_hooks/pr-review-auto-hook.sh"
+printf '%s\n' 'changed.md' > "$_session_dir/session-touched-files"
+jq -nc --arg sid "$CLAUDE_SESSION_ID" \
+  '{session_id:$sid,hook_event_name:"Stop",stop_hook_active:false,last_assistant_message:("x" * 250000)}' > "$_stop_root/payload.json"
+
+_run_large_stop() {
+  _last_exit=0
+  (trap '' PIPE; CLAUDE_PLUGIN_ROOT="$_stop_root" bash "$_stop_hooks/stop-dispatch.sh" < "$_stop_root/payload.json") \
+    > "$_stop_root/stdout" 2> "$_stop_root/stderr" || _last_exit=$?
+  _last_stdout=$(cat "$_stop_root/stdout")
+  _last_stderr=$(cat "$_stop_root/stderr")
+}
+
+_run_large_stop
+_assert_exit 0 "unread large payload does not fail the dispatcher or tail"
+_assert_stdout_not_contains 'check exited' "successful children produce no false-failure note"
+_assert_file_exists "$_stop_root/tail-ran" "successful checks reach the tail hook"
+
+# Preserve real child statuses rather than hiding every pipeline failure.
+cat > "$_stop_hooks/registry-check.sh" <<'EOF'
+#!/bin/bash
+printf '%s\n' '{"systemMessage":"real block"}' >&2
+exit 2
+EOF
+rm -f "$_stop_root/tail-ran"
+_run_large_stop
+_assert_exit 2 "real child block keeps exit 2 with an unread payload"
+_assert_stderr_contains 'real block' "real block message is preserved"
+_assert_file_not_exists "$_stop_root/tail-ran" "blocked checks do not release the tail hook"
+
+printf '#!/bin/bash\nexit 1\n' > "$_stop_hooks/registry-check.sh"
+_run_large_stop
+_assert_exit 0 "nonblocking child errors do not fail the tail"
+_assert_stdout_contains '\[registry-check\] check exited 1' "real child failure still emits a note"
+rm -rf "$_stop_root"
+_teardown_session
+
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "━━━ stop-findings pipeline ━━━"

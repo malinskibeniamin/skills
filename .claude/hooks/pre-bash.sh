@@ -41,6 +41,9 @@ _hooks=(
   "rtk-rewrite.sh|.+"
 )
 
+_input_file=$(mktemp) || { printf '%s\n' 'Cannot create hook payload file.' >&2; exit 2; }
+trap 'rm -f "$_input_file"' EXIT
+
 _stdout_final=""
 _contexts=""
 _updated_command=""
@@ -49,12 +52,13 @@ for _entry in "${_hooks[@]}"; do
   _union="${_entry#*|}"
   [ -x "$_dir/$_h" ] || continue
   printf '%s' "$_cmd_norm" | grep -qE "$_union" || continue
-  # Children write stderr straight through (no temp file: an unwritable /tmp
-  # must never silently disable guards). Deny = exit 2. A child emitting
+  # Children write stderr straight through. Payload-file failures block rather
+  # than silently disabling guards. Deny = exit 2. A child emitting
   # updatedInput rewrites the command for every LATER child, so rewrites
   # compose instead of last-stdout-wins clobbering earlier ones.
   _out=""; _code=0
-  _out=$(printf '%s' "$_input" | "$_dir/$_h") || _code=$?
+  printf '%s' "$_input" >"$_input_file" || exit 2
+  _out=$("$_dir/$_h" <"$_input_file") || _code=$?
   if [ "$_code" -eq 2 ]; then
     [ -n "$_out" ] && printf '%s\n' "$_out"
     exit 2
