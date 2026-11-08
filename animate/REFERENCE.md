@@ -66,7 +66,7 @@ panel usually carries already-visible content instead of adding a second child e
 | Carry | A parent can supply the shared spatial move | Nested transforms, clipping and layout ownership |
 
 - Default frequent menus, command palettes, keyboard-triggered UI and returning data
-  to together/instant. For an occasional stagger, 30–80 ms gaps are candidates; bound
+  to together/instant. For an occasional stagger, 30-80 ms gaps are candidates; bound
   the **last delay plus duration**, so a long list cannot produce a waiting queue.
   Vary hierarchy where useful; uniform timing is not inherently a defect.
 - Keep secondary accents tied to the cause, impact or settle of the lead, not arbitrary

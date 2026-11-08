@@ -17,12 +17,12 @@ interactions, not a new physics engine or a frozen Motion/Vaul API table.
   than stacking custom resistance on top. Re-measure bounds after layout changes.
 - Estimate release velocity from a recent, bounded sample window, not total distance
   divided by the whole drag duration. A pause before release should not retain an old
-  flick. For raw Pointer Events, CSS px / milliseconds × 1000 gives CSS px/second;
+  flick. For raw Pointer Events, CSS px / milliseconds * 1000 gives CSS px/second;
   ignore nonpositive time deltas and reset samples after cancellation/re-grab.
 - Project onto the allowed direction: a downward dismiss requires positive downward
   travel/velocity, not `abs(velocity)`. A reversed or perpendicular flick must not
   dismiss accidentally. Require recognized drag intent before treating velocity as commit.
-- Candidate dismiss thresholds are 40–50% of available travel OR roughly 500 CSS px/s
+- Candidate dismiss thresholds are 40-50% of available travel OR roughly 500 CSS px/s
   on the allowed axis. Calibrate to target size, scroll arbitration and real-device
   behavior; snap-point selection can use projected travel instead of dismissal rules.
 - [Motion drag](https://motion.dev/docs/react-drag) exposes offset/velocity, elastic
@@ -54,7 +54,7 @@ Exclude buttons, links, inputs and selectable content from drag initiation throu
 the primitive's supported mechanism (`data-vaul-no-drag` where supported). Pointer
 capture retains events outside the handle, but does not override browser cancellation.
 See [pointer capture](https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture).
-Give small handles a generous hit region (44 × 44 CSS px is a touch-oriented candidate),
+Give small handles a generous hit region (44 x 44 CSS px is a touch-oriented candidate),
 without overlapping adjacent controls or making content unselectable.
 
 Normalize one current progress value against measured travel, clamp it for overlay
