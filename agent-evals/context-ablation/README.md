@@ -59,11 +59,10 @@ Unrequested planning or review promotions must clear the recorded gate. The curr
 is owner-selected, not benchmark-promoted. Handoffs to a different model remain explicit
 owner-approved delegation, not automatic routing.
 
-The manifest pins only Claude Opus 5.5 and GPT-6.1 Sol. Both run at `low`, `medium`,
-`high`, `xhigh`, and `max`; results from their
-predecessors do not determine the new effort frontier. The owner-selected drivers start at
-Opus 5.5 `xhigh` and Sol `xhigh` while the suite measures the lowest quality-equivalent
-effort. Claude Code 2.1.257 or newer is
+The manifest pins only Claude Opus 5.5 and GPT-6.1 Sol, both at `xhigh`.
+The owner allows no other models or effort levels, including benchmarks.
+Experiment constructors reject disallowed overrides before any inference runs.
+Claude Code 2.1.257 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.
 Keep raw results out of git. On every major model release, record the decision with

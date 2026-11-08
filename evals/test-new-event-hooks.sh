@@ -167,7 +167,7 @@ if [ -x "$HOOKS_DIR/model-switch-router.sh" ]; then
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","requested_model":"opus","source":"picker"}
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","effort":{"level":"xhigh"},"requested_model":"opus","source":"picker"}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -187,11 +187,11 @@ JSON
   fi
 
   _routing_fixture=$(mktemp)
-  jq '.models["gpt-6.1-sol"].status = "eval-gated"' \
+  jq 'del(.efforts.allowed) | .models["gpt-6.1-sol"].status = "eval-gated"' \
     "$REPO_ROOT/config/model-routing.json" > "$_routing_fixture"
   _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$_routing_fixture" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"gpt-6.1-sol","requested_model":"gpt-6.1-sol","source":"picker"}
+{"hook_event_name":"PostModelSwitch","from_model":"claude-fable-5-1","to_model":"gpt-6.1-sol","effort":{"level":"xhigh"},"requested_model":"gpt-6.1-sol","source":"picker"}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -207,6 +207,24 @@ JSON
   fi
 
   rm -f "$_routing_fixture"
+
+  _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PostModelSwitch","to_model":"gpt-5.6-luna","source":"resume"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '
+      (.hookSpecificOutput.additionalContext | contains("prohibited"))
+      and (.hookSpecificOutput.additionalContext | contains("before continuing"))
+      and (.hookSpecificOutput.additionalContext | contains("do not infer a ban") | not)' \
+    >/dev/null 2>&1; then
+    echo "  PASS  resumed GPT-5.6 sessions require a preferred model before continuing"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  resumed GPT-5.6 session permits prohibited work: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: resumed GPT-5.6 route"
+  fi
 
   _out=$(HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
@@ -226,10 +244,117 @@ JSON
     ERRORS="$ERRORS\n  FAIL: resumed model switch prime guidance"
   fi
 
-  _routing_fixture=$(mktemp)
-  cat >"$_routing_fixture" <<'JSON'
-{"model_switch":{"deny_statuses":["retired","unsupported"]},"models":{"claude-retired":{"status":"unsupported"}}}
+  for _model in gpt-5.6 gpt-5.6-sol gpt-5.6-terra gpt-5.6-luna gpt-5.6-sol-2026-07-09 openai/gpt-5.6-luna GPT-5.6-SOL gpt-6-astra gpt-6-luna claude-sonnet-5-5 custom-gateway-model gpt-5.60-fixture; do
+    for _source in picker command sdk; do
+      _out=$(jq -cn --arg model "$_model" --arg source "$_source" \
+        '{hook_event_name:"PreModelSwitch",to_model:$model,source:$source,prompt_cache_warm:true,estimated_cache_write_usd:2.5}' \
+        | HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+          "$HOOKS_DIR/model-switch-router.sh")
+      if printf '%s' "$_out" | jq -e --arg model "$_model" '
+          .hookSpecificOutput.hookEventName == "PreModelSwitch"
+          and .hookSpecificOutput.permissionDecision == "deny"
+          and (.hookSpecificOutput.permissionDecisionReason | contains($model))' \
+        >/dev/null 2>&1; then
+        echo "  PASS  $_source denies $_model even without a catalog entry"
+        PASS=$((PASS + 1))
+      else
+        echo "  FAIL  $_source permits $_model: $_out"
+        FAIL=$((FAIL + 1))
+        ERRORS="$ERRORS\n  FAIL: $_source permits $_model"
+      fi
+    done
+  done
+
+  for _model in claude-opus-5-5 gpt-6.1-sol; do
+    _out=$(jq -cn --arg model "$_model" \
+      '{hook_event_name:"PreModelSwitch",to_model:$model,source:"picker",effort:{level:"xhigh"}}' \
+      | HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+        "$HOOKS_DIR/model-switch-router.sh")
+    if [ -z "$_out" ]; then
+      echo "  PASS  Exact model allowlist admits $_model unchanged"
+      PASS=$((PASS + 1))
+    else
+      echo "  FAIL  Exact model allowlist rejects $_model: $_out"
+      FAIL=$((FAIL + 1))
+      ERRORS="$ERRORS\n  FAIL: Exact model allowlist rejects $_model"
+    fi
+  done
+
+  for _model in claude-opus-5-5 gpt-6.1-sol; do
+    for _effort in low medium high max ultra ''; do
+      _out=$(jq -cn --arg model "$_model" --arg effort "$_effort" \
+        '{hook_event_name:"PreModelSwitch",to_model:$model,source:"sdk",effort:{level:$effort}}' \
+        | HOOK_METRICS_DISABLED=1 CLAUDE_EFFORT= MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+          "$HOOKS_DIR/model-switch-router.sh")
+      if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+        echo "  PASS  $_model rejects non-xhigh or missing effort: ${_effort:-missing}"
+        PASS=$((PASS + 1))
+      else
+        echo "  FAIL  $_model permits effort ${_effort:-missing}: $_out"
+        FAIL=$((FAIL + 1))
+        ERRORS="$ERRORS\n  FAIL: $_model effort ${_effort:-missing}"
+      fi
+    done
+  done
+
+  _out=$(env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID HOOK_METRICS_DISABLED=1 \
+    MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","to_model":"gpt-6-astra","effort":{"level":"xhigh"},"source":"sdk"}
 JSON
+  )
+  if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+    echo "  PASS  missing session metadata cannot bypass model admission"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  missing session metadata bypasses model admission"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: model admission without session"
+  fi
+
+  for _input in '{"effort": {"level":"high"}}' '{"effort":"xhigh"}' '{"effort":{"level":false}}' '{"effort":{"level":12}}'; do
+    _out=$(printf '%s' "$_input" | jq -c '. + {hook_event_name:"PreModelSwitch",to_model:"claude-opus-5-5",source:"sdk"}' \
+      | HOOK_METRICS_DISABLED=1 CLAUDE_EFFORT=xhigh MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+        "$HOOKS_DIR/model-switch-router.sh")
+    if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+      echo "  PASS  conflicting or malformed effort cannot bypass admission"
+      PASS=$((PASS + 1))
+    else
+      echo "  FAIL  invalid effort bypasses admission: $_out"
+      FAIL=$((FAIL + 1))
+      ERRORS="$ERRORS\n  FAIL: invalid effort admission"
+    fi
+  done
+
+  _out=$(HOOK_METRICS_DISABLED=1 CLAUDE_EFFORT=xhigh \
+    MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","to_model":"claude-opus-5-5","source":"sdk"}
+JSON
+  )
+  if [ -z "$_out" ]; then
+    echo "  PASS  documented CLAUDE_EFFORT admits the approved native route"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  native xhigh route was rejected: $_out"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: native effort admission"
+  fi
+
+  _out=$(HOOK_METRICS_DISABLED=1 CLAUDE_EFFORT=xhigh MODEL_ROUTING_FILE="/tmp/missing-model-policy-$$.json" \
+    "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
+{"hook_event_name":"PreModelSwitch","to_model":"claude-opus-5-5","source":"sdk"}
+JSON
+  )
+  if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+    echo "  PASS  missing model policy fails closed"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  missing model policy bypasses admission"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: missing model policy"
+  fi
+
+  _routing_fixture=$(mktemp)
+  jq '.models["claude-retired"] = {status:"unsupported"}' "$REPO_ROOT/config/model-routing.json" > "$_routing_fixture"
   _out=$(MODEL_ROUTING_FILE="$_routing_fixture" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
 {"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-retired","requested_model":"claude-retired","source":"command"}
@@ -251,7 +376,7 @@ JSON
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"picker","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","effort":{"level":"xhigh"},"requested_model":"opus","source":"picker","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -269,7 +394,7 @@ JSON
 
   _out=$(MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
     "$HOOKS_DIR/model-switch-router.sh" <<'JSON'
-{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5","requested_model":"opus","source":"command","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
+{"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"claude-opus-5-5","effort":{"level":"xhigh"},"requested_model":"opus","source":"command","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":1.25}
 JSON
   )
   if printf '%s' "$_out" | jq -e '
@@ -288,11 +413,11 @@ JSON
 {"hook_event_name":"PreModelSwitch","from_model":"claude-fable-5-1","to_model":"custom-gateway-model","requested_model":"custom-gateway-model","source":"sdk","context_tokens":180000,"prompt_cache_warm":true,"cache_ttl":"5m","estimated_cache_write_usd":2.5}
 JSON
   )
-  if [ -z "$_out" ]; then
-    echo "  PASS  PreModelSwitch preserves unlisted SDK-selected models"
+  if printf '%s' "$_out" | jq -e '.hookSpecificOutput.permissionDecision == "deny"' >/dev/null 2>&1; then
+    echo "  PASS  PreModelSwitch denies unlisted SDK-selected models"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  PreModelSwitch blocked an unlisted SDK-selected model: $_out"
+    echo "  FAIL  PreModelSwitch allowed an unlisted SDK-selected model: $_out"
     FAIL=$((FAIL + 1))
     ERRORS="$ERRORS\n  FAIL: PreModelSwitch unlisted SDK route"
   fi

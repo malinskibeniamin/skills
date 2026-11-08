@@ -10,13 +10,13 @@
     {
       "agent": "codex",
       "id": "gpt-6.1-sol",
-      "effort": "max",
+      "effort": "xhigh",
       "role": "current-codex-baseline"
     },
     {
       "agent": "claude-code",
       "id": "claude-opus-5-5",
-      "effort": "max",
+      "effort": "xhigh",
       "role": "cross-family-baseline"
     }
   ],
