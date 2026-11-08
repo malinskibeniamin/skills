@@ -58,7 +58,7 @@ done
 # Shared v1 skills are composed by the existing harness entrypoints.
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'Skill tool with "domain-modeling"' "grilling updates docs through domain-modeling"
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'Skill tool with "codebase-design"' "architecture skill uses codebase-design vocabulary"
-run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'Skill tool with "domain-modeling"' "architecture skill uses domain-modeling for side effects"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'Skill tool with "domain-modeling"' "architecture skill loads domain-modeling for proposals"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "frontend/React/TypeScript/Go" "ask-ben is tailored to Ben work"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/grilling" "ask-ben routes planning through grilling"
 run_content_eval "$REPO_ROOT/ask-ben/SKILL.md" "/diagnosing-bugs" "ask-ben routes hard bugs to diagnosing-bugs"

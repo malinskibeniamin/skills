@@ -42,6 +42,7 @@ Zapytaj tylko, jeśli brakuje ustalonego punktu. W przeciwnym razie wyznacz
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
 przypnij SHA końca i wspólnego przodka, a następnie sprawdź pełny diff i log tych rewizji.
 Dla WIP uwzględnij zmiany w indeksie, poza indeksem i istotne pliki nieśledzone; nazwij wyłączenia.
+Przed przeglądem sprawdź ustalony punkt odniesienia. Jeśli cały wybrany zakres jest pusty, zgłoś `no changes to review`; nie twórz sztucznych znalezisk ani nie uruchamiaj pustych osi przeglądu.
 Przed testami mutacyjnymi lub równoległym odczytem użyj [migawek źródła](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests).
 Przed werdyktem sprawdź tożsamość migawki; zmiana wejścia unieważnia odpowiednie dowody.
 

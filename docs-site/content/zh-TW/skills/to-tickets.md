@@ -41,6 +41,8 @@ type: skill
 
 若多個工單圖仍成立，使用 `/plan-arbiter`。若大型圖的前沿或阻塞關係需要檢查，使用 `/visual-plan`。
 
+套用[建置工單圖約定](https://github.com/malinskibeniamin/skills/blob/main/shared/ticket-graph.md)：發布前驗證參照與循環相依；說明每個切片的公開驗收測試接縫能捕捉什麼、未涵蓋什麼。交接前重新讀取已發布工單及其阻塞關係。
+
 ## 3. 確認 [#3-confirm]
 
 用編號列表展示**標題**、**阻塞於**和**交付內容**。詢問粒度、邊關係以及是否拆分或合併。迭代到使用者批准。

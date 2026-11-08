@@ -4,7 +4,8 @@ description: Turn a decision you cannot fully answer into a questionnaire for so
 disable-model-invocation: true
 ---
 
-Create a Markdown discovery questionnaire for a recipient with missing knowledge. Grill the send, not the subject: ask only who receives it and what must come back.
+Create a Markdown discovery questionnaire for a recipient who holds knowledge the user lacks.
+Grill the send, not the subject: ask only who receives it and what must come back.
 
 1. Ask recipient role, expertise, relationship in one exchange; stop when audience and unique knowledge are clear.
 2. Ask which facts/decisions the user cannot resolve; stop when answers enable a concrete next decision/action.

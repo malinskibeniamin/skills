@@ -24,15 +24,17 @@ Non-skill upstream infrastructure, docs site and repository automation are not i
 ## Refresh
 
 Use any Git checkout containing the reviewed commit; source worktree edits are not
-inputs. In this repository the `upstream` remote points to Matt's repository:
+inputs. Fetch into a temporary source checkout without changing the host's remotes:
 
 ```bash
-git fetch upstream
-git rev-parse upstream/main # review this immutable revision before importing
-python3 scripts/vendor-mattpocock.py --source . --revision <full-reviewed-sha>
+source_dir=$(mktemp -d)
+git clone https://github.com/mattpocock/skills.git "$source_dir/upstream"
+git -C "$source_dir/upstream" rev-parse HEAD # review this immutable revision before importing
+python3 scripts/vendor-mattpocock.py --source "$source_dir/upstream" --revision <full-reviewed-sha>
 bash scripts/generate-skill-catalog.sh
 python3 scripts/vendor-mattpocock.py --check
 bash evals/run.sh matt-refresh
+bun run docs:translate:check # refresh affected locale pages when local skills change
 ```
 
 Compare the old pin with the reviewed revision and update each affected local owner,
@@ -41,13 +43,22 @@ all receive an explicit-only adapter under the host contract. Update this notice
 and the README pin/count. The importer refuses modified managed outputs, unsafe
 source entries, missing attribution inputs and duplicate skill names; preserve and
 reconcile local work before retrying. Repeating the same import and generators must
-produce no additional diff. `--check` is local, read-only and network-free.
+produce no additional diff, even when other vendors follow Matt's registrations.
+Refresh output identifies added, changed and removed skills for reconciliation;
+removing a source adapter does not retire its local owner. `--check` is local,
+read-only and network-free. Remove the disposable source checkout after verification.
 
 ## Reconciliation at this pin
 
 The latest refresh adds the merged software-factory design language and surveys,
 routes its adapter through the existing planning owner, and reuses shared wikis for
 chief-of-staff. Retro procedures remain scoped and recommend-only without edit authority.
+
+A same-pin integration pass verifies the full suite without snapshot churn, preserves
+cross-vendor registration order and reports removed sources. The
+[family coverage map](../shared/MATT-POCOCK.md#integration-coverage) records existing coverage
+and focused improvements to ticket-graph safety, test-seam limits, read-only architecture
+assessment, empty review scope and questionnaire audience grounding.
 
 Earlier reconciliations from the adapted baseline `49dd158d1076134a641b33efb035946536778336` remain:
 

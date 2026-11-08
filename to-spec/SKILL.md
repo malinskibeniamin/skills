@@ -41,6 +41,8 @@ Settled module/interface, architecture, schema, API, interaction decisions. No s
 ## Testing Decisions
 
 Name observable behavior, modules, seams, and similar repo tests; never implementation detail.
+For each seam, state what it catches and misses. Carry unresolved coverage decisions in
+Further Notes rather than presenting an unconfirmed contract as settled.
 
 ## Out of Scope
 

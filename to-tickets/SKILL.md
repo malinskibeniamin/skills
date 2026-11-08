@@ -31,6 +31,9 @@ the old; move callers in independently green batches; then delete the old form. 
 The contract is blocked by every migrate batch. If batches cannot
 stay green alone, use an integration branch and final integrate-and-verify ticket.
 
+Apply the [build-ticket graph contract](../shared/ticket-graph.md): validate references
+and cycles before publication; name each slice's acceptance seam and its catches/misses.
+
 Call the Skill tool separately with "plan-arbiter" for competing graphs, "visual-plan" for large
 graphs whose frontier or blockers need inspection.
 

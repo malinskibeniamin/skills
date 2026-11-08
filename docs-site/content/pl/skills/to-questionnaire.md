@@ -11,7 +11,7 @@ sidebar:
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/to-questionnaire.excalidraw)
 
-Przekształć kwestię, której użytkownik nie może rozstrzygnąć samodzielnie, w kwestionariusz Markdown do wypełnienia przez jedną osobę asynchronicznie lub podczas spotkania. Odbiorca ma wiedzę, której brakuje użytkownikowi; kwestionariusz pomaga ją wydobyć.
+Utwórz kwestionariusz rozpoznawczy Markdown dla odbiorcy, który ma wiedzę brakującą użytkownikowi.
 
 **Dopytuj o wysyłkę, nie o temat.** Pytaj użytkownika tylko o to, na co może odpowiedzieć: kto otrzyma kwestionariusz i jakich informacji zwrotnych potrzebuje. Dokument powinien następnie wypełnić lukę między wiedzą odbiorcy a decyzją użytkownika.
 

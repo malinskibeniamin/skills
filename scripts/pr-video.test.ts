@@ -625,6 +625,30 @@ test("renders one real CLI or UI take with timed subtitles and an escaped execut
   expect(html).toContain('class="node active">Result');
 });
 
+test("demo stops before rendering when narration generation fails", () => {
+  const { root, demo, calls } = demoFixture();
+  const jq = Bun.which("jq");
+  expect(jq).not.toBeNull();
+  writeFileSync(
+    join(root, "bin/jq"),
+    `#!/bin/sh
+if [ "$1" = "-r" ]; then
+  echo "narration generation unavailable" >&2
+  exit 23
+fi
+exec ${JSON.stringify(jq)} "$@"
+`,
+    { mode: 0o755 },
+  );
+  const result = demo();
+  expect(result.exitCode).not.toBe(0);
+  expect(result.stderr.toString()).toContain(
+    "narration generation unavailable",
+  );
+  expect(existsSync(calls)).toBe(false);
+  expect(existsSync(join(root, "out/demo.mp4"))).toBe(false);
+});
+
 test.each([
   null,
   { title: "No steps", steps: [] },
