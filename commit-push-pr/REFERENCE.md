@@ -20,7 +20,10 @@ protection does not report `BEHIND`, and even with no new review feedback.
    git operation or concurrent owner, and local HEAD equal to the published PR HEAD. Record
    that published SHA for the push lease. Defer unsafe ownership/worktree states visibly;
    never stash, reset, or switch another worktree to make them eligible.
-2. Fetch origin and run the pre-rebase check. For a coherent linear branch whose commits
+2. Fetch origin and run the pre-rebase check. Inspect relevant base changes since divergence
+   for superseded intent or changed ownership/contracts, even without textual conflicts.
+   Stop obsolete work before rewriting; a materially different product/architecture choice
+   needs its owner, not a mechanical rebase. For a coherent linear branch whose commits
    belong to the current Git identity, consolidate before rebase:
    `<plugin-root>/scripts/pr-maintenance-squash.sh <fetched-base-ref> <observed-pr-head>
    "<conventional-commit-message>"`. The helper retains the tree and reflog recovery,
@@ -32,7 +35,10 @@ protection does not report `BEHIND`, and even with no new review feedback.
    tests, and current base behavior, not blanket `ours`/`theirs`. Continue without asking
    the human to click Update branch or approve a routine rebase. Only a genuine access,
    ownership, or material owner-reserved semantic decision blocks this work.
-3. Rerun affected tests and repository checks; refresh invalidated review/visual evidence.
+3. Inspect the final base diff and compare the saved pre-rebase series with `git range-diff`,
+   accounting for intentional consolidation. Confirm intended behavior survived and no
+   already-landed or retired behavior was reintroduced. Rerun affected tests and repository
+   checks; refresh invalidated review/visual evidence.
    Push immediately with `git push --force-with-lease=refs/heads/<branch>:<observed-pr-head>
    origin HEAD:refs/heads/<branch>`. A rejected lease means remote work changed: inspect it,
    never retry with plain force or silently refresh the lease.

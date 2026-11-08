@@ -96,10 +96,70 @@ class TstackSyncTest(unittest.TestCase):
 
     def test_committed_inputs_and_repeat_import_are_deterministic(self):
         self.assertEqual(self.install().returncode, 0)
+        manifest_path = self.repo / ".claude-plugin/plugin.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["skills"].remove("./tdd/")
+        manifest["skills"].append("./tdd/")
+        manifest_path.write_text(json.dumps(manifest) + "\n")
         self.write(self.source, "skills/file-pr/SKILL.md", "Dirty upstream work is not the pin\n")
         before = self.snapshot()
         result = self.install()
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_source_check_uses_recorded_commit_without_writes(self):
+        self.assertEqual(self.install().returncode, 0)
+        self.write(self.source, "skills/file-pr/SKILL.md", "A later committed instruction\n")
+        self.commit()
+        self.write(self.source, "LICENSE", "Dirty upstream license\n")
+        before = self.snapshot()
+        result = self.cli("--check", "--source", str(self.source))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(self.revision, result.stdout)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_source_check_rejects_self_consistent_snapshot_drift(self):
+        self.assertEqual(self.install().returncode, 0)
+        helper = self.repo / "vendor/tstack/skills/babysit-pr/scripts/pr-wait"
+        lock_path = self.repo / "vendor/tstack.lock.json"
+        original, original_lock = helper.read_bytes(), lock_path.read_text()
+        for mutation in ("bytes", "mode", "missing"):
+            with self.subTest(mutation=mutation):
+                helper.write_bytes(original)
+                helper.chmod(0o755)
+                lock = json.loads(original_lock)
+                record = lock["files"]["skills/babysit-pr/scripts/pr-wait"]
+                if mutation == "bytes":
+                    helper.write_text("#!/bin/sh\necho modified\n")
+                    record["sha256"] = hashlib.sha256(helper.read_bytes()).hexdigest()
+                elif mutation == "mode":
+                    helper.chmod(0o644)
+                    record["mode"] = 0o644
+                else:
+                    helper.unlink()
+                    del lock["files"]["skills/babysit-pr/scripts/pr-wait"]
+                lock_path.write_text(json.dumps(lock))
+                self.assertEqual(self.cli("--check").returncode, 0)
+                before = self.snapshot()
+                result = self.cli("--check", "--source", str(self.source))
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("does not match committed source", result.stderr)
+                self.assertEqual(self.snapshot(), before)
+
+    def test_source_check_does_not_lazy_fetch_missing_objects(self):
+        self.assertEqual(self.install().returncode, 0)
+        remote = Path(self.temp.name) / "promisor"
+        subprocess.check_call(["git", "clone", "--quiet", "--no-local", str(self.source), str(remote)])
+        self.git("config", "remote.origin.url", str(remote))
+        self.git("config", "remote.origin.promisor", "true")
+        self.git("config", "extensions.partialClone", "origin")
+        oid = self.git("rev-parse", f"{self.revision}:skills/babysit-pr/scripts/pr-wait").strip()
+        missing = self.source / ".git/objects" / oid[:2] / oid[2:]
+        missing.unlink()
+        before = self.snapshot()
+        result = self.cli("--check", "--source", str(self.source))
+        self.assertNotEqual(result.returncode, 0, result.stdout)
+        self.assertIn(oid, result.stderr)
         self.assertEqual(self.snapshot(), before)
 
     def test_drift_is_reported_and_refresh_preserves_local_work(self):

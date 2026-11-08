@@ -17,8 +17,9 @@ execution, delegation consent, review evidence, or a permission grant.
   Full send, full stop, takeover and PR creation do not implicitly select reviewers,
   switch models, spawn agents or create top-level threads. Without consent, review
   inline and label it inline, never independent or cross-provider.
-- Read actual tool schemas. In T3, register every PR being worked on with
-  `link_pull_request`; verify thread links before handoff. Do not invent tool success.
+- Read actual tool schemas. In T3, make `link_pull_request` with the full URL the
+  next call after creating, taking over or pushing to a PR; read-only review needs
+  no registration. Verify thread links before handoff. Do not invent tool success.
   No unattended scheduling, new credentials or external services as a side effect.
 
 ## Owners and entrypoints
@@ -68,13 +69,23 @@ human endorsement, reviewer results or model identities.
 
 ## babysit-pr
 
-Handle current checks and findings first. Use one watcher per PR, owned by the
+Handle current checks and findings first through
+[feedback freshness](../resolve-pr-feedback/REFERENCE.md#coverage-and-evidence-freshness).
+It overrides upstream's latest-push-only comment filter: unresolved older findings
+still need a disposition against the current candidate.
+Use one watcher per PR, owned by the
 parent thread; child reviewers never watch. For owned PR maintenance with host-authorized
 wakes and exposed `watch_pull_request`, handle current events, checkpoint, register once
 and end the turn; no polling or second watcher. An explicit unattended upkeep request
 selects this path without per-event prompts. Call `unwatch_pull_request` at terminal
 handoff or before a user question as required by the host, not after every push. A wake is new evidence,
 not approval. Read back uncertain tool outcomes before retrying.
+
+If native T3 watching fails or is unavailable, report the exact continuation gap.
+Use read-only hosted-state/rate-limit diagnostics when available and follow the
+host's supported recovery. Upstream's background wait for a rate-limit reset is
+not authorized: do not replace native watch with `pr-wait`, a dispatcher, polling
+or sleeping jobs. Confirm an old watch stopped before registering a replacement.
 
 Outside T3, for authorized monitoring only, use the snapshot's executable
 `vendor/tstack/skills/babysit-pr/scripts/pr-wait` by its absolute plugin path,
