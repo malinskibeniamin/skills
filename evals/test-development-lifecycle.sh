@@ -25,6 +25,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "requested endpoint" "lifecycle stops at 
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Outcome evidence by task" "reference branches by task evidence"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Bug branch" "reference has a root-cause bug branch"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Meaningful behavior branch" "reference has a TDD behavior branch"
+run_content_eval "$SKILL_DIR/SKILL.md" "REFERENCE.md#refactor-branch" "ordinary implementation reaches the structural refactor branch"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "comment/test pruning.*requested" "structural refactoring keeps broad pruning opt-in"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Review depth" "reference scales review to evidence"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Endpoint evidence" "reference defines delivery completion"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "schedule fixed review rounds" "reference rejects review ceremony"

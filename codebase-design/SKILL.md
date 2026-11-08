@@ -58,4 +58,4 @@ When two designs survive deletion, Call the Skill tool with "plan-arbiter": dept
 
 Reject depth-by-line-count, interface-as-TypeScript-keyword, and vague boundary wording.
 
-Read [DEEPENING.md](DEEPENING.md) for dependency/seam/testing discipline and [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md) for parallel designs.
+Read [DEEPENING.md](DEEPENING.md#change-locality) for cleanup/dependencies/tests; [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md) for alternatives.

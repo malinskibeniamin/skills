@@ -13,6 +13,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "\[REFERENCE.md\]" "architecture skill di
 run_content_eval "$SKILL_DIR/SKILL.md" "class(es)? of errors|error class" "architecture skill targets error classes"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ss]tructural invariant" "architecture skill makes invariants explicit"
 run_content_eval "$SKILL_DIR/SKILL.md" "single source of truth|one source of truth" "architecture skill detects parallel bookkeeping"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Trace each exception.*requirement" "architecture diagnoses the requirement behind workarounds"
+run_content_eval "$SKILL_DIR/REFERENCE.md" "Group related symptoms.*root-cause" "architecture groups symptoms under a root-cause redesign"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Ii]nvalid states.*(impossible|unrepresentable)" "architecture skill prefers impossible invalid states"
 run_content_eval "$SKILL_DIR/SKILL.md" "data ownership|state transitions|dependency graph|call graph" "architecture skill maps structural evidence"
 run_content_eval "$SKILL_DIR/SKILL.md" "[Dd]eletion test" "architecture skill applies the deletion test"

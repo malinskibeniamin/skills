@@ -17,6 +17,11 @@ Use this reference while exploring candidates. The output remains the report def
 Trace reads, writes, transitions, retries, and recovery. A candidate must name the error class,
 show the path that permits it, and identify the owner that will preserve the target invariant.
 
+Inspect caller-specific branches, sleeps/retries, swallowed errors and disabled tests.
+Trace each exception to the requirement or external constraint it protects; its presence is not a defect.
+Group related symptoms under a root-cause redesign, rather than planning one patch per workaround.
+Show which exceptions become unnecessary and which must remain, with caller and failure-path evidence.
+
 ## Dependency categories
 
 1. **In-process:** pure computation; usually safe to absorb.

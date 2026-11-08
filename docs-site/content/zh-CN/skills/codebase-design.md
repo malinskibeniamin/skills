@@ -77,4 +77,4 @@ type: skill
 
 不采用按代码行数衡量深度、将接口仅理解为 TypeScript 关键字，以及含义宽泛的“边界”表述。
 
-请阅读 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md)，了解依赖项、接缝和测试规范；阅读 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)，了解并行设计。
+整理结构或设计依赖与测试时，阅读 [DEEPENING.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DEEPENING.md#change-locality)；比较替代方案时，阅读 [DESIGN-IT-TWICE.md](https://github.com/malinskibeniamin/skills/blob/main/codebase-design/DESIGN-IT-TWICE.md)。

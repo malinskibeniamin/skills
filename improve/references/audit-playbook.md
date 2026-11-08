@@ -90,7 +90,7 @@ The goal is not a percentage -- it's *which untested code is dangerous*.
 - Dead-code candidates: unused values/exports/files, retired flag branches and apparently unreferenced dependencies. Apply [semantic cleanup](../../shared/verifiability.md#dead-code-and-duplication): verify intended uses, public/runtime entry points and retirement before recommending deletion.
 - God objects/modules: files an order of magnitude larger than the repo median that everything touches; functions with double-digit parameters or deep conditional nesting.
 - Inconsistent patterns: three ways of doing data fetching / error handling / styling in the same repo -- pick the winner (the one the team converged on most recently) and plan the consolidation.
-- Abstraction mismatches: premature abstractions with a single implementation, or missing abstractions where the same change always requires touching N files in lockstep.
+- Abstraction mismatches: use [change locality](../../codebase-design/DEEPENING.md#change-locality) to distinguish hidden coordination, unnecessary coupling and unearned structure. Trace workaround requirements before proposing grouped root-cause fixes; preserve the advisor-only scope.
 
 ## 6. Dependencies & Migrations
 

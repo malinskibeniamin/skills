@@ -61,4 +61,4 @@ routine work needs no evidence/checklist file.
 
 ## Completion
 
-Run [author delivery](../shared/delivery-workflow.md): inline self-review, evidence, publication and requested CI/feedback. Reuse verification; stop only at the requested endpoint when every exit criterion passes. [REFERENCE.md](REFERENCE.md) has probes.
+Run [author delivery](../shared/delivery-workflow.md): inline self-review, evidence, publication and requested CI/feedback. Reuse verification; stop only at the requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).

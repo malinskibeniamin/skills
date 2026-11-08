@@ -73,4 +73,4 @@ type: skill
 
 ## 完成 [#completion]
 
-閱讀並執行[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)：內嵌自我審查、適用證據、發布以及要求的 CI/回饋跟進。重用目前驗證；所有退出條件滿足後，在要求的端點停止。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md)包含針對任務的探查。
+閱讀並執行[作者交付](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md)：內嵌自我審查、適用證據、發布以及要求的 CI/回饋跟進。重用目前驗證；所有退出條件滿足後，在要求的端點停止。[重構](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md#refactor-branch)。

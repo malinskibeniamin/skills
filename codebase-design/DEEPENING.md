@@ -2,6 +2,20 @@
 
 How to deepen a cluster of shallow modules safely, given its dependencies. Assumes the vocabulary in [SKILL.md](SKILL.md) -- **module**, **interface**, **seam**, **adapter**.
 
+## Change locality
+
+Before structural cleanup, compare requirements, callers and Git co-change evidence:
+
+- **Hidden coordination:** duplicated domain decisions, implicit shared state or call order,
+  and one feature scattered across technical layers. Make the owner and required coordination explicit.
+- **Unnecessary coupling:** independent workflows reaching into internals, caller-specific
+  parameters, or stable domain code depending on volatile providers. Keep variability behind its seam.
+- **Unearned structure:** forwarding wrappers, unused extension points and apparently dead
+  paths. Establish what contract or side effect they own before proposing removal.
+
+Consolidate shared knowledge, not similar syntax. Follow [semantic cleanup](../shared/verifiability.md#dead-code-and-duplication)
+before deletion/sharing; preserve authorization, validation, observability and compatibility.
+
 ## Dependency categories
 
 When assessing a candidate for deepening, classify its dependencies. The category determines how the deepened module is tested across its seam.
@@ -31,7 +45,8 @@ Third-party services (Stripe, Twilio, etc.) you don't control. The deepened modu
 
 ## Testing strategy: replace, don't layer
 
-- Old unit tests on shallow modules become waste once tests at the deepened module's interface exist -- delete them.
+- Keep old coverage until replacement interface checks pass; retire a test only when its contract and failure cases remain covered.
 - Write new tests at the deepened module's interface. The **interface is the test surface**.
 - Tests assert on observable outcomes through the interface, not internal state.
 - Tests should survive internal refactors -- they describe behaviour, not implementation. If a test has to change when the implementation changes, it's testing past the interface.
+- Use [test audit](../test-audit/SKILL.md) for requested pruning; a module move alone does not make its regression tests redundant.
