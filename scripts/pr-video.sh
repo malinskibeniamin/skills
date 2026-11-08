@@ -394,17 +394,18 @@ demo() {
   # Preserve real timing; no slowing, looping, or end-frame padding for a demo.
   ffmpeg -hide_banner -loglevel error -y -i "$video" -an -c:v libx264 -r 30 -g 30 -keyint_min 30 -pix_fmt yuv420p -movflags +faststart "$project/assets/recording.mp4" || return 1
   printf '%s\n' '{"paths":{"assets":"assets"},"media":{"autoProxy":true}}' > "$project/hyperframes.json"
-  HF_DURATION=$duration \
-    HF_TITLE=$(jq -r '.title | @html' "$sidecar") \
-    HF_LAYOUT=$(jq -r 'if (.diagram // [] | length) > 0 then "with-diagram" else "full" end' "$sidecar") \
-    HF_STEPS=$(jq -r --argjson end "$duration" '
+  local title layout steps
+  title=$(jq -r '.title | @html' "$sidecar") || return 1
+  layout=$(jq -r 'if (.diagram // [] | length) > 0 then "with-diagram" else "full" end' "$sidecar") || return 1
+  steps=$(jq -r --argjson end "$duration" '
       (.diagram // []) as $diagram | .steps as $s | range(0; $s | length) as $i | $s[$i] as $step |
-      (if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at as $duration |
+      ((if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at) as $duration |
       "<div id=\"step-\($i)\" class=\"step clip\" data-start=\"\($step.at)\" data-duration=\"\($duration)\">" +
       "<div class=\"caption\">\($step.caption | @html)</div>" +
       (if ($diagram | length) > 0 then "<aside><h2>Execution model</h2><p>Explanation, not a live trace</p>" +
         ([range(0; $diagram | length) as $n | "<div class=\"node\(if $step.active == $n then " active" else "" end)\">\($diagram[$n] | @html)</div>"] | join("<div class=\"arrow\">↓</div>")) + "</aside>" else "" end) + "</div>"
-    ' "$sidecar") \
+    ' "$sidecar") || return 1
+  HF_DURATION=$duration HF_TITLE=$title HF_LAYOUT=$layout HF_STEPS=$steps \
     perl -pe 's/<!-- __(\w+)__ -->|__(\w+)__/$ENV{"HF_" . ($1 || $2)}/g' \
     "$SCRIPT_DIR/pr-video-demo.html" > "$project/index.html"
   (cd "$project" && "${HYPERFRAMES_CMD[@]}" check >&2 &&

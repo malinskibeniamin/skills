@@ -40,6 +40,7 @@ type: skill
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`，
 固定头部和合并基点的 SHA，再检查这些版本的完整差异和日志。
 审查 WIP 时，纳入暂存、未暂存及相关未跟踪内容；说明排除项。
+审查前验证固定的比较基点。如果所选完整范围为空，报告 `no changes to review`；不要虚构发现，也不要执行没有差异的审查轴。
 执行变异测试或并发读取前，使用[源码快照](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests)。
 给出结论前重新核对快照身份；输入变动会使相关证据失效。
 

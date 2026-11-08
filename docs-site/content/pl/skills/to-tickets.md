@@ -43,6 +43,8 @@ Każde zgłoszenie:
 
 Użyj `/plan-arbiter`, gdy pozostaje kilka grafów. Użyj `/visual-plan` dla dużego grafu wymagającego kontroli granicy lub blokad.
 
+Zastosuj [kontrakt grafu zgłoszeń implementacyjnych](https://github.com/malinskibeniamin/skills/blob/main/shared/ticket-graph.md): przed publikacją zweryfikuj odwołania i cykle; dla każdego wycinka nazwij publiczny punkt testowania i jego ograniczenia. Przed przekazaniem pracy odczytaj opublikowane zgłoszenia i relacje blokowania.
+
 ## 3. Potwierdź [#3-confirm]
 
 Pokaż numerowaną listę z **Tytułem**, **Blokowane przez** i **Co dostarcza**. Zapytaj o ziarnistość, krawędzie oraz łączenie lub dzielenie. Iteruj do zatwierdzenia.

@@ -21,6 +21,7 @@ Missing fixed point: ask. Otherwise resolve
 `BASE=$(PR_BASE_REF="${REVIEW_BASE:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`,
 pin head/merge-base SHAs; inspect their complete diff and log.
 WIP includes staged, unstaged, relevant untracked inputs; label exclusions.
+Empty complete scope: report `no changes to review`.
 Mutations/concurrent reads: [snapshots](REFERENCE.md#source-snapshots-and-mutation-tests).
 Recheck identity; drift invalidates evidence.
 
@@ -94,6 +95,6 @@ complete applicability ledger. Cover all surfaces; do not add automatic agents.
 
 ## Output
 
-Use [REFERENCE.md](REFERENCE.md) for schema and format.
+Schema/format: [REFERENCE.md](REFERENCE.md).
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
 `product:`/`lie-detector:` lines, verdict and residual limits. Clean: receipt/verdict only.

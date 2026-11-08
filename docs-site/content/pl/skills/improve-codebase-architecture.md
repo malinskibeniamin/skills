@@ -55,10 +55,10 @@ Zakończ sekcją **Najważniejsza rekomendacja**. Nie proponuj jeszcze ostateczn
 
 Uruchom `/grilling`. Rozstrzygnij własność, niezmiennik, kształt modułu, granicę, adaptery, kierunek zależności, stany przejściowe, migrację, wycofanie i obserwowalne testy.
 
-- Nowy lub doprecyzowany termin domenowy -> `/domain-modeling` aktualizuje `GLOSSARY.md`.
+- Nowy termin -> zaproponuj wpis w glosariuszu. Wczytaj `domain-modeling` dla propozycji, ale zapisuj dokumenty domenowe tylko z uprawnieniem do edycji.
 - Trwałe odrzucenie -> zaproponuj ADR.
 - Konkurencyjne interfejsy -> zastosuj projektowanie dwóch wariantów z `/codebase-design`.
 - Propozycja wizualna gotowa do przeglądu -> `/visual-plan`; konkurencyjne propozycje -> `/plan-arbiter`.
 - Żądanie implementacji -> odwracalna sekwencja migracji przekazana do `/development-lifecycle`.
 
-Praca jest ukończona, gdy wybrany niezmiennik wyjaśnia, dlaczego klasa błędu nie może powrócić przez niezmodyfikowaną ścieżkę wywołania, a testy weryfikują ten publiczny kontrakt.
+Przegląd jest ukończony, gdy każda rekomendacja łączy udokumentowaną klasę błędu z proponowanym właścicielem i niezmiennikiem, odwracalną migracją oraz weryfikacją publicznego kontraktu, a użytkownik ma jasny kolejny wybór. To twierdzenia projektowe do sprawdzenia podczas implementacji, nie zmiany ani zaliczone testy z tego przeglądu tylko do odczytu.

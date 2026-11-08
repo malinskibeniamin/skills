@@ -24,3 +24,13 @@ run_content_eval "$REPO_ROOT/work-automation-kit/templates/issue-tracker-gitlab.
   "GitLab MR listing uses its supported output flag"
 run_content_eval "$REPO_ROOT/pr/SKILL.md" 'vendor/mattpocock/upstream/skills/engineering/pr/' \
   "local pr retains a direct provenance pointer"
+
+# Public instruction wiring only; these are not claims of model adherence.
+for owner in to-tickets implement-spec; do
+  run_content_eval "$REPO_ROOT/$owner/SKILL.md" 'shared/ticket-graph.md' \
+    "$owner loads the shared build-ticket graph contract"
+done
+run_content_eval "$REPO_ROOT/shared/ticket-graph.md" 'self-blockers and cycles' \
+  "build-ticket preflight covers invalid dependency graphs"
+run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'not changes or passing tests.*read-only' \
+  "architecture recommendations distinguish design claims from implemented proof"

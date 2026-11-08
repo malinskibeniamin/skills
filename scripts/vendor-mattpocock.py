@@ -167,10 +167,20 @@ def install(repo, source, revision):
     published_entries, length = json.JSONDecoder().raw_decode(manifest_text[skills_match.end():])
     if published_entries != manifest["skills"]:
         raise ValueError("Ambiguous plugin skills array")
-    manifest["skills"] = [p for p in manifest["skills"] if not p.startswith(f"./{ADAPTERS}/")] + [s["registration"] for s in skills]
+    # Preserve surviving entries in place: refreshing one vendor must not reorder
+    # other vendors or create a diff when the pinned inputs are unchanged.
+    registrations = [s["registration"] for s in skills]
+    manifest["skills"] = [p for p in published_entries
+                          if not p.startswith(f"./{ADAPTERS}/") or p in registrations]
+    added = [p for p in registrations if p not in manifest["skills"]]
+    insertion = max((i + 1 for i, p in enumerate(manifest["skills"])
+                     if p.startswith(f"./{ADAPTERS}/")), default=len(manifest["skills"]))
+    manifest["skills"][insertion:insertion] = added
     validate_registration(repo, skills, manifest["skills"])
-    entries_text = json.dumps(manifest["skills"], indent=2).replace("\n", "\n  ")
-    updated_manifest = manifest_text[:skills_match.end()] + entries_text + manifest_text[skills_match.end() + length:]
+    updated_manifest = manifest_text
+    if manifest["skills"] != published_entries:
+        entries_text = json.dumps(manifest["skills"], indent=2).replace("\n", "\n  ")
+        updated_manifest = manifest_text[:skills_match.end()] + entries_text + manifest_text[skills_match.end() + length:]
     # Validate and stage the entire new inventory before replacing managed outputs.
     with tempfile.TemporaryDirectory(prefix="matt-import-") as temp:
         stage = Path(temp)
@@ -195,10 +205,15 @@ def install(repo, source, revision):
     manifest_path.write_text(updated_manifest)
     if previous:
         changed = {p for p in previous["files"].keys() | files.keys() if previous["files"].get(p) != files.get(p)}
-        for skill in skills:
-            prefix = str(PurePosixPath(skill["source"]).parent) + "/"
-            if any(p.startswith(prefix) for p in changed):
-                print(f'Reconcile {skill["upstream_name"]} -> {skill["owner"] or skill["name"]}')
+        old = {s["upstream_name"]: s for s in previous["skills"]}
+        new = {s["upstream_name"]: s for s in skills}
+        for name in sorted(old.keys() | new.keys()):
+            skill = new.get(name) or old[name]
+            prefixes = tuple(str(PurePosixPath(rows[name]["source"]).parent) + "/"
+                             for rows in (old, new) if name in rows)
+            if any(p.startswith(prefixes) for p in changed):
+                status = "added" if name not in old else "removed" if name not in new else "changed"
+                print(f'Reconcile {name} -> {skill["owner"] or skill["name"]} ({status})')
     check(repo)
 
 

@@ -19,27 +19,34 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 Start every authorized subagent with a fresh context window and a self-contained brief; do not fork the coordinator's conversation.
 
-**Implementer subagents** should be run in the background where possible for **maximum concurrency**.
+Use only host-supported, authorized delegation. Bound concurrent implementers by independent
+ownership and the coordinator's ability to integrate and verify their work, not frontier size.
+An unavailable delegation capability is a reported limitation, not permission to change providers.
 
 ## Steps
 
-1. Read the spec and tickets. Read enough to understand the task graph.
+1. Read the spec, full tickets and blocking relationships. Apply the
+   [build-ticket graph contract](../shared/ticket-graph.md) before dispatch: missing edges,
+   cycles and an empty frontier with unfinished work cannot be treated as completion.
 
 2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
 
 3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
 
 4. Use a fresh **implementer subagent** for each ticket, each in its own worktree on its own branch. Each implementer subagent:
-   - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
+   - confirms its clean, agent-owned worktree is based on the integration branch's pinned tip before starting; correct a wrong base without resetting foreign, dirty or concurrent work;
    - Calls the Skill tool with "tdd" to build the ticket;
    - merges the integration branch tip into its own branch before reporting done, so step 5 is a fast-forward.
 
 5. Once an **implementer subagent** completes, merge its work to the integration branch with a **merger subagent**.
 
-6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
+6. Verify the integrated slice against its acceptance criteria, then refresh ticket state
+   and recompute the **frontier**. Dispatch newly ready work within the authorized bounds;
+   an implementer's completion alone never unblocks dependent work.
 
 7. Once all tickets are complete, Call the Skill tool with "review" on the integration branch. Fix all issues raised by the code review in a single fresh **implementer subagent**.
 
 8. If a draft PR exists, keep it draft when that is the requested endpoint; otherwise mark it ready for review. Without a PR, resolve each ticket the way the issue tracker closes work, and report the integration branch.
 
-9. Clean up all **implementer subagent** worktrees.
+9. Clean up only owned implementer worktrees whose results are integrated and whose useful
+   artifacts are retained. Preserve dirty, unpushed or foreign work; report anything left.

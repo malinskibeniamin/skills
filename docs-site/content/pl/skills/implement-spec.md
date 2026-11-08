@@ -25,27 +25,27 @@ Zgłoszenia nie są listą kroków. Tworzą **graf zadań** z relacjami blokowan
 
 Komunikacja z subagentami i od nich powinna być oszczędna. Komunikuj się głównie przez **wskaźniki kontekstu**: do specyfikacji, zgłoszeń, notatek z badań i wcześniejszych commitów. Nie powielaj informacji dostępnych przez wskaźniki.
 
-**Subagentów implementujących** uruchamiaj w tle, gdy to możliwe, aby uzyskać **maksymalną współbieżność**.
+Używaj tylko delegowania obsługiwanego przez hosta i objętego zgodą. Ogranicz współbieżność według niezależnej własności i możliwości koordynatora w zakresie integracji i weryfikacji, nie według wielkości frontu. Brak obsługi delegowania zgłoś jako ograniczenie; nie zmieniaj dostawcy bez zgody.
 
 ## Kroki
 
-1. Przeczytaj specyfikację i zgłoszenia. Przeczytaj tyle, by zrozumieć graf zadań.
+1. Przeczytaj specyfikację, pełną treść zgłoszeń i relacje blokowania. Przed delegowaniem zastosuj [kontrakt grafu zgłoszeń implementacyjnych](https://github.com/malinskibeniamin/skills/blob/main/shared/ticket-graph.md). Brakujące odwołania, cykle oraz pusty front przy nieukończonej pracy nie oznaczają ukończenia.
 
 2. (opcjonalnie) Użyj **subagenta eksplorującego** do przeprowadzenia eksploracji wymaganej przez zgłoszenia – odpowiednich plików kodu lub zewnętrznej dokumentacji. Upewnij się, że subagent eksplorujący może zapisywać pliki – powinien zapisać notatki Markdown w katalogu poza repozytorium, dostępnym dla wszystkich przyszłych subagentów. Dzięki temu **subagenci implementujący** mogą skupić się na implementacji, a nie na eksploracji.
 
 3. Utwórz gałąź integracyjną. Jeśli system zgłoszeń zamyka pracę przez PR-y lub użytkownik o to prosi, otwórz szkic PR po pierwszym scaleniu w kroku 5 (gałęzi bez commitów wyprzedzających main nie da się otworzyć), oznaczony jako zamykający specyfikację i zgłoszenia.
 
 4. Dla każdego zgłoszenia użyj nowego **subagenta implementującego**, każdy we własnym worktree na własnej gałęzi. Każdy subagent implementujący:
-   - przed rozpoczęciem potwierdza, że jego worktree bazuje na gałęzi integracyjnej, a jeśli nie, przestawia się na nią;
+   - przed rozpoczęciem potwierdza, że jego czysty, należący do agenta worktree bazuje na przypiętym końcu gałęzi integracyjnej; błędną bazę poprawia bez resetowania cudzej, niezacommitowanej lub równoległej pracy;
    - wywołuje narzędzie Skill z "tdd", aby zbudować zgłoszenie;
    - przed zgłoszeniem ukończenia scala najnowszy stan gałęzi integracyjnej do własnej gałęzi, aby krok 5 był przewinięciem (fast-forward).
 
 5. Gdy **subagent implementujący** skończy, scal jego pracę do gałęzi integracyjnej za pomocą **subagenta scalającego**.
 
-6. Jeśli zmienia to **front** dostępnych zgłoszeń, uruchom kolejnych **subagentów implementujących** dla nowych zgłoszeń. Pozwala to osiągnąć maksymalną współbieżność.
+6. Zweryfikuj zintegrowany wycinek według kryteriów akceptacji, odśwież stan zgłoszeń i ponownie wyznacz **front**. Uruchamiaj nowo gotową pracę w granicach zgody; samo zgłoszenie ukończenia przez agenta nie odblokowuje zależnych zadań.
 
 7. Gdy wszystkie zgłoszenia są ukończone, wywołaj narzędzie Skill z "review" na gałęzi integracyjnej. Napraw wszystkie problemy zgłoszone w przeglądzie kodu w jednym nowym **subagencie implementującym**.
 
 8. Jeśli istnieje szkic PR, pozostaw go szkicem, gdy taki jest żądany etap końcowy; w przeciwnym razie oznacz go jako gotowy do przeglądu. Bez PR zamknij każde zgłoszenie zgodnie z zasadami systemu zgłoszeń i podaj gałąź integracyjną.
 
-9. Usuń wszystkie worktree **subagentów implementujących**.
+9. Usuń tylko własne worktree agentów implementujących, których wyniki zintegrowano, a użyteczne artefakty zachowano. Zachowaj cudzą, niezacommitowaną i niewypchniętą pracę; zgłoś, co pozostaje.

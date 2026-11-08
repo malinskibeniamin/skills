@@ -98,6 +98,9 @@ class MattSyncTest(unittest.TestCase):
         self.write(self.source, "skills/engineering/pr/CREDITS.md", "Uncommitted work\n")
         result = self.install(revision)
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Reconcile fixture-tool -> matt-fixture-tool (removed)", result.stdout)
+        self.assertIn("Reconcile new-skill -> matt-new-skill (added)", result.stdout)
+        self.assertIn("Reconcile pr -> pr (changed)", result.stdout)
         self.assertFalse((self.repo / "vendor/mattpocock/upstream/skills/misc/fixture-tool/scripts/check.sh").exists())
         self.assertFalse((self.repo / "matt-skills/matt-fixture-tool").exists())
         self.assertEqual((self.repo / "vendor/mattpocock/upstream/skills/engineering/pr/CREDITS.md").read_text(), "Updated credit\n")
@@ -105,6 +108,32 @@ class MattSyncTest(unittest.TestCase):
         before = self.snapshot()
         self.assertEqual(self.install(revision).returncode, 0)
         self.assertEqual(self.snapshot(), before)
+
+    def test_same_pin_preserves_registration_order_among_other_vendors(self):
+        self.assertEqual(self.install().returncode, 0)
+        manifest_path = self.repo / ".claude-plugin/plugin.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["skills"].insert(2, "./another-vendor/skill/")
+        manifest["skills"].append("./local-tail/")
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+        before = self.snapshot()
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.snapshot(), before)
+        self.assertNotIn("Reconcile ", result.stdout)
+
+    def test_removing_source_owner_keeps_host_workflow_and_reports_reconciliation(self):
+        self.assertEqual(self.install().returncode, 0)
+        (self.source / "skills/engineering/pr/SKILL.md").unlink()
+        (self.source / "skills/engineering/pr/CREDITS.md").unlink()
+        result = self.install(self.commit())
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Reconcile pr -> pr (removed)", result.stdout)
+        self.assertEqual((self.repo / "pr/SKILL.md").read_text(), "Local PR policy stays authoritative\n")
+        self.assertFalse((self.repo / "matt-skills/matt-pr").exists())
+        registrations = json.loads((self.repo / ".claude-plugin/plugin.json").read_text())["skills"]
+        self.assertEqual(registrations, ["./pr/", "./matt-skills/matt-fixture-tool/"])
+        self.assertEqual(self.cli("--check").returncode, 0)
 
     def test_new_software_factory_skill_keeps_existing_host_owner(self):
         self.assertEqual(self.install().returncode, 0)

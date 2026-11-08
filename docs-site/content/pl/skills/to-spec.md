@@ -77,6 +77,8 @@ Lista podjętych decyzji dotyczących testowania. Uwzględnij:
 - Moduły, które będą testowane
 - Istniejące wzorce testów (czyli podobne rodzaje testów w bazie kodu)
 
+Dla każdego punktu testowania opisz, co wykrywa, a czego nie obejmuje. Nierozstrzygnięte decyzje dotyczące pokrycia umieść w Dalszych uwagach, zamiast przedstawiać niepotwierdzony kontrakt jako uzgodniony.
+
 ## Poza zakresem
 
 Opis elementów, które nie są objęte tą specyfikacją.
