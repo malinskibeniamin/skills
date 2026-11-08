@@ -399,7 +399,7 @@ demo() {
     HF_LAYOUT=$(jq -r 'if (.diagram // [] | length) > 0 then "with-diagram" else "full" end' "$sidecar") \
     HF_STEPS=$(jq -r --argjson end "$duration" '
       (.diagram // []) as $diagram | .steps as $s | range(0; $s | length) as $i | $s[$i] as $step |
-      (if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at as $duration |
+      ((if $i + 1 < ($s | length) then $s[$i + 1].at else $end end) - $step.at) as $duration |
       "<div id=\"step-\($i)\" class=\"step clip\" data-start=\"\($step.at)\" data-duration=\"\($duration)\">" +
       "<div class=\"caption\">\($step.caption | @html)</div>" +
       (if ($diagram | length) > 0 then "<aside><h2>Execution model</h2><p>Explanation, not a live trace</p>" +
