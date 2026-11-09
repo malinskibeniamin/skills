@@ -34,6 +34,21 @@ nie z animacji UI. `/demo` nadal wymaga wywołania przez użytkownika; ten odno�
 - Audyt/plan/okazje: uszereguj ulepszenia lub uzasadnione dodatki; pozostaw źródła bez zmian.
   Zapisuj plany tylko na żądanie. Audyt nie rozpoczyna fali wdrożeń.
 
+## Wybierz właściwy obszar ruchu [#choose-the-motion-lane]
+
+Wybierz następny krok na podstawie objawu, nie samego słowa „wolno”. Sprawdź interakcję,
+zanim zalecisz usunięcie ruchu, skrócenie czasu lub poprawkę wydajności.
+
+| Prośba / zaobserwowany objaw | Lokalny właściciel |
+|---|---|
+| „Aplikacja działa wolno”, bo animacje każą czekać | [remove-animations](https://github.com/malinskibeniamin/skills/blob/main/remove-animations/SKILL.md) do usuwania; ten skill do dostrajania czasu zachowanych animacji |
+| „Panel boczny się zacina” / widoczne zacięcia klatek | [animation-performance](https://github.com/malinskibeniamin/skills/blob/main/animation-performance/SKILL.md): zarejestruj ślad przed optymalizacją |
+| „Panel podskakuje po puszczeniu” / szybkie przesunięcie ignoruje kierunek | [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md): śledzenie, puszczenie i przerwanie |
+| „Dwa widoki kolidują podczas zmiany rozmiaru karty” | [Choreografia](https://github.com/malinskibeniamin/skills/blob/main/animate/REFERENCE.md#choreography) tego skilla, nie dodatkowa komenda |
+| „Przejrzyj aplikację i zaplanuj poprawki ruchu” | [improve-animations](https://github.com/malinskibeniamin/skills/blob/main/improve-animations/SKILL.md); audyt/plan pozostaje tylko do odczytu |
+| „Co powinno się tu animować, a co nie?” / „oceń ten popover” | Poniższy tryb przeglądu/okazji tego skilla; ustalenia, nie wdrożenie |
+| „Jak nazywa się efekt, gdy popover rozwija się od przycisku?” | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/main/animation-vocabulary/SKILL.md); samo nazwanie nie upoważnia do implementacji |
+
 ## Kolejność decyzji [#decision-sequence]
 
 1. Sprawdź komponent, istniejące tokeny ruchu, zainstalowaną bibliotekę i wersję, sposoby obsługi wejścia
@@ -73,6 +88,9 @@ Dla audytu całego kodu lub planu ulepszeń według priorytetów wczytaj
 Sprawdź cel/częstotliwość, krzywą/czas, punkt początkowy, przerwania, koszt klatek, dostępność
 oraz spójność. Przytocz `plik:wiersz` i dowód wizualny lub ślad; odróżniaj sugestie jakościowe
 od odtwarzalnych usterek. Istniejące świadome kompromisy stanowią kontekst, nie automatyczne zgłoszenia.
+Opisuj ustalenie jako zaobserwowane zachowanie -> proponowane zachowanie -> dlaczego pomaga.
+Porównuj ten sam stan i dane wejściowe przy normalnej prędkości; demonstracja źródłowa jest
+punktem odniesienia, a nie dowodem wyniku tej aplikacji.
 
 Szukając okazji, pokaż odpowiednie miejsce, cel, oczekiwaną częstotliwość, przepis i odrzucone
 kandydatury. Brak uzasadnionych okazji jest poprawnym wynikiem.

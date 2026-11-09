@@ -17,6 +17,10 @@ type: "skill"
 進行最佳化或修正時，編輯前先閱讀共用的[實驗循環](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
 它負責原始與已接受基準、保留或撤銷決策，以及未解決的線索。
 
+如果動效流暢卻讓使用者等待，使用 [animate](https://github.com/malinskibeniamin/skills/blob/main/animate/SKILL.md#choose-the-motion-lane)
+區分不必要的動效與時序問題。縮短時間不能證明已修正掉格；即使動效適合合成器處理，
+也仍可能讓人感覺遲緩。
+
 ## 迴圈
 
 1. 記錄故障互動：路由、資料規模、動畫驅動方式/屬性、瀏覽器/裝置、重新整理率，
