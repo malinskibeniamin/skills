@@ -412,18 +412,19 @@ _setup_session
 
 echo "  3 failures then quality-gate check:"
 # Simulate 3 lint failures
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_stdout_contains "failed.*3x|Fix ALL" "3rd failure triggers guidance"
+_lint_failure='{"hook_event_name":"PostToolUseFailure","tool_name":"Bash","tool_input":{"command":"bun run lint"},"error":"Exit code 1\nLint errors"}'
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_assert_stdout_contains "3rd consecutive lint-fail" "3rd failure triggers guidance"
 
 echo "  success resets counter:"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
+_run_hook "consecutive-failure-check.sh" '{"hook_event_name":"PostToolUse","tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
 _assert_exit 0 "success resets"
 
 echo "  next failure starts fresh count:"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_exit 0 "1st failure after reset — no message"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_assert_stdout_contains "Lint fail" "1st failure after reset gets fresh remediation"
 
 _teardown_session
 

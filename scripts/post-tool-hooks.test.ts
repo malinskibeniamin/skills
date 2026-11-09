@@ -243,6 +243,112 @@ const failure = {
 };
 
 describe("post-tool-failure", () => {
+  test.each(["claude", "codex"] as const)(
+    "%s successes break the failure streak",
+    (host) => {
+      const failed =
+        host === "claude"
+          ? failure
+          : {
+              ...postTool(""),
+              tool_result: { exit_code: 2, stdout: "", stderr: "failed" },
+              tool_response: undefined,
+            };
+      const succeeded =
+        host === "claude"
+          ? postTool("ok")
+          : {
+              ...postTool(""),
+              tool_response: undefined,
+              tool_result: { exit_code: 0, stdout: "ok", stderr: "" },
+            };
+      const outputs = failureSequence(host, [
+        failed,
+        succeeded,
+        failed,
+        succeeded,
+        failed,
+      ]);
+      expect(outputs[0]).toHaveLength(1);
+      expect(outputs[2]).toHaveLength(1);
+      expect(outputs[4]).toHaveLength(1);
+      expect(outputs[4]?.join(" ")).not.toContain("consecutive");
+    },
+  );
+
+  test.each(["claude", "codex"] as const)(
+    "%s repeated failures emit initial advice and one escalation",
+    (host) => {
+      const failed =
+        host === "claude"
+          ? failure
+          : {
+              ...postTool(""),
+              tool_response: { exit_code: 2, stdout: "", stderr: "failed" },
+            };
+      const outputs = failureSequence(host, Array(5).fill(failed));
+      expect(outputs.map((messages) => messages.length)).toEqual([
+        1, 0, 1, 0, 0,
+      ]);
+      expect(outputs[2]?.[0]).toContain("3rd consecutive");
+    },
+  );
+
+  test("changed diagnostics are new evidence, not a repeated-failure loop", () => {
+    const failed = {
+      ...failure,
+      error: `Exit code 1\n${"x".repeat(600)} first`,
+    };
+    const outputs = failureSequence("claude", [
+      failed,
+      failed,
+      { ...failed, error: `Exit code 1\n${"x".repeat(600)} changed` },
+    ]);
+    expect(outputs[2]).toHaveLength(1);
+    expect(outputs[2]?.[0]).not.toContain("consecutive");
+  });
+
+  test.each([
+    {
+      name: "Claude interrupt",
+      host: "claude" as const,
+      input: { ...failure, is_interrupt: true },
+    },
+    {
+      name: "Codex result interrupt",
+      host: "codex" as const,
+      input: {
+        ...postTool(""),
+        tool_response: {
+          exit_code: 0,
+          interrupted: true,
+          stdout: "",
+          stderr: "",
+        },
+      },
+    },
+    {
+      name: "unknown Codex result",
+      host: "codex" as const,
+      input: { ...postTool(""), tool_response: "unstructured output" },
+    },
+  ])(
+    "$name neither advances nor clears a failure streak",
+    ({ host, input }) => {
+      const failed =
+        host === "claude"
+          ? failure
+          : {
+              ...postTool(""),
+              tool_response: { exit_code: 2, stdout: "", stderr: "failed" },
+            };
+      const outputs = failureSequence(host, [failed, failed, input, failed]);
+      expect(outputs[2]).toEqual([]);
+      expect(outputs[3]).toHaveLength(1);
+      expect(outputs[3]?.[0]).toContain("3rd consecutive");
+    },
+  );
+
   test("reports the real exit code from Claude's failure event", () => {
     const { output } = run("post-tool-failure", failure);
     expect(output?.systemMessage).toContain("Command failed (exit 1)");
@@ -304,3 +410,41 @@ describe("post-tool-failure", () => {
     ).toContain("Command failed (exit 2)");
   });
 });
+
+function failureSequence(host: "claude" | "codex", inputs: unknown[]) {
+  const state = mkdtempSync("/tmp/hook-session-failure-sequence-");
+  cleanup.push(state);
+  const config = JSON.parse(
+    readFileSync(
+      new URL(
+        `../hooks/${host === "claude" ? "hooks" : "codex-hooks"}.json`,
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  ) as {
+    hooks: Record<string, { matcher?: string; hooks: { command: string }[] }[]>;
+  };
+  return inputs.map((input) => {
+    const event = (input as { hook_event_name: string }).hook_event_name;
+    return (config.hooks[event] ?? [])
+      .filter((group) => group.matcher === "Bash")
+      .flatMap((group) => group.hooks)
+      .flatMap((hook) => {
+        const script = ["consecutive-failure-check", "post-tool-failure"].find(
+          (name) => hook.command.includes(`/${name}.sh`),
+        );
+        if (!script) return [];
+        const sessionId = basename(state).slice("hook-session-".length);
+        const { output } = run(
+          script,
+          { ...(input as object), session_id: sessionId },
+          {
+            CLAUDE_SESSION_ID: host === "claude" ? sessionId : "",
+            CODEX_SESSION_ID: "",
+          },
+        );
+        return output?.systemMessage ? [output.systemMessage] : [];
+      });
+  });
+}

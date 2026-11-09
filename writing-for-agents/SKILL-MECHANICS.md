@@ -12,7 +12,9 @@ Choose model invocation only when autonomous discovery or skill-to-skill reach i
 ## Loading dependencies
 
 When a workflow requires a model-invoked skill, invoke each dependency separately with Claude's Skill tool. In Codex or a host without that tool, read its canonical `SKILL.md` completely, following any generated proxy to the canonical file; load branch references when needed. A slash mention or catalog description is not a load.
-Reuse guidance already loaded in the current context; recover it after compaction when missing. For a user-invoked skill, recommend it to the human instead of invoking it automatically. Loading guidance grants no delegation or external-action permission.
+Load conditional companions only when their trigger applies; read the linked section unless the owner requires the full file. Keep mandatory dependencies, safety and verification steps. Reuse unchanged guidance already loaded in the current context for this task; revalidate after relevant edits or scope changes and recover missing guidance after compaction. Required per-task instruction reads still apply.
+
+For a user-invoked skill, recommend it to the human instead of invoking it automatically. Loading guidance grants no delegation or external-action permission.
 
 
 ## Splitting by invocation

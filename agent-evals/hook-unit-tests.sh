@@ -360,32 +360,33 @@ _teardown_session
 
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "━━━ consecutive-failure-check.sh (new) ━━━"
+echo "━━━ failure advice and success reset ━━━"
 # ═══════════════════════════════════════════════════════════════
 
 _setup_session
 
-echo "  first lint failure (no inject):"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_exit 0 "1st failure — no message"
+_lint_failure='{"hook_event_name":"PostToolUseFailure","tool_name":"Bash","tool_input":{"command":"bun run lint"},"error":"Exit code 1\nLint errors"}'
+echo "  first lint failure (initial advice):"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_assert_stdout_contains "Lint fail" "1st failure provides remediation"
 
 echo "  second lint failure (no inject):"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint:fix"},"tool_result":{"exit_code":1}}'
-_assert_exit 0 "2nd failure — no message yet"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_assert_stdout_contains '^$' "2nd identical failure does not repeat advice"
 
 echo "  third lint failure (should inject):"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":1}}'
-_assert_stdout_contains "failed.*3x|Fix ALL" "3rd consecutive failure triggers guidance"
+_run_hook "post-tool-failure.sh" "$_lint_failure"
+_assert_stdout_contains "3rd consecutive lint-fail" "3rd consecutive failure triggers guidance"
 
 echo "  lint success (resets counter):"
-_run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
+_run_hook "consecutive-failure-check.sh" '{"hook_event_name":"PostToolUse","tool_name":"Bash","tool_input":{"command":"bun run lint"},"tool_result":{"exit_code":0}}'
 _assert_exit 0 "success resets counter"
 
 echo "  third tsrs failure counts as a type-check failure:"
 for _attempt in 1 2 3; do
-  _run_hook "consecutive-failure-check.sh" '{"tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"tool_result":{"exit_code":1}}'
+  _run_hook "post-tool-failure.sh" '{"hook_event_name":"PostToolUseFailure","tool_name":"Bash","tool_input":{"command":"tsrs --noEmit"},"error":"Exit code 2\nType errors"}'
 done
-_assert_stdout_contains "typecheck.*3x|failed.*3x|Fix ALL" "3rd consecutive tsrs failure triggers guidance"
+_assert_stdout_contains "3rd consecutive typecheck-fail" "3rd consecutive tsrs failure triggers guidance"
 
 _teardown_session
 

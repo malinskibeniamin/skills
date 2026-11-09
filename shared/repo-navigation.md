@@ -20,9 +20,13 @@ Use when orienting in unfamiliar code, choosing commands, or reconciling stale g
 
 ## Retrieve without outage loops
 
+- Discover tools with a bounded capability/name query; return matching names and
+  short descriptions, then inspect the selected candidates' schemas. Widen for a
+  named missing capability rather than dumping the entire tool catalog.
 - Use the TraceDecay graph before broad shell search or whole-file reads. Ask a
   scoped context question for unfamiliar behavior; use narrow path/symbol lookup
-  otherwise. Read returned excerpts without re-reading the same ranges. Treat role
+  otherwise. Reuse unchanged excerpts within the task; re-read after relevant edits,
+  scope changes or context loss. Required per-task instruction reads still apply. Treat role
   labels as leads, verbatim source as evidence; incomplete retrieval stays unknown.
   Use callers, callees, affected tests, or test maps for relationships.
 - After an MCP timeout, disconnect, or unavailable transport, try `tracedecay tool`
