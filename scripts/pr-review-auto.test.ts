@@ -7,6 +7,7 @@ import {
   writeFileSync,
   mkdirSync,
   copyFileSync,
+  existsSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -71,6 +72,14 @@ function fixture() {
   const head = git(["rev-parse", "HEAD"]);
   const reviews: FixtureEvent[] = [];
   const inline: FixtureEvent[] = [];
+  const comments: FixtureEvent[] = [
+    {
+      id: 11,
+      user: { login: "reviewer[bot]" },
+      body: "Fix null handling",
+      updated_at: "2026-10-01T10:00:00Z",
+    },
+  ];
   const snapshot = {
     pr: {
       number: 42,
@@ -82,14 +91,7 @@ function fixture() {
       baseRefOid: head,
       isCrossRepository: false,
     },
-    comments: [
-      {
-        id: 11,
-        user: { login: "reviewer[bot]" },
-        body: "Fix null handling",
-        updated_at: "2026-10-01T10:00:00Z",
-      },
-    ],
+    comments,
     reviews,
     inline,
     checks: [] as FixtureCheck[],
@@ -112,6 +114,9 @@ function fixture() {
     advanceDuringAgent: false,
     publishRebase: true,
     unbindDuringFetch: false,
+    revokeDuringFinalGuard: "",
+    guardViews: 0,
+    waitForHeartbeat: false,
     laterPage: false,
     threads: [
       {
@@ -142,6 +147,26 @@ appendFileSync(process.env.CALLS, JSON.stringify({ tool, args, input, cwd: proce
 const data = JSON.parse(readFileSync(process.env.DATA, "utf8"));
 if (tool !== "gh") {
   if (data.failAgent) process.exit(1);
+  if (data.waitForHeartbeat) {
+    const stateFile = process.env.PR_REVIEW_AUTO_HOME + "/state.json";
+    const before = JSON.parse(readFileSync(stateFile, "utf8")).sweep;
+    const hook = Bun.spawnSync([process.env.BUN, process.env.ENTRY, "hook"], {
+      env: { ...process.env, PR_REVIEW_AUTO_RUN: "0" },
+      stdin: Buffer.from(JSON.stringify({ session_id: "11111111-1111-4111-8111-111111111111", hook_event_name: "Stop" })),
+    });
+    data.concurrentHookExit = hook.exitCode;
+    const deadline = Date.now() + 45_000;
+    while (Date.now() < deadline) {
+      const sweep = JSON.parse(readFileSync(stateFile, "utf8")).sweep;
+      if (sweep.progressedAt !== before.progressedAt) {
+        data.heartbeat = { phase: sweep.phase, finishedAt: sweep.finishedAt ?? null };
+        break;
+      }
+      await Bun.sleep(25);
+    }
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+    if (!data.heartbeat) process.exit(2);
+  }
   if (data.invalidCompareAfterAgent) { data.invalidCompare = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
   if (data.failChecksAfterAgent) { data.failChecks = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
   if (data.failAfterAgent) { data.failGh = true; writeFileSync(process.env.DATA, JSON.stringify(data)); }
@@ -176,12 +201,28 @@ if (tool !== "gh") {
   }
   process.exit(0);
 }
+
 if (data.failGh) process.exit(1);
 if (args[0] === "api" && args[1] === "user") {
   console.log("owner");
 } else if (args[0] === "repo") {
   console.log(args.includes("-q") ? "example/project" : JSON.stringify({ nameWithOwner: "example/project", defaultBranchRef: { name: "main" } }));
 } else if (args[0] === "pr") {
+  if (data.revokeDuringFinalGuard) {
+    data.guardViews++;
+    writeFileSync(process.env.DATA, JSON.stringify(data));
+    if (data.guardViews === 2) {
+      const sid = "11111111-1111-4111-8111-111111111111";
+      const action = data.revokeDuringFinalGuard;
+      const revokeArgs = action === "unbind" ? ["unbind", "--session", sid]
+        : action === "busy" ? ["hook"]
+        : action === "reviewers" ? ["configure", "--reviewer", "other[bot]"] : ["disable"];
+      const result = Bun.spawnSync([process.env.BUN, process.env.ENTRY, ...revokeArgs], {
+        stdin: Buffer.from(action === "busy" ? JSON.stringify({ session_id: sid, hook_event_name: "UserPromptSubmit" }) : ""),
+      });
+      if (result.exitCode !== 0) { process.stderr.write(result.stderr); process.exit(2); }
+    }
+  }
   console.log(JSON.stringify(data.pr));
 } else if (args[0] === "api") {
   const endpoint = args[1];
@@ -227,7 +268,7 @@ if (args[0] === "api" && args[1] === "user") {
   // Exclude harness artifacts, not arbitrary untracked user files.
   writeFileSync(
     join(root, ".git/info/exclude"),
-    "bin/\nstate/\ncalls.jsonl\ngithub.json\nharness/\n",
+    "bin/\nstate/\ncalls.jsonl\ngithub.json\nharness/\nhost-home/\n",
   );
   const env = {
     ...Bun.env,
@@ -237,6 +278,7 @@ if (args[0] === "api" && args[1] === "user") {
     DATA: data,
     BUN: process.execPath,
     ENTRY: entry,
+    HOME: join(root, "host-home"),
   };
   const run = (
     args: string[],
@@ -261,15 +303,15 @@ if (args[0] === "api" && args[1] === "user") {
       .map((line) => JSON.parse(line));
   const bind = (provider = "codex") => {
     expect(run(["configure", "--reviewer", "reviewer[bot]"]).code).toBe(0);
-    expect(
-      run([
-        "bind",
-        "--agent",
-        provider,
-        "--session",
-        "11111111-1111-4111-8111-111111111111",
-      ]).code,
-    ).toBe(0);
+    const result = run([
+      "bind",
+      "--agent",
+      provider,
+      "--session",
+      "11111111-1111-4111-8111-111111111111",
+    ]);
+    expect(result.err).toBe("");
+    expect(result.code).toBe(0);
   };
   const advanceBase = () => {
     snapshot.pr.headRefOid = git(["rev-parse", "HEAD"]);
@@ -292,6 +334,93 @@ if (args[0] === "api" && args[1] === "user") {
     advanceBase,
   };
 }
+
+function installedScheduler(f: ReturnType<typeof fixture>) {
+  const directory = join(f.env.HOME, "Library/LaunchAgents");
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(
+    join(directory, "dev.frontend-skills.pr-review-auto.plist"),
+    `<plist><string>${entry}</string><key>PR_REVIEW_AUTO_HOME</key><string>${f.env.PR_REVIEW_AUTO_HOME}</string></plist>`,
+  );
+  writeFileSync(join(f.bin, "launchctl"), '#!/bin/sh\n[ "$1" = print ]\n', {
+    mode: 0o755,
+  });
+}
+
+test("scheduler health requires fresh progress, not installation or a completed legacy sweep", () => {
+  const f = fixture();
+  expect(JSON.parse(f.run(["status"]).out).scheduler.health).toBe("disabled");
+  f.bind();
+  expect(JSON.parse(f.run(["status"]).out).scheduler.health).toBe(
+    "uninstalled",
+  );
+  installedScheduler(f);
+  if (process.platform !== "darwin") {
+    expect(JSON.parse(f.run(["status"]).out).scheduler.health).toBe("blocked");
+    return;
+  }
+  expect(JSON.parse(f.run(["status"]).out).scheduler.health).toBe("overdue");
+  expect(f.run(["tick"]).code).toBe(0);
+  const status = JSON.parse(f.run(["status"]).out);
+  expect(status.scheduler.health).toBe("running");
+  expect(status.scheduler.freshnessSeconds).toBe(600);
+  expect(status.sweep.phase).toBe("completed");
+  expect(Date.parse(status.sweep.finishedAt)).toBeGreaterThanOrEqual(
+    Date.parse(status.sweep.attemptedAt),
+  );
+  const stateFile = join(f.env.PR_REVIEW_AUTO_HOME, "state.json");
+  const state = JSON.parse(readFileSync(stateFile, "utf8"));
+  const stale = new Date(Date.now() - 601_000).toISOString();
+  state.sweep = {
+    attemptedAt: stale,
+    progressedAt: stale,
+    finishedAt: stale,
+    phase: "completed",
+  };
+  state.lastSweepStatus = "completed";
+  writeFileSync(stateFile, JSON.stringify(state));
+  expect(JSON.parse(f.run(["status"]).out).scheduler.health).toBe("overdue");
+  // An unfinished old call is overdue evidence, not a claim that its process died.
+  delete state.sweep.finishedAt;
+  state.sweep.phase = "policies";
+  writeFileSync(stateFile, JSON.stringify(state));
+  expect(JSON.parse(f.run(["status"]).out).scheduler).toMatchObject({
+    health: "overdue",
+    phase: "policies",
+  });
+});
+
+test("terminal policy failures persist a failed finish instead of leaving an active sweep", () => {
+  const f = fixture();
+  expect(f.run(["configure", "--reviewer", "reviewer[bot]"]).code).toBe(0);
+  const policies = join(f.env.PR_REVIEW_AUTO_HOME, "policies.json");
+  writeFileSync(policies, "{}");
+  expect(f.run(["tick"]).code).toBe(1);
+  rmSync(policies);
+  const status = JSON.parse(f.run(["status"]).out);
+  expect(status.lastSweepStatus).toBe("failed");
+  expect(status.sweep.phase).toBe("failed");
+  expect(Date.parse(status.sweep.finishedAt)).toBeGreaterThanOrEqual(
+    Date.parse(status.sweep.attemptedAt),
+  );
+});
+
+test("an awaited owner turn persists heartbeat progress without holding the state lock", () => {
+  const f = fixture();
+  f.bind();
+  f.snapshot.waitForHeartbeat = true;
+  f.save();
+  expect(f.run(["tick"]).code).toBe(0);
+  const observed = JSON.parse(
+    readFileSync(join(f.root, "github.json"), "utf8"),
+  );
+  expect(observed.concurrentHookExit).toBe(0);
+  expect(observed.heartbeat).toEqual({
+    phase: "awaiting-owner",
+    finishedAt: null,
+  });
+  expect(JSON.parse(f.run(["status"]).out).sweep.phase).toBe("completed");
+}, 60_000);
 
 test("base advances rebase the bound feature session without review feedback", () => {
   const f = fixture();
@@ -514,6 +643,7 @@ test("edits retrigger without embedding untrusted text; Claude preserves origina
 test("busy hooks defer; only successful Stop releases the feature session", () => {
   const f = fixture();
   f.bind();
+  installedScheduler(f);
   const event = {
     session_id: "11111111-1111-4111-8111-111111111111",
     hook_event_name: "UserPromptSubmit",
@@ -522,6 +652,9 @@ test("busy hooks defer; only successful Stop releases the feature session", () =
     0,
   );
   expect(f.run(["tick"]).out).toContain("busy; deferred");
+  expect(
+    JSON.parse(f.run(["status"]).out).scheduler.bindingStates[0].reasons,
+  ).toContain("busy");
   expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
   event.hook_event_name = "Stop";
   expect(f.run(["hook"], JSON.stringify(event)).code).toBe(0);
@@ -556,10 +689,16 @@ test("dirty tree, changed local HEAD, fork, closed PR, and branch mismatch never
 test("provider failure pauses paid retries; explicit retry retains feedback", () => {
   const f = fixture();
   f.bind();
+  installedScheduler(f);
   f.snapshot.failAgent = true;
   f.save();
   expect(f.run(["tick"]).code).toBe(1);
   expect(f.run(["tick"]).out).toContain("paused");
+  const status = JSON.parse(f.run(["status"]).out);
+  expect(status.lastSweepStatus).toBe("completed");
+  expect(status.scheduler.bindingStates[0].reasons).toContain("paused");
+  if (process.platform === "darwin")
+    expect(status.scheduler.health).toBe("blocked");
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
   f.snapshot.failAgent = false;
   f.save();
@@ -596,6 +735,44 @@ test("unbinding while feedback is fetched revokes queued ownership", () => {
   expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
   expect(JSON.parse(f.run(["status"]).out).bindings).toEqual([]);
 });
+
+test("revocation during the final GitHub guard prevents launch and retains feedback", () => {
+  for (const action of ["unbind", "disable", "busy", "reviewers"]) {
+    const f = fixture();
+    f.bind();
+    f.snapshot.revokeDuringFinalGuard = action;
+    f.save();
+    expect(f.run(["tick"]).code).toBe(0);
+    expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(
+      0,
+    );
+    expect(
+      JSON.parse(readFileSync(join(f.root, "github.json"), "utf8")).guardViews,
+    ).toBe(2);
+    const status = JSON.parse(f.run(["status"]).out);
+    if (action === "unbind") expect(status.bindings).toEqual([]);
+    else expect(status.bindings[0].seen).toEqual({});
+    f.snapshot.revokeDuringFinalGuard = "";
+    f.save();
+    if (action === "unbind") f.bind();
+    else if (action === "busy")
+      expect(
+        f.run(
+          ["hook"],
+          JSON.stringify({
+            session_id: "11111111-1111-4111-8111-111111111111",
+            hook_event_name: "Stop",
+          }),
+        ).code,
+      ).toBe(0);
+    else
+      expect(f.run(["configure", "--reviewer", "reviewer[bot]"]).code).toBe(0);
+    expect(f.run(["tick"]).code).toBe(0);
+    expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(
+      1,
+    );
+  }
+}, 20_000);
 
 test("API errors retain pending feedback; later inline/review pages wake the agent", () => {
   const f = fixture();
@@ -717,6 +894,15 @@ if (command === "bootstrap") {
   expect(f.run(["enable", "--reviewer", "reviewer[bot]"], "", env).code).toBe(
     0,
   );
+  expect(
+    readFileSync(
+      join(
+        env.HOME,
+        "Library/LaunchAgents/dev.frontend-skills.pr-review-auto.plist",
+      ),
+      "utf8",
+    ),
+  ).toContain("<key>StartInterval</key><integer>300</integer>");
   expect(f.run(["disable"], "", env).code).toBe(0);
   expect(f.run(["disable"], "", env).code).toBe(0);
   expect(JSON.parse(f.run(["status"]).out).enabled).toBe(false);
@@ -968,6 +1154,9 @@ test("blocked CI is deduplicated without disabling future feedback maintenance",
   const binding = JSON.parse(f.run(["status"]).out).bindings[0];
   expect(binding.paused).toBe(false);
   expect(binding.blockedCi).toHaveProperty("ci:check:101");
+  expect(
+    JSON.parse(f.run(["status"]).out).scheduler.bindingStates[0].reasons,
+  ).toContain("blocked-ci");
   expect(f.run(["tick"]).code).toBe(0);
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
   f.snapshot.comments.push({
@@ -979,6 +1168,14 @@ test("blocked CI is deduplicated without disabling future feedback maintenance",
   f.save();
   expect(f.run(["tick"]).code).toBe(0);
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(2);
+  f.snapshot.checks = [];
+  f.save();
+  expect(f.run(["tick"]).code).toBe(0);
+  const cleared = JSON.parse(f.run(["status"]).out);
+  expect(cleared.bindings[0].blockedCi).toEqual({});
+  expect(cleared.scheduler.bindingStates[0].reasons).not.toContain(
+    "blocked-ci",
+  );
 });
 
 test("post-run GitHub outage retries verification without another paid run", () => {
@@ -1035,6 +1232,9 @@ test("native transport disables local dispatch and creation hooks cannot re-enab
     ).code,
   ).toBe(0);
   expect(f.run(["tick"]).out).toContain("native transport");
+  expect(
+    JSON.parse(f.run(["status"]).out).scheduler.bindingStates[0].reasons,
+  ).toContain("native-unverified");
   expect(f.recorded().some((call) => call.tool === "codex")).toBe(false);
 });
 
@@ -1203,4 +1403,140 @@ test("current-head cancellation wakes diagnosis once without review comments", (
   expect(resumes[0].input).toContain("intentional cancellation");
   expect(f.run(["tick"]).code).toBe(0);
   expect(f.recorded().filter((call) => call.tool === "codex")).toHaveLength(1);
+});
+
+test("publishing an existing PR binds the pushing original session automatically", () => {
+  const f = fixture();
+  expect(f.run(["configure", "--reviewer", "reviewer[bot]"]).code).toBe(0);
+  const event = {
+    session_id: "11111111-1111-4111-8111-111111111111",
+    hook_event_name: "PostToolUse",
+    tool_input: { command: "git push origin HEAD" },
+  };
+  expect(f.run(["hook", "--agent", "codex"], JSON.stringify(event)).code).toBe(
+    0,
+  );
+  expect(JSON.parse(f.run(["status"]).out).bindings[0]).toMatchObject({
+    agent: "codex",
+    session: event.session_id,
+    pr: 42,
+  });
+});
+
+test("successful owner must remain acknowledged when configure briefly owns state lock", async () => {
+  const f = fixture();
+  f.bind();
+  writeFileSync(
+    join(f.root, ".git/info/exclude"),
+    readFileSync(join(f.root, ".git/info/exclude"), "utf8") +
+      "owner-ready\nowner-release\nconfig-ready\n",
+  );
+  const ownerReady = join(f.root, "owner-ready");
+  const ownerRelease = join(f.root, "owner-release");
+  const configReady = join(f.root, "config-ready");
+  const wait = async (path: string) => {
+    const deadline = Date.now() + 5000;
+    while (!existsSync(path)) {
+      if (Date.now() > deadline) throw new Error(`No marker ${path}`);
+      await Bun.sleep(5);
+    }
+  };
+  for (const tool of ["gh", "codex"]) {
+    let source = readFileSync(join(f.bin, tool), "utf8");
+    source = source.replace(
+      "appendFileSync, readFileSync, writeFileSync",
+      "appendFileSync, readFileSync, writeFileSync, existsSync",
+    );
+    source = source.replace(
+      'if (tool !== "gh") {',
+      `if (tool !== "gh") {
+      if (!existsSync(${JSON.stringify(ownerReady)})) {
+        writeFileSync(${JSON.stringify(ownerReady)}, "");
+        while (!existsSync(${JSON.stringify(ownerRelease)})) await Bun.sleep(5);
+      }
+    `,
+    );
+    source = source.replace(
+      'if (args[0] === "api" && args[1] === "user") {',
+      `if (args[0] === "api" && args[1] === "user") {
+      if (process.env.SLOW_CONFIG === "1") {
+        writeFileSync(${JSON.stringify(configReady)}, "");
+        await Bun.sleep(500);
+      }
+    `,
+    );
+    source = source.replace(
+      '} else if (args[0] === "repo") {',
+      `} else if (args[0] === "repo") {
+      if (existsSync(${JSON.stringify(configReady)})) {
+        while (existsSync(process.env.PR_REVIEW_AUTO_HOME + "/state.lock")) await Bun.sleep(5);
+      }
+    `,
+    );
+    writeFileSync(join(f.bin, tool), source, { mode: 0o755 });
+  }
+  const turn = Bun.spawn([process.execPath, entry, "tick"], {
+    cwd: f.root,
+    env: f.env,
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  await wait(ownerReady);
+  const configuring = Bun.spawn(
+    [process.execPath, entry, "configure", "--reviewer", "reviewer[bot]"],
+    {
+      cwd: f.root,
+      env: { ...f.env, SLOW_CONFIG: "1", PR_REVIEW_AUTO_RUN: "0" },
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  );
+  await wait(configReady);
+  writeFileSync(ownerRelease, "");
+  await turn.exited;
+  expect(await configuring.exited).toBe(0);
+  const after = JSON.parse(f.run(["status"]).out).bindings[0];
+  expect(f.run(["tick"]).code).toBe(0);
+  const count = f.recorded().filter((call) => call.tool === "codex").length;
+  expect(count).toBe(1);
+  expect(Object.keys(after.seen)).not.toHaveLength(0);
+}, 15000);
+
+test("runner failures write the opened log inode, not a replacement symlink", () => {
+  const f = fixture();
+  f.bind();
+  const home = f.env.PR_REVIEW_AUTO_HOME;
+  const victim = join(home, "victim.txt");
+  const original = join(home, "original.log");
+  const preload = join(home, "spawn-failure.ts");
+  writeFileSync(victim, "unchanged\n");
+  writeFileSync(
+    preload,
+    `
+import { readdirSync, renameSync, symlinkSync } from "node:fs";
+import { join } from "node:path";
+Bun.spawn = () => {
+  const home = ${JSON.stringify(home)};
+  const name = readdirSync(home).find((name) => name.startsWith("run-") && name.endsWith(".log"));
+  if (!name) throw Error("Missing opened runner log");
+  const log = join(home, name);
+  renameSync(log, ${JSON.stringify(original)});
+  symlinkSync(${JSON.stringify(victim)}, log);
+  throw Error("Fixture runner unavailable");
+};
+`,
+  );
+  const result = Bun.spawnSync(
+    [process.execPath, "--preload", preload, entry, "tick"],
+    {
+      cwd: f.root,
+      env: f.env,
+    },
+  );
+  expect(result.exitCode).toBe(1);
+  expect(readFileSync(victim, "utf8")).toBe("unchanged\n");
+  expect(readFileSync(original, "utf8")).toContain(
+    "Runner failed: Fixture runner unavailable",
+  );
+  expect(JSON.parse(f.run(["status"]).out).bindings[0].paused).toBe(true);
 });
