@@ -1,7 +1,7 @@
 # Emil Kowalski skills: selection and provenance
 
 Maintain nine focused web skills from [emilkowalski/skills](https://github.com/emilkowalski/skills),
-reviewed at [`5206a950b715e0cabe7043ea0b2304332b91494e`](https://github.com/emilkowalski/skills/tree/5206a950b715e0cabe7043ea0b2304332b91494e/skills).
+reviewed at [`715c1807e08c497cfd1dc4feb450a2a3300ef2a9`](https://github.com/emilkowalski/skills/tree/715c1807e08c497cfd1dc4feb450a2a3300ef2a9/skills).
 They fill motion subtraction, auditing, implementation, frame diagnosis, terminology,
 mobile-platform, data-stress, toast-library, and direct-manipulation gaps. Consolidate overlapping motion workflows;
 preserve existing design/prototype owners. Upstream defaults need adaptation to
@@ -13,29 +13,45 @@ Overlap/stack conflict -> existing owner or defer -> smaller discovery surface
 Both paths -> source/license retained -> offline distribution and repository checks
 ```
 
+## Documentation and local use
+
+[Official documentation](https://aiforui.dev/skills) supplies before/after demos,
+example prompts, when-to-use guidance and pairings for 17 skills. Use it for examples,
+not as a runtime dependency or an instruction to install the full upstream suite.
+The selection table below maps those names to our existing owners; `write-swift`
+remains in the source snapshot but is not listed in the new docs.
+
+The docs' symptom-first examples inform [motion triage](../animate/SKILL.md#choose-the-motion-lane):
+separate waiting on unnecessary motion, retained motion's timing, dropped frames and
+gesture handoffs before choosing a fix. Upstream `choreograph`, `review-animations`
+and `find-animation-opportunities` still resolve to `animate`, not new commands.
+Pairings load only when the task needs them and retain its read-only/build endpoint.
+Compare the same state/input before and after; upstream demos do not verify a consumer's
+behavior, frame rate or physical-device feel.
+
 ## Selection
 
 All rows refer to `skills/<name>/SKILL.md` at the revision above.
 
 | Upstream skill | Decision | Reason/local owner |
 |---|---|---|
-| `gestures` | Add | Direct tracking, rubber banding, signed release velocity, momentum, snap points and catch/cancel behavior |
-| `choreograph` | Consolidate | Multi-element timing lives in `animate/REFERENCE.md`; no separate choreography router |
-| `animate` | Add | Purpose-first implementation; also owns scoped motion review, audit, and opportunities |
-| `animation-performance` | Add | Frame-driver/rendering diagnosis is narrower than general `ux-performance` |
-| `animation-vocabulary` | Add | Reverse lookup of motion terms; answer-only, no implementation |
-| `mobile-native` | Add | Mobile **web** viewport/touch/keyboard/PWA behavior, not native development |
-| `break-ui` | Add | Explicit schema-backed fixture/layout stress; complements lifecycle `dogfood` |
-| `ask-sonner` | Add | Sonner-specific operation, styling, and placement guidance; existing UI wrapper wins |
-| `review-animations` | Consolidate | Read-only review mode in `animate`; general visual findings stay with `visual-review` |
-| `improve-animations` | Add | Distinct audit/roadmap entrypoint for retained motion; `animate` owns execution, with no executor dispatch or extra approval gate |
-| `remove-animations` | Add | Subtraction-only cleanup with hidden-state, completion, unmount and focus safeguards |
-| `find-animation-opportunities` | Consolidate | Purpose/frequency gate and rejected candidates in `animate`; no forced additions |
-| `emil-design-eng` | Keep existing owner | Its motion/component craft already appears in `visual-review/REFERENCE.md` |
-| `apple-design` | Keep existing owner | Continuity, gestures, feedback, and reduced motion overlap `animate`/`visual-review`; avoid another broad taste router |
-| `prototype` | Keep ours | Existing `prototype/UI.md` owns variants; upstream cleanup conflicts with retained evidence |
-| `pick-ui-library` | Skip | Fixed choices can override the caller's library or registry; use existing primitives and current package evidence |
-| `animate-expo` | Defer | Expo/Reanimated is outside this web harness's current stack |
+| [`gestures`](https://aiforui.dev/skills/gestures) | Add | Direct tracking, rubber banding, signed release velocity, momentum, snap points and catch/cancel behavior |
+| [`choreograph`](https://aiforui.dev/skills/choreograph) | Consolidate | Multi-element timing lives in `animate/REFERENCE.md`; no separate choreography router |
+| [`animate`](https://aiforui.dev/skills/animate) | Add | Purpose-first implementation; also owns scoped motion review, audit, and opportunities |
+| [`animation-performance`](https://aiforui.dev/skills/animation-performance) | Add | Frame-driver/rendering diagnosis is narrower than general `ux-performance` |
+| [`animation-vocabulary`](https://aiforui.dev/skills/animation-vocabulary) | Add | Reverse lookup of motion terms; answer-only, no implementation |
+| [`mobile-native`](https://aiforui.dev/skills/mobile-native) | Add | Mobile **web** viewport/touch/keyboard/PWA behavior, not native development |
+| [`break-ui`](https://aiforui.dev/skills/break-ui) | Add | Explicit schema-backed fixture/layout stress; complements lifecycle `dogfood` |
+| [`ask-sonner`](https://aiforui.dev/skills/ask-sonner) | Add | Sonner-specific operation, styling, and placement guidance; existing UI wrapper wins |
+| [`review-animations`](https://aiforui.dev/skills/review-animations) | Consolidate | Read-only review mode in `animate`; general visual findings stay with `visual-review` |
+| [`improve-animations`](https://aiforui.dev/skills/improve-animations) | Add | Distinct audit/roadmap entrypoint for retained motion; `animate` owns execution, with no executor dispatch or extra approval gate |
+| [`remove-animations`](https://aiforui.dev/skills/remove-animations) | Add | Subtraction-only cleanup with hidden-state, completion, unmount and focus safeguards |
+| [`find-animation-opportunities`](https://aiforui.dev/skills/find-animation-opportunities) | Consolidate | Purpose/frequency gate and rejected candidates in `animate`; no forced additions |
+| [`emil-design-eng`](https://aiforui.dev/skills/emil-design-eng) | Keep existing owner | Its motion/component craft already appears in `visual-review/REFERENCE.md` |
+| [`apple-design`](https://aiforui.dev/skills/apple-design) | Keep existing owner | Continuity, gestures, feedback, and reduced motion overlap `animate`/`visual-review`; avoid another broad taste router |
+| [`prototype`](https://aiforui.dev/skills/prototype) | Keep ours | Existing `prototype/UI.md` owns variants; upstream cleanup conflicts with retained evidence |
+| [`pick-ui-library`](https://aiforui.dev/skills/pick-ui-library) | Skip | Fixed choices can override the caller's library or registry; use existing primitives and current package evidence |
+| [`animate-expo`](https://aiforui.dev/skills/animate-expo) | Defer | Expo/Reanimated is outside this web harness's current stack |
 | `write-swift` | Defer | Native Swift requires a separate toolchain/version-aware workflow |
 
 ## Adapted files
@@ -134,10 +150,14 @@ The complete upstream `skills/` tree, README, cheatsheets and MIT license are re
 byte-exact in [`vendor/emil`](../vendor/emil), including deferred and consolidated
 skills as reference material, not registered commands.
 [`vendor/emil.lock.json`](../vendor/emil.lock.json) records the immutable revision and
-SHA-256/mode of every file. This refresh adds upstream `gestures` and `choreograph`
-resources plus README entries; all previous source bytes and the license are unchanged.
-`gestures` is the ninth registered adaptation; choreography enhances the existing motion
-owner. Acceleration and perceived feel still require runtime evidence, not instruction checks.
+SHA-256/mode of every file. Compared with the previous `5206a95` pin, this refresh removes
+two nonexistent skill references (`animation-accessibility` and `debug-animation`) from
+upstream gestures and moves the README newsletter link to `/skills/updates`.
+The skill/resource inventory and license are unchanged. Local gesture guidance already
+used the retained accessibility and verification owners, so it needs no matching rewrite.
+The docs-driven triage and before/after reporting changes live outside the snapshot;
+all nine registrations and the existing choreography owner remain intact. Acceleration
+and perceived feel still require runtime evidence, not instruction checks.
 
 Refresh explicitly from a separate upstream checkout; nothing fetches on skill invocation:
 
@@ -170,4 +190,4 @@ bun run type:check
 ```
 
 Each adapted skill includes the upstream MIT license, copyright 2026 Emil Kowalski,
-from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/5206a950b715e0cabe7043ea0b2304332b91494e/LICENSE).
+from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/715c1807e08c497cfd1dc4feb450a2a3300ef2a9/LICENSE).

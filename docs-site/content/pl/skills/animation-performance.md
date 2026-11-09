@@ -17,6 +17,10 @@ prowadzi przez weryfikację i bramki dostarczania projektu.
 Przed edycją w ramach optymalizacji lub poprawki przeczytaj wspólną [pętlę eksperymentów](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments).
 Określa pierwotny i zaakceptowany stan bazowy, decyzje o zachowaniu lub wycofaniu zmian oraz nierozstrzygnięte tropy.
 
+Jeśli ruch jest płynny, ale każe użytkownikowi czekać, użyj [animate](https://github.com/malinskibeniamin/skills/blob/main/animate/SKILL.md#choose-the-motion-lane),
+aby odróżnić zbędny ruch od problemów z czasowaniem. Skrócenie animacji nie dowodzi naprawienia
+utraconych klatek; nawet animacja przyjazna kompozytorowi może sprawiać wrażenie powolnej.
+
 ## Pętla
 
 1. Zarejestruj wadliwą interakcję: trasę, wielkość danych, mechanizm i właściwości animacji,

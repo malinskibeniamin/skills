@@ -15,6 +15,21 @@ not UI animation. `/demo` remains user-invoked; this pointer grants no publicati
 - Audit/plan/opportunities: rank improvements or justified additions; leave source unchanged.
   Save plans only when requested. Do not turn an audit into an execution wave.
 
+## Choose the motion lane
+
+Use the symptom, not the word "slow", to select the next step. Inspect the interaction
+before prescribing removal, shorter durations or a performance fix.
+
+| Request / observed symptom | Local owner |
+|---|---|
+| "The app feels slow" because motion makes people wait | [remove-animations](../remove-animations/SKILL.md) for subtraction; this skill for retained motion's timing |
+| "The sidebar is janky" / frames visibly stutter | [animation-performance](../animation-performance/SKILL.md): capture a trace before optimizing |
+| "The drawer jumps when I let go" / a flick ignores direction | [gestures](../gestures/SKILL.md): tracking, release and interruption |
+| "The two views fight while the card resizes" | This skill's [choreography](REFERENCE.md#choreography), not another command |
+| "Survey the app and plan motion fixes" | [improve-animations](../improve-animations/SKILL.md); audit/plan stays read-only |
+| "What should and shouldn't animate here?" / "review this popover" | This skill's review/opportunity mode below; findings, not implementation |
+| "What's it called when a popover grows from its button?" | [animation-vocabulary](../animation-vocabulary/SKILL.md); naming alone authorizes no build |
+
 ## Decision sequence
 
 1. Inspect the component, existing motion tokens, installed library/version, input paths,
@@ -56,6 +71,8 @@ For a codebase-wide audit or prioritized roadmap, load
 Review purpose/frequency, easing/timing, origin, interruption, frame cost, accessibility,
 and cohesion. Cite `file:line` plus visible or trace evidence; distinguish craft suggestions
 from reproducible defects. Existing deliberate tradeoffs are context, not automatic findings.
+Describe a finding as observed behavior -> proposed behavior -> why it helps. Compare the
+same state/input at normal speed; a source demo is a reference, not proof of this app's result.
 
 For opportunity searches, show the eligible location, purpose, expected frequency,
 recipe, and rejected candidates. No surviving opportunity is a valid result.

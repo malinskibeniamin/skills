@@ -17,6 +17,10 @@ type: "skill"
 进行优化或修复时，编辑前先阅读共用的[实验循环](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)。
 它负责原始和已接受基线、保留或回退决策，以及未解决的线索。
 
+如果动效流畅却让用户等待，使用 [animate](https://github.com/malinskibeniamin/skills/blob/main/animate/SKILL.md#choose-the-motion-lane)
+区分不必要的动效与时序问题。缩短时长不能证明已修复丢帧；即使动效适合合成器处理，
+也仍可能让人感觉迟缓。
+
 ## 循环
 
 1. 记录故障交互：路由、数据规模、动画驱动方式/属性、浏览器/设备、刷新率，

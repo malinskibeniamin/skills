@@ -31,6 +31,21 @@ type: skill
 - 审计/规划/机会探索：按优先级列出改进或有理由的新增动效；不改动源代码。
   仅在明确要求时保存计划。不要将审计变成一轮实现工作。
 
+## 选择动效处理方向 [#choose-the-motion-lane]
+
+根据症状，而不是“慢”这个词，选择下一步。先检查交互，再建议移除动效、
+缩短时长或修复性能问题。
+
+| 请求 / 观察到的症状 | 本地负责技能 |
+|---|---|
+| “应用感觉很慢”，因为动效让人等待 | [remove-animations](https://github.com/malinskibeniamin/skills/blob/main/remove-animations/SKILL.md) 负责移除；本技能负责保留动效的时序 |
+| “侧边栏卡顿” / 画面明显不连贯 | [animation-performance](https://github.com/malinskibeniamin/skills/blob/main/animation-performance/SKILL.md)：优化前先记录性能轨迹 |
+| “抽屉松手时跳动” / 轻甩不遵循方向 | [gestures](https://github.com/malinskibeniamin/skills/blob/main/gestures/SKILL.md)：跟踪、释放和打断 |
+| “卡片调整大小时，两个视图互相干扰” | 本技能的[编排](https://github.com/malinskibeniamin/skills/blob/main/animate/REFERENCE.md#choreography)，不是另一条命令 |
+| “检查整个应用并规划动效修复” | [improve-animations](https://github.com/malinskibeniamin/skills/blob/main/improve-animations/SKILL.md)；审计/规划保持只读 |
+| “这里什么该动、什么不该动？” / “审查这个弹出层” | 本技能下方的审查/机会探索模式；输出发现，不实施修改 |
+| “弹出层从按钮展开的效果叫什么？” | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/main/animation-vocabulary/SKILL.md)；仅询问名称不授权实现 |
+
 ## 决策顺序 [#decision-sequence]
 
 1. 检查组件、现有动效令牌、已安装的库及版本、输入方式和产品背景。
@@ -67,6 +82,8 @@ type: skill
 审查目的/频率、缓动/时长、起点、打断、每帧成本、无障碍和一致性。
 引用 `文件:行号` 以及可见证据或性能轨迹；区分品质建议与可复现缺陷。
 现有的有意权衡是背景，不自动构成问题。
+将发现描述为观察到的行为 -> 建议的行为 -> 为什么有帮助。以正常速度比较相同的
+状态/输入；来源演示是参考，不是本应用结果的证明。
 
 探索机会时，列出合适位置、目的、预期频率、方案和被排除的候选项。
 没有值得增加的动效也是有效结果。制定路线图时，按用户影响和工作量排序已确认的问题；
