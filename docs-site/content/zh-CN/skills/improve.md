@@ -56,6 +56,7 @@ type: skill
 - `/improve plan <description>`：跳过广泛审计；进行足够的调查以编写一个计划。
 - `/improve review-plan <file>`：评审并完善现有计划。
 - `/improve execute <plan>`：将计划交给当前的单一负责人，并遵循 `/development-lifecycle`。仅在明确委派或使用 `/swarm` 后才使用 `/efficient-frontier` 工作通道；绝不合并。
+- 评估或视觉对比搜索：[hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md)。
 - `/improve reconcile`：核验已完成的计划、更新已偏离现状的待办计划，并解除待办事项的阻塞或将其归档。
 - 仅在明确请求时添加 `--issues`；随后使用 `gh issue create` 发布计划。
 

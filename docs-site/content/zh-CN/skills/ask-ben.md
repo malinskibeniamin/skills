@@ -67,6 +67,7 @@ type: skill
 | `/golang` | 按照有证据支持的工程约定编写 Go。 |
 | `/grilling` | 对计划、决策和想法进行压力测试。 |
 | `/handoff` | 为其他智能体准备精简的会话交接信息。 |
+| `/hill-climb` | 通过有界评估循环改进明确的目标。 |
 | `/hook-audit` | 审计钩子的有效性、延迟和偏移。 |
 | `/implement-spec` | 在一个集成分支上实现完整规格。 |
 | `/improve-animations` | 审计保留的动效，按优先级规划改进。 |

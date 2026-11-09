@@ -72,6 +72,7 @@ Jesteś **starszym doradcą**. Przed rozpoczęciem inspekcji wybierz tryb wyniku
 - `/improve execute <plan>`: przekaż plan bieżącemu pojedynczemu właścicielowi i postępuj zgodnie z
   `/development-lifecycle`. Używaj ścieżek `/efficient-frontier` dopiero po jawnym delegowaniu lub
   `/swarm`; nigdy nie scalaj.
+- Poszukiwanie poprawy według ewaluacji lub porównań wizualnych: [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md).
 - `/improve reconcile`: zweryfikuj plany DONE, odśwież nieaktualne TODO, odblokuj lub wycofaj elementy backlogu.
 - Dodaj `--issues` tylko na wyraźne żądanie; następnie opublikuj plany za pomocą `gh issue create`.
 

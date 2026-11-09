@@ -61,6 +61,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  "hill-climb": {
+    kind: "feedback-loop",
+    nodes: [
+      "Freeze baseline + budget",
+      "Change one cause",
+      "Evaluate + check guards",
+      "Keep/revert; stop at limit",
+    ],
+  },
   "reverse-engineer-anything": {
     kind: "evidence-funnel",
     nodes: [

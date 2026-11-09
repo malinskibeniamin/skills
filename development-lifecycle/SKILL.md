@@ -35,13 +35,15 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 Load [change evidence](../shared/change-evidence.md) and owners.
 Assess risk; capture bases only for useful/required comparisons. Reuse checks.
 
+Fixed-eval search: [hill-climb](../hill-climb/SKILL.md).
+
 [Figma/image](../jakubkrehel-skills/build-design/SKILL.md).
 
 ### Act
 
-A single owner; delegation/background need explicit consent. Implement the smallest functional
-diff using local conventions. Use [tdd](../tdd/SKILL.md) for uncovered regressions; reuse checks
-otherwise. Re-plan only the affected slice; no speculative abstractions or adjacent cleanup.
+A single owner; delegation/background need explicit consent. Smallest functional diff; local conventions.
+Use [tdd](../tdd/SKILL.md) for uncovered regressions; else reuse checks. Re-plan only the affected
+slice; no speculative abstractions or adjacent cleanup.
 
 Per batch: scoped format/fix + lint -> types/tests. Inspect; repair/rerun. Reuse hooks only for identical inputs/coverage; keep project-wide types.
 
@@ -56,9 +58,8 @@ Fix causes, not gates: never weaken checks/tests/strictness to pass. Bad rules n
 ## Boundaries
 
 Ask only for user-reserved decisions or irreversible production, legal/privacy, destructive,
-or high-security actions. Reuse local notes only when a long task needs a checkpoint;
-routine work needs no evidence/checklist file.
+or high-security actions. Keep local checkpoints for long tasks, not routine evidence/checklist files.
 
 ## Completion
 
-Run [author delivery](../shared/delivery-workflow.md): inline self-review, evidence, publication and requested CI/feedback. Reuse verification; stop only at the requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).
+Run [author delivery](../shared/delivery-workflow.md): inline self-review, evidence, publication and requested CI/feedback. Reuse checks; stop only at the requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).

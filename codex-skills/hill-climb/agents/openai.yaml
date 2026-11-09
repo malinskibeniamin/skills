@@ -1,0 +1,3 @@
+interface:
+  display_name: "Hill Climb"
+  short_description: "Improve a defined outcome through bounded evaluation loops"
