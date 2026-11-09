@@ -10,6 +10,10 @@ request continues through verification and the project's delivery gates.
 For optimization/fixes, read the shared [experiment loop](../quantify-impact/REFERENCE.md#optimization-experiments)
 before edits; it owns original/accepted baselines, keep/revert decisions and unresolved leads.
 
+If motion is smooth but makes the user wait, use [animate](../animate/SKILL.md#choose-the-motion-lane)
+to separate unnecessary motion from timing problems. Shortening a duration does not prove
+that dropped frames were fixed; a compositor-friendly animation can still feel sluggish.
+
 ## Loop
 
 1. Capture the failing interaction: route, data size, animation driver/properties,

@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "5206a950b715e0cabe7043ea0b2304332b91494e",
+  "revision": "715c1807e08c497cfd1dc4feb450a2a3300ef2a9",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "356a21d2351566743a38d78f8388ef1768762f3724e1257137aee278ee04a9b2",
+      "sha256": "bc5f6275e48c2c9445adef94929e421a51dd9fc82da06fa3e85e51b16d2ef292",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -75,7 +75,7 @@
       "mode": 420
     },
     "skills/gestures/SKILL.md": {
-      "sha256": "3301a3528632e7b6e980e79f2708f2faa60340e833ce5816b5b081e8cfe83e7f",
+      "sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
       "mode": 420
     },
     "skills/improve-animations/AUDIT.md": {

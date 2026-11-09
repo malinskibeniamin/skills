@@ -567,6 +567,10 @@ their historical filenames.
 
 Nine focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) are adapted locally: `/animate`, `/remove-animations`, `/improve-animations`, `/animation-performance`, `/animation-vocabulary`, `/mobile-native`, `/break-ui`, `/ask-sonner`, and `/gestures`. Use `/remove-animations` -> `/improve-animations` -> `/animation-performance` to subtract unnecessary motion, plan improvements to what remains, then diagnose measured frame problems. `/gestures` adds direct tracking, rubber banding, release velocity, momentum and catch/cancel behavior. `/animate` owns implementation, diff review, opportunity searches and multi-element choreography; existing design/prototype workflows remain owners. Complete upstream sources are pinned offline with a repeatable importer, not fetched at runtime. The fixed library picker and native Swift/Expo skills are not installed. [Selection, pinned sources, compatibility changes, and refresh steps](shared/EMIL-SKILLS-CREDITS.md).
 
+[Emil's documentation](https://aiforui.dev/skills) adds before/after demos, example prompts,
+and pairings. Use our [motion triage](animate/SKILL.md#choose-the-motion-lane) for local
+command names and the distinction between waiting, dropped frames and gesture handoffs.
+
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`). [Builder source selection and compatibility](shared/BUILDER-SKILLS-CREDITS.md) preserve local owners, model routing, permissions, and publication boundaries.
 
 `/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses
