@@ -75,9 +75,10 @@ or an evidence waiver. Preserve explicit project/user requirements; report real 
 
 A named review skill is guidance, not a separate approval gate. Self-review loads
 `/review` through author delivery; a standalone review request remains read-only.
-Use architecture prototypes or [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md)
-only when a concrete design question needs them or the user requests them. A routine
-API/data-flow edit needs no diagram/source files.
+Architecture prototypes remain conditional. For backend/API/Protobuf/contract or data-flow
+changes without screenshots/video explaining the affected behavior, include
+[backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md). Show the changed contract, ordering,
+or ownership; a UI screenshot alone may leave these relationships unexplained.
 
 ## Conventional commit types (Phase 3)
 
@@ -173,7 +174,13 @@ new runner or snapshot. Preserve existing required checks and explicit user/proj
    stills cannot adequately explain. Follow [review-video storytelling](VIDEO.md) and
    `scripts/pr-video.sh` for real capture/composition. Do not automatically create a video,
    GIF, flow file, annotated copy and HTML report for the same change.
-5. **Summarize:** put the decisive command/result and material limits in the existing PR.
+5. **Diagram fallback:** backend/API/Protobuf/contract, architecture, data-flow or workflow
+   changes without explanatory captures require a source-grounded architecture, sequence or
+   flow diagram inline after the opening. Follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md):
+   prefer Excalidraw; use inline Mermaid when export/hosting is unavailable. No rendering
+   tool or upload failure silently waives the explanation. Mixed changes need a diagram
+   too when captures do not explain the changed non-UI contract.
+6. **Summarize:** put the decisive command/result and material limits in the existing PR.
    Include only media that helps the reviewer, with a short previous -> new claim. Keep
    captures/logs in temporary or ignored scratch unless requested, already required, or a
    reusable maintenance asset. Refresh only evidence invalidated by subsequent edits.
@@ -187,7 +194,18 @@ branch. Never publish private evidence without authorization. Re-read the hosted
 local paths and localhost links are not reviewer-accessible proof. CLI readback proves
 publication, not playback. Do not launch a browser just to verify publication.
 
-Optional capture/annotation/hosting gaps do not block an otherwise verified change.
+Before completion, `lifecycle-stop.sh` reads the hosted body and runs
+`scripts/pr-visual-evidence.py`: include a hosted Markdown image/video, HTML image/video,
+standalone GitHub attachment URL, or a non-empty inline Mermaid diagram. For docs-only,
+formatting, mechanical or other changes with no behavior/contract/relationship delta,
+use `Visual evidence: not applicable - <concrete reason>`. A routine UI edit with no
+useful capture may use that exception; eligible backend changes may not. Exemptions
+are reviewable author assertions, not machine-verified scope. The gate checks presence,
+not diagram correctness, accessibility or coverage; author/review still owns those.
+Commit/push-only and genuine blocked/awaiting-decision endpoints retain their stops.
+
+Optional capture/annotation/hosting gaps do not block an otherwise verified change;
+required diagram explanations use inline Mermaid instead.
 A missing explicitly required check remains a named gap needing the owner's decision,
 not a fabricated PASS or permission to relax repository policy.
 

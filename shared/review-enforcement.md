@@ -83,7 +83,8 @@ threads, and mergeability. It also reads classic protection and active inherited
   This detects direct action references, not reusable-workflow internals or complete
   scanner coverage; `not-detected` supplies no dependency-security evidence.
 
-The lifecycle Stop hook checks publication, not hosted readiness, in both supported hosts.
+The lifecycle Stop hook checks publication and [visual-evidence presence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5),
+not hosted readiness, in both supported hosts.
 The author loop owns automatic CI/feedback maintenance and the host owns wakes; the
 publication hook alone cannot prove ongoing monitoring or production readiness. Pending
 or missing protections are reported, never described as hosted-gates-pass. Commit-only,

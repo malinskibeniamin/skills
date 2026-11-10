@@ -26,7 +26,7 @@ reuse current checks; create output only for a concrete risk, explanation or exp
 | Mobile web viewport, keyboard, touch, safe-area or PWA behavior | [mobile-native](../mobile-native/SKILL.md): reproduce the phone/browser symptom, preserve zoom and native activation; distinguish emulation from physical-device evidence, not a React Native or Swift route |
 | Content/layout stress or overflow at valid data bounds | [break-ui](../break-ui/SKILL.md): schema-backed fixtures through the real component; reuse dogfood captures and keep audit requests read-only |
 | Sonner toast setup, styling or lifecycle | [ask-sonner](../ask-sonner/SKILL.md): installed types and existing Toaster wrapper, one notification per operation, settled outcome and persistent error path; other toast libraries keep their existing owner |
-| Architecture, API contract, data flow or workflow relationships need visual explanation | [excalidraw-diagram](../excalidraw-diagram/SKILL.md) and its [PR comparison](../excalidraw-diagram/PR-WORKFLOW.md): only when requested or clearer than a short explanation; no automatic diagram/source files |
+| Backend/API/Protobuf/frontend-backend contracts, architecture, data flow or workflow changes without explanatory screenshots/video | [excalidraw-diagram](../excalidraw-diagram/SKILL.md) and its [PR comparison](../excalidraw-diagram/PR-WORKFLOW.md): required source-grounded architecture/sequence/flow diagram; Excalidraw preferred, inline Mermaid fallback; captures do not waive unexplained non-UI contracts |
 | Logic, ownership or code shape needs a small explanation | [show-me](../show-me/SKILL.md): smallest useful diff sketch, tree or Mermaid; omit visuals that add no understanding |
 | PR creation/update | [pr](../pr/SKILL.md): value, reviewer focus, before/after evidence, risk and rollback; separate core changes from generated/mechanical files |
 
@@ -49,6 +49,8 @@ cannot replace real captures, tests or measurements. Interactive planning remain
 
 Refresh retained artifacts after edits or base changes; reuse still-current evidence across
 self-review and publication. Missing or inaccessible evidence stays an explicit limit, never
-fabricated proof. Excalidraw rendering failures warn and continue under its nonblocking contract;
-explicitly required project/user evidence keeps its blocker/waiver behavior. Optional
-media tooling gaps do not block an otherwise verified change.
+fabricated proof. Excalidraw rendering failures use the required inline Mermaid fallback;
+they do not waive eligible changes' visual explanation. Apply the [hosted-body evidence gate
+and scoped exceptions](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+Other explicitly required project/user evidence keeps its blocker/waiver behavior.
+Optional media tooling gaps do not block an otherwise verified change.

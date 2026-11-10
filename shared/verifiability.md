@@ -18,8 +18,10 @@ self-comparisons, duplicate layers and wrappers/seams added only to make tests p
 When a new test is warranted, show it fails for the intended regression before the fix.
 
 Inspect changed UI; retain a focused screenshot/comparison only when it resolves a visual
-question or helps review. Video, annotations, diagrams, reports and replay files are
-conditional tools, not automatic deliverables. Reuse captures across checks; keep output
+question or helps review. Video, annotations, reports and replay files remain conditional.
+Backend/API/Protobuf/contract, architecture, data-flow or workflow changes without explanatory
+screenshots/video require a [diagram](../excalidraw-diagram/PR-WORKFLOW.md), with inline Mermaid
+as the renderer-independent fallback. Reuse captures across checks; keep output
 in temporary/ignored scratch and summarize commands, results and material limits inline.
 Persist only requested artifacts, existing required outputs or a reusable maintenance asset.
 Stop when the requested behavior and credible risks are covered; preserve project gates.

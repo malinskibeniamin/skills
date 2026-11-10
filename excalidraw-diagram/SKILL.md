@@ -31,6 +31,7 @@ Node 22+, installed Chrome/Chromium/Edge/Firefox; temporary browser profile, no 
 
 - `clear --yes`, `import --replace`, and restoration are destructive; preserve first.
 - `share` uploads the scene; use only for a requested public link.
-- Excalidraw+ sync is opt-in; Git stays authoritative. Backend diagram failures are nonblocking; report missing evidence and continue delivery.
+- Excalidraw+ sync is opt-in; Git stays authoritative. Backend rendering failures are nonblocking:
+  include the required inline Mermaid fallback per [PR workflow](PR-WORKFLOW.md), then continue delivery.
 - Use SVG/imported brand assets for exact logos; never approximate protected marks.
 - Stop only canvas servers you started.

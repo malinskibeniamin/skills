@@ -45,6 +45,6 @@ EXCALIDRAW_NO_UPDATE_NOTIFIER=1 bunx @excalidraw/cli@0.2.0 render diagram.excali
 
 - `clear --yes`、`import --replace` 和恢复操作具有破坏性；先保留源文件。
 - `share` 会上传场景；仅在用户请求公开链接时使用。
-- Excalidraw+ 同步需明确选择启用；Git 保持权威。后端图表失败不阻塞交付；报告缺失的证据并继续交付。
+- Excalidraw+ 同步需明确选择启用；Git 保持权威。后端图表渲染失败不阻塞交付：按 [PR 工作流](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)在正文中加入必需的 Mermaid 后备图表，然后继续交付。
 - 精确徽标使用 SVG 或导入的品牌资源；不要近似仿制受保护的标志。
 - 仅停止自己启动的画布服务器。

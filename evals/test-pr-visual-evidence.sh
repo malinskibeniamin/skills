@@ -58,3 +58,83 @@ for command in 'gh pr view 12' 'gh pr checks 12' 'gh issue create' 'gh stack vie
     PASS=$((PASS + 1))
   fi
 done
+
+# Completion must inspect the hosted PR body, not just print a reminder.
+visual_root=$(mktemp -d)
+visual_repo="$visual_root/repo"
+visual_sid="pr-visual-eval-$$"
+visual_session="/tmp/hook-session-$visual_sid"
+trap 'rm -rf "$visual_root" "$visual_session"' EXIT
+mkdir -p "$visual_root/bin" "$visual_session"
+git init --bare -q "$visual_root/origin.git"
+git init -q -b main "$visual_repo"
+git -C "$visual_repo" config user.email eval@example.com
+git -C "$visual_repo" config user.name Eval
+printf 'syntax = "proto3";\n' > "$visual_repo/api.proto"
+git -C "$visual_repo" add api.proto
+git -C "$visual_repo" commit -qm base
+git -C "$visual_repo" remote add origin "$visual_root/origin.git"
+git -C "$visual_repo" push -qu origin main
+git -C "$visual_repo" checkout -qb feature/api-contract
+printf 'message Result { string value = 1; }\n' >> "$visual_repo/api.proto"
+git -C "$visual_repo" commit -qam change
+git -C "$visual_repo" push -qu origin feature/api-contract
+: > "$visual_session/dirty-files-baseline"
+cat > "$visual_root/bin/gh" <<'GH'
+#!/bin/bash
+case "$1 $2" in
+  'pr list') printf '17\n' ;;
+  'pr view') cat "$VISUAL_BODY" ;;
+  *) exit 1 ;;
+esac
+GH
+chmod +x "$visual_root/bin/gh"
+export VISUAL_BODY="$visual_root/body.md"
+visual_input=$(jq -nc --arg sid "$visual_sid" \
+  '{session_id:$sid,last_assistant_message:"Intent: explain the contract | Impact: reviewable change\n🟢 done — PR published"}')
+pushd "$visual_repo" >/dev/null
+printf 'pr\n' > "$visual_session/task-endpoint"
+export PATH="$visual_root/bin:$PATH"
+
+printf 'Adds the result contract.\n\n- Testing: compatibility passes.\n' > "$VISUAL_BODY"
+CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+  "$visual_input" 2 'backend PR without visuals cannot complete' 'visual evidence'
+
+for body in \
+  $'```mermaid\nsequenceDiagram\n  Browser->>API: Read result\n  API-->>Browser: Result.value\n```' \
+  $'```mermaid\n---\ntitle: Contract flow\n---\nflowchart LR\n  Browser-->API\n```' \
+  $'```mermaid\nflowchart LR; Browser-->API\n```' \
+  $'~~~mermaid\r\nflowchart LR\r\n  Browser-->API\r\n~~~\r\n' \
+  '![Contract diagram](https://example.com/contract.png)' \
+  '<video src="https://example.com/flow.mp4" controls></video>' \
+  'https://github.com/user-attachments/assets/1234' \
+  'Visual evidence: not applicable — formatting only; contract and behavior unchanged.'; do
+  printf '%s\n' "$body" > "$VISUAL_BODY"
+  CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+    "$visual_input" 0 "hosted evidence or explicit scoped exception permits completion: ${body:0:45}"
+done
+
+for body in \
+  'Architecture preview unavailable: browser missing.' \
+  '![Diagram](/tmp/architecture.png)' \
+  $'```mermaid\n```' \
+  $'```mermaid\nsequenceDiagram\n```' \
+  $'```mermaid\nflowchart LR\n A-->B' \
+  $'```markdown\n![Example](https://example.com/example.png)\n```' \
+  '<!-- ![Hidden](https://example.com/hidden.png) -->' \
+  'Visual evidence: not applicable —'; do
+  printf '%s\n' "$body" > "$VISUAL_BODY"
+  CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+    "$visual_input" 2 "missing, local, empty or hidden evidence is rejected: ${body:0:45}" 'visual evidence'
+done
+
+printf 'ship\n' > "$visual_session/task-endpoint"
+CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+  "$visual_input" 2 'ship endpoint retains the same visual requirement' 'visual evidence'
+rm "$VISUAL_BODY"
+CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+  "$visual_input" 2 'unreadable hosted body cannot pass evidence verification' 'Cannot read'
+printf 'push\n' > "$visual_session/task-endpoint"
+CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+  "$visual_input" 0 'push-only endpoint needs no PR or diagram'
+popd >/dev/null

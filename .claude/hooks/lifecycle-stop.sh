@@ -126,7 +126,17 @@ if [ -z "$pr_number" ]; then
   hook_stop_block "No PR for '$branch'. Create one NOW: gh pr create --fill — then retry."
 fi
 
-# This hook checks publication. The author workflow owns automatic PR upkeep and
+# ── Step 3: Hosted visual explanation or explicit scoped exception ───────────
+# Read back the published body: a local capture or a pre-publication reminder is
+# not evidence the reviewer can see. This checks presence, not semantic quality.
+if ! pr_body=$(gh pr view "$pr_number" --json body --jq .body 2>/dev/null); then
+  hook_stop_block "Cannot read PR #$pr_number body to verify visual evidence. Restore access and retry, or report the external blocker."
+fi
+if ! visual_result=$(printf '%s' "$pr_body" | python3 "$(dirname "$0")/../../scripts/pr-visual-evidence.py" 2>&1); then
+  hook_stop_block "$visual_result"
+fi
+
+# This hook checks publication and visual-evidence presence. The author owns upkeep and
 # native wake registration; publication alone is not production readiness.
 # Hosted merge policy and merge authorization remain separate from delivery.
 exit 0
