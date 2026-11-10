@@ -198,7 +198,7 @@ Before completion, `lifecycle-stop.sh` reads the hosted body and runs
 `scripts/pr-visual-evidence.py`: include a hosted Markdown image/video, HTML image/video,
 standalone GitHub attachment URL, or a non-empty inline Mermaid diagram. For docs-only,
 formatting, mechanical or other changes with no behavior/contract/relationship delta,
-use `Visual evidence: not applicable — <concrete reason>`. A routine UI edit with no
+use `Visual evidence: not applicable - <concrete reason>`. A routine UI edit with no
 useful capture may use that exception; eligible backend changes may not. Exemptions
 are reviewable author assertions, not machine-verified scope. The gate checks presence,
 not diagram correctness, accessibility or coverage; author/review still owns those.

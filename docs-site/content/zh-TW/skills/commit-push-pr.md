@@ -49,7 +49,7 @@ type: skill
 
 1. 基底：`"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`。後續工作沿用目前的 PR 與[中繼資料](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/references/metadata.md)，包括草稿狀態。建立草稿 PR 無須核准；堆疊使用 `/stacked-prs`。
 2. 每個 PR 都應分別載入 [PR](https://github.com/malinskibeniamin/skills/blob/main/tstack-skills/file-pr/SKILL.md)、[影響評估](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)與[內文](https://github.com/malinskibeniamin/skills/blob/main/pr/SKILL.md)；保留草稿狀態並說明價值。
-3. 選擇[視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。對於後端、API、Protobuf、契約或資料流變更，如果沒有能解釋受影響行為的截圖或影片，必須提供以原始碼為依據的圖表；優先使用 Excalidraw，並以內嵌 Mermaid 作為備援方案。重新讀取已發布的內文；生命週期 Stop 閘門會檢查證據是否存在，或是否明確說明適用範圍內的例外。
+3. 必須提供[視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)，或說明適用範圍內的例外。
 4. 公開儲存庫（`gh repo view --json visibility`）：推送前，請從提交、標題、內文及證據中移除內部組織、儲存庫、產品、人員名稱及私人連結。
 5. 在內文簡述關鍵檢查與重要限制，不另建證據檔案。包含適用的 dogfood 結果；重新讀取內文並確認所附媒體的存取權限。編輯僅使受影響的證據失效。
 
