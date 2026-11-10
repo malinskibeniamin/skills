@@ -8,7 +8,7 @@ Fit SQL to one measured workload, version, provider, and recovery contract. Post
 ## Workflow
 
 1. **Mode:** author/review SQL; schema/index; transactions/queues; migration; tune; operate/recover; secure/tenant; report; or Jet.
-2. **Contract:** version/fork/provider, extensions/topology/pooler, workload, volume/skew/growth, concurrency, SLO, RPO/RTO, security, and change window. Mark unknowns; never invent production facts.
+2. **Contract:** automatically detect the local `psql` client and, on the authorized target, the server separately using [version discovery](references/VERSIONS-PROVIDERS.md#automatic-version-discovery). Record exact versions, stable/beta/RC/devel channel, fork/provider, extensions/topology/pooler, workload, volume/skew/growth, concurrency, SLO, RPO/RTO, security, and change window. Offline reviews use repository pins as intended versions, not deployment proof; mark unknowns.
 3. **Ground truth:** exact SQL/parameters, transaction boundary, schema/catalog, representative data, plan/stats, waits/locks, resources, and deploy/config history.
 4. **Smallest reversible change:** evidence, hypothesis, expected effect, write/storage/lock/WAL cost, unhappy paths, version/provider caveats, rollback/forward-fix, abort criteria, verification.
 5. **Live gate:** production diagnosis defaults read-only, bounded, time-limited. Get explicit approval for writes, DDL, cancellation, role/policy/config changes, failover, restore, or destructive commands; reconfirm target.
@@ -29,11 +29,12 @@ Fit SQL to one measured workload, version, provider, and recovery contract. Post
 | Roles, RLS, tenant isolation | [SECURITY-TENANCY.md](references/SECURITY-TENANCY.md) |
 | Health/weekly report | [WEEKLY-REPORT.md](references/WEEKLY-REPORT.md) |
 | Versions/providers | [VERSIONS-PROVIDERS.md](references/VERSIONS-PROVIDERS.md) |
+| PostgreSQL 19 preview/RC, psql 19, upgrade to 19 | [POSTGRESQL-19.md](references/POSTGRESQL-19.md) plus touched domains |
 | Drizzle | [SQL-AUTHORING.md](references/SQL-AUTHORING.md), migrations, versions/providers |
 | `go-jet/jet` | [GO-JET.md](references/GO-JET.md) |
 | Evidence/corpus refresh | [EVIDENCE.md](references/EVIDENCE.md) |
 
-PostgreSQL 19 is preview. Recheck current docs for version-, extension-, provider-, Drizzle-, or Jet-specific behavior.
+Recheck release status and exact-major docs for version-, extension-, provider-, Drizzle-, or Jet-specific behavior. A numeric major does not distinguish a prerelease from GA; `/current/` and `/devel/` may describe a different target.
 
 ## Output
 
