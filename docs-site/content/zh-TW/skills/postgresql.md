@@ -16,7 +16,7 @@ sidebar:
 ## 工作流程
 
 1. **選擇模式：**撰寫/審查 SQL；建立結構描述/索引模型；協調交易/佇列；遷移；診斷/調校；操作/復原；安全性/租戶；報告；或整合 Jet。
-2. **確立契約：**PostgreSQL 主要/次要版本與供應商/分支版本；擴充功能/拓撲/連線池；工作負載型態；資料量/偏斜/成長；並行處理；延遲/吞吐量 SLO；RPO/RTO；安全性；變更時段。標示未知項目。絕不虛構正式環境的事實。
+2. **確立契約：**自動[偵測用戶端與伺服器版本](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md#automatic-version-discovery)；記錄分支版本/供應商、擴充功能/拓撲/連線池、工作負載、資料量/偏斜/成長、並行處理、SLO、RPO/RTO、安全性與變更時段。標示未知項目。
 3. **擷取實際狀況：**實際 SQL 與參數型態、交易邊界、結構描述/系統目錄狀態、具代表性的資料、執行計畫/統計資料、等待事件、鎖定、資源遙測資料，以及相關的部署/設定歷程。
 4. **提出最小且可逆的變更：**說明證據、假設、預期效果、寫入/儲存空間/鎖定/WAL 成本、異常路徑、版本/供應商注意事項、復原或向前修正方案、中止條件，以及驗證方式。
 5. **管控即時影響：**正式環境診斷預設為唯讀、有明確範圍且有時間限制。執行寫入、DDL、取消作業、角色/政策/設定變更、容錯移轉、還原或破壞性命令之前，須取得明確核准。再次確認目標。
@@ -37,11 +37,10 @@ sidebar:
 | 角色、RLS、租戶隔離、敏感資料副本 | [SECURITY-TENANCY.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SECURITY-TENANCY.md) |
 | 維運摘要或資料庫健康狀態報告 | [WEEKLY-REPORT.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/WEEKLY-REPORT.md) |
 | 支援的功能、代管供應商限制 | [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
+| PostgreSQL 19 預覽版/RC；psql 19 | [POSTGRESQL-19.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/POSTGRESQL-19.md) |
 | Drizzle 產生的 SQL 或遷移 | [SQL-AUTHORING.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SQL-AUTHORING.md)、[MIGRATIONS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/MIGRATIONS.md)及 [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
 | 使用 `go-jet/jet` 的 Go 程式碼 | [GO-JET.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/GO-JET.md) |
 | 證據強度或語料庫更新 | [EVIDENCE.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/EVIDENCE.md) |
-
-將 PostgreSQL 19 視為預覽版本。使用版本、擴充功能、供應商、Drizzle 或 Jet 的特定行為前，請重新查閱最新文件。
 
 ## 輸出契約
 

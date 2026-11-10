@@ -16,7 +16,7 @@ sidebar:
 ## 工作流
 
 1. **选择模式：**编写/审查 SQL；设计架构/索引；编排事务/队列；迁移；诊断/调优；运维/恢复；安全/租户；报告；或集成 Jet。
-2. **确定约定：**PostgreSQL 主版本/次版本及提供商/分支版本；扩展/拓扑/连接池；工作负载特征；数据量/倾斜度/增长率；并发量；延迟/吞吐量 SLO；RPO/RTO；安全要求；变更窗口。标明未知项。绝不虚构生产环境事实。
+2. **确定约定：**自动[检测客户端与服务器版本](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md#automatic-version-discovery)；记录分支版本/提供商、扩展/拓扑/连接池、工作负载、数据量/倾斜度/增长率、并发量、SLO、RPO/RTO、安全要求和变更窗口。标明未知项。
 3. **获取真实依据：**实际 SQL 和参数形式、事务边界、架构/系统目录状态、代表性数据、执行计划/统计信息、等待事件、锁、资源遥测数据，以及相关的部署/配置历史。
 4. **提出最小可逆变更：**说明证据、假设、预期效果、写入/存储/锁/WAL 成本、异常路径、版本/提供商注意事项、回滚或前向修复方案、中止条件和验证方法。
 5. **管控实时影响：**默认情况下，生产环境诊断必须只读、范围受限且有时间限制。在执行写入、DDL、取消操作、角色/策略/配置变更、故障转移、恢复或破坏性命令之前，必须获得明确批准。再次确认目标。
@@ -37,11 +37,10 @@ sidebar:
 | 角色、RLS、租户隔离、敏感数据副本 | [SECURITY-TENANCY.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SECURITY-TENANCY.md) |
 | 运维总结或数据库健康报告 | [WEEKLY-REPORT.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/WEEKLY-REPORT.md) |
 | 支持的功能、托管服务提供商边界 | [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
+| PostgreSQL 19 预览版/RC；psql 19 | [POSTGRESQL-19.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/POSTGRESQL-19.md) |
 | Drizzle 生成的 SQL 或迁移 | [SQL-AUTHORING.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SQL-AUTHORING.md)、[MIGRATIONS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/MIGRATIONS.md) 和 [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
 | 使用 `go-jet/jet` 的 Go 代码 | [GO-JET.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/GO-JET.md) |
 | 证据强度或语料库更新 | [EVIDENCE.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/EVIDENCE.md) |
-
-将 PostgreSQL 19 视为预览版本。在使用特定于版本、扩展、提供商、Drizzle 或 Jet 的行为之前，请重新查阅最新文档。
 
 ## 输出约定
 

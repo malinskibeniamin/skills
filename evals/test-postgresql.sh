@@ -99,12 +99,12 @@ PY
 fi
 
 if [ -f "$REFRESH_TEST" ]; then
-  if bun test "$REFRESH_TEST"; then
-    echo "  PASS  postgresql corpus updater tests pass"
+  if bun test "$REFRESH_TEST" "$SKILL_DIR/scripts/detect-version.test.ts" "$SKILL_DIR/postgresql-skill.test.ts"; then
+    echo "  PASS  postgresql skill and script tests pass"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  postgresql corpus updater tests fail"
+    echo "  FAIL  postgresql skill and script tests fail"
     FAIL=$((FAIL + 1))
-    ERRORS="$ERRORS\n  FAIL: postgresql corpus updater tests"
+    ERRORS="$ERRORS\n  FAIL: postgresql skill and script tests"
   fi
 fi

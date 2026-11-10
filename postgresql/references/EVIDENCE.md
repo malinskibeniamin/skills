@@ -36,6 +36,11 @@ pooler, performance, and denial-of-service complexity.
 
 ## Research snapshot
 
+Targeted version refresh: **2026-11-10**, covering automatic client/server
+discovery and [PostgreSQL 19 RC guidance](POSTGRESQL-19.md). Its linked official
+sources and checked date are separate from the historical corpus snapshot below;
+this was not a full corpus refresh.
+
 Snapshot date: **2026-07-29**. The machine-readable
 [source-decision index](source-index.jsonl) records 10,358 unique URL-level
 decisions: 2,029 included and 8,329 excluded or screened out.

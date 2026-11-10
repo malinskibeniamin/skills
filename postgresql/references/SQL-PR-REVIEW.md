@@ -22,6 +22,10 @@ only the changed `.sql` lines. Read the other reference files named by
 1. Identify the deployed PostgreSQL version/provider, migration runner, whether
    each migration is transactional, schema owner, runtime roles, pooler, and
    oldest application version that can overlap the rollout.
+   Use [version discovery](VERSIONS-PROVIDERS.md#automatic-version-discovery)
+   to separate client/server evidence from repository intent. For a 19 target
+   or upgrade, apply the [19 compatibility checks](POSTGRESQL-19.md), including
+   the exact RC build; gate SQL on the oldest supported server, not local psql.
 2. Classify every artifact:
    - immutable migration history;
    - hand-authored queries;

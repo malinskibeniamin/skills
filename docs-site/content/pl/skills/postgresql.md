@@ -20,10 +20,10 @@ Traktuj „najlepszy SQL” jako rozwiązanie dopasowane na podstawie pomiarów 
 1. **Wybierz tryb:** tworzenie/przegląd SQL; modelowanie schematu/indeksów; koordynowanie
    transakcji/kolejek; migracja; diagnostyka/optymalizacja; obsługa/odtwarzanie; bezpieczeństwo/wielodostępność;
    raportowanie; lub integracja z Jet.
-2. **Ustal założenia:** wersja główna/pomocnicza PostgreSQL i dostawca/odmiana;
-   rozszerzenia/topologia/pooler; charakterystyka obciążenia; ilość/rozkład/wzrost danych;
-   współbieżność; SLO opóźnień/przepustowości; RPO/RTO; bezpieczeństwo; okno zmian.
-   Oznacz niewiadome. Nigdy nie zmyślaj faktów dotyczących środowiska produkcyjnego.
+2. **Ustal założenia:** automatycznie [wykryj wersje klienta i serwera](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md#automatic-version-discovery);
+   zapisz odmianę/dostawcę, rozszerzenia/topologię/pooler, obciążenie,
+   ilość/rozkład/wzrost danych, współbieżność, SLO, RPO/RTO, bezpieczeństwo
+   i okno zmian. Oznacz niewiadome.
 3. **Zbierz dane źródłowe:** rzeczywisty SQL i postać parametrów, granice
    transakcji, stan schematu/katalogu, reprezentatywne dane, plan/statystyki, oczekiwania,
    blokady, telemetrię zasobów oraz istotną historię wdrożeń/konfiguracji.
@@ -53,12 +53,10 @@ Traktuj „najlepszy SQL” jako rozwiązanie dopasowane na podstawie pomiarów 
 | Role, RLS, izolacja dzierżawców, kopie danych wrażliwych | [SECURITY-TENANCY.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SECURITY-TENANCY.md) |
 | Podsumowanie operacyjne lub raport o stanie bazy danych | [WEEKLY-REPORT.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/WEEKLY-REPORT.md) |
 | Obsługiwane funkcje, ograniczenia dostawców zarządzanych usług | [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
+| PostgreSQL 19 preview/RC; psql 19 | [POSTGRESQL-19.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/POSTGRESQL-19.md) |
 | SQL lub migracje generowane przez Drizzle | [SQL-AUTHORING.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/SQL-AUTHORING.md), [MIGRATIONS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/MIGRATIONS.md) oraz [VERSIONS-PROVIDERS.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/VERSIONS-PROVIDERS.md) |
 | Kod Go korzystający z `go-jet/jet` | [GO-JET.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/GO-JET.md) |
 | Siła dowodów lub aktualizacja korpusu | [EVIDENCE.md](https://github.com/malinskibeniamin/skills/blob/main/postgresql/references/EVIDENCE.md) |
-
-Traktuj PostgreSQL 19 jako wersję zapoznawczą. Przed użyciem zachowań zależnych od
-wersji, rozszerzenia, dostawcy, Drizzle lub Jet ponownie sprawdź aktualną dokumentację.
 
 ## Wymagany format wyniku
 
