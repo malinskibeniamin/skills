@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+2026-11-11 -- Let Claude Fable 5.2 run any session or delegated lane the owner names it
+for, including audits outside the hard-task triggers; the default and automatic routes
+are unchanged. The model-switch denial now points at the configured allowlist instead of
+a hard-coded model list.
+
 2026-11-10 -- Pin complete shadcn/improve sources and restore the full MIT license.
 Refresh the existing advisor's input/secret handling, intent-document guidance and
 public-sensitive-issue confirmation while preserving local execution and delegation

@@ -47,7 +47,7 @@ else
   elif ! jq -e --arg model "$to_model" \
     '.selection.preferred_models | index($model) != null' \
     "$routing_file" >/dev/null 2>&1; then
-    deny_reason="Model $to_model is prohibited; only the configured Opus 5.5, Fable 5.2 and GPT-6.1 Sol routes are allowed."
+    deny_reason="Model $to_model is prohibited; only selection.preferred_models in config/model-routing.json is allowed."
   elif [ "$effort" != "xhigh" ]; then
     deny_reason="Model $to_model requires xhigh effort; reported effort is ${effort:-unknown}."
   fi

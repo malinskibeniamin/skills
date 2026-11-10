@@ -15,6 +15,7 @@
       "model": "claude-fable-5-2",
       "efforts": ["xhigh"],
       "selection": "Owner-authorized hard-task specialist, not the daily default. Select for the triggers below or an observed Opus capability shortfall after checking the verification loop. Preserve an explicitly selected session model; routing is not delegation consent.",
+      "owner_named": "Run any session or delegated lane the owner names Fable 5.2 for, including audits outside these triggers. Naming one lane is not consent for more.",
       "when": [
         "Major cross-cutting refactors or migrations with coupled invariants.",
         "Architecture decisions with substantial unresolved technical trade-offs.",
