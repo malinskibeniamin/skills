@@ -36,8 +36,10 @@ With Changesets, load [changesets](../t3code-skills/changesets/SKILL.md) after c
 
 1. Base: `"${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh"`. Keep follow-up in current PR and [metadata](references/metadata.md), including draft state. Draft PRs open without approval; stacks: `/stacked-prs`.
 2. Every PR: load [PR](../tstack-skills/file-pr/SKILL.md), [impact](../quantify-impact/SKILL.md) and [body](../pr/SKILL.md) separately; keep drafts/value.
-3. Visible changes: inspect rendering; reuse checks. Captures only when helpful/required;
-   no automatic video, annotations, snapshots or diagrams.
+3. Select [visual evidence](REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+   Backend/API/Protobuf/contract or data-flow changes without explanatory screenshots/video
+   require a source-grounded diagram; Excalidraw preferred, inline Mermaid fallback.
+   Read back the hosted body; the lifecycle Stop gate checks evidence presence or an explicit scoped exception.
 4. Public repo (`gh repo view --json visibility`): scrub internal org, repo, product, person names and private links from commits, title, body, and evidence before push.
 5. Summarize checks/limits and dogfood inline; read back body/media access.
    Refresh invalidated evidence; no separate evidence file.

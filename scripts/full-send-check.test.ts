@@ -64,6 +64,7 @@ function fixture(dependencyReview = false, gates = false) {
   const head = git("rev-parse", "HEAD");
   const snapshot = {
     pr: {
+      body: "```mermaid\nflowchart LR\n  Client-->API\n```",
       state: "OPEN",
       isDraft: false,
       isCrossRepository: false,
@@ -116,7 +117,7 @@ appendFileSync(process.env.CALLS, JSON.stringify(args) + "\\n");
 const d = JSON.parse(readFileSync(process.env.DATA, "utf8"));
 if (d.failGh) process.exit(1);
 if (args[0] === "pr" && args[1] === "view") {
-  console.log(args.includes("--jq") ? d.pr.baseRefOid : JSON.stringify(d.pr));
+  console.log(args.includes("--jq") ? (args.includes("body") ? d.pr.body : d.pr.baseRefOid) : JSON.stringify(d.pr));
   d.viewReads += 1;
   if (d.detachOnRead === d.viewReads) Bun.spawnSync(["git", "switch", "--detach"]);
   writeFileSync(process.env.DATA, JSON.stringify(d));
@@ -532,10 +533,16 @@ for (const endpoint of ["pr", "ship"]) {
         .trim()
         .split("\n")
         .map((line) => JSON.parse(line));
-      // Publication still needs its PR; CI/review/readiness never becomes a Stop gate.
+      // Publication needs its PR and visible explanation, not CI/review readiness.
       expect(calls.length).toBeGreaterThan(0);
       expect(
-        calls.every((args) => args[0] === "pr" && args[1] === "list"),
+        calls.every(
+          (args) =>
+            args[0] === "pr" &&
+            (args[1] === "list" ||
+              (args[1] === "view" &&
+                args[args.indexOf("--json") + 1] === "body")),
+        ),
       ).toBe(true);
     });
   }

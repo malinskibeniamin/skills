@@ -76,8 +76,12 @@ remaining uncertainty; passing tests are not evidence of human review or consens
 Use [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations) for hard-to-find deltas;
 [UI change maps](SUMMARY-VIEWS.md#ui-change-maps) for broad UI only when helpful. Avoid duplicate captures/recaps.
 
-Use [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md) only when requested or clearer than prose; refresh stale maintained diagrams.
-Routine changes need no diagram/source files. Rendering failures warn and continue, never block or replace test evidence.
+For backend/API/Protobuf/contract, architecture, data-flow or workflow changes without
+explanatory screenshots/video, include [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md)
+inline after the opening; refresh stale maintained diagrams. Prefer Excalidraw, with inline
+Mermaid when rendering/hosting fails. Keep test evidence: a diagram explains, not proves.
+Use the [visual-evidence contract](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)
+for scoped exceptions and the hosted-body completion gate.
 
 Select media per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 Record real flows only when interaction/motion needs it or requested; stills/results suffice otherwise.

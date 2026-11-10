@@ -75,7 +75,7 @@ PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前�
 
 仅在差异难以定位时使用[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。广泛的 UI 工作可在有助于理解时使用 [UI 变更图](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重复截图和独立总结文件。
 
-对于需要视觉解释的后端关系，仅在用户要求或比简短文字更清晰时使用[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)。更新已过时的现有维护图表；常规变更不新建图表或源文件。渲染失败应警告后继续，不阻塞 PR，也不替代测试证据。
+对于后端、API、Protobuf、契约、架构、数据流或工作流变更，如果截图或视频未能解释受影响的行为，必须在开头一句之后内联加入[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，并更新过时的维护图表。优先使用 Excalidraw；渲染或托管失败时使用内联 Mermaid。保留测试证据：图表用于解释，不证明正确性。[视觉证据契约](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)规定了适用范围内的例外和检查已发布正文的完成门禁。
 
 按 [commit-push-pr 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)选择媒体。只有交互或动效需要，或用户要求时才录制真实流程；其他情况下静态图片和命令结果足够。证据的价值在于回答的问题，不在于媒体等级。测试结果应简洁、真实，不要重构或虚构。
 

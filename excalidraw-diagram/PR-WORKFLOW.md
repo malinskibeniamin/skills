@@ -1,11 +1,15 @@
 # Backend diagrams and maintenance
 
-## When to attempt
+## Required fallback
 
-Read the actual diff and affected callers. Changes to architecture, data flow, API contracts, or workflows
-trigger a focused before/after Excalidraw attempt, including backend-only PRs. Skip docs-only,
-formatting, mechanical, or implementation-only edits when these relationships stay unchanged.
-File extensions alone do not decide eligibility. State a skip reason when the boundary is unclear.
+Read the actual diff and affected callers. Changes to architecture, data flow, API contracts, or workflows,
+including backend behavior, frontend-backend contracts, BFFs, Protobuf and generated-client semantics,
+require a source-grounded architecture, sequence or flow diagram when screenshots/video do not
+explain the affected behavior. Backend-only PRs take this route automatically; no extra user request.
+Mixed UI/backend changes still need a diagram for contracts the captures leave unexplained.
+Skip docs-only, formatting, mechanical or implementation-only edits only when behavior, contracts
+and relationships stay unchanged; record a concrete reason under the [visual-evidence contract](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+File extensions alone do not decide eligibility.
 
 Invoke `excalidraw-diagram`; it owns creation, export, and visual inspection. A diagram is not a test
 or proof that the system works. Keep execution evidence beside the explanation; retain existing
@@ -67,12 +71,17 @@ local `.context` paths are not hosted images. Link the tracked editable source f
 No automatic Excalidraw+ sync, `share`, or public hosting: uploads need explicit user intent and
 must preserve the repository's audience. Do not create an evidence branch just to host diagrams.
 
-## Failure is nonblocking
+## Rendering failure is nonblocking; explanation remains required
 
-Missing CLI/browser, conversion, rendering, or upload failure: report the actual error, preserve
-valid source and any verified outputs, then continue commit/push/PR delivery. Do not retry
-indefinitely or ask the user to waive a diagram gate. Keep broken/empty artifacts out of maintained
-docs. If useful, include a clearly labeled Mermaid/text fallback; it is not editable Excalidraw.
-Say what is missing, for example `Architecture preview unavailable: browser not found; editable
-source committed; rendering not verified.` Refresh stale docs as above. Diagram availability
-does not weaken tests or other required checks, and diagram success never substitutes for them.
+Missing CLI/browser, conversion, rendering or upload failure: report the actual error, preserve
+valid source and verified outputs, and include a fenced `mermaid` diagram directly in the PR body
+before continuing delivery. Use the same source-grounded changed path and an accessible caption;
+label the fallback as Mermaid, not editable Excalidraw. A local scene link or prose-only failure
+notice does not satisfy the requirement. Do not retry indefinitely or require Excalidraw installation.
+Keep broken/empty artifacts out of maintained docs; refresh stale docs as above. Ordinary diagram
+uploads remain within the repository's audience; public sharing is still opt-in. Diagram success
+never substitutes for tests or other required checks.
+
+The lifecycle Stop gate checks the published body's evidence presence, including drafts, using
+`scripts/pr-visual-evidence.py`; author/review verifies semantic applicability and diagram accuracy.
+Keep new PR-only sources temporary unless requested or reusable; update existing maintained scenes.

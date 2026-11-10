@@ -48,6 +48,6 @@ Node 22 lub nowszy, zainstalowany Chrome/Chromium/Edge/Firefox; tymczasowy profi
 
 - `clear --yes`, `import --replace` i przywracanie są destrukcyjne; najpierw zachowaj źródło.
 - `share` przesyła scenę; używaj tylko na prośbę o publiczny link.
-- Synchronizacja Excalidraw+ wymaga świadomego włączenia; Git pozostaje źródłem nadrzędnym. Błędy diagramów backendowych nie blokują pracy; zgłoś brakujące dowody i kontynuuj dostarczenie.
+- Synchronizacja Excalidraw+ wymaga świadomego włączenia; Git pozostaje źródłem nadrzędnym. Błędy renderowania backendowych diagramów nie blokują dostarczenia: dodaj wymagany diagram Mermaid bezpośrednio w opisie zgodnie z [procedurą PR](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md), a następnie kontynuuj dostarczenie.
 - Używaj SVG lub importowanych zasobów marki do dokładnych logo; nigdy nie twórz przybliżonych wersji chronionych znaków.
 - Zatrzymuj tylko serwery obszaru roboczego uruchomione przez siebie.

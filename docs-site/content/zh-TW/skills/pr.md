@@ -75,7 +75,7 @@ type: skill
 
 只在差異難以定位時使用[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。大範圍 UI 工作可在有助於理解時使用 [UI 變更圖](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重複截圖與獨立回顧檔案。
 
-對於需要視覺解釋的後端關係，只在使用者要求或比簡短文字更清楚時使用[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)。更新已過時的現有維護圖表；例行變更不新建圖表或原始檔。繪製失敗應警告後繼續，不阻擋 PR，也不取代測試證據。
+對於後端、API、Protobuf、契約、架構、資料流或工作流程變更，如果截圖或影片無法解釋受影響的行為，必須在開頭一句之後內嵌加入[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，並更新過時的維護圖表。優先使用 Excalidraw；繪製或託管失敗時使用內嵌 Mermaid。保留測試證據：圖表用於解釋，不代表已證明正確性。[視覺證據契約](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)規定適用範圍內的例外，以及檢查已發布內文的完成閘門。
 
 依 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)選擇媒體。只有互動或動態效果需要，或使用者要求時才錄製真實流程；其他情況靜態圖片與指令結果已足夠。證據的價值在於回答的問題，而非媒體等級。測試結果應簡潔、真實，不要重新建構或虛構。
 
