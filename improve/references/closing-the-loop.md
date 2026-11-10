@@ -1,5 +1,8 @@
 # Execute, reconcile, and publish
 
+Use the chosen plan directory throughout; substitute `advisor-plans/` for `plans/`
+below when recon found another owner for `plans/`.
+
 ## `execute <plan>`
 
 Explicit execution exits advisor mode and hands the outcome to the current single owner
@@ -37,8 +40,9 @@ Finish with a short report: what's verified done, what was refreshed, what's rej
 Modifier on any planning invocation (`/improve --issues`, `/improve security --issues`). The flag is the user's authorization to create issues -- never create them without it.
 
 1. Preflight: `gh auth status` succeeds and the repo has a GitHub remote. If either fails, write the plan files as normal and say why issues were skipped.
-2. Show the list of titles about to become issues; confirm once if interactive.
-3. Per plan: `gh issue create --title "<plan title>" --body-file <plan file>`. Labels: `improve` plus the category -- apply only if the labels exist or can be created without erroring; skip labels rather than fail.
-4. Record each issue URL in the plan's Status block (`- **Issue**: <url>`) and the index.
+2. Visibility check: `gh repo view --json visibility`. If this fails or visibility is unknown, keep plans local and report why publication is blocked. For a public repository, warn that issues are public and get explicit confirmation before publishing sensitive findings, including vulnerabilities or credential locations. The `--issues` flag alone does not authorize that disclosure. Apply this gate before handing plans to `/to-tickets` or any tracker helper.
+3. Show the list of titles about to become issues; confirm once if interactive.
+4. Per plan: `gh issue create --title "<plan title>" --body-file <plan file>`. Labels: `improve` plus the category -- apply only if the labels exist or can be created without erroring; skip labels rather than fail.
+5. Record each issue URL in the plan's Status block (`- **Issue**: <url>`) and the index.
 
 The plan file remains the source of truth; the issue is distribution. The self-containment rule pays off here -- the issue body needs no edits to make sense to whoever (or whatever) picks it up.

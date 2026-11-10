@@ -1,6 +1,6 @@
 # Improve reference
 
-Vendored from shadcn/improve. Use this with `/improve` to audit without editing source.
+Adapted from shadcn/improve. [Pinned source, licenses, compatibility and refresh](../vendor/shadcn-improve-NOTICE.md). Use this with `/improve` to audit without editing source.
 
 ## Positioning
 
@@ -25,8 +25,8 @@ Every plan should cover:
 | Improve mode | Skills to use | Purpose |
 |---|---|---|
 | `quick` | `/prime` + direct audit | Fast repo map and hotspot pass. |
-| standard `/improve` | `/prime`, `/swarm`, `/review` | Recon, parallel audit fan-out, vet and dedupe findings. |
-| `deep` | `/prime`, `/swarm`, `/review --deep` | Exhaustive audit and release-blocking quality lens. |
+| standard `/improve` | `/prime`, `/review`; `/swarm` only with explicit consent | Recon, audit, vet and dedupe findings. |
+| `deep` | `/prime`, `/review --deep`; `/swarm` only with explicit consent | Exhaustive audit and release-blocking quality lens. |
 | `next` | `/prime`, `/steelman` | Ground roadmap ideas in repo evidence and argue against weak ideas. |
 | `plan <description>` | `/prime`, `/resilience-review` | Produce one executable plan with unhappy paths and STOP conditions. |
 | `branch` | `/prime`, `/review` | Scope to branch diff, classify introduced versus pre-existing findings. |
@@ -38,6 +38,7 @@ Guardrails:
 - Do not call /commit-push-pr from improve. Shipping belongs to executor flows, not advisor mode.
 - If a helper skill would edit source, use only its review questions/checklists, not its mutation steps.
 - If a helper skill is unavailable, continue with the equivalent manual checklist and say so.
+- A mode or helper mention grants no delegation consent. Apply the canonical skill's untrusted-input and secret-handling rules to every separately authorized audit helper.
 
 ## Audit categories
 
@@ -72,6 +73,7 @@ Reject findings that are by design, unsupported by evidence, duplicate another f
 
 - `pwd`, `git rev-parse --short HEAD`, `git status --short`, `git log --oneline -30`.
 - Read project instructions: `AGENTS.md`, `CLAUDE.md`, `README*`, `CONTRIBUTING*`.
+- Read existing ADRs, PRDs/specs, `CONTEXT.md`, `DESIGN.md` and `PRODUCT.md`. Carry decided tradeoffs and vocabulary into vetting, direction and plans. Missing docs are a no-op; stale ADRs or code/document drift are findings, not grounds to suppress code evidence.
 - Identify verification gates from package/build config and CI.
 - Map key directories and generated files to skip.
 - Note conventions with exemplar files the executor can mimic.

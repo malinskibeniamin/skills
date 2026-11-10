@@ -9,6 +9,8 @@ Three properties make a plan executable by a weaker model:
 3. **Hard boundaries and escape hatches** -- explicit out-of-scope list, and "STOP and report" conditions instead of letting the model improvise when reality doesn't match the plan.
 
 File naming: `plans/NNN-short-slug.md`, numbered in recommended execution order.
+When `plans/` has another owner, replace every `plans/` path in the plan and index
+templates below with the chosen `advisor-plans/` directory.
 
 ---
 
@@ -56,6 +58,9 @@ The facts the executor needs, inlined -- never "as discussed" or "see audit":
 - The repo conventions that apply here, with a pointer to one exemplar file:
   "Error handling follows the Result pattern -- see `src/lib/result.ts` and its
   use in `src/users/api.ts:40-60`. Match it."
+- Inline applicable vocabulary and design constraints from recon's intent docs:
+  `CONTEXT.md` terms, `DESIGN.md` tokens/components, and relevant ADR decisions.
+  Include the specific excerpts; the executor has not read those documents.
 
 ## Commands you will need
 

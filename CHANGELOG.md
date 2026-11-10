@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+2026-11-10 -- Pin complete shadcn/improve sources and restore the full MIT license.
+Refresh the existing advisor's input/secret handling, intent-document guidance and
+public-sensitive-issue confirmation while preserving local execution and delegation
+boundaries. Add repeatable import, upstream verification and drift-rejection checks.
+
 2026-11-09 -- Incorporate Emil's new skill documentation into existing motion guidance:
 route symptoms to timing, subtraction, profiling, gestures or naming without adding
 commands. Link upstream demos and refresh pinned sources, retaining local execution
