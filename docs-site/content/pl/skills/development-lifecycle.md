@@ -27,12 +27,7 @@ Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat. Przed edy
 
 ## Kontrakt rezultatu [#outcome-contract]
 
-Przed rozpoczęciem edycji określ:
-
-- **Cel** -- ogólny stan końcowy.
-- **Ograniczenia** -- ograniczenia, których nie można wywnioskować, decyzje zastrzeżone dla użytkownika oraz nieodwracalne granice.
-- **Weryfikacja** -- kontrole lub obserwowalne zachowanie, które odróżniają ukończone rozwiązanie od rozwiązania jedynie pozornie poprawnego.
-- **Zatrzymanie** -- żądany punkt końcowy i warunki, które rzeczywiście wymagają udziału użytkownika.
+Określ **cel** (rezultat), **ograniczenia** (zastrzeżone granice), **weryfikację** (obserwowalny dowód) i **zatrzymanie** (punkt końcowy lub blokady).
 
 Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj.
 [Automatycznie uzupełnij zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach tego punktu końcowego.

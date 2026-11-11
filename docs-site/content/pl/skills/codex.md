@@ -32,7 +32,6 @@ Sprawdź dostępność tylko po zatwierdzeniu delegacji: `codex exec -m gpt-6.1-
 | Wariant | Zastosowanie |
 |---|---|
 | Sol, `xhigh` (`gpt-6.1-sol`; nigdy `max`) | preferowany recenzent PR; wykonanie, obsługa komputera i analiza po jawnym wyborze |
-| Fable 5.2, `xhigh` (`claude-fable-5-2`) | najtrudniejsze zadania techniczne według `quality_first.hard`; nie jest modelem Codex CLI ani standardową ścieżką zapasową przeglądu |
 | Opus 5.5, `xhigh` (`claude-opus-5-5`) | codzienna praca, UI, plany, kod, drobne prace; oznaczony przegląd zapasowy z czystym kontekstem |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości na podstawie ceny ani nazwy. [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md) określa warunki użycia między dostawcami i mechanizmy CLI.

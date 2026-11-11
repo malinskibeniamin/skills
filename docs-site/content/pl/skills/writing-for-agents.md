@@ -28,7 +28,7 @@ Dotyczy to umiejętności, plików `AGENTS.md`, `CLAUDE.md` i wskazanych materia
 
 Podczas pisania umiejętności przeczytaj [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md), aby poznać zasady frontmatter, wyboru sposobu wywołania i routerów.
 
-Przy zmianach promptów dla Claude przeczytaj [wskazówki dotyczące promptów modeli](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md): dostosuj je do docelowego modelu i zachowaj historię aktywnej rozmowy API zamiast kopiować prompt innego modelu lub przepisywać wcześniejszy prefiks.
+Przy zmianach promptów dla Claude przeczytaj [wskazówki dotyczące promptów modeli](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md), aby dostroić model i zachować historię aktywnej rozmowy API.
 
 ## Umieszczaj informacje na właściwym poziomie [#depth]
 
@@ -75,5 +75,4 @@ jego usunięciu. Jeśli żadne, usuń wiersz.
 - Uprość niejasny kod lub konfigurację zamiast opisywać oczywisty mechanizm.
 - Przenieś szczegóły gałęzi za wskaźnik; definicję, regułę i zastrzeżenia trzymaj razem.
 
-Zakończ, gdy najkrótsza wersja nadal wybiera właściwą gałąź, zachowuje każdą zasadę
-ochronną i umożliwia sprawdzenie ukończenia.
+Zakończ po zweryfikowaniu ukończenia.

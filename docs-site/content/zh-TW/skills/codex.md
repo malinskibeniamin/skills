@@ -26,7 +26,6 @@ type: skill
 | 變體 | 用途 |
 |---|---|
 | Sol，`xhigh`（`gpt-6.1-sol`；絕不使用 `max`） | 首選 PR 審查者；明確選用時執行工作、操作電腦或調查 |
-| Fable 5.2，`xhigh`（`claude-fable-5-2`） | 依 `quality_first.hard` 處理最困難的技術任務；不是 Codex CLI 模型，也不是一般審查的備援模型 |
 | Opus 5.5，`xhigh`（`claude-opus-5-5`） | 日常工作、UI、計畫、程式碼、瑣碎工作；明確標示的乾淨上下文審查備援 |
 
 閱讀 `config/model-routing.json`；不要依名稱或價格推斷品質。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md) 規定供應商閘門與 CLI 機制。

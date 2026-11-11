@@ -25,7 +25,7 @@ type: skill
 
 编写技能时，请阅读 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，了解前置元数据、调用方式选择和路由器。
 
-修改 Claude 提示词时，请阅读[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)：根据目标模型调整，并保留活跃 API 对话的历史，而不是照搬其他模型的提示词或改写已有前缀。
+修改 Claude 提示词时，请阅读[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)，了解调优与活跃 API 对话历史的处理方式。
 
 ## 将信息放在正确层级 [#depth]
 
@@ -65,4 +65,4 @@ type: skill
 - 优先让不清晰的代码或配置本身更清楚，而不是记录显而易见的机制。
 - 将仅特定分支需要的细节移到指针后；共置其定义、规则和注意事项。
 
-当最短版本仍能选择正确分支、保留所有护栏并让完成状态可验证时停止。
+验证完成后停止。

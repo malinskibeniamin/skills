@@ -25,7 +25,7 @@ type: skill
 
 撰寫技能時，請閱讀 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，以瞭解 frontmatter、叫用方式的選擇，以及路由器。
 
-修改 Claude 提示詞時，請閱讀[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)：依目標模型調整，並保留進行中 API 對話的歷程，而不是照搬其他模型的提示詞或改寫既有前綴。
+修改 Claude 提示詞時，請閱讀[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)，了解調校與進行中 API 對話歷程的處理方式。
 
 ## 將資訊放在正確層級 [#depth]
 
@@ -65,4 +65,4 @@ type: skill
 - 優先讓不清楚的程式碼或設定本身更清楚，而不是記錄顯而易見的機制。
 - 將僅特定分支需要的細節移到指標後；共置其定義、規則及注意事項。
 
-當最短版本仍能選擇正確分支、保留所有護欄並讓完成狀態可驗證時停止。
+驗證完成後停止。
