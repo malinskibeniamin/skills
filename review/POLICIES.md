@@ -120,7 +120,7 @@ bots remain separately managed.
 
 ### Review worker boundary
 
-Automatic review currently requires Darwin kernel 27 and Codex 0.167.0 from the
+Automatic review currently requires Darwin kernel 27 and verified Codex 0.167.0 or 0.167.1 from the
 trusted Homebrew installation. Set `PR_REVIEW_CODEX_HOME` to an existing, dedicated
 auth-only Codex home: no `config.toml`, `managed_config.toml` or enabled MCP servers.
 Use provider-supported authentication; do not copy publisher credentials there.

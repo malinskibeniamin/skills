@@ -103,7 +103,13 @@ test.skipIf(!nativeHost)(
   "rejects unsupported CLI and unknown or enabled MCP before model dispatch",
   () => {
     for (const [version, mcp, error] of [
-      ["codex-cli 0.166.0", "[]", "Codex 0.167.0 required"],
+      ["codex-cli 0.166.0", "[]", "Codex 0.167.0 or 0.167.1 required"],
+      ["codex-cli 0.167.2", "[]", "Codex 0.167.0 or 0.167.1 required"],
+      [
+        "codex-cli 0.167.1",
+        '[{"name":"github","enabled":true}]',
+        "effective MCP servers",
+      ],
       [
         "codex-cli 0.167.0",
         '[{"name":"github","enabled":true}]',

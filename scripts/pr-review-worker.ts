@@ -192,9 +192,14 @@ export function runIsolatedReview(input: ReviewInput) {
       };
     };
     const version = run(["--version"]);
-    if (version.exitCode !== 0 || version.stdout.trim() !== "codex-cli 0.167.0")
+    if (
+      version.exitCode !== 0 ||
+      !["codex-cli 0.167.0", "codex-cli 0.167.1"].includes(
+        version.stdout.trim(),
+      )
+    )
       throw new Error(
-        "Unsupported review isolation capability: Codex 0.167.0 required",
+        "Unsupported review isolation capability: Codex 0.167.0 or 0.167.1 required",
       );
     const profile = `review_${crypto.randomUUID().replaceAll("-", "")}`;
     const filesystem: Record<string, string> = {
