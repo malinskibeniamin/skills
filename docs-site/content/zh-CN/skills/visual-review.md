@@ -40,6 +40,8 @@ type: skill
 
 已实现或发布：在截图有助于审查或明确要求时使用 [PR 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)。在预期更新前审查相关快照差异，再正常重跑。仅在需要定位差异时添加标注；只读审查报告缺口。截图不是测试；测试也不是前后对比证据。
 
+匹配已批准的图像或声称已修复视觉问题时，使用[目标与证据检查](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md#target-and-evidence-checks)：保留目标图像，确认截图可比较，并在适用时使用随附工具验证产物及 PNG 差异。测量用于定位差异，不代表正确性。
+
 渲染行为优先。生命周期比截图重要。状态比顺利路径重要。动效就是交互。无障碍自动化只能覆盖一部分。当风险足以支持维护成本时，再将重复检查自动化。
 
 需要时使用 `/excalidraw-diagram`；以截图为主要证据，Mermaid 作为后备方案。

@@ -74,4 +74,4 @@ Pytaj tylko o decyzje zastrzeżone dla użytkownika albo nieodwracalne działani
 
 ## Zakończenie [#completion]
 
-Przeczytaj i wykonaj [dostarczanie autora](https://github.com/malinskibeniamin/skills/blob/main/shared/delivery-workflow.md): samodzielny przegląd inline, właściwe dowody, publikacja oraz żądana obsługa CI i uwag. Wykorzystaj aktualną weryfikację; zatrzymaj się w żądanym punkcie końcowym po spełnieniu wszystkich kryteriów. [Refaktoryzacja](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md#refactor-branch).
+Luki w specyfikacji: przeprowadź [audyt nowych decyzji](https://github.com/malinskibeniamin/skills/blob/main/shared/decision-deltas.md). Zakończ dostarczanie autora w żądanym punkcie końcowym, gdy spełnione są wszystkie kryteria zakończenia. [Refaktoryzacja](https://github.com/malinskibeniamin/skills/blob/main/development-lifecycle/REFERENCE.md#refactor-branch).

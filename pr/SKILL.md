@@ -58,6 +58,8 @@ Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).
 Surface material departures from a recorded plan or outcome contract when
 scope, contracts, verification, or rollout risk changes. Reuse existing notes or intent maps:
 prior choice -> new evidence -> current choice -> review consequence.
+For consequential agent choices the request/plan did not settle, apply
+[decision deltas](../shared/decision-deltas.md), including on direct PR invocations.
 Keep the PR self-contained; omit empty histories and never invent a prior plan or agreement.
 
 Session excerpts are optional context. Use only relevant,

@@ -3,13 +3,13 @@ name: visual-review
 description: Review customer-facing surfaces from visual evidence. Use when web, mobile, CLI, TUI, desktop, reports, onboarding, forms, or other visible behavior changes.
 ---
 
-Browser-based frontend review: product, design, engineering, and QA hats. [REFERENCE.md](REFERENCE.md): **Design language handles**. Modes: `plan`, `implemented`, `regression`, `release`. Standalone trigger OK.
+Browser-based frontend review. [REFERENCE.md](REFERENCE.md): **Design language handles**, modes and standalone use.
 
 ## Flow
 
 Apply [proportionate verification](../shared/verifiability.md#proportionate-verification).
-Routine copy/style edits need focused rendering, not a full device/state matrix or report;
-reuse dogfood evidence. Expand only for changed assumptions.
+Routine copy/style edits need focused rendering; reuse dogfood evidence.
+Expand devices/states/reports only for changed assumptions.
 
 Web UI: load [better-interface](../jakubkrehel-skills/better-interface/SKILL.md).
 
@@ -28,6 +28,8 @@ and captures; test only uncovered cases. Preserve the read-only or authorized-fi
 Implemented/release: use [PR visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)
 only when helpful/required. Review snapshot diffs before updates; rerun normally.
 Annotate hard-to-find deltas only; read-only: report gaps. Screenshots are not tests.
+
+Approved-image matches/visual fixes: [target and evidence checks](REFERENCE.md#target-and-evidence-checks).
 
 Rendered behavior first. Lifecycle beats screenshot. State beats happy path. Motion is interaction. Accessibility automation is partial. Automate worthwhile recurring checks.
 

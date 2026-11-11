@@ -62,6 +62,7 @@ Wybierz najmniejszy widok z [SUMMARY-VIEWS.md](https://github.com/malinskibeniam
 
 Opisz istotne odstępstwa od zapisanego planu lub kontraktu rezultatu, jeśli zmieniają zakres, kontrakty, weryfikację lub ryzyko wdrożenia. Wykorzystaj istniejące notatki lub mapy intencji:
 poprzedni wybór -> nowe dowody -> obecny wybór -> konsekwencje dla przeglądu.
+W przypadku istotnych wyborów agenta nierozstrzygniętych w żądaniu lub planie zastosuj [audyt nowych decyzji](https://github.com/malinskibeniamin/skills/blob/main/shared/decision-deltas.md), również przy bezpośrednim wywołaniu tworzenia PR.
 Opis PR musi być samowystarczalny; pomijaj puste historie zmian i nigdy nie wymyślaj wcześniejszego planu ani uzgodnień.
 
 Fragmenty sesji są opcjonalnym kontekstem. Używaj tylko istotnych fragmentów, dopuszczonych do udostępnienia, z usuniętymi danymi wrażliwymi i dostępnych dla recenzentów; w przeciwnym razie podaj bezpieczne, samodzielne uzasadnienie.

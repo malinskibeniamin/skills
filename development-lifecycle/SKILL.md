@@ -61,4 +61,4 @@ or high-security actions. Keep local checkpoints for long tasks, not routine evi
 
 ## Completion
 
-Author delivery: self-review, evidence, publication, requested CI/feedback. Reuse checks; stop at requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).
+Spec gaps: audit [decision deltas](../shared/decision-deltas.md). Finish author delivery at the requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).
