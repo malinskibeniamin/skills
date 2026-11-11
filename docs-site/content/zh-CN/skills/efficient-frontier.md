@@ -30,7 +30,7 @@ type: skill
 6. 跨模型家族审查需要用户明确授权；路由不是启动智能体的许可。
 7. `ultra`：明确委派或 `/swarm`；仅限 API 的功能见[参考文档](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#routing-notes)。
 
-保留所选模型和终点；确认宿主的模型标识与访问权限。路由不授权递归调用、新线程、付费额度或静默切换。未获委派授权时直接处理。任务简报限定目标、输入、排除项、证据和停止条件；所有者保留决策权。
+保留所选模型和终点；确认宿主的模型标识与访问权限。路由不授权递归调用、新线程、付费额度或静默切换。未获委派授权时直接处理。任务简报限定目标、输入、排除项、证据和停止条件；最终验收由所有者负责。
 使用 Fable、交接任务或修改提示词时，阅读[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)。
 
 ## 容量 [#capacity]

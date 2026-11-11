@@ -9,27 +9,27 @@ For prose, read [Poteto](../shared/POTETO-NATIVE.md#writing).
 
 For skills, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
 
-Claude prompt edits: read [model prompting](../shared/model-prompting.md) for tuning and live API history.
+Claude prompts: read [model prompting](../shared/model-prompting.md) for tuning/live API history.
 
 ## Depth
 
-A **context pointer** names material and its load trigger. Disclose shallowest first:
+A **context pointer** names material and a load trigger. Progressive disclosure limits context load; shallowest first:
 
 1. Inline universal steps.
 2. Inline reference needed during them.
 3. Link branch-only detail with a precise trigger.
 4. Treat the environment as a source of truth; cache only expensive lookups.
 
-Front-load triggers; keep mandatory steps inline.
+Front-load triggers; inline mandatory steps.
 
 ## Executable instructions
 
 - Use repo-term imperatives.
 - Give steps observable completion criteria.
-- Enforce deterministic rules in existing checks; link their commands/configs before edits. Prose owns intent/exceptions, not enforcement or duplicate catalogs.
+- Enforce deterministic rules in existing checks; link commands/configs before edits. Prose owns intent/exceptions, not enforcement or duplicate catalogs.
 - Define terms only to replace repetition.
 - Negation activates behavior. Prompt the **positive** target; reserve prohibitions for hard guardrails and pair with safe action.
-- Split sequences only when later visible steps cause premature completion.
+- Split only when later visible steps cause premature completion.
 
 ## Behavioral evaluations
 

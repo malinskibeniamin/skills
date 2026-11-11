@@ -33,7 +33,7 @@ Role: `config/model-routing.json`; pomijaj subiektywne oceny w promptach.
 6. Sprawdzenie przez inną rodzinę wymaga wyraźnego upoważnienia użytkownika; routing nie upoważnia do uruchamiania agentów.
 7. `ultra`: wyraźna delegacja lub `/swarm`; funkcje dostępne tylko przez API: [referencja](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#routing-notes).
 
-Zachowaj wybrany model i punkt końcowy; sprawdź identyfikatory i dostęp u hosta. Routing nie upoważnia do rekurencji, nowych wątków, płatnych kredytów ani cichych zmian modelu. Bez delegacji pracuj samodzielnie. Instrukcje określają cel, dane wejściowe, wyłączenia, dowody i warunek zakończenia; decyzje pozostają po stronie właściciela.
+Zachowaj wybrany model i punkt końcowy; sprawdź identyfikatory i dostęp u hosta. Routing nie upoważnia do rekurencji, nowych wątków, płatnych kredytów ani cichych zmian modelu. Bez delegacji pracuj samodzielnie. Instrukcje określają cel, dane wejściowe, wyłączenia, dowody i warunek zakończenia; akceptacja pozostaje po stronie właściciela.
 Przy pracy z Fable, przekazywaniu zadania lub zmianach promptów przeczytaj [wskazówki dotyczące promptów modeli](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md).
 
 ## Limity [#capacity]

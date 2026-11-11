@@ -32,10 +32,7 @@ Przy zmianach promptów dla Claude przeczytaj [wskazówki dotyczące promptów m
 
 ## Umieszczaj informacje na właściwym poziomie [#depth]
 
-**Wskaźnik kontekstu** nazywa materiał poza wczytanym dokumentem i określa, kiedy go
-przeczytać. Wskaźnik zużywa obciążenie kontekstu; jego brak obciąża pamięć człowieka.
-
-**Stopniowe ujawnianie** używa najpłytszego uzasadnionego poziomu:
+**Wskaźnik kontekstu** nazywa materiał i określa, kiedy go wczytać. Stopniowe ujawnianie ogranicza obciążenie kontekstu; zaczynaj od najpłytszego poziomu:
 
 1. Umieszczaj bezpośrednio kroki potrzebne w każdym wykonaniu.
 2. Umieszczaj bezpośrednio materiały potrzebne podczas tych kroków.

@@ -25,7 +25,7 @@ type: skill
 
 ## 结果契约 [#outcome-contract]
 
-说明**目标**（结果）、**约束**（保留的边界）、**验证**（可观察的证据）和**停止条件**（终点或阻碍）。
+说明**目标**（结果）、**约束**（保留的边界）、**验证**（可观察的行为）和**停止条件**（终点或阻碍）。
 
 说明契约；构建、修复或实现请求应立即继续。
 在该终点范围内[自动补齐使用方仓库的审查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。

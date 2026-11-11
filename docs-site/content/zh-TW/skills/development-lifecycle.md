@@ -25,7 +25,7 @@ type: skill
 
 ## 成果契約 [#outcome-contract]
 
-陳述**目標**（成果）、**護欄**（保留的界線）、**驗證**（可觀察的證據）及**停止條件**（端點或阻礙）。
+陳述**目標**（成果）、**護欄**（保留的界線）、**驗證**（可觀察的行為）及**停止條件**（端點或阻礙）。
 
 陳述契約；建置、修正或實作請求應立即繼續。
 在該終點範圍內[自動補齊使用端儲存庫的審查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。

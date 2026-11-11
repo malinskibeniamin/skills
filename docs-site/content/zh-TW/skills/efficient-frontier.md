@@ -30,7 +30,7 @@ type: skill
 6. 跨模型家族審查需要使用者明確授權；路由不是啟動代理程式的許可。
 7. `ultra`：明確委派或 `/swarm`；僅限 API 的功能見[參考文件](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#routing-notes)。
 
-保留所選模型與端點；確認主機的模型識別碼與存取權限。路由不授權遞迴呼叫、新執行緒、付費額度或靜默切換。未獲委派授權時直接處理。工作簡報限定目標、輸入、排除項目、證據與停止條件；擁有者保留決策權。
+保留所選模型與端點；確認主機的模型識別碼與存取權限。路由不授權遞迴呼叫、新執行緒、付費額度或靜默切換。未獲委派授權時直接處理。工作簡報限定目標、輸入、排除項目、證據與停止條件；最終驗收由擁有者負責。
 使用 Fable、交接工作或修改提示詞時，閱讀[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)。
 
 ## 容量 [#capacity]

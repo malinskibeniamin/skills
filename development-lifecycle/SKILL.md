@@ -5,13 +5,13 @@ description: "Run React, TypeScript, and UI implementation from a high-level out
 
 For multi-step delivery, read [Poteto](../shared/POTETO-NATIVE.md#execution).
 
-`/work`: one outcome. Before edits, read [author delivery](../shared/delivery-workflow.md) for ownership, isolation and endpoints.
+`/work`: one outcome. Before edits, read [author delivery](../shared/delivery-workflow.md).
 Use [communication](../shared/communication.md#admit-work-by-priority); [helpers](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Outcome contract
 
 State **Objective** (outcome), **Guardrails** (reserved bounds),
-**Verification** (observable proof), **Stop** (endpoint/blockers).
+**Verification** (observable behavior), **Stop** (endpoint/blockers).
 
 Build/fix/implement: continue immediately; [auto-setup](../shared/review-enforcement.md) within endpoint.
 
@@ -37,7 +37,7 @@ Fixed evals: [hill-climb](../hill-climb/SKILL.md).
 
 ### Act
 
-Single owner; explicit consent for delegation/background. Smallest working diff.
+Use a single owner; explicit consent for delegation/background. Smallest working diff.
 User-owned code; own this change, not unrelated redesign. Diagnose tool failures; retry safe checks,
 read back uncertain writes before retrying; continue independent work while questions wait.
 Respect deliberate access boundaries.
@@ -61,4 +61,4 @@ or high-security actions. Keep local checkpoints for long tasks, not routine evi
 
 ## Completion
 
-Author delivery to verified requested endpoint: self-review, evidence, publication, requested CI/feedback. Reuse checks. [Refactor](REFERENCE.md#refactor-branch).
+Author delivery: self-review, evidence, publication, requested CI/feedback. Reuse checks; stop at requested endpoint when every exit criterion passes. [Refactor](REFERENCE.md#refactor-branch).

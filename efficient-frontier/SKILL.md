@@ -16,7 +16,7 @@ Roles: `config/model-routing.json`; omit subjective prompt scores.
 6. The user explicitly authorizes a different-family pass; routing is not spawning consent.
 7. `ultra`: explicit delegation or `/swarm`; API-only features: [reference](../codex/REFERENCE.md#routing-notes).
 
-Preserve selected model/endpoint; discover host IDs/access. Routing grants no recursion, threads, credits or silent switches. Without delegation, work inline. Briefs bound objective, inputs, exclusions, evidence, stop; owner keeps decisions.
+Preserve selected model/endpoint; discover host IDs/access. Routing grants no recursion, threads, credits or silent switches. Without delegation, work inline. Briefs bound objective, inputs, exclusions, evidence, stop; owner keeps acceptance.
 Fable/handoffs/prompt edits: read [model prompting](../shared/model-prompting.md).
 
 ## Capacity
