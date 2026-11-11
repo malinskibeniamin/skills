@@ -27,12 +27,7 @@ Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat. Przed edy
 
 ## Kontrakt rezultatu [#outcome-contract]
 
-Przed rozpoczęciem edycji określ:
-
-- **Cel** -- ogólny stan końcowy.
-- **Ograniczenia** -- ograniczenia, których nie można wywnioskować, decyzje zastrzeżone dla użytkownika oraz nieodwracalne granice.
-- **Weryfikacja** -- kontrole lub obserwowalne zachowanie, które odróżniają ukończone rozwiązanie od rozwiązania jedynie pozornie poprawnego.
-- **Zatrzymanie** -- żądany punkt końcowy i warunki, które rzeczywiście wymagają udziału użytkownika.
+Określ **cel** (rezultat), **ograniczenia** (zastrzeżone granice), **weryfikację** (obserwowalne zachowanie) i **zatrzymanie** (punkt końcowy lub blokady).
 
 Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj.
 [Automatycznie uzupełnij zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach tego punktu końcowego.
@@ -56,6 +51,8 @@ Przy powtarzalnej optymalizacji według stałej ewaluacji załaduj [hill-climb](
 [Figma/obraz](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md).
 
 ### Działaj [#act]
+
+Repozytorium należy do użytkownika; odpowiadasz za tę zmianę, nie za niepowiązane przeprojektowanie. Diagnozuj zwykłe błędy narzędzi i ponawiaj bezpieczne kontrole; przed powtórzeniem zapisu o nieznanym wyniku odczytaj stan. Kontynuuj niezależne prace, czekając na odpowiedź na otwarte pytanie; respektuj celowo ograniczony dostęp.
 
 Jeden właściciel; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą działającą zmianę zgodnie z lokalnymi konwencjami. Używaj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) dla wiarygodnych regresji nieobjętych testami; w pozostałych przypadkach wystarczą istniejące kontrole lub próby. Planuj ponownie tylko dotknięty fragment; pomijaj spekulacyjne abstrakcje i poboczne porządki.
 

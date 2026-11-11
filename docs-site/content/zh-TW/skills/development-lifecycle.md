@@ -25,12 +25,7 @@ type: skill
 
 ## 成果契約 [#outcome-contract]
 
-編輯前，先陳述：
-
-- **目標** -- 高階的最終狀態。
-- **護欄** -- 無法推斷的限制、保留給使用者決定的事項，以及不可逆的界線。
-- **驗證** -- 可執行的檢查或可觀察的行為，用以區分確實完成與看似可行。
-- **停止條件** -- 要求的終點，以及確實需要使用者介入的情況。
+陳述**目標**（成果）、**護欄**（保留的界線）、**驗證**（可觀察的行為）及**停止條件**（端點或阻礙）。
 
 陳述契約；建置、修正或實作請求應立即繼續。
 在該終點範圍內[自動補齊使用端儲存庫的審查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
@@ -54,6 +49,8 @@ type: skill
 [Figma/圖片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 行動 [#act]
+
+程式碼庫屬於使用者；對本次變更負責，而非進行無關的重新設計。診斷一般工具故障並重試安全的檢查；對結果不確定的寫入，先讀取狀態再決定是否重試。等待開放問題的答覆時，繼續不依賴該答覆的工作；尊重刻意設定的存取邊界。
 
 單一負責人；委派與背景工作需要明確同意。依本地慣例實作可正常運作的最小差異。對可信且尚未涵蓋的回歸使用 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)；其他情況使用現有檢查或探測即可。僅重新規劃受影響部分；避免推測性抽象與順手清理。
 

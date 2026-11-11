@@ -6,6 +6,9 @@ workflow. This contract overrides conflicting snapshot instructions.
 
 ## Host contract
 
+- For Fable work or model handoffs, read [model prompting](model-prompting.md).
+  Host routing and scoped ownership override source model defaults, delegation
+  suggestions and older prompting recipes; preserve the selected session model.
 - Preserve target, scope, ownership, endpoint and requested draft state. Reviews
   stay read-only; building a workbench does not authorize production fixes.
   Loading guidance grants no delegation, installation, publication or scheduling.

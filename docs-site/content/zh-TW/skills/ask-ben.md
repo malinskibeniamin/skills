@@ -54,7 +54,7 @@ type: skill
 | `/e2e-testing` | 建置具韌性的 Playwright 端對端測試。 |
 | `/effect-ts` | 為 Effect 設定儲存庫。 |
 | `/effect-v3-to-v4` | 依據上游參考資料將 Effect v3 程式碼庫遷移至 v4。 |
-| `/efficient-frontier` | 委派範圍明確的工作，同時保留集中式判斷。 |
+| `/efficient-frontier` | 將日常工作、高難度任務與審查路由至核准的模型。 |
 | `/eli5` | 以宏觀圖像和精簡文字解釋艱深主題。 |
 | `/excalidraw-diagram` | 根據提示詞繪製可編輯的 Excalidraw 圖表。 |
 | `/extend-harness` | 擴充前端技能控制框架並進行除錯。 |

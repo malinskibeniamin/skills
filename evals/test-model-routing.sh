@@ -12,16 +12,16 @@ if jq -e '.policy == "quality-first"
   and .quality_first.default == {"model": "claude-opus-5-5", "effort": "xhigh"}
   and .quality_first.secondary.model == "gpt-6.1-sol"
   and .quality_first.secondary.effort == "xhigh"
-  and .quality_first.hard.model == "claude-opus-5-5"
+  and .quality_first.hard.model == "claude-fable-5-2"
   and .quality_first.hard.efforts == ["xhigh"]
   and .quality_first.chores.model == "claude-opus-5-5"
   and .quality_first.chores.effort == "xhigh"
   and .quality_first.review.primary == {"model": "gpt-6.1-sol", "effort": "xhigh"}
   and .quality_first.review.secondary == {"model": "claude-opus-5-5", "effort": "xhigh"}
   and (.quality_first.review | has("escalation") | not)
-  and .selection.preferred_models == ["claude-opus-5-5", "gpt-6.1-sol"]
+  and .selection.preferred_models == ["claude-opus-5-5", "claude-fable-5-2", "gpt-6.1-sol"]
   and ([.quality_first | .. | objects | select(has("model")) | .model]
-    | all(. == "claude-opus-5-5" or . == "gpt-6.1-sol"))
+    | all(. == "claude-opus-5-5" or . == "claude-fable-5-2" or . == "gpt-6.1-sol"))
   and .quality_first.ui_owners == ["claude-opus-5-5"]
   and .quality_first.ui_policy.min_taste == 8
   and (.quality_first.ui_policy | has("non_claude_fallback") | not)
@@ -37,7 +37,10 @@ if jq -e '.policy == "quality-first"
   and .models["gpt-6.1-sol"].starting_effort == "xhigh"
   and (.models["gpt-6.1-sol"].work | index("review"))
   and ([.models[] | select(.status == "primary")] | length == 1)
-  and (.models | keys) == ["claude-opus-5-5", "gpt-6.1-sol"]
+  and (.models | keys) == ["claude-fable-5-2", "claude-opus-5-5", "gpt-6.1-sol"]
+  and .models["claude-fable-5-2"].status == "specialist"
+  and .models["claude-fable-5-2"].starting_effort == "xhigh"
+  and ([.models["claude-fable-5-2"].scores[]] | all(. == null))
   and ([.models[] | .scores | has("cost") and has("intelligence") and has("speed") and has("taste") and has("allowance")] | all)
   and .models["claude-opus-5-5"].scores.allowance == 9
   and (.scoring.allowance | contains("$200"))
@@ -47,15 +50,15 @@ if jq -e '.policy == "quality-first"
   and .model_switch.warm_cache_confirmation_usd == 1
   and .selection.single_owner
   and (.selection.cross_family_review_for_non_trivial_pr | not)' "$ROUTING" >/dev/null; then
-  echo "  PASS  Opus and Sol xhigh are the entire model catalog and automatic routes"
+  echo "  PASS  Opus daily, Fable hardest and Sol review routes retain xhigh"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  Opus and Sol xhigh are the entire model catalog and automatic routes"
+  echo "  FAIL  Opus daily, Fable hardest and Sol review routes retain xhigh"
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: owner-selected two-model routing"
+  ERRORS="$ERRORS\n  FAIL: owner-selected three-model routing"
 fi
 
-if jq -e '[.. | strings | select(test("astra|fable|luna|gpt-6-sol"; "i"))] | length == 0' "$ROUTING" >/dev/null; then
+if jq -e '[.. | strings | select(test("astra|luna|gpt-6-sol"; "i"))] | length == 0' "$ROUTING" >/dev/null; then
   echo "  PASS  routing metadata and sources contain only the preferred models"
   PASS=$((PASS + 1))
 else
@@ -131,7 +134,7 @@ run_content_eval "$REPO_ROOT/codex/SKILL.md" 'gpt-6.1-sol -c .model_reasoning_ef
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "never .max." "codex never routes max effort"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "never .max." "efficient-frontier never routes max effort"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Codex models do not own user-facing" "codex leaves visible work to Claude"
-run_content_eval "$REPO_ROOT/codex/SKILL.md" "Route only Opus 5.5 and GPT-6.1 Sol" "codex has no third-model catalog or fallback"
+run_content_eval "$REPO_ROOT/codex/SKILL.md" "Route only Opus 5.5, Fable 5.2 and GPT-6.1 Sol" "codex follows the configured three-model roles"
 run_content_eval "$REPO_ROOT/codex/SKILL.md" "Review:.*Sol.*xhigh" "codex reviews with Sol xhigh"
 run_content_eval "$REPO_ROOT/efficient-frontier/SKILL.md" "Sol .xhigh. reviews" "efficient-frontier routes PR review to Sol xhigh"
 run_content_eval "$REPO_ROOT/agents/code-reviewer.md" "Sol .xhigh." "reviewer routing names Sol xhigh"

@@ -64,6 +64,10 @@ Keep the same first-read budget across prose and an intent map; do not double th
 
 ## Protect attention while working
 
+In interactive agentic work, say what you will do before tools, then give a one-line
+update every few tool calls with the finding and next action. Close with a self-contained
+result, decisive evidence and remaining limits. A progress note does not end unfinished work.
+
 Use deterministic scripts, CLIs, libraries, or a small reusable app for regular, repeatable
 work. Reserve agent judgment for irregular, uncertain, or ad hoc work. Fix slow checks and
 feedback loops before hiding latency with more agents. Delegation still requires explicit

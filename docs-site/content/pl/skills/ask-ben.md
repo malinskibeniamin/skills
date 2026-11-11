@@ -54,7 +54,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/e2e-testing` | Tworzenie odpornych testów end-to-end w Playwright. |
 | `/effect-ts` | Konfiguracja repozytoriów pod kątem Effect. |
 | `/effect-v3-to-v4` | Migracja kodu z Effect v3 do v4 na podstawie materiałów upstream. |
-| `/efficient-frontier` | Delegowanie ograniczonych zadań przy zachowaniu centralnej oceny. |
+| `/efficient-frontier` | Kieruj codzienną pracę, wymagające zadania i przeglądy do zatwierdzonych modeli. |
 | `/eli5` | Wyjaśnianie trudnych tematów całościowo i w kilku słowach. |
 | `/excalidraw-diagram` | Rysowanie edytowalnych diagramów Excalidraw na podstawie poleceń. |
 | `/extend-harness` | Rozszerzanie i debugowanie zestawu umiejętności frontendowych. |

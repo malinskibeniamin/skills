@@ -25,12 +25,7 @@ type: skill
 
 ## 结果契约 [#outcome-contract]
 
-编辑前：
-
-- **目标** -- 高级最终状态。
-- **约束** -- 无法推断的限制、保留给用户的决策、不可逆的边界。
-- **验证** -- 能够区分真正完成与表面可行的检查或可观察行为。
-- **停止条件** -- 请求的终点，以及确实需要用户介入的阻碍。
+说明**目标**（结果）、**约束**（保留的边界）、**验证**（可观察的行为）和**停止条件**（终点或阻碍）。
 
 说明契约；构建、修复或实现请求应立即继续。
 在该终点范围内[自动补齐使用方仓库的审查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
@@ -54,6 +49,8 @@ type: skill
 [Figma/图片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
 ### 操作 [#act]
+
+代码库属于用户；对本次变更负责，而不是进行无关的重新设计。诊断常规工具故障并重试安全的检查；对结果不确定的写入，先读取状态再决定是否重试。等待开放问题的答复时，继续不依赖该答复的工作；尊重有意设置的访问边界。
 
 一个负责人；委派和后台工作需要明确授权。遵循本地惯例，采用能正常工作的最小改动。对可信且尚未覆盖的回归使用 [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md)；其他情况用现有检查或探针即可。仅重新规划受影响部分；避免推测性抽象和顺手清理。
 

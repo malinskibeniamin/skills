@@ -14,14 +14,18 @@ export function selectModelRoute(
       : routing.quality_first.default;
   const model = modelOverride ?? route.model;
   const effort = effortOverride ?? route.effort;
+  const permittedModels =
+    agentName === "codex"
+      ? [routing.quality_first.secondary.model]
+      : [routing.quality_first.default.model, routing.quality_first.hard.model];
   if (
-    model !== route.model ||
+    !permittedModels.includes(model) ||
     !routing.selection.preferred_models.includes(model) ||
     effort !== route.effort ||
     !routing.efforts.allowed.includes(effort)
   ) {
     throw new Error(
-      `Model policy: ${agentName} requires ${route.model} at ${route.effort}; received ${model} at ${effort}`,
+      `Model policy: ${agentName} requires ${permittedModels.join(" or ")} at ${route.effort}; received ${model} at ${effort}`,
     );
   }
   return {

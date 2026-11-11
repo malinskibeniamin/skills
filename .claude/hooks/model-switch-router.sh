@@ -47,7 +47,7 @@ else
   elif ! jq -e --arg model "$to_model" \
     '.selection.preferred_models | index($model) != null' \
     "$routing_file" >/dev/null 2>&1; then
-    deny_reason="Model $to_model is prohibited; only the configured Opus 5.5 and GPT-6.1 Sol routes are allowed."
+    deny_reason="Model $to_model is prohibited; only the configured Opus 5.5, Fable 5.2 and GPT-6.1 Sol routes are allowed."
   elif [ "$effort" != "xhigh" ]; then
     deny_reason="Model $to_model requires xhigh effort; reported effort is ${effort:-unknown}."
   fi
@@ -149,6 +149,10 @@ if [ "$event" = "PostModelSwitch" ] && [ -n "$to_model" ]; then
     context="$context No routing record exists for this model; do not infer a ban."
   fi
   context="$context Use /efficient-frontier to validate the active model against config/model-routing.json for the current lifecycle phase; preserve the current owner and delivery endpoint."
+  if [ -z "$deny_reason" ] && { [ "$to_model" = "claude-fable-5-2" ] || [ "$from_model" = "claude-fable-5-2" ]; }; then
+    source "$(dirname "$0")/../../shared/model-prompting.sh"
+    context="$context $(harness_model_prompting_context)"
+  fi
   if [ "$source" = "resume" ]; then
     context="$context If repository state is stale after resume, use /prime; otherwise do not re-prime."
   fi

@@ -1,31 +1,30 @@
 ---
 name: efficient-frontier
-description: Apply eval-backed model routing and budget explicitly authorized agent waves without moving judgment away from the owner.
+description: Select Opus for daily work, Fable for demanding technical work, and Sol for reviews; preserve selected models and explicit delegation.
 ---
 
-Only for requested delegation, read [Poteto](../shared/POTETO-NATIVE.md#delegation).
-
+Delegation: read [Poteto](../shared/POTETO-NATIVE.md#delegation).
 Use [tool choice](../shared/communication.md#protect-attention-while-working).
 
-`config/model-routing.json` owns routing; omit subjective prompt scores.
+Roles: `config/model-routing.json`; omit subjective prompt scores.
 
-1. Owner: Opus 5.5 `xhigh` for daily work, plans, code, UI.
-2. Sol `xhigh` reviews PRs via `/codex`; if unavailable, label a clean-context Opus `xhigh` pass and disclose missing different-family coverage.
-3. Opus owns UI, copy, API design (taste >= 8); if unavailable, report the UI lane blocked.
-4. Keep chores inline on Opus. Use Sol `xhigh` for user-selected Codex execution, computer use, or investigation.
-5. Route only Opus/Sol; never `max`. If neither is available, report the lane blocked. Owner preference overrides historical scores.
-6. The user explicitly authorizes a different-family pass; model preference is not spawning consent.
-7. `ultra` needs explicit delegation or `/swarm`. Pro mode, persisted reasoning, programmatic tools, explicit cache: API-only unless exposed.
+1. Opus 5.5 `xhigh`: daily/plans/code/UI. Fable 5.2 `xhigh`: `quality_first.hard`. Fix context/tools/checks first; length or a failed test alone is not escalation.
+2. Sol `xhigh` reviews via `/codex`; unavailable: labeled clean-context Opus `xhigh`, disclose missing different-family coverage.
+3. Opus owns UI/copy/API design (taste >= 8); unavailable: report blocked.
+4. Chores: inline Opus; user-selected Codex execution/computer use/investigation: Sol.
+5. Only Opus/Fable/Sol; never `max`. Report unavailable Fable; Opus replaces it only by owner choice.
+6. The user explicitly authorizes a different-family pass; routing is not spawning consent.
+7. `ultra`: explicit delegation or `/swarm`; API-only features: [reference](../codex/REFERENCE.md#routing-notes).
 
-Without delegation, keep lanes inline. Authorized briefs bound objective, inputs, exclusions, evidence, stop. One owner keeps architecture, priority, risk, synthesis and acceptance.
+Preserve selected model/endpoint; discover host IDs/access. Routing grants no recursion, threads, credits or silent switches. Without delegation, work inline. Briefs bound objective, inputs, exclusions, evidence, stop; owner keeps acceptance.
+Fable/handoffs/prompt edits: read [model prompting](../shared/model-prompting.md).
 
 ## Capacity
 
-Capacity: `/stay-within-limits` host meter, else unknown. Never infer from tokens/cost; remove routes, never lower quality.
+`/stay-within-limits`: host meter, else unknown; never infer from tokens/cost or lower quality.
 
 ## Promotion
 
-`xhigh` is owner-selected, not benchmark-promoted.
-Before unrequested default changes run `agent-evals/context-ablation/`: vary one context group, fix tasks/scoring, prefer lower cost only among quality-equivalent results. Record winner in routing config.
+Owner-selected `xhigh` is not an eval win. Unrequested changes: `agent-evals/context-ablation/`; vary one context group, fix tasks/scoring, prefer cost only at equal quality; record winner in routing config.
 
-[Packet and source](references/builder-upstream.md): authorized delegation only.
+Delegation [packet](references/builder-upstream.md).

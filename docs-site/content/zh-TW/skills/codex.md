@@ -1,9 +1,17 @@
 ---
-title: /codex
 description: 透過 Codex CLI 委派工作給 GPT-6.1 Sol。適用於規格明確的實作、獨立審查、電腦操作、調查、資料分析或耗用大量 token 的機械式工作。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - codex
 sidebar:
   label: /codex
+title: /codex
+type: skill
 ---
 ![／codex 技能示意圖](/diagrams/skills/codex.svg)
 
@@ -11,9 +19,9 @@ sidebar:
 
 **主機閘門：**此路徑由 Claude 託管。在原生 Codex 中，除非使用者明確要求委派或使用平行代理程式，否則請直接處理。請勿啟動遞迴的 `codex exec`；保留所選的模型與推理強度；請勿重寫 Codex 設定。
 
-僅在委派獲授權後偵測能力：`codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`。若無法使用，採用明確標示、使用乾淨上下文的 Opus 5.5 `xhigh` 審查，並說明缺少跨模型家族覆蓋。僅選用 Opus 5.5 和 GPT-6.1 Sol；若兩者都無法使用，回報此路徑受阻。
+僅在委派獲授權後偵測能力：`codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`。若無法使用，採用明確標示、使用乾淨上下文的 Opus 5.5 `xhigh` 審查，並說明缺少跨模型家族覆蓋。僅依設定的角色使用 Opus 5.5、Fable 5.2 和 GPT-6.1 Sol；回報無法使用的路徑。
 
-## 路由
+## 路由 [#route]
 
 | 變體 | 用途 |
 |---|---|
@@ -22,13 +30,13 @@ sidebar:
 
 閱讀 `config/model-routing.json`；不要依名稱或價格推斷品質。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md) 規定供應商閘門與 CLI 機制。
 
-## 提示詞契約
+## 提示詞契約 [#prompt-contract]
 
 Codex 看不到這段對話的任何內容。每個提示詞都必須指明儲存庫與分支、目標、範圍與排除項目、驗收條件、適用的技能規則與範例、確切的驗證命令、證據格式及停止條件。只傳送差異內容與任務本身的相關脈絡；排除機密資訊與無關檔案。
 
 **引導承載內容：**進行實作工作時，請直接內嵌符合該路徑的特定規則，以及 `exemplars/` 中相符的檔案。
 
-## 模式
+## 模式 [#modes]
 
 - **實作：**`codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`；
   將並行寫入隔離於個別工作樹中。
@@ -40,7 +48,7 @@ Codex 看不到這段對話的任何內容。每個提示詞都必須指明儲�
 審查 PR 時，請使用 [PR 報告與發布](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#pr-report-and-posting)。
 預設將報告儲存在本機；發布需要使用者明確提出要求，審查授權不等於發布授權。
 
-## 工作流程
+## 工作流程 [#workflow]
 
 1. 通過主機與授權閘門。
 2. 從 `config/model-routing.json` 選取符合品質要求的路由。

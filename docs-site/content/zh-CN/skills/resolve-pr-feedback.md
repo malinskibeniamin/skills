@@ -63,6 +63,8 @@ type: skill
 
 ### 6. 完整性验证 [#6-completeness-verification]
 
+报告完成前，逐一检查已获取的讨论串，确认均有实质性修复、回复或有依据的处理结论。直接在当前上下文中完成这项语义检查；此技能不会启动其他模型。明确保留待负责人决策的未解决事项。
+
 声明完成前，未解决的讨论串必须为零，包括机器人反馈和定位到过期代码行的讨论串；不得有陈旧的 `CHANGES_REQUESTED`。由 `pr-feedback-completeness-stop` 强制执行。
 
 ```bash

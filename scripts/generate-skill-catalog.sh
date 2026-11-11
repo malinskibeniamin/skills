@@ -53,7 +53,7 @@ SHORT_DESCRIPTIONS = {
     "effect-ts": "Set up repositories for Effect",
     "effect-v3-to-v4": "Migrate Effect v3 codebases to v4 from upstream references",
     "eli5": "Explain hard topics with big pictures and few words",
-    "efficient-frontier": "Delegate bounded work while preserving central judgment",
+    "efficient-frontier": "Route daily, demanding, and review work to approved models",
     "excalidraw-diagram": "Draw editable Excalidraw diagrams from prompts",
     "extend-harness": "Extend and debug the frontend skill harness",
     "frontend-invariants": "Timeless frontend principles that outlive stacks",
@@ -200,6 +200,25 @@ def display_name(skill_name):
             words.append(word.capitalize())
     return " ".join(words)
 
+allowed_efforts = set(json.loads((repo / "config/model-routing.json").read_text())["efforts"]["allowed"])
+
+
+def validate_execution_metadata(path, header):
+    # The registry uses block-style frontmatter. Reject opaque flow-style
+    # execution fields instead of copying hidden model calls into host discovery.
+    if re.search(r"[\{,]\s*['\"]?(?:model|effort|context|type|hooks)['\"]?\s*:", header):
+        print(f"MODEL POLICY: {path}: use block-style execution metadata", file=sys.stderr)
+        sys.exit(1)
+    for field, raw in re.findall(r'^[ \t]*(?:-[ \t]*)?[\'"]?(model|effort|context|type)[\'"]?:[ \t]*([^\n]*)$', header, re.M):
+        value = raw.split("#", 1)[0].strip().strip("\"'")
+        if (field == "model" and value != "inherit"
+                or field == "effort" and value not in allowed_efforts
+                or field == "context" and value == "fork"
+                or field == "type" and value in ("agent", "prompt")):
+            print(f"MODEL POLICY: {path}: {field}: {value} bypasses host-selected routing or explicit delegation; keep models inherited and use deterministic hooks", file=sys.stderr)
+            sys.exit(1)
+
+
 skills = json.loads((repo / ".claude-plugin/plugin.json").read_text())["skills"]
 codex_manifest = json.loads((repo / ".codex-plugin/plugin.json").read_text())
 if codex_manifest.get("skills") != "./codex-skills/":
@@ -216,6 +235,7 @@ for entry in skills:
     if not frontmatter:
         print(f"MISSING frontmatter for registered skill: {canonical}", file=sys.stderr)
         sys.exit(1)
+    validate_execution_metadata(f"{canonical}/SKILL.md", frontmatter.group(1))
     target = f"../../{canonical}/SKILL.md"
     name_match = re.search(r"^name:\s*(.+)$", frontmatter.group(1), re.M)
     description_match = re.search(r"^description:\s*(.+)$", frontmatter.group(1), re.M)
@@ -241,6 +261,12 @@ for entry in skills:
         f"Read and follow the complete [canonical skill instructions]({target}) before acting.\n",
         metadata,
     )
+
+for agent in sorted((repo / "agents").glob("*.md")):
+    header = re.match(r"---\n(.*?)\n---", agent.read_text(), re.S)
+    # Companion reading such as karpathy-failure-modes.md is not an agent.
+    if header:
+        validate_execution_metadata(agent.relative_to(repo), header.group(1))
 
 if registered_skill_names != set(SHORT_DESCRIPTIONS):
     stale = sorted(set(SHORT_DESCRIPTIONS) - registered_skill_names)

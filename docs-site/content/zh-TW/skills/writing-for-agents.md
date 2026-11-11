@@ -25,11 +25,11 @@ type: skill
 
 撰寫技能時，請閱讀 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，以瞭解 frontmatter、叫用方式的選擇，以及路由器。
 
+修改 Claude 提示詞時，請閱讀[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)，了解調校與進行中 API 對話歷程的處理方式。
+
 ## 將資訊放在正確層級 [#depth]
 
-**情境指標**會指出已載入文件之外的資料，並說明何時讀取。指標增加情境負載；省略指標則依賴人的記憶。
-
-**漸進式揭露**使用理由充分的最淺層級：
+**情境指標**說明資料及其載入條件。漸進式揭露限制情境負載；從最淺層級開始：
 
 1. 內嵌每次執行都需要的步驟。
 2. 內嵌執行這些步驟時需要的參考資料。
@@ -63,4 +63,4 @@ type: skill
 - 優先讓不清楚的程式碼或設定本身更清楚，而不是記錄顯而易見的機制。
 - 將僅特定分支需要的細節移到指標後；共置其定義、規則及注意事項。
 
-當最短版本仍能選擇正確分支、保留所有護欄並讓完成狀態可驗證時停止。
+驗證完成後停止。

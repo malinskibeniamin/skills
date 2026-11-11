@@ -25,11 +25,11 @@ type: skill
 
 编写技能时，请阅读 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，了解前置元数据、调用方式选择和路由器。
 
+修改 Claude 提示词时，请阅读[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)，了解调优与活跃 API 对话历史的处理方式。
+
 ## 将信息放在正确层级 [#depth]
 
-**上下文指针**会指明已加载文档之外的资料，并说明何时读取。指针增加上下文负载；省略指针则依赖人的记忆。
-
-**渐进式披露**使用理由充分的最浅层级：
+**上下文指针**说明材料及其加载条件。渐进式披露限制上下文负载；从最浅层级开始：
 
 1. 内联每次执行都需要的步骤。
 2. 内联执行这些步骤时需要的参考资料。
@@ -63,4 +63,4 @@ type: skill
 - 优先让不清晰的代码或配置本身更清楚，而不是记录显而易见的机制。
 - 将仅特定分支需要的细节移到指针后；共置其定义、规则和注意事项。
 
-当最短版本仍能选择正确分支、保留所有护栏并让完成状态可验证时停止。
+验证完成后停止。

@@ -278,11 +278,11 @@ class PotetoSyncTest(unittest.TestCase):
         config = self.repo / "config/model-routing.json"
         config.parent.mkdir()
         config.write_text(json.dumps({
-            "models": {"claude-opus-5-5": {}, "gpt-6.1-sol": {}},
-            "selection": {"preferred_models": ["claude-opus-5-5", "gpt-6.1-sol"]},
+            "models": {"claude-opus-5-5": {}, "claude-fable-5-2": {}, "gpt-6.1-sol": {}},
+            "selection": {"preferred_models": ["claude-opus-5-5", "claude-fable-5-2", "gpt-6.1-sol"]},
             "quality_first": {
                 "default": {"model": "claude-opus-5-5", "effort": "xhigh"},
-                "hard": {"model": "claude-opus-5-5", "efforts": ["xhigh"]},
+                "hard": {"model": "claude-fable-5-2", "efforts": ["xhigh"]},
                 "review": {
                     "primary": {"model": "gpt-6.1-sol", "effort": "xhigh"},
                     "secondary": {"model": "claude-opus-5-5", "effort": "xhigh"},
@@ -295,6 +295,8 @@ class PotetoSyncTest(unittest.TestCase):
         self.assertIn("alwaysApply: true\n", result.stdout)
         self.assertIn("feature, refactoring: claude-opus-5-5-xhigh\n", result.stdout)
         self.assertIn("reflect tooling: gpt-6.1-sol-xhigh\n", result.stdout)
+        self.assertIn("hardest tasks: claude-fable-5-2-xhigh\n", result.stdout)
+        self.assertNotIn("budget: large", result.stdout)
         self.assertIn("interrogate reviewers: gpt-6.1-sol-xhigh, claude-opus-5-5-xhigh\n", result.stdout)
         self.assertNotIn("grok", result.stdout.lower())
         self.assertEqual(config.read_bytes(), before)
@@ -320,7 +322,7 @@ class PotetoSyncTest(unittest.TestCase):
         result = self.sync("--model-rule")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(result.stdout, "")
-        self.assertIn("Only Opus 5.5 and GPT-6.1 Sol", result.stderr)
+        self.assertIn("Only Opus 5.5, Fable 5.2 and GPT-6.1 Sol", result.stderr)
 
 
     def test_refresh_includes_prompt_and_verification_skills(self):

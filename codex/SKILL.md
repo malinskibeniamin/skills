@@ -3,9 +3,9 @@ name: codex
 description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec implementation, independent review, computer use, investigation, data analysis, or token-heavy mechanical work.
 ---
 
-**Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
+**Host gate:** Claude-hosted only. Native Codex works inline unless the user explicitly requests delegation/parallel agents. No recursive `codex exec`; preserve selected model/reasoning/config.
 
-When delegation is authorized, check once: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5 and GPT-6.1 Sol; block if neither is available.
+When delegation is authorized, check once: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5, Fable 5.2 and GPT-6.1 Sol through their configured roles; report unavailable lanes.
 
 ## Route
 
