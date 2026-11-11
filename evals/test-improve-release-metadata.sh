@@ -27,35 +27,26 @@ done
 
 run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.45\.0$' "changelog has 4.45.0 section"
 run_content_eval "$REPO_ROOT/README.md" 'v4\.45\.0' "README pinned release example updated"
-run_content_eval "$REPO_ROOT/docs-site/blume.config.ts" 'id: "v4\.45\.0"' "docs archive registers v4.45.0"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/index.mdx" "docs archive includes the v4.45.0 landing page"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/release.md" "docs archive includes v4.45.0 skill pages"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/test-audit.md" "docs archive includes test-audit"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/skeleton-loaders.md" "docs archive includes skeleton-loaders"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/protobuf.md" "docs archive includes protobuf"
-run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/ci-fixes.md" "docs archive includes ci-fixes"
 run_file_eval "$REPO_ROOT/skeleton-loaders/SKILL.md" "release includes the canonical skeleton-loaders skill"
 run_file_eval "$REPO_ROOT/codex-skills/skeleton-loaders/SKILL.md" "release includes the Codex skeleton-loaders adapter"
 for skill in remove-animations improve-animations gestures hill-climb reverse-engineer-anything; do
   run_file_eval "$REPO_ROOT/$skill/SKILL.md" "release includes the canonical $skill skill"
   run_file_eval "$REPO_ROOT/codex-skills/$skill/SKILL.md" "release includes the Codex $skill adapter"
   run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" "\"./$skill/\"" "Claude plugin registers $skill"
-  run_file_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/$skill.md" "docs archive includes $skill"
 done
 run_file_eval "$REPO_ROOT/matt-skills/matt-software-factory/SKILL.md" "release includes the new explicit Matt factory adapter"
 run_file_eval "$REPO_ROOT/codex-skills/matt-software-factory/SKILL.md" "release includes the Codex Matt factory proxy"
-run_content_eval "$REPO_ROOT/docs-site/content/v4.45.0/skills/software-factory.md" 'blob/v4\.45\.0/vendor/mattpocock/upstream/skills/in-progress/software-factory/' \
-  "factory archive links use the release-pinned complete Matt source"
-if grep -Rq 'github.com/malinskibeniamin/skills/blob/main/' "$REPO_ROOT/docs-site/content/v4.45.0"; then
-  echo "  FAIL  archived docs still link to mutable main content"
-  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: archived docs links are tag-pinned"
+# This edition deliberately publishes no documentation archive. Keep the default
+# release contract lean; an explicitly requested archive needs its own coverage.
+release_version=$(jq -er '.version' "$REPO_ROOT/skill-manifest.json")
+if [ -e "$REPO_ROOT/docs-site/content/v$release_version" ] ||
+  grep -qF "id: \"v$release_version\"" "$REPO_ROOT/docs-site/blume.config.ts"; then
+  echo "  FAIL  metadata-only release includes an unrequested documentation archive"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: metadata-only release includes a documentation archive"
 else
-  echo "  PASS  archived docs links are tag-pinned"
+  echo "  PASS  metadata-only release keeps documentation on main"
   PASS=$((PASS + 1))
 fi
-run_content_eval "$REPO_ROOT/package.json" '"docs:version":' "repository exposes the docs version command"
-run_content_eval "$REPO_ROOT/package.json" 'version-docs.test.ts' "repository test gate protects docs archives"
-run_content_eval "$REPO_ROOT/release/SKILL.md" 'bun run docs:version v<version>' "release workflow archives its docs"
 run_content_eval "$REPO_ROOT/README.md" 'codex features enable hooks' "README enables the stable Codex hooks feature"
 run_content_eval "$REPO_ROOT/README.md" 'codex plugin add frontend-skills@skills' "README installs the Codex plugin after adding its marketplace"
 
