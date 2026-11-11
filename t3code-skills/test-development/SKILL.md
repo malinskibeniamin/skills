@@ -7,4 +7,4 @@ description: "Use when selecting runtime versus compiler-contract coverage, incl
 
 Read [host compatibility](../../shared/T3CODE-SKILLS.md) first and apply the `test-development` branch. It takes precedence over the source snapshot.
 
-Read the complete [upstream skill](../../vendor/t3code/.repos/effect-smol/.agents/skills/test-development/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.
+Read the complete [upstream skill](../../vendor/t3code/.repos/effect/.agents/skills/test-development/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.

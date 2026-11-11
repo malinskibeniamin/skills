@@ -637,12 +637,13 @@ and explicitly invoked v3-to-v4 migrations. Upstream revision, refresh sources,
 local adaptations, and the MIT notice live in
 [shared/EFFECT-SKILLS-CREDITS.md](shared/EFFECT-SKILLS-CREDITS.md).
 
-All **15 skills from T3 Code's reviewed checkout** ship as local adapters with
+All **16 skills from T3 Code's reviewed checkout** ship as local adapters with
 unchanged upstream instructions, references, helpers and MIT licenses. The source
-is pinned at [`1451e7c`](https://github.com/pingdotgg/t3code/tree/1451e7cb23034d29774338608368a15d8845df36)
+is pinned at [`bc8583b`](https://github.com/pingdotgg/t3code/tree/bc8583bc6409e608557c33d42e02b2d1f1e2072f)
 in [the snapshot lock](vendor/t3code-skills.lock.json).
 
 - CI and imports: `/ci-maintenance`, `/vendored-assets`.
+- PR finalization: `/pull-requests`, composed with existing delivery and draft rules.
 - Library/toolchain work: `/test-development`, `/bundle-analysis`, `/changesets`,
   `/package-development`, `/performance-analysis`, `/dependency-maintenance`, `/jsdocs`.
 - Effect: `/effect-development`, `/migration-guidance`, `/ai-docs`. The latter two

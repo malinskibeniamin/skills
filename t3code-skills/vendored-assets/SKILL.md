@@ -7,4 +7,4 @@ description: "Use when importing or updating checked-in third-party code, skills
 
 Read [host compatibility](../../shared/T3CODE-SKILLS.md) first and apply the `vendored-assets` branch. It takes precedence over the source snapshot.
 
-Read the complete [upstream skill](../../vendor/t3code/.repos/effect-smol/.agents/skills/vendored-assets/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.
+Read the complete [upstream skill](../../vendor/t3code/.repos/effect/.agents/skills/vendored-assets/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.

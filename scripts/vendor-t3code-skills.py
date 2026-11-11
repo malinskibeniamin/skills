@@ -14,8 +14,8 @@ from pathlib import Path, PurePosixPath
 
 
 REPOSITORY = "https://github.com/pingdotgg/t3code"
-ROOTS = (".agents/skills", ".repos/effect-smol/.agents/skills")
-LICENSES = ("LICENSE", ".repos/effect-smol/LICENSE")
+ROOTS = (".agents/skills", ".repos/effect/.agents/skills", ".repos/effect-smol/.agents/skills")
+LICENSES = ("LICENSE", ".repos/effect/LICENSE", ".repos/effect-smol/LICENSE")
 METADATA = {
     "ai-docs": ("Maintain Effect's generated AI documentation", "Use when editing Effect's ai-docs/src or regenerating its LLMS.md. Not general documentation authoring."),
     "bundle-analysis": ("Measure bundle size and explain included dependencies", "Use when comparing production bundles, inspecting module composition, or maintaining bundle fixtures."),
@@ -28,6 +28,7 @@ METADATA = {
     "migration-guidance": ("Maintain Effect's generated API migration reference", "Use when maintaining Effect's v3-to-v4 migration annotations or generated reference. Not migrating an application."),
     "package-development": ("Register and verify publishable workspace packages", "Use when adding, renaming, moving, or publishing JavaScript workspace packages, including exports, dependencies, and packed contents."),
     "performance-analysis": ("Measure runtime and TypeScript compiler regressions", "Use for library runtime benchmarks or TypeScript compiler-cost measurements and regression thresholds. Not web interaction profiling."),
+    "pull-requests": ("Finalize a PR through the existing delivery owners", "Use when finalizing a pull request or continuing an existing one; preserve the requested endpoint and draft state."),
     "test-development": ("Verify runtime behavior and public compiler contracts", "Use when selecting runtime versus compiler-contract coverage, including inference, assignability, overloads, or displayed TypeScript types."),
     "test-t3-app": ("Verify T3 Code web and desktop in isolated state", "Use only in a T3 Code checkout for web or desktop verification through its built-in Browser panel, pairing recovery, and SQLite fixtures."),
     "test-t3-mobile": ("Verify T3 Code native clients through its Device panel", "Use only in a T3 Code checkout for native iOS or Android verification through its Device panel and returned AgentDevice command."),
@@ -72,8 +73,12 @@ def discover(payload):
         skills.append({"name": name, "source": path, "description": description,
                        "short_description": short,
                        "explicit_only": bool(re.search(r"^disable-model-invocation: true$", frontmatter[1], re.M))})
-    if not skills or any(path not in payload for path in LICENSES):
-        raise ValueError("Both T3 and Effect licenses and at least one skill are required")
+    effect_roots = [root for root in ROOTS[1:] if any(path.startswith(root + "/") for path in payload)]
+    if not skills or len(effect_roots) != 1:
+        raise ValueError("Exactly one complete Effect skill root is required")
+    effect_license = effect_roots[0].removesuffix("/.agents/skills") + "/LICENSE"
+    if "LICENSE" not in payload or effect_license not in payload:
+        raise ValueError("Both T3 and the matching Effect license are required")
     return skills
 
 

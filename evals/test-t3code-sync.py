@@ -90,6 +90,36 @@ class T3CodeSyncTest(unittest.TestCase):
         self.assertEqual(self.snapshot(), before)
         self.assertEqual(self.cli("--check").returncode, 0)
 
+    def test_refresh_follows_effect_rename_and_adapts_pull_requests(self):
+        self.assertEqual(self.install().returncode, 0)
+        self.git("mv", ".repos/effect-smol", ".repos/effect")
+        pr = ".repos/effect/.agents/skills/pull-requests"
+        self.write(self.source, f"{pr}/SKILL.md",
+                   "---\nname: pull-requests\ndescription: Finalize a PR.\n---\nRead [validation](../../AGENTS.md#validation).\n")
+        self.write(self.source, ".repos/effect/.agents/AGENTS.md", "# Validation\nUse target checks.\n")
+        self.git("add", ".")
+        self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.com", "commit", "-qm", "rename reference and add pr skill")
+        result = self.install(self.git("rev-parse", "HEAD").strip())
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.repo / "vendor/t3code/.repos/effect-smol").exists())
+        copied = self.repo / f"vendor/t3code/{pr}/SKILL.md"
+        self.assertEqual(copied.read_bytes(), (self.source / f"{pr}/SKILL.md").read_bytes())
+        self.assertTrue((self.repo / "vendor/t3code/.repos/effect/LICENSE").is_file())
+        self.assertTrue((self.repo / "vendor/t3code/.repos/effect/.agents/AGENTS.md.upstream").is_file())
+        self.assertIn("`pull-requests` branch", (self.repo / "t3code-skills/pull-requests/SKILL.md").read_text())
+        self.assertEqual(self.cli("--check").returncode, 0)
+        before = self.snapshot()
+        self.assertEqual(self.install(self.git("rev-parse", "HEAD").strip()).returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+        self.git("rm", ".repos/effect/LICENSE")
+        self.write(self.source, ".repos/effect-smol/LICENSE", "Wrong root's license\n")
+        self.git("add", ".")
+        self.git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.com", "commit", "-qm", "mismatched license")
+        rejected = self.install(self.git("rev-parse", "HEAD").strip())
+        self.assertNotEqual(rejected.returncode, 0)
+        self.assertIn("matching Effect license", rejected.stderr)
+        self.assertEqual(self.snapshot(), before)
+
     def test_policy_links_are_pinned_without_importing_the_app(self):
         source = self.source / f"{APP}/SKILL.md"
         source.write_text(source.read_text() + "Read [policy](../../../CONTRIBUTING.md) or [runtime](t3-context://v1/projects/fixture).\n")

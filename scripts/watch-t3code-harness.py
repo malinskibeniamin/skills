@@ -16,9 +16,9 @@ UPSTREAM = "https://github.com/pingdotgg/t3code"
 CONFIG = "config/t3code-harness-watch.json"
 REPORT = "reports/t3code-harness-watch.md"
 PREFIX = "ben-malinski/t3-harness/"
-ROOTS = (".agents", ".claude", ".codex", ".repos/effect-smol/.agents", ".github/triage")
+ROOTS = (".agents", ".claude", ".codex", ".repos/effect/.agents", ".repos/effect-smol/.agents", ".github/triage")
 FILES = {"AGENTS.md", "CLAUDE.md", "CONTRIBUTING.md", "LICENSE",
-         ".repos/effect-smol/LICENSE", ".github/TRIAGE_EXEMPTIONS.td", "scripts/lib/reference-repos.ts"}
+         ".repos/effect/LICENSE", ".repos/effect-smol/LICENSE", ".github/TRIAGE_EXEMPTIONS.td", "scripts/lib/reference-repos.ts"}
 
 
 def run(command, **kwargs):
