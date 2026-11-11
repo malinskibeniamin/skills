@@ -58,6 +58,18 @@ else
   ERRORS="$ERRORS\n  FAIL: owner-selected three-model routing"
 fi
 
+if jq -e '.quality_first.hard.owner_named as $named
+  | ($named | contains("the owner names Fable 5.2"))
+  and ($named | contains("outside these triggers"))
+  and ($named | contains("not consent for more"))' "$ROUTING" >/dev/null; then
+  echo "  PASS  owner-named Fable 5.2 lanes run outside the hard-task triggers"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  owner-named Fable 5.2 lanes run outside the hard-task triggers"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: owner-named Fable 5.2 lane permission"
+fi
+
 if jq -e '[.. | strings | select(test("astra|luna|gpt-6-sol"; "i"))] | length == 0' "$ROUTING" >/dev/null; then
   echo "  PASS  routing metadata and sources contain only the preferred models"
   PASS=$((PASS + 1))
