@@ -214,6 +214,7 @@
 | `/migration-guidance` | Maintain Effect's generated API migration reference. |
 | `/package-development` | Register and verify publishable workspace packages. |
 | `/performance-analysis` | Measure runtime and TypeScript compiler regressions. |
+| `/pull-requests` | Finalize a PR through the existing delivery owners. |
 | `/test-development` | Verify runtime behavior and public compiler contracts. |
 | `/test-t3-app` | Verify T3 Code web and desktop in isolated state. |
 | `/test-t3-mobile` | Verify T3 Code native clients through its Device panel. |

@@ -238,6 +238,7 @@ type: skill
 | `/migration-guidance` | 维护 Effect 生成的 API 迁移参考. |
 | `/package-development` | 注册并验证可发布的工作区包. |
 | `/performance-analysis` | 测量运行时与 TypeScript 编译器的性能回归. |
+| `/pull-requests` | 通过现有交付流程完成 PR。 |
 | `/test-development` | 验证运行时行为与公共编译器契约. |
 | `/test-t3-app` | 在隔离状态下验证 T3 Code Web 和桌面端. |
 | `/test-t3-mobile` | 通过 Device 面板验证 T3 Code 原生客户端. |

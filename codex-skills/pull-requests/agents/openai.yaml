@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pull Requests"
+  short_description: "Finalize a PR through the existing delivery owners"

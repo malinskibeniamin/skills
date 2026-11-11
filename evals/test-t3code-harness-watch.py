@@ -156,6 +156,19 @@ print(json.dumps(result))
         self.assertEqual(self.published()["pulls"][0]["head"]["sha"], "4" * 40)
         self.assertEqual(self.git(self.repo, "status", "--porcelain"), "")
 
+    def test_inventory_follows_effect_reference_rename(self):
+        for root in (".repos/effect-smol", ".repos/effect"):
+            self.write(self.source, f"{root}/.agents/skills/example/SKILL.md", "Effect instructions\n")
+            self.write(self.source, f"{root}/LICENSE", "Effect license\n")
+        revision = self.commit(self.source)
+        changes = {item["path"]: item["category"] for item in self.result(revision)["changes"]}
+        for root in (".repos/effect-smol", ".repos/effect"):
+            self.assertEqual(changes.get(f"{root}/.agents/skills/example/SKILL.md"), "skill")
+            self.assertEqual(changes.get(f"{root}/LICENSE"), "license")
+        self.write(self.source, ".repos/effect/.agents/skills/example/SKILL.md", "Updated Effect instructions\n")
+        updated = self.result(self.commit(self.source))
+        self.assertNotEqual(updated["fingerprint"], self.result(revision)["fingerprint"])
+
     def test_inventory_includes_new_removed_helpers_modes_policies_and_symlinks(self):
         (self.source / SKILL).unlink()
         helper = self.write(self.source, ".agents/hooks/check.sh", "exit 99\n")

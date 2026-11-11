@@ -7,4 +7,4 @@ description: "Use when authoring or reviewing public TypeScript API JSDoc, examp
 
 Read [host compatibility](../../shared/T3CODE-SKILLS.md) first and apply the `jsdocs` branch. It takes precedence over the source snapshot.
 
-Read the complete [upstream skill](../../vendor/t3code/.repos/effect-smol/.agents/skills/jsdocs/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.
+Read the complete [upstream skill](../../vendor/t3code/.repos/effect/.agents/skills/jsdocs/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.

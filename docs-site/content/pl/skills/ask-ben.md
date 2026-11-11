@@ -238,6 +238,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/migration-guidance` | Utrzymuj generowaną dokumentację migracji API Effect. |
 | `/package-development` | Rejestruj i weryfikuj publikowalne pakiety workspace. |
 | `/performance-analysis` | Mierz regresje wykonania i kompilatora TypeScript. |
+| `/pull-requests` | Sfinalizuj PR przez istniejące procesy dostarczania. |
 | `/test-development` | Weryfikuj zachowanie wykonania i publiczne kontrakty kompilatora. |
 | `/test-t3-app` | Weryfikuj web i desktop T3 Code w odizolowanym stanie. |
 | `/test-t3-mobile` | Weryfikuj natywnych klientów T3 Code przez panel Device. |

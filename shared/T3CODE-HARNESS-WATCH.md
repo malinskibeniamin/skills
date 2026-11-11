@@ -21,8 +21,8 @@ executable bits and symlink targets count; symlinks are never followed.
 Watched inputs:
 
 - `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `LICENSE`;
-- `.agents/`, `.claude/`, `.codex/`, `.repos/effect-smol/.agents/`;
-- `.repos/effect-smol/LICENSE`, `.github/triage/`, `.github/TRIAGE_EXEMPTIONS.td`;
+- `.agents/`, `.claude/`, `.codex/`, `.repos/effect/.agents/` (and legacy `effect-smol`);
+- `.repos/effect/LICENSE` (and legacy `effect-smol`), `.github/triage/`, `.github/TRIAGE_EXEMPTIONS.td`;
 - `scripts/lib/reference-repos.ts` (reference-repository setup).
 
 Other reference repositories, app workflows and recursively linked files outside this

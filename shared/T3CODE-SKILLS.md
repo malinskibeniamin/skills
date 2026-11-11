@@ -1,7 +1,7 @@
 # T3 Code skill compatibility
 
-All 15 skills from the reviewed T3 Code checkout are available through local
-adapters. Three belong to T3; twelve come from its Effect reference checkout.
+All 16 skills from the reviewed T3 Code checkout are available through local
+adapters. Three belong to T3; thirteen come from its Effect reference checkout.
 [Provenance and refresh](../vendor/t3code-NOTICE.md) own the source pin and licenses.
 
 [Native composition](T3CODE-NATIVE.md) connects existing workflow entrypoints to target
@@ -71,6 +71,8 @@ packages and consumer contracts after focused verification. Update the current P
 existing changeset by default, including later scope changes. Audit call, result,
 runtime, lifecycle and wire-data compatibility rather than treating every API addition
 as breaking. This skill finalizes notes; it does not publish or replace a release flow.
+Use the target's stability tags and bump policy rather than exporting Effect's
+stable/unstable/experimental rules or release-queue branches to other projects.
 
 ## package-development
 
@@ -128,6 +130,18 @@ maintainer protections, and read back uncertain outcomes before retrying. The ho
 [triage comment disclosure](../triage/SKILL.md#comment-invariant) applies to posted comments.
 Use [review](../review/SKILL.md) for correctness, not eligibility moderation.
 
+## pull-requests
+
+Use this finalization checklist through the existing [delivery](delivery-workflow.md),
+[review](../review/SKILL.md), [test audit](../test-audit/SKILL.md),
+[publication](../commit-push-pr/SKILL.md) and [PR body](../pr/SKILL.md) owners.
+Run the axes inline unless the user explicitly authorizes delegation; availability
+of subagents is not consent. Keep the requested endpoint and draft state: finalizing
+an explicitly requested draft means a verified draft, not marking it ready for review.
+Load Changesets only where the target uses it, Effect guidance only for Effect code,
+and validation from the target's actual instructions, not the copied Effect table.
+The local concise PR body and verified model/harness attribution remain authoritative.
+
 ## Native verification
 
 Confirm T3 Code identity from the target's source and manifests, not its directory name
@@ -151,7 +165,11 @@ Enter only in a T3 Code checkout with its Browser panel tools available. Use its
 runner output, pairing flow, isolated state and bundled SQLite fixture reference. A
 listening port or an empty UI is not behavioral proof. Direct projection fixtures prove
 visual states, not event-history or backend business behavior. Keep user credentials out
-of shared evidence. Missing tools block this verification, not unrelated task work.
+of shared evidence. When tools exist but status reports no usable tab, follow the source's
+`preview_open` recovery before declaring the panel unavailable. Missing tools block
+this verification, not unrelated task work. Prefer recorded dev replay for render-only
+checks when the target provides it. Real-provider verification keeps the user's selected
+model and effort; a cheaper-model suggestion does not authorize switching routes.
 
 For another app, use [create verification skill](../create-verification-skill/SKILL.md)
 and [dogfood](../dogfood/SKILL.md); do not install T3's tooling there. Retain a task's
@@ -168,6 +186,9 @@ builds and Metro follow the task's authorization and actual repository scripts. 
 backend and app connections, prove device reachability, and remove only disposable state
 at teardown. Missing devices stay a named verification gap; do not claim native coverage
 from a browser or a simulated pairing test.
+The native installer may dispatch a hosted build and wait for it; inspect its current
+behavior first. Cache downloads, workflow dispatch, native builds and installation
+remain bounded by the task's authorization. Vendoring alone grants none of them.
 
 ## effect-development
 
@@ -176,6 +197,8 @@ agent guide, source and examples established by [Effect setup](../effect-ts/SKIL
 Use a local `LLMS.md` or `ai-docs/src` when that checkout actually supplies it. Match each
 material API/pattern to version-correct guidance; do not silently substitute T3's pinned
 Effect reference for the dependency installed in an unrelated application.
+The source's inline options types, `readonly` fields and optional-field conventions
+are Effect API conventions; use the target's established public API policy elsewhere.
 
 ## migration-guidance
 

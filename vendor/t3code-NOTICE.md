@@ -1,7 +1,7 @@
 # T3 Code and Effect skill snapshot
 
-All 15 skills and every file inside their skill directories are copied unchanged
-from [pingdotgg/t3code at 1451e7c](https://github.com/pingdotgg/t3code/tree/1451e7cb23034d29774338608368a15d8845df36).
+All 16 skills and every file inside their skill directories are copied unchanged
+from [pingdotgg/t3code at bc8583b](https://github.com/pingdotgg/t3code/tree/bc8583bc6409e608557c33d42e02b2d1f1e2072f).
 The [lock](t3code-skills.lock.json) records full revision, file digests, executable
 modes and the complete skill inventory. This is a skill snapshot, not a runnable
 T3 or Effect checkout. The local [compatibility contract](../shared/T3CODE-SKILLS.md)
@@ -11,10 +11,10 @@ adapts it without editing upstream bytes.
 
 - Three project skills: `.agents/skills` in T3 Code. Retain the
   [T3 MIT license](t3code/LICENSE), copyright 2026 T3 Tools Inc.
-- Twelve reference skills: `.repos/effect-smol/.agents/skills` in the same T3
-  revision. T3's [reference configuration](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/scripts/lib/reference-repos.ts)
+- Thirteen reference skills: `.repos/effect/.agents/skills` in the same T3
+  revision. T3's [reference configuration](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/scripts/lib/reference-repos.ts)
   identifies [Effect-TS/effect](https://github.com/Effect-TS/effect) as their origin.
-  Retain the [Effect MIT license](t3code/.repos/effect-smol/LICENSE), copyright
+  Retain the [Effect MIT license](t3code/.repos/effect/LICENSE), copyright
   2023 Effectful Technologies Inc. The T3 commit pins these exact copied bytes;
   it is not a claim about Effect's current main branch.
 - The snapshot also carries the contribution skill's directly linked T3 policy/support
@@ -30,7 +30,7 @@ does not install a Browser panel, Device panel, server, mobile client or automat
 
 Marginal usefulness for this harness, judged by portability, missing coverage and
 overlap with existing owners; not measured effectiveness or invocation frequency.
-All 15 ship as requested. Rank guides selection, not availability.
+All 16 ship as requested. Rank guides selection, not availability.
 
 | Rank | Skill | Why |
 |---:|---|---|
@@ -49,18 +49,21 @@ All 15 ship as requested. Rank guides selection, not availability.
 | 13 | `effect-development` | Useful pointer; overlaps installed-version Effect guidance. |
 | 14 | `migration-guidance` | Effect's own generator, not application upgrades. |
 | 15 | `ai-docs` | Effect's own generated-documentation pipeline. |
+| 16 | `pull-requests` | Finalization checklist; existing delivery and draft rules retain ownership. |
 
 ## Refresh
 
 Use a separate T3 Git checkout containing the reviewed full commit. The importer
-reads committed objects, not dirty working-tree files. It copies both complete
+reads committed objects, not dirty working-tree files. It supports the current
+`.repos/effect` root and legacy `.repos/effect-smol` snapshots, requiring the matching
+Effect license and exactly one complete reference skill root. It copies both complete
 skill roots, licenses and directly linked policy documents; unknown skills require an
 explicit host metadata/compatibility review before import.
 
 ```sh
 python3 scripts/vendor-t3code-skills.py \
   --source /path/to/t3code \
-  --revision 1451e7cb23034d29774338608368a15d8845df36
+  --revision bc8583bc6409e608557c33d42e02b2d1f1e2072f
 bash scripts/generate-skill-catalog.sh
 python3 scripts/vendor-t3code-skills.py --check
 bash evals/run.sh t3code-vendored-skills

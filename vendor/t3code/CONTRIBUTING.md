@@ -4,7 +4,7 @@
 
 ## Developer setup
 
-See the [development runbook](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/docs/operations/development.md#first-checkout) for the initial checkout,
+See the [development runbook](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/docs/operations/development.md#first-checkout) for the initial checkout,
 development commands, tests, and platform-specific desktop packaging prerequisites.
 
 ## Read this first
@@ -73,9 +73,9 @@ its own PR unless it is necessary to solve the same problem. A large diff alone 
 the PR contains unrelated work.
 
 This rule is for outside contributions. Maintainers, the logins in
-[.github/TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/.github/TRIAGE_EXEMPTIONS.td), may batch related fixes in one PR.
+[.github/TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/.github/TRIAGE_EXEMPTIONS.td), may batch related fixes in one PR.
 
-Follow the [documentation rules](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/AGENTS.md#documentation). Keep internal docs for decisions and
+Follow the [documentation rules](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/AGENTS.md#documentation). Keep internal docs for decisions and
 hard-to-discover constraints. Update user guides when how to use a feature changes; skip descriptions
 of obvious controls and cosmetic changes.
 
@@ -122,9 +122,9 @@ security, performance, or merging. Those need deeper review. Updates to the PR c
 eligibility and require reassessment.
 
 PRs receive `vouch:*` contributor-status labels and `size:*` diff-size labels. These are context, not
-eligibility rules. Vouching through [.github/VOUCHED.td](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/.github/VOUCHED.td) is separate from permission
+eligibility rules. Vouching through [.github/VOUCHED.td](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/.github/VOUCHED.td) is separate from permission
 to bypass triage. Only the GitHub logins explicitly listed in
-[.github/TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/.github/TRIAGE_EXEMPTIONS.td) bypass triage. Organization membership,
+[.github/TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/.github/TRIAGE_EXEMPTIONS.td) bypass triage. Organization membership,
 vouching, collaborator or bot status, repository write access, and previous successful PRs do not
 establish an exemption. Other contributors, including vouched contributors, go through triage.
 Passing once does not grant permanent trust.
@@ -148,7 +148,7 @@ existing review settings. Neither triage nor a Macroscope review authorizes merg
 ## Closure and reconsideration
 
 Automated triage leaves a PR open for maintainer decision if someone in the trusted
-[TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/1451e7cb23034d29774338608368a15d8845df36/.github/TRIAGE_EXEMPTIONS.td) list has commented or submitted a review,
+[TRIAGE_EXEMPTIONS.td](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/.github/TRIAGE_EXEMPTIONS.td) list has commented or submitted a review,
 including on an earlier head, or if `triage:keep-open` is present. This protection does not imply
 eligibility or review approval.
 

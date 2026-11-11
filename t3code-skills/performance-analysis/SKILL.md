@@ -7,4 +7,4 @@ description: "Use for library runtime benchmarks or TypeScript compiler-cost mea
 
 Read [host compatibility](../../shared/T3CODE-SKILLS.md) first and apply the `performance-analysis` branch. It takes precedence over the source snapshot.
 
-Read the complete [upstream skill](../../vendor/t3code/.repos/effect-smol/.agents/skills/performance-analysis/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.
+Read the complete [upstream skill](../../vendor/t3code/.repos/effect/.agents/skills/performance-analysis/SKILL.md). Resolve its relative references from that source directory. Repository-root commands and paths refer to the target checkout, never this plugin's vendor directory.
