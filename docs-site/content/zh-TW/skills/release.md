@@ -29,8 +29,7 @@ sidebar:
    變更記錄項目、`CHANGELOG.md`，以及 README 的安裝版本固定值。
 4. 若技能介面有所變更，請執行掛鉤、目錄與 AGENTS 產生器。絕不可手動編輯
    產生的 Codex 代理檔案。
-5. 使用 `bun run docs:version v<version>` 凍結該發行版本的文件。提交產生的快照及其新增的
-   `versions.archived` 項目；絕不可編輯現有快照。
+5. 即時文件保留在 `main`；發布技能工具組不需要複製技能文件。
 6. 重新執行聚焦的發布中繼資料與封裝評估，直到達到 GREEN。
 
 ## 3. 驗證套件
@@ -66,6 +65,9 @@ bash scripts/test-codex-plugin-install.sh
 4. 從全新的隔離式 Codex 設定加入固定至新標籤的遠端市集、
    安裝外掛並進行相同驗證。Claude 與 Codex 的全新隔離式安裝都必須通過。
 5. 僅在收到要求時升級使用者目前使用中的安裝；兩個用戶端皆需重新啟動或重新載入。
+
+文件封存為選用操作。僅依使用者明確請求執行 `bun run docs:version v<version>`，
+提交快照與 `versions.archived`，並更新封存評估。保留已發布的快照。
 
 最後提供 PR 與發行版本 URL、標籤與合併識別資訊、CI 結果、安裝程式證據，以及一項
 清楚可見的終端狀態。

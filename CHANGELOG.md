@@ -17,8 +17,9 @@
   PostgreSQL version discovery, and writable derived server-state guidance.
 - Ship bounded hook failure advice, file-backed Stop dispatch, and owner-scoped
   model-selection safeguards without changing consumer model settings.
-- Synchronize manifests, marketplaces, the Codex install pin, and immutable docs;
-  leave existing archived releases and the optional Claude mods version unchanged.
+- Synchronize manifests, marketplaces, and the Codex install pin. Keep live docs on
+  main; documentation archives are opt-in instead of copying every skill at release.
+  Preserve published archives and the optional Claude mods version.
 
 ### Detailed changes
 

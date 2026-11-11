@@ -30,8 +30,7 @@ Opublikuj to repozytorium, nie dopuszczając do rozbieżności metadanych, tagó
    wpisy dziennika zmian, `CHANGELOG.md` oraz przypiętą wersję instalacyjną w README.
 4. Jeśli powierzchnia umiejętności uległa zmianie, uruchom generatory hooków, katalogu i plików AGENTS. Nigdy nie edytuj ręcznie
    wygenerowanych proxy Codex.
-5. Zamroź dokumentację wydania poleceniem `bun run docs:version v<version>`. Zacommituj wygenerowaną
-   migawkę i jej nowy wpis `versions.archived`; nigdy nie edytuj istniejącej migawki.
+5. Pozostaw aktualną dokumentację na `main`; wydanie harnessu nie wymaga kopiowania dokumentacji umiejętności.
 6. Ponownie uruchom ukierunkowane testy ewaluacyjne metadanych wydania i pakowania, aż osiągną stan GREEN.
 
 ## 3. Zweryfikuj pakiet
@@ -66,6 +65,10 @@ pakowania i zagrożeń dla niezmienności wydania.
 4. W świeżej, izolowanej konfiguracji Codex dodaj zdalny marketplace przypięty do nowego tagu,
    zainstaluj wtyczkę i wykonaj taką samą weryfikację. Świeże, izolowane instalacje Claude i Codex muszą przejść pomyślnie.
 5. Uaktualnij aktywne instalacje użytkownika tylko na jego żądanie; oba klienty wymagają ponownego uruchomienia lub przeładowania.
+
+Archiwa dokumentacji są opcjonalne. Tylko na wyraźne żądanie użytkownika uruchom
+`bun run docs:version v<version>`, zacommituj migawkę i `versions.archived` oraz
+dostosuj testy ewaluacyjne archiwum. Zachowaj opublikowane migawki.
 
 Na koniec podaj adresy URL PR-u i wydania, tożsamość tagu i scalenia, wyniki CI, dowody z instalatorów oraz jeden
 widoczny status terminala.

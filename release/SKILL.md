@@ -20,7 +20,7 @@ Publish without metadata, tags, or caches diverging. Version must be exact stabl
 1. First change `evals/test-improve-release-metadata.sh`; record expected RED metadata failures.
 2. Update `skill-manifest.json`, plugin manifests, both marketplaces, dated changelogs, `CHANGELOG.md`, README pin together.
 3. For skill-surface changes run hook/catalog/AGENTS generators; never hand-edit generated Codex proxies.
-4. Freeze docs with `bun run docs:version v<version>`; commit new snapshot and `versions.archived`, never edit old snapshots.
+4. Keep live docs on `main`; do not copy skill docs for a release.
 5. Replay release metadata/packaging evals GREEN.
 
 ## 3. Verify
@@ -49,5 +49,9 @@ Run `/dogfood` on both packaged surfaces; skip visual review only without render
 3. From fresh isolated Claude config: add remote marketplace, install, verify version/new skill surface.
 4. From fresh isolated Codex config: add marketplace pinned to tag, install, verify same. Both must pass.
 5. Upgrade live installs only when requested; clients require restart/reload.
+
+Documentation archives are opt-in. Only on explicit user request, run
+`bun run docs:version v<version>`, commit the snapshot and `versions.archived`,
+and update archive evals. Preserve published snapshots.
 
 Report PR/release URLs, tag/merge identity, CI, installer evidence, and one visible terminal status.

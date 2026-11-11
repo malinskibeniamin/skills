@@ -25,7 +25,7 @@ sidebar:
 2. 运行该脚本，并记录预期出现的 RED 发布元数据失败。
 3. 同时更新 `skill-manifest.json`、两个插件清单、两个市场清单、其中带日期的变更日志条目、`CHANGELOG.md` 以及 README 中固定的安装版本。
 4. 如果技能接口发生变化，运行钩子、目录和 AGENTS 生成器。切勿手动编辑生成的 Codex 代理。
-5. 使用 `bun run docs:version v<version>` 冻结该版本的文档。提交生成的快照及其新增的 `versions.archived` 条目；切勿编辑现有快照。
+5. 将实时文档保留在 `main`；发布技能工具集无需复制技能文档。
 6. 重新运行针对发布元数据和打包的评估，直至变为 GREEN。
 
 ## 3. 验证软件包
@@ -54,5 +54,8 @@ bash scripts/test-codex-plugin-install.sh
 3. 使用全新的隔离 Claude 配置添加远程市场、安装插件，并验证其版本以及新发布的技能接口。
 4. 使用全新的隔离 Codex 配置添加固定到新标签的远程市场、安装插件，并进行同样的验证。Claude 和 Codex 的全新隔离安装都必须通过。
 5. 仅在收到请求时升级用户的现有安装；两个客户端都需要重启或重新加载。
+
+文档归档为可选操作。仅按用户的明确请求运行 `bun run docs:version v<version>`，
+提交快照和 `versions.archived`，并更新归档评估。保留已发布的快照。
 
 最后提供 PR 和 Release URL、标签与合并提交标识、CI 结果、安装程序证据，以及一条可见的终端状态。

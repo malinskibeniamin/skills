@@ -11,6 +11,7 @@ run_content_eval "$RELEASE_SKILL" 'tag.*release.*(absent|collision)|collision.*t
 run_content_eval "$RELEASE_SKILL" 'RED.*release.metadata|release.metadata.*RED' "release bumps metadata test-first"
 run_content_eval "$RELEASE_SKILL" 'skill-manifest\.json' "release updates the source manifest"
 run_content_eval "$RELEASE_SKILL" 'both marketplaces|marketplaces.*plugin manifests' "release aligns every version surface"
+run_content_eval "$RELEASE_SKILL" 'Documentation archives are opt-in' "release workflow requires explicit documentation archive intent"
 run_content_eval "$RELEASE_SKILL" 'test-claude-plugin-install\.sh' "release exercises the Claude installer"
 run_content_eval "$RELEASE_SKILL" 'test-codex-plugin-install\.sh' "release exercises the Codex installer"
 run_content_eval "$RELEASE_SKILL" 'merge permission|permission.*merge' "release preserves the merge permission boundary"
