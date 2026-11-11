@@ -54,8 +54,9 @@ or overwriting work settings.
 The complete core plugin includes all registered skills, hook scripts, shared
 references, helpers and reviewer definitions. Host-specific supported lifecycle
 mappings still differ. Definitions do not authorize automatic delegation.
-Claude mods, MCP integrations, TraceDecay/indexers, React DevTools and external
-services remain separate opt-ins; this manager does not install or start them.
+Claude mods, MCP integrations, media tooling and the TraceDecay CLI are separate
+opt-ins through the capability profile below. Core-only sync does not install them.
+The add-on installer never starts an indexer or connects new accounts.
 `status` reports the presence of common companion tools, not their configuration
 or authentication. The existing `scripts/verify-install.sh` remains a supplemental
 consumer diagnostic, not the authoritative revision-sync receipt.
@@ -130,3 +131,83 @@ covered by `scripts/test-claude-plugin-install.sh` and
 
 References: [Claude marketplace source semantics](https://code.claude.com/docs/en/plugins/marketplace-reference),
 [OpenAI local plugins and hook trust](https://developers.openai.com/plugins/build/plugins).
+
+
+## Approved machine add-ons
+
+After core enrollment, opt in on each machine:
+
+```sh
+python3 scripts/machine-addons.py plan
+python3 scripts/machine-addons.py --yes apply
+python3 scripts/machine-addons.py probe
+python3 scripts/machine-addons.py schedule
+```
+
+`config/machine-addons.json` names the supported capabilities. `--yes` saves only
+that machine's selected capability names in `addons-consent.json`; it is not a
+credential or permission export. `--only openai-docs,rea` enrolls a smaller set.
+Later `apply` without `--yes` reconciles the saved selection, never every new
+capability added to the repo. Skipping a previously installed capability does not
+uninstall it or revoke an existing registration; remove it explicitly through its
+native manager. Existing same-name connections and disabled settings are preserved;
+a mismatch returns a visible failure rather than overwriting work configuration.
+Local config backups precede explicitly approved enrollment.
+
+The current Apple Silicon macOS profile covers:
+
+- **Harness Desk:** export a revision-stamped copy of the bundled Claude-only mod,
+  preserving core bundle bytes and old active-session caches. No prompt enrichment
+  is enabled by setup. Native reload/trust and SDK compatibility remain host checks.
+- **REA and React DevTools:** install the versions from the repo's MCP templates in
+  a machine-local npm prefix, not a consuming project. Acquire with install scripts
+  disabled and enforce package engine constraints. Select a compatible existing
+  Node without changing the shell's default. Register absolute executable/package
+  paths in both hosts; preserve React's isolated loopback URL restrictions and
+  disabled usage/CrUX reporting. Native decompilers, target execution and app
+  instrumentation are separate scopes. React tool discovery needs the named app's
+  development-only bootstrap; listing generic MCP tools does not prove that.
+- **OpenAI Docs:** a read-only remote documentation endpoint, without account login
+  or paid API calls. Both hosts receive the same connection definition.
+- **Media:** install missing Tesseract/asciinema Homebrew formulae and prepare the
+  pinned MLX Whisper runtime through uv/Python 3.12. Existing FFmpeg/yt-dlp remain
+  prerequisites for relevant media tasks. Model weights download on first local
+  transcription; this installer does not enable cloud transcription. Homebrew
+  formulae are installed if missing, not forcibly upgraded to arbitrary new releases.
+  Other platforms need a reviewed media adapter, not this macOS-specific profile.
+- **TraceDecay CLI:** acquire the profile's pinned upstream installer, verify its
+  digest, then require the installer's archive/build-provenance verification.
+  An existing executable is preserved and its actual version reported, not silently
+  upgraded across storage schemas. This includes **no daemon start, host hook
+  installation, transcript backfill, automation loop or remote authority setup**.
+  Indexing scopes and session-history ingestion need explicit approval first.
+
+`probe` opens fresh direct transports for the registered MCP definitions and checks
+initialization plus nonempty tool discovery. It uses the MCP client shipped with
+the REA runtime; a docs-only installation can instead use its native host's MCP
+health view. Probe results bind to a digest of the recorded definitions and become
+stale after registration changes. They do not certify native host activation,
+individual tools, browser behavior, accounts or production readiness.
+
+Add-on scheduling **reuses** `com.malinskibeniamin.skills-sync`; it does not add a
+second periodic job. Its stable runner calls core sync first, then reconciles the
+saved add-on selection, restoring the mod catalog entry after core refresh. Once
+this implementation reaches `main`, verified bundles can refresh the approved
+profile/pins and runner without expanding machine consent. Until then the local
+runner/profile survive independently of the feature checkout. Re-running core
+`schedule` alone restores core-only scheduling; run add-on `schedule` afterward to
+restore the combined job. Core `unschedule` stops the combined job as well.
+
+From any directory after enrollment:
+
+```sh
+python3 ~/.local/share/frontend-skills/machine-addons.py status
+python3 ~/.local/share/frontend-skills/machine-addons.py probe
+```
+
+`addons.json`, `addons-attempt.json` and `addons-probes.json` distinguish configured
+state, reconciliation failure and runtime probe evidence. The existing sync logs
+and native launchd exit status cover the scheduled chain. No account credentials,
+OAuth grants or production changes are created by this profile. GitHub, Jira,
+LaunchDarkly, Snyk, Google Workspace and incident.io authentication remain separate
+machine-local enrollment decisions.

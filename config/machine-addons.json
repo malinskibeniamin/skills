@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "capabilities": [
+    "claude-mods",
+    "rea",
+    "react-devtools",
+    "openai-docs",
+    "media",
+    "trace-cli"
+  ],
+  "docsUrl": "https://developers.openai.com/mcp",
+  "mediaFormulae": ["tesseract", "asciinema"],
+  "whisperPackage": "mlx-whisper==0.4.3",
+  "tracedecay": {
+    "version": "1.0.0-beta.98",
+    "installerUrl": "https://raw.githubusercontent.com/ScriptedAlchemy/tracedecay/5eef2490404e8313cdf1aa8c28c646af9eb1059d/install.sh",
+    "installerSha256": "b393b12c69d8177d802b853f4cf866d867ae6a2af58fd1a43d1ab2662d08328a"
+  }
+}
