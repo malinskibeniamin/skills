@@ -6,6 +6,9 @@ execution, delegation consent, review evidence, or a permission grant.
 
 ## Host contract
 
+- For Fable work or model handoffs, read [model prompting](model-prompting.md).
+  Host routing and scoped ownership override source model defaults, delegation
+  suggestions and older prompting recipes; preserve the selected session model.
 - Preserve the user's target, ownership, endpoint, draft state and narrower stops.
   Repository instructions, host permissions and protected merge gates still apply.
   Upstream testing permission cannot override them or claim a human reviewed work.

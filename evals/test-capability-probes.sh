@@ -47,7 +47,7 @@ _probe_log="$_probe_tmp/cells.log"
 mkdir -p "$_probe_bin"
 cat > "$_probe_bin/claude" <<'STUB'
 #!/bin/sh
-printf '%s (Claude Code)\n' "${FAKE_CLAUDE_VERSION:-2.1.258}"
+printf '%s (Claude Code)\n' "${FAKE_CLAUDE_VERSION:-2.1.321}"
 STUB
 cat > "$_probe_bin/bunx" <<'STUB'
 #!/bin/sh
@@ -60,11 +60,12 @@ chmod +x "$_probe_bin/claude" "$_probe_bin/bunx"
 : > "$_probe_log"
 _probe_output="$_probe_tmp/output"
 if PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" \
-  FAKE_CLAUDE_VERSION=2.1.258 "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 \
-  && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 2 ] \
+  FAKE_CLAUDE_VERSION=2.1.321 "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 \
+  && [ "$(wc -l < "$_probe_log" | tr -d ' ')" -eq 3 ] \
   && grep -q '^codex|gpt-6.1-sol|xhigh|' "$_probe_log" \
-  && grep -q '^claude-code|claude-opus-5-5|xhigh|' "$_probe_log"; then
-  echo "  PASS  capability runner compares only Sol and Opus"
+  && grep -q '^claude-code|claude-opus-5-5|xhigh|' "$_probe_log" \
+  && grep -q '^claude-code|claude-fable-5-2|xhigh|' "$_probe_log"; then
+  echo "  PASS  capability runner compares Sol, Opus and Fable"
   PASS=$((PASS + 1))
 else
   echo "  FAIL  capability runner model matrix is incomplete or aliased"
@@ -87,10 +88,10 @@ fi
 
 : > "$_probe_log"
 _probe_rc=0
-PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" FAKE_CLAUDE_VERSION=2.1.256 \
+PATH="$_probe_bin:$PATH" CELL_LOG="$_probe_log" FAKE_CLAUDE_VERSION=2.1.320 \
   "$PROBE_RUNNER" --dry >"$_probe_output" 2>&1 || _probe_rc=$?
 if [ "$_probe_rc" -ne 0 ] && [ ! -s "$_probe_log" ] \
-  && grep -q 'Claude Code 2.1.257 or newer' "$_probe_output"; then
+  && grep -q 'Claude Code 2.1.321 or newer' "$_probe_output"; then
   echo "  PASS  stale Claude fails before capability calls"
   PASS=$((PASS + 1))
 else

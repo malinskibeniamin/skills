@@ -54,7 +54,7 @@ type: skill
 | `/e2e-testing` | 构建具有韧性的 Playwright 端到端测试。 |
 | `/effect-ts` | 为 Effect 配置仓库。 |
 | `/effect-v3-to-v4` | 依据上游参考资料将 Effect v3 代码库迁移到 v4。 |
-| `/efficient-frontier` | 委派范围明确的工作，同时保留核心判断权。 |
+| `/efficient-frontier` | 将日常工作、高难度任务和审查路由至获准使用的模型。 |
 | `/eli5` | 用宏观图景和寥寥数语解释晦涩主题。 |
 | `/excalidraw-diagram` | 根据提示绘制可编辑的 Excalidraw 图表。 |
 | `/extend-harness` | 扩展并调试前端技能框架。 |

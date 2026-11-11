@@ -8,6 +8,9 @@ misc skills, is pinned in [the lock](../vendor/mattpocock.lock.json).
 
 These rules take precedence over the source snapshot:
 
+- For Fable work or model handoffs, read [model prompting](model-prompting.md).
+  Host routing and scoped ownership override source model defaults, delegation
+  suggestions and older prompting recipes; preserve the selected session model.
 - Preserve the user's repository, requested outcome and endpoint. Loading or
   invoking a skill grants no delegation, persistent scheduling, merge, deployment,
   global configuration or unrelated installation permission. Explicit user intent

@@ -1,19 +1,6 @@
 ---
 name: resolve-pr-feedback
 description: Use to resolve PR comments, requested changes, replies, and thread closure.
-hooks:
-  Stop:
-    - hooks:
-        - type: agent
-          model: claude-sonnet-5
-          timeout: 90
-          statusMessage: "Verifying every review thread was addressed"
-          prompt: |
-            Read transcript_path from $ARGUMENTS. If the session enumerated PR review
-            threads, verify each received a fix, reply, or reasoned skip. Return ok=false
-            with only the dropped threads when omission is clear. If evidence is absent or
-            ambiguous, return ok=true. The deterministic hook owns GitHub state; check
-            semantic substance only.
 ---
 
 # Resolve PR Feedback
@@ -68,6 +55,10 @@ run `${CLAUDE_PLUGIN_ROOT:-.}/scripts/stack-worktree-conflicts.sh`; require expl
 authorization before upstack rebase/push. Repair CI before summary.
 
 ### 6. Completeness Verification
+
+Before reporting completion, check each fetched thread for a substantive fix,
+reply or reasoned disposition. Perform this semantic check inline; the skill does
+not launch another model. Keep pending decisions visibly unresolved.
 
 Complete: zero unresolved threads (bots/outdated too); no stale
 `CHANGES_REQUESTED`. Enforced by `pr-feedback-completeness-stop`.

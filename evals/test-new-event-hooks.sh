@@ -34,6 +34,78 @@ export CLAUDE_SESSION_ID="eval-new-events-$$"
 _eval_session_dir="/tmp/hook-session-${CLAUDE_SESSION_ID}"
 mkdir -p "$_eval_session_dir"
 
+# Model guidance must also reach fresh sessions and direct skill invocations in
+# consuming repositories, not only sessions that emitted PostModelSwitch.
+_fable_fixture=$(mktemp -d)
+_fable_session="eval-fable-profile-$$"
+_fable_session_dir="/tmp/hook-session-${_fable_session}"
+git -C "$_fable_fixture" init -q
+mkdir -p "$_fable_fixture/bin"
+printf '#!/bin/sh\nexit 1\n' > "$_fable_fixture/bin/gh"
+chmod +x "$_fable_fixture/bin/gh"
+_fable_start=$(cd "$_fable_fixture" && env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID \
+  HOOK_SESSION_SWEEP_DISABLED=1 CLAUDE_ENV_FILE= \
+  "$HOOKS_DIR/session-env.sh" <<JSON
+{"hook_event_name":"SessionStart","model":"claude-fable-5-2","session_id":"$_fable_session"}
+JSON
+)
+if printf '%s' "$_fable_start" | jq -e --arg root "$REPO_ROOT" '
+    .hookSpecificOutput.hookEventName == "SessionStart"
+    and (.hookSpecificOutput.additionalContext | contains($root + "/shared/model-prompting.md"))
+    and (.hookSpecificOutput.additionalContext | contains("selected model"))' >/dev/null 2>&1; then
+  echo "  PASS  fresh Fable sessions load installed prompting guidance outside this checkout"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  fresh Fable session omits its prompting guidance: $_fable_start"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: fresh Fable prompting"
+fi
+printf 'local\n' > "$_fable_session_dir/task-endpoint"
+_fable_compact=$(cd "$_fable_fixture" && env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID \
+  "$HOOKS_DIR/post-compact-context.sh" <<JSON
+{"hook_event_name":"PostCompact","session_id":"$_fable_session"}
+JSON
+)
+if printf '%s' "$_fable_compact" | jq -e '
+    .hookSpecificOutput.hookEventName == "PostCompact"
+    and (.hookSpecificOutput.additionalContext | contains("model-prompting.md"))
+    and (.hookSpecificOutput.additionalContext | contains("Endpoint: local"))' >/dev/null 2>&1; then
+  echo "  PASS  compaction restores the Fable profile pointer without losing the endpoint"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  compacted Fable session loses its profile or endpoint: $_fable_compact"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: compacted Fable prompting"
+fi
+_fable_child=$(cd "$_fable_fixture" && PATH="$_fable_fixture/bin:$PATH" \
+  "$HOOKS_DIR/subagent-start.sh" <<JSON
+{"hook_event_name":"SubagentStart","session_id":"$_fable_session","agent_type":"Explore"}
+JSON
+)
+if printf '%s' "$_fable_child" | jq -e '
+    .hookSpecificOutput.hookEventName == "SubagentStart"
+    and (.hookSpecificOutput.additionalContext | contains("model-prompting.md"))
+    and (.hookSpecificOutput.additionalContext | contains("selected model"))' >/dev/null 2>&1; then
+  echo "  PASS  authorized child context carries the conditional Fable profile, not a parent-model assumption"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  child context loses the model profile: $_fable_child"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: child Fable prompting"
+fi
+_opus_start=$(cd "$_fable_fixture" && env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID \
+  HOOK_SESSION_SWEEP_DISABLED=1 CLAUDE_ENV_FILE= \
+  "$HOOKS_DIR/session-env.sh" <<JSON
+{"hook_event_name":"SessionStart","model":"claude-opus-5-5","session_id":"$_fable_session"}
+JSON
+)
+if printf '%s' "$_opus_start" | jq -e '
+    (.hookSpecificOutput.additionalContext | contains("model-prompting.md") | not)' >/dev/null 2>&1; then
+  echo "  PASS  ordinary Opus startup avoids the Fable-only profile load"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  ordinary Opus startup loads unnecessary Fable context"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: unconditional Fable prompting"
+fi
+rm -rf "$_fable_fixture" "$_fable_session_dir"
+
 # SessionStart is the only ordinary hook event that carries the active model.
 # Persist it so later skill/session telemetry stays model-qualified.
 _claude_env_file=$(mktemp)
@@ -265,7 +337,26 @@ JSON
     done
   done
 
-  for _model in claude-opus-5-5 gpt-6.1-sol; do
+  for _transition in 'claude-opus-5-5|claude-fable-5-2' 'claude-fable-5-2|claude-opus-5-5'; do
+    IFS='|' read -r _from _to <<< "$_transition"
+    _out=$(jq -cn --arg from "$_from" --arg to "$_to" \
+      '{hook_event_name:"PostModelSwitch",from_model:$from,to_model:$to,source:"picker",effort:{level:"xhigh"}}' \
+      | env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
+        "$HOOKS_DIR/model-switch-router.sh")
+    if printf '%s' "$_out" | jq -e '
+        (.hookSpecificOutput.additionalContext | contains("/shared/model-prompting.md"))
+        and (.hookSpecificOutput.additionalContext | contains("short summary"))
+        and (.hookSpecificOutput.additionalContext | contains("delivery endpoint"))' >/dev/null 2>&1; then
+      echo "  PASS  $_transition carries the Fable prompting and handoff contract"
+      PASS=$((PASS + 1))
+    else
+      echo "  FAIL  $_transition omits the Fable handoff: $_out"
+      FAIL=$((FAIL + 1))
+      ERRORS="$ERRORS\n  FAIL: Fable handoff $_transition"
+    fi
+  done
+
+  for _model in claude-opus-5-5 claude-fable-5-2 gpt-6.1-sol; do
     _out=$(jq -cn --arg model "$_model" \
       '{hook_event_name:"PreModelSwitch",to_model:$model,source:"picker",effort:{level:"xhigh"}}' \
       | HOOK_METRICS_DISABLED=1 MODEL_ROUTING_FILE="$REPO_ROOT/config/model-routing.json" \
@@ -280,7 +371,7 @@ JSON
     fi
   done
 
-  for _model in claude-opus-5-5 gpt-6.1-sol; do
+  for _model in claude-opus-5-5 claude-fable-5-2 gpt-6.1-sol; do
     for _effort in low medium high max ultra ''; do
       _out=$(jq -cn --arg model "$_model" --arg effort "$_effort" \
         '{hook_event_name:"PreModelSwitch",to_model:$model,source:"sdk",effort:{level:$effort}}' \
@@ -746,15 +837,6 @@ else
 fi
 rm -f "$_eval_session_dir/bound-worktree"
 rm -rf "$_go_fix"
-if grep -q "type: agent" "$REPO_ROOT/resolve-pr-feedback/SKILL.md" 2>/dev/null; then
-  echo "  PASS  resolve-pr-feedback carries agent-type Stop verifier"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  resolve-pr-feedback agent hook missing"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: agent-type verifier"
-fi
-
 # ── Teardown ─────────────────────────────────────────────────────
 rm -rf "$_eval_session_dir"
 rm -rf "$HOOK_METRICS_DIR"

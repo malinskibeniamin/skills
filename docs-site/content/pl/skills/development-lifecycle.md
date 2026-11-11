@@ -57,6 +57,8 @@ Przy powtarzalnej optymalizacji według stałej ewaluacji załaduj [hill-climb](
 
 ### Działaj [#act]
 
+Repozytorium należy do użytkownika; odpowiadasz za tę zmianę, nie za niepowiązane przeprojektowanie. Diagnozuj zwykłe błędy narzędzi i ponawiaj bezpieczne kontrole; przed powtórzeniem zapisu o nieznanym wyniku odczytaj stan. Kontynuuj niezależne prace, czekając na odpowiedź na otwarte pytanie; respektuj celowo ograniczony dostęp.
+
 Jeden właściciel; delegowanie i praca w tle wymagają wyraźnej zgody. Wprowadź najmniejszą działającą zmianę zgodnie z lokalnymi konwencjami. Używaj [tdd](https://github.com/malinskibeniamin/skills/blob/main/tdd/SKILL.md) dla wiarygodnych regresji nieobjętych testami; w pozostałych przypadkach wystarczą istniejące kontrole lub próby. Planuj ponownie tylko dotknięty fragment; pomijaj spekulacyjne abstrakcje i poboczne porządki.
 
 Po każdej spójnej partii zmian uruchom formatowanie lub automatyczne poprawki i lintowanie w odpowiednim zakresie, a następnie właściwe kontrole typów i testy. Wyniki zakończonych hooków wykorzystuj ponownie tylko przy identycznej zawartości plików i zakresie kontroli. Sprawdź diff automatycznych poprawek; napraw błędy i uruchom kontrole ponownie. Zachowaj sprawdzanie typów całego projektu, gdy ograniczenie do plików nie jest poprawne.

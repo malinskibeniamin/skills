@@ -15,6 +15,11 @@ sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 session_dir="/tmp/hook-session-${sid}"
 branch=$(git branch --show-current 2>/dev/null || echo detached)
 context="[POST-COMPACTION] Branch: $branch"
+if [ -f "$session_dir/current-model" ] \
+  && [ "$(head -1 "$session_dir/current-model")" = "claude-fable-5-2" ]; then
+  source "$(dirname "$0")/../../shared/model-prompting.sh"
+  context="$context\n$(harness_model_prompting_context)"
+fi
 
 if [ -f "$session_dir/task-endpoint" ]; then
   context="$context\nEndpoint: $(head -1 "$session_dir/task-endpoint")"

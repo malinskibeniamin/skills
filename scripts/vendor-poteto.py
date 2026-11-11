@@ -124,15 +124,15 @@ def discover(source, files):
 
 def model_rule(repo):
     config = json.loads((repo / "config/model-routing.json").read_text())
-    allowed = {"claude-opus-5-5", "gpt-6.1-sol"}
+    allowed = {"claude-opus-5-5", "claude-fable-5-2", "gpt-6.1-sol"}
     preferred = config["selection"]["preferred_models"]
-    if set(config["models"]) != allowed or set(preferred) != allowed or len(preferred) != 2:
-        raise ValueError("Only Opus 5.5 and GPT-6.1 Sol are allowed in pstack routing")
+    if set(config["models"]) != allowed or set(preferred) != allowed or len(preferred) != 3:
+        raise ValueError("Only Opus 5.5, Fable 5.2 and GPT-6.1 Sol are allowed in pstack routing")
     policy = config["quality_first"]
 
     def route(value):
         if not isinstance(value, dict) or value.get("model") not in allowed or value.get("effort") != "xhigh":
-            raise ValueError("Unsupported pstack model route; use the host's Opus 5.5 / GPT-6.1 Sol xhigh routes")
+            raise ValueError("Unsupported pstack model route; use the host's Opus 5.5 / Fable 5.2 / GPT-6.1 Sol xhigh routes")
         return f'{value["model"]}-{value["effort"]}'
 
     default = route(policy["default"])
@@ -165,7 +165,6 @@ def model_rule(repo):
     return "\n".join([
         "---", "alwaysApply: true", "---",
         "# Generated from config/model-routing.json; rerun vendor-poteto.py --model-rule.",
-        "# budget: large (xhigh)",
         "# Every role overrides upstream defaults. No other models or aliases are allowed.",
         "# A model rule grants no permission to delegate or call models recursively.",
         *[f"{name}: {model}" for name, model in roles],
@@ -364,7 +363,7 @@ def main():
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="check the local snapshot and complete registrations")
     actions.add_argument("--check-routing", action="store_true", help="check the snapshot and native instruction links; execute no skills")
-    actions.add_argument("--model-rule", action="store_true", help="print a pstack rule using only the host's Opus/Sol routes; write nothing")
+    actions.add_argument("--model-rule", action="store_true", help="print a pstack rule using only the host's Opus/Fable/Sol routes; write nothing")
     args = parser.parse_args()
     if args.model_rule:
         if args.source or args.revision:

@@ -17,7 +17,9 @@ agent-evals/capability-probes/run.sh --smoke
 agent-evals/capability-probes/run.sh --force
 ```
 
-The runner permits only GPT-6.1 Sol and Opus 5.5 at `xhigh`, including benchmarks.
+The runner compares GPT-6.1 Sol, Opus 5.5 and Fable 5.2 at `xhigh`, including
+benchmarks. Claude Code 2.1.321+ is required for the Fable cells. The Fable role is
+owner-selected; these trials do not establish a general quality or savings claim.
 Experiment constructors reject other model/effort overrides before inference. It runs
 three repetitions of the research/data synthesis task and the existing evergreen debugging
 task. Keep raw results out of Git and complete `scorecard-template.md` before using a result.

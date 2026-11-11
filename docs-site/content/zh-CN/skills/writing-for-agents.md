@@ -25,6 +25,8 @@ type: skill
 
 编写技能时，请阅读 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，了解前置元数据、调用方式选择和路由器。
 
+修改 Claude 提示词时，请阅读[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)：根据目标模型调整，并保留活跃 API 对话的历史，而不是照搬其他模型的提示词或改写已有前缀。
+
 ## 将信息放在正确层级 [#depth]
 
 **上下文指针**会指明已加载文档之外的资料，并说明何时读取。指针增加上下文负载；省略指针则依赖人的记忆。

@@ -8,7 +8,7 @@
   conversation, secrets, or unrelated files.
 - **Budget:** Claude and Codex quotas are separate. Unknown capacity is not a reason to
   guess or lower the quality gate; never substitute `ccusage` or session tokens.
-- **Diversity:** for an authorized independent review, prefer Sol for Opus work and Opus
+- **Diversity:** for an authorized independent review, prefer Sol for Opus/Fable work and Opus
   for Sol work. Label clean-context fallbacks and disclose missing different-family coverage.
 
 ## Background execution
@@ -22,7 +22,7 @@ than sleeping.
 
 ## Claude wrapper
 
-Use a thin wrapper inheriting the Opus owner and its `xhigh` effort only when a workflow
+Use a thin wrapper inheriting the configured Claude owner and its `xhigh` effort only when a workflow
 needs structured results:
 
 1. Compose the self-contained prompt.
@@ -77,8 +77,9 @@ Read `config/model-routing.json`. Opus 5.5 `xhigh` is the daily/UI owner; Sol `x
 is the preferred reviewer and explicitly selected Codex execution lane. Keep chores on
 Opus. If Sol is unavailable, use a labeled clean-context Opus `xhigh` review and disclose
 missing different-family coverage. If Opus is unavailable for UI, report the lane blocked.
-Route only the Opus/Sol pair; never silently lower effort or substitute another model.
-If neither is available, report the lane blocked. The owner's preference does not authorize delegation.
+Fable 5.2 `xhigh` owns the hard-task role in `quality_first.hard`, not the review
+fallback or Codex CLI. Route only Opus/Fable/Sol; never silently lower effort or
+substitute another model. Report unavailable role-specific lanes. The owner's preference does not authorize delegation.
 
 `ultra` is an agent team, so it needs explicit delegation. Pro mode, persisted reasoning,
 programmatic tool calling, and explicit cache controls are API-only unless the current

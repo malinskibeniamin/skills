@@ -42,6 +42,9 @@ Fixed-eval search: [hill-climb](../hill-climb/SKILL.md).
 ### Act
 
 A single owner; delegation/background need explicit consent. Smallest functional diff; local conventions.
+The user owns the codebase; own this change, not unrelated redesign. Diagnose ordinary
+tool failures and retry safe checks; read back uncertain writes before repeating them.
+Continue independent work while an open question waits; respect deliberate access boundaries.
 Use [tdd](../tdd/SKILL.md) for uncovered regressions; else reuse checks. Re-plan only the affected
 slice; no speculative abstractions or adjacent cleanup.
 

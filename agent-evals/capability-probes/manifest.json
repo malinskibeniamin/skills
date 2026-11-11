@@ -4,7 +4,7 @@
   "claim_status": "hypothesis",
   "routing_effect": "none-until-gate",
   "runs_per_cell": 3,
-  "minimum_claude_version": "2.1.257",
+  "minimum_claude_version": "2.1.321",
   "automated_tasks": ["research-data-synthesis", "evergreen-project-recovery"],
   "models": [
     {
@@ -18,6 +18,12 @@
       "id": "claude-opus-5-5",
       "effort": "xhigh",
       "role": "cross-family-baseline"
+    },
+    {
+      "agent": "claude-code",
+      "id": "claude-fable-5-2",
+      "effort": "xhigh",
+      "role": "owner-selected-hard-task-specialist"
     }
   ],
   "probes": [

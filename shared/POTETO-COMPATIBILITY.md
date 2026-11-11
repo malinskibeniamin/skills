@@ -27,17 +27,21 @@ keep their current behavior. [Inventory and source pin](../vendor/pstack.lock.js
   of copying Cursor-only defaults. If a required tool, control skill, automation editor, or agent role is
   unavailable, state the limitation. Use an available equivalent only when it
   preserves the contract; never claim unperformed verification or delegation.
+- For Fable work or model handoffs, read [model prompting](model-prompting.md).
+  Host routing and scoped ownership override source model defaults, delegation
+  suggestions and older prompting recipes; preserve the selected session model.
 - Keep model configuration in `config/model-routing.json`. Before applying any
   upstream role or setup workflow, run
   `python3 <plugin-root>/scripts/vendor-poteto.py --model-rule` and use its generated
   role assignments, not upstream defaults.
   This read-only command rejects unsupported models and reasoning budgets.
-- Only **Opus 5.5** (`claude-opus-5-5`) and **GPT-6.1 Sol** (`gpt-6.1-sol`), at
+- Only **Opus 5.5** (`claude-opus-5-5`), **Fable 5.2** (`claude-fable-5-2`)
+  and **GPT-6.1 Sol** (`gpt-6.1-sol`), at
   `xhigh`, may execute work. Grok and every other model are forbidden across defaults,
   panels, fallbacks, automation workers, and bots. Ignore incompatible upstream or
   existing Cursor role rules; `auto` and `inherit-parent` cannot bypass this limit.
   If the permitted host model is unavailable, follow the canonical routing policy's
-  two-model fallback or report the lane blocked. Never fall back to an upstream model.
+  role-specific fallback or report the lane blocked. Never fall back to an upstream model.
 - `/poteto-setup-pstack` may write the generated rule only during explicitly requested
   Cursor setup, without offering upstream model/budget choices. Reading a skill in
   Codex does not authorize writing Cursor rules or changing Codex settings. Model

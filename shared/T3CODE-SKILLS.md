@@ -11,6 +11,9 @@ guidance and exposed host capabilities; it does not require another user-invoked
 
 These rules override conflicting source instructions:
 
+- For Fable work or model handoffs, read [model prompting](model-prompting.md).
+  Host routing and scoped ownership override source model defaults, delegation
+  suggestions and older prompting recipes; preserve the selected session model.
 - Preserve the requested repository, outcome and endpoint. Loading a skill grants
   no delegation, moderation, merge, deployment, installation or scheduling authority.
 - The snapshot is reference material, not a runnable checkout. Resolve root-relative

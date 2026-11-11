@@ -27,7 +27,7 @@ mkdir -p "$_ablation_bin"
 
 cat > "$_ablation_bin/claude" <<'STUB'
 #!/bin/bash
-printf '%s (Claude Code)\n' "${FAKE_CLAUDE_VERSION:-2.1.258}"
+printf '%s (Claude Code)\n' "${FAKE_CLAUDE_VERSION:-2.1.321}"
 STUB
 cat > "$_ablation_bin/bunx" <<'STUB'
 #!/bin/bash
@@ -40,7 +40,7 @@ chmod +x "$_ablation_bin/claude" "$_ablation_bin/bunx"
 : > "$_ablation_log"
 _ablation_output="$_ablation_tmp/output"
 if PATH="$_ablation_bin:$PATH" CELL_LOG="$_ablation_log" \
-  FAKE_CLAUDE_VERSION=2.1.258 "$RUNNER" --dry >"$_ablation_output" 2>&1; then
+  FAKE_CLAUDE_VERSION=2.1.321 "$RUNNER" --dry >"$_ablation_output" 2>&1; then
   echo "  PASS  context-ablation runner accepts a supported Claude Code"
   PASS=$((PASS + 1))
 else
@@ -56,9 +56,9 @@ for _variant in bare guardrails lean current; do
     printf 'codex|gpt-6.1-sol|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
       "$_effort" "$_variant" >> "$_expected_cells"
   done
-  for _effort in xhigh; do
-    printf 'claude-code|claude-opus-5-5|%s|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
-      "$_effort" "$_variant" >> "$_expected_cells"
+  for _model in claude-opus-5-5 claude-fable-5-2; do
+    printf 'claude-code|%s|xhigh|@vercel/agent-eval@1.4.0 --dry agent-evals/context-ablation/%s.ts\n' \
+      "$_model" "$_variant" >> "$_expected_cells"
   done
 done
 
@@ -75,13 +75,13 @@ fi
 : > "$_ablation_log"
 _ablation_rc=0
 PATH="$_ablation_bin:$PATH" CELL_LOG="$_ablation_log" \
-  FAKE_CLAUDE_VERSION=2.1.256 "$RUNNER" --dry >"$_ablation_output" 2>&1 || _ablation_rc=$?
+  FAKE_CLAUDE_VERSION=2.1.320 "$RUNNER" --dry >"$_ablation_output" 2>&1 || _ablation_rc=$?
 if [ "$_ablation_rc" -ne 0 ] && [ ! -s "$_ablation_log" ] \
-  && grep -q 'Claude Code 2.1.257 or newer' "$_ablation_output"; then
+  && grep -q 'Claude Code 2.1.321 or newer' "$_ablation_output"; then
   echo "  PASS  context-ablation fails before any cell on an incompatible Claude Code"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  context-ablation did not fail fast for Claude Code 2.1.256"
+  echo "  FAIL  context-ablation did not fail fast for Claude Code 2.1.320"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: context-ablation version preflight"
 fi
@@ -137,8 +137,22 @@ fi
 
 rm -rf "$_ablation_tmp"
 
+if ABLATION_AGENT=claude-code ABLATION_MODEL=claude-fable-5-2 \
+  ABLATION_EFFORT=xhigh bun -e '
+    const { createExperiment } = await import("./agent-evals/context-ablation/create-experiment.ts");
+    const config = createExperiment(null);
+    if (config.model !== "claude-fable-5-2" || config.agentOptions?.effort !== "xhigh") process.exit(1);
+  ' >/dev/null 2>&1; then
+  echo "  PASS  Fable xhigh reaches the model-backed experiment without changing defaults"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  Fable xhigh cannot reach the experiment"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: Fable experiment route"
+fi
+
 # Reject overrides before creating a model-backed experiment; no inference runs here.
-for _case in 'codex|gpt-6-astra|xhigh' 'codex|gpt-6.1-sol|high' 'codex|gpt-6.1-sol|max' 'claude-code|claude-sonnet-5-5|xhigh' 'claude-code|claude-opus-5-5|high'; do
+for _case in 'codex|gpt-6-astra|xhigh' 'codex|gpt-6.1-sol|high' 'codex|gpt-6.1-sol|max' 'claude-code|claude-sonnet-5-5|xhigh' 'claude-code|claude-opus-5-5|high' 'claude-code|claude-fable-5-2|high' 'claude-code|claude-fable-5-2|max' 'codex|claude-fable-5-2|xhigh' 'claude-code|gpt-6.1-sol|xhigh'; do
   IFS='|' read -r _agent _model _effort <<< "$_case"
   if ABLATION_AGENT="$_agent" ABLATION_MODEL="$_model" ABLATION_EFFORT="$_effort" bun -e '
     try { const {createExperiment}=await import("./agent-evals/context-ablation/create-experiment.ts"); createExperiment(null); process.exit(1); }

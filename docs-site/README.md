@@ -17,6 +17,12 @@ bunx --no-install playwright install chromium
 bun run docs:test:browser
 ```
 
+After changing canonical skills or catalog descriptions, run `docs:translate:check`
+before pushing. Refresh the actual prose in every reported locale and record the
+validated translations in Blume's ledger; updating source hashes alone does not
+translate the content. `docs:translate` starts Codex processes, so native Codex
+sessions need explicit delegation consent before using that command.
+
 `docs:audit` gates the built site's accessibility checks, including theme contrast.
 The browser suite exercises onboarding views, shared snippets and Markdown, the
 skill directory, related links, search, locale choice, narration, and mobile layout.

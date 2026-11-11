@@ -81,9 +81,9 @@ pair status with the next action, not recaps/offers/non-blocking options.
 No extra gates/ceremonies. Add failing public-contract tests only for uncovered risks;
 reuse local notes for long-run checkpoints, not routine evidence/checklist files.
 
-Quality-first: `config/model-routing.json`, `/efficient-frontier`.
-Only Opus 5.5/Sol 6.1 xhigh; block other routes. No rankings/token-based usage guesses.
-Promote models/effort/context only via `agent-evals/context-ablation/`.
+Quality-first: `config/model-routing.json`, `/efficient-frontier`; xhigh only.
+Opus daily/UI, Fable hardest, Sol reviews. Fable/handoffs: `shared/model-prompting.md`.
+Unrequested promotions: `agent-evals/context-ablation/`.
 
 Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generated files
 (`*.gen.*`, `*_pb.*`, `*_connectquery.*`, or an `@generated`/`DO NOT EDIT` header).
@@ -123,4 +123,4 @@ Before done: `bun run lint:fix` + `bun run type:check`. Never hand-edit generate
   Use host-authorized wakes rather than polling; unavailable monitoring is a visible gap,
   not green readiness. `/plow-ahead` is not delegation consent. Standing owner consent covers only its explicit review scope; preserve model routes
   and disclose unavailable providers.
-- `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Keep the owner-selected Opus/Sol `xhigh` routes; unknown usage never invents a 50% effort gate. Authorized unknown-usage agent waves checkpoint after one explicitly requested wave.
+- `ccusage` token/cost reports are not Codex subscription-quota evidence. Use a host meter or user-reported value; otherwise usage is unknown and report `Codex usage unavailable to the harness`. Never infer quota from session tokens. Do not guess reset time. Keep the owner-selected Opus/Fable/Sol `xhigh` routes; unknown usage never invents a 50% effort gate. Authorized unknown-usage agent waves checkpoint after one explicitly requested wave.

@@ -1,13 +1,21 @@
 ---
-title: /codex
 description: >-
   Deleguj zadania do GPT-6.1 Sol za pomocą Codex CLI. Używaj do implementacji na
   podstawie jasnej specyfikacji, niezależnych przeglądów, obsługi komputera,
   analizy problemów i danych oraz mechanicznych prac wymagających dużej liczby
   tokenów.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - codex
 sidebar:
   label: /codex
+title: /codex
+type: skill
 ---
 ![Diagram umiejętności /codex](/diagrams/skills/codex.svg)
 
@@ -17,18 +25,19 @@ sidebar:
 wyraźnie poprosi o delegowanie lub równoległych agentów. Nie uruchamiaj rekurencyjnie `codex exec`;
 zachowaj wybrany model i poziom wnioskowania; nie zmieniaj konfiguracji Codex.
 
-Sprawdź dostępność tylko po zatwierdzeniu delegacji: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. Jeśli Sol jest niedostępny, użyj wyraźnie oznaczonego przeglądu Opus 5.5 `xhigh` z czystym kontekstem i ujawnij brak sprawdzenia przez inną rodzinę modeli. Wybieraj tylko Opus 5.5 i GPT-6.1 Sol; jeśli oba są niedostępne, zgłoś blokadę tej ścieżki.
+Sprawdź dostępność tylko po zatwierdzeniu delegacji: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. Jeśli Sol jest niedostępny, użyj wyraźnie oznaczonego przeglądu Opus 5.5 `xhigh` z czystym kontekstem i ujawnij brak sprawdzenia przez inną rodzinę modeli. Używaj wyłącznie Opus 5.5, Fable 5.2 i GPT-6.1 Sol zgodnie z przypisanymi im rolami; zgłaszaj niedostępne ścieżki.
 
-## Warianty routingu
+## Warianty routingu [#route]
 
 | Wariant | Zastosowanie |
 |---|---|
 | Sol, `xhigh` (`gpt-6.1-sol`; nigdy `max`) | preferowany recenzent PR; wykonanie, obsługa komputera i analiza po jawnym wyborze |
+| Fable 5.2, `xhigh` (`claude-fable-5-2`) | najtrudniejsze zadania techniczne według `quality_first.hard`; nie jest modelem Codex CLI ani standardową ścieżką zapasową przeglądu |
 | Opus 5.5, `xhigh` (`claude-opus-5-5`) | codzienna praca, UI, plany, kod, drobne prace; oznaczony przegląd zapasowy z czystym kontekstem |
 
 Przed wyborem przeczytaj `config/model-routing.json`. Nie oceniaj jakości na podstawie ceny ani nazwy. [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md) określa warunki użycia między dostawcami i mechanizmy CLI.
 
-## Kontrakt promptu
+## Kontrakt promptu [#prompt-contract]
 
 Codex nie widzi tej rozmowy. Każdy prompt określa repozytorium i gałąź, cel,
 zakres i wyłączenia, kryteria akceptacji, obowiązujące reguły umiejętności i wzorzec, dokładne
@@ -37,7 +46,7 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 
 **Pakiet instrukcji:** w przypadku prac implementacyjnych dołącz bezpośrednio dopasowane reguły właściwe dla ścieżki oraz odpowiedni plik z katalogu `exemplars/`.
 
-## Tryby
+## Tryby [#modes]
 
 - **Implementacja:** `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"'`;
   izoluj równoległe zapisy w osobnych drzewach roboczych.
@@ -49,7 +58,7 @@ kontekst związany z zadaniem; pomijaj dane poufne i niepowiązane pliki.
 W przypadku przeglądów PR korzystaj z sekcji [Raport PR i publikowanie](https://github.com/malinskibeniamin/skills/blob/main/codex/REFERENCE.md#pr-report-and-posting).
 Domyślnie zapisuj raport lokalnie; publikacja wymaga wyraźnej prośby użytkownika, niezależnej od zgody na przegląd.
 
-## Przepływ pracy
+## Przepływ pracy [#workflow]
 
 1. Przejdź weryfikację hosta i uprawnień.
 2. Wybierz trasę spełniającą wymagania jakościowe z pliku `config/model-routing.json`.

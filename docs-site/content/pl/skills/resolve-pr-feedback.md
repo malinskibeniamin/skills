@@ -75,6 +75,8 @@ rebase lub push w górę stosu wymaga wyraźnej autoryzacji. Napraw CI przed pod
 
 ### 6. Weryfikacja kompletności [#6-completeness-verification]
 
+Przed podsumowaniem sprawdź, czy każdy pobrany wątek otrzymał merytoryczną poprawkę, odpowiedź lub uzasadnione rozstrzygnięcie. Przeprowadź tę ocenę bezpośrednio w bieżącym kontekście; umiejętność nie uruchamia kolejnego modelu. Decyzje oczekujące na właściciela pozostają jawnie nierozstrzygnięte.
+
 Przed deklaracją zakończenia wymagaj zera nierozwiązanych wątków, także uwag botów i wątków
 przy nieaktualnych liniach, oraz braku nieaktualnego `CHANGES_REQUESTED`.
 Wymusza to `pr-feedback-completeness-stop`.

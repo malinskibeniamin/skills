@@ -54,6 +54,10 @@ context_parts+=("$branch_context")
 
 # ── Reviewer-specific context ────────────────────────────────────
 harness_root=$(cd "$(dirname "$0")/../.." && pwd)
+source "$harness_root/shared/model-prompting.sh"
+# Explore and other host agents can use a different model from their parent.
+# Give the conditional reference without claiming they inherited Fable.
+context_parts+=("$(harness_model_prompting_context)")
 case "$agent_type" in
   self-reviewer|code-reviewer|adversarial-reviewer|interface-reviewer|integration-reviewer|runtime-reviewer|contracts-data-reviewer|performance-reviewer)
     context_parts+=("## Review Output Format\nYou MUST output findings as structured JSON per \`${harness_root}/agents/references/findings-schema.md\`. Read that file for the exact format. Start from the hypothesis that the change is wrong. Completed reviews require concrete falsification challenges, actual observations and dispositions; unresolved checks are NEEDS_CHANGES. A clean result is valid when evidence refutes the hypotheses.")

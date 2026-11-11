@@ -12,9 +12,17 @@
       "use": "GPT-6.1 Sol xhigh for reviews; clear-spec execution, computer use, and investigation only when the user chooses the Codex lane."
     },
     "hard": {
-      "model": "claude-opus-5-5",
+      "model": "claude-fable-5-2",
       "efforts": ["xhigh"],
-      "selection": "Keep the owner-selected xhigh default; validate unrequested changes with context-ablation."
+      "selection": "Owner-authorized hard-task specialist, not the daily default. Select for the triggers below or an observed Opus capability shortfall after checking the verification loop. Preserve an explicitly selected session model; routing is not delegation consent.",
+      "when": [
+        "Major cross-cutting refactors or migrations with coupled invariants.",
+        "Architecture decisions with substantial unresolved technical trade-offs.",
+        "Deep scientific, quantitative or technical research requiring demanding reasoning.",
+        "Long-horizon technical work with many dependent decisions, or a verified Opus capability shortfall."
+      ],
+      "not_for": "Routine fixes, chores, UI/copy/API taste decisions, or a long prompt alone. Repair missing context, tools or verification before treating a failed check as a model limitation.",
+      "unavailable": "Report the Fable hard-task lane unavailable; keep the selected session intact. Use Opus for this lane only when the owner explicitly chooses it."
     },
     "ui_owners": ["claude-opus-5-5"],
     "ultra": {
@@ -74,12 +82,34 @@
         }
       }
     },
+    "claude-fable-5-2": {
+      "status": "specialist",
+      "work": [
+        "hard-reasoning",
+        "architecture",
+        "major-refactor",
+        "migration",
+        "research",
+        "long-horizon-implementation"
+      ],
+      "starting_effort": "xhigh",
+      "effort_selection": "Explicit owner choice: xhigh for the hardest tasks. This is not an eval-backed claim that xhigh beats high; validate unrequested effort changes with context-ablation.",
+      "unavailable": "Report the Fable hard-task lane unavailable; keep the selected session intact. Use Opus for this lane only when the owner explicitly chooses it.",
+      "scores": {
+        "cost": null,
+        "intelligence": null,
+        "speed": null,
+        "taste": null,
+        "review": null,
+        "allowance": null
+      }
+    },
     "gpt-6.1-sol": {
       "status": "secondary",
       "work": ["review", "implementation", "computer-use", "investigation"],
       "starting_effort": "xhigh",
       "effort_selection": "Explicit owner choice: xhigh for reviews and the requested Codex lane. Validate unrequested changes with context-ablation.",
-      "unavailable": "Use claude-opus-5-5 at xhigh for a labeled clean-context review; disclose unavailable different-family coverage. If neither preferred model is available, report the lane blocked.",
+      "unavailable": "Use claude-opus-5-5 at xhigh for a labeled clean-context review; disclose unavailable different-family coverage. If neither review model is available, report the lane blocked.",
       "scores": {
         "cost": null,
         "intelligence": 8,
@@ -111,10 +141,10 @@
   "selection": {
     "single_owner": true,
     "cross_family_review_for_non_trivial_pr": false,
-    "fallback": "Keep one owner within the preferred pair. Sol reviews fall back to a labeled clean-context Opus xhigh pass; unavailable Opus UI is blocked. A different-family agent pass still requires explicit delegation.",
-    "promotion_rule": "These xhigh routes are explicit owner choices, not benchmark promotions. Promote unrequested model, effort, or context changes only after the versioned ablation gate.",
-    "preferred_models": ["claude-opus-5-5", "gpt-6.1-sol"],
-    "owner_preference": "Opus 5.5 xhigh is the daily driver and better for UI; GPT-6.1 Sol xhigh is preferred for reviews. These are the only catalog models."
+    "fallback": "Keep one owner on the configured role. Sol reviews fall back to a labeled clean-context Opus xhigh pass; unavailable Opus UI or Fable hard-task lanes are reported, not silently substituted. Any agent pass still requires explicit delegation.",
+    "promotion_rule": "These three xhigh routes are explicit owner choices, not benchmark promotions. Promote unrequested model, effort, or context changes only after the versioned ablation gate.",
+    "preferred_models": ["claude-opus-5-5", "claude-fable-5-2", "gpt-6.1-sol"],
+    "owner_preference": "Opus 5.5 xhigh is the daily/UI driver; Fable 5.2 xhigh handles the most demanding technical work; GPT-6.1 Sol xhigh is preferred for reviews and user-selected Codex execution. These are the only catalog models; preserve the explicitly selected session model."
   },
   "api_only": {
     "pro_mode": "Available through the API; do not imply that a local CLI session uses it.",
@@ -126,7 +156,10 @@
     "https://platform.claude.com/docs/en/about-claude/pricing",
     "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
     "https://developers.openai.com/api/docs/guides/latest-model",
-    "https://learn.chatgpt.com/docs/pricing"
+    "https://learn.chatgpt.com/docs/pricing",
+    "https://claude.dev/blog/which-claude-model-should-you-build-with/",
+    "https://platform.claude.com/docs/en/models/overview",
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2"
   ],
   "scoring": {
     "scale": "1-10, higher is better; null means unmeasured.",

@@ -37,13 +37,13 @@ run_json_eval '.quality_first.default.model == "claude-opus-5-5"
   and .quality_first.default.effort == "xhigh"
   and .quality_first.secondary.model == "gpt-6.1-sol"
   and .quality_first.secondary.effort == "xhigh"
-  and .quality_first.hard.model == "claude-opus-5-5"
+  and .quality_first.hard.model == "claude-fable-5-2"
   and (.quality_first.hard.efforts | index("max") | not)
   and .quality_first.ultra.requires_explicit_delegation
   and (.quality_first.ui_owners | index("claude-opus-5-5"))
   and .models["claude-opus-5-5"].status == "primary"
   and .models["gpt-6.1-sol"].status == "secondary"' \
-  "config/model-routing.json" "routing drives Opus 5.5 first and GPT-6.1 Sol second"
+  "config/model-routing.json" "routing keeps Opus daily, Fable hardest and Sol review roles"
 
 run_file_eval "agent-evals/context-ablation/manifest.json" "ablation matrix is versioned"
 run_json_eval '.schema_version == 2
@@ -55,7 +55,7 @@ run_json_eval '.schema_version == 2
   and (.metrics | index("regressions"))
   and (.metrics | index("input_tokens"))
   and [.capabilities.codex.models[].id] == ["gpt-6.1-sol"]
-  and [.capabilities["claude-code"].models[].id] == ["claude-opus-5-5"]' \
+  and [.capabilities["claude-code"].models[].id] == ["claude-opus-5-5", "claude-fable-5-2"]' \
   "agent-evals/context-ablation/manifest.json" "ablation compares families, context, effort, quality, and cost"
 run_executable_eval "agent-evals/context-ablation/run.sh" "ablation runner is executable"
 run_json_eval 'any(.capabilities.codex.models[];

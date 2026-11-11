@@ -30,7 +30,7 @@
 | `/e2e-testing` | Build resilient Playwright end-to-end tests. |
 | `/effect-ts` | Set up repositories for Effect. |
 | `/effect-v3-to-v4` | Migrate Effect v3 codebases to v4 from upstream references. |
-| `/efficient-frontier` | Delegate bounded work while preserving central judgment. |
+| `/efficient-frontier` | Route daily, demanding, and review work to approved models. |
 | `/eli5` | Explain hard topics with big pictures and few words. |
 | `/excalidraw-diagram` | Draw editable Excalidraw diagrams from prompts. |
 | `/extend-harness` | Extend and debug the frontend skill harness. |

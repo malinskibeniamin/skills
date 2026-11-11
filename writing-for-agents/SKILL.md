@@ -9,6 +9,10 @@ For prose, read [Poteto](../shared/POTETO-NATIVE.md#writing).
 
 For skills, read [SKILL-MECHANICS.md](SKILL-MECHANICS.md).
 
+For Claude prompt changes, read [model prompting](../shared/model-prompting.md):
+adapt to the target model and preserve live API history rather than copying another
+model's prompt or rewriting an existing prefix.
+
 ## Depth
 
 A **context pointer**: material + context load trigger. Progressive disclosure, shallowest first:

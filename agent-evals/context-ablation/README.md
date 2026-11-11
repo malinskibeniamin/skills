@@ -55,14 +55,14 @@ policy tasks:
   grades the file-scoped recovery plan and its verification contract.
 
 They test the proposed workflows; they do not establish a general model ranking.
-Unrequested planning or review promotions must clear the recorded gate. The current pair
+Unrequested planning or review promotions must clear the recorded gate. The current three-model policy
 is owner-selected, not benchmark-promoted. Handoffs to a different model remain explicit
 owner-approved delegation, not automatic routing.
 
-The manifest pins only Claude Opus 5.5 and GPT-6.1 Sol, both at `xhigh`.
+The manifest pins Claude Opus 5.5, Claude Fable 5.2 and GPT-6.1 Sol at `xhigh`.
 The owner allows no other models or effort levels, including benchmarks.
 Experiment constructors reject disallowed overrides before any inference runs.
-Claude Code 2.1.257 or newer is
+Claude Code 2.1.321 or newer is
 required. The runner checks this before starting any cell and points stale installations
 to `claude update`.
 Keep raw results out of git. On every major model release, record the decision with

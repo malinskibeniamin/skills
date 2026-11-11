@@ -5,13 +5,14 @@ description: Delegate to GPT-6.1 Sol through the Codex CLI. Use for clear-spec i
 
 **Host gate:** Claude-hosted only. In native Codex, work inline unless the user explicitly requests delegation/parallel agents. Never start recursive `codex exec`; preserve selected model/reasoning and Codex config.
 
-When delegation is authorized, check once: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5 and GPT-6.1 Sol; block if neither is available.
+When delegation is authorized, check once: `codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' "reply OK"`. If unavailable, use a labeled clean-context Opus 5.5 `xhigh` review and disclose missing different-family coverage. Route only Opus 5.5, Fable 5.2 and GPT-6.1 Sol through their configured roles; report unavailable lanes.
 
 ## Route
 
 | Variant | Use |
 |---|---|
 | Sol, `xhigh` (`gpt-6.1-sol`; never `max`) | preferred PR reviewer; explicitly selected execution, computer use, investigation |
+| Fable 5.2, `xhigh` (`claude-fable-5-2`) | hardest technical tasks per `quality_first.hard`; not a Codex CLI model or routine review fallback |
 | Opus 5.5, `xhigh` (`claude-opus-5-5`) | daily driver, UI, plans, code, chores; labeled clean-context review fallback |
 
 Read `config/model-routing.json`; never infer quality from name/price. [REFERENCE.md](REFERENCE.md) owns provider gates and CLI mechanics.

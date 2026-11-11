@@ -28,6 +28,8 @@ Dotyczy to umiejętności, plików `AGENTS.md`, `CLAUDE.md` i wskazanych materia
 
 Podczas pisania umiejętności przeczytaj [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md), aby poznać zasady frontmatter, wyboru sposobu wywołania i routerów.
 
+Przy zmianach promptów dla Claude przeczytaj [wskazówki dotyczące promptów modeli](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md): dostosuj je do docelowego modelu i zachowaj historię aktywnej rozmowy API zamiast kopiować prompt innego modelu lub przepisywać wcześniejszy prefiks.
+
 ## Umieszczaj informacje na właściwym poziomie [#depth]
 
 **Wskaźnik kontekstu** nazywa materiał poza wczytanym dokumentem i określa, kiedy go

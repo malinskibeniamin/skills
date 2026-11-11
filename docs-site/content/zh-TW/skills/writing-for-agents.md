@@ -25,6 +25,8 @@ type: skill
 
 撰寫技能時，請閱讀 [SKILL-MECHANICS.md](https://github.com/malinskibeniamin/skills/blob/main/writing-for-agents/SKILL-MECHANICS.md)，以瞭解 frontmatter、叫用方式的選擇，以及路由器。
 
+修改 Claude 提示詞時，請閱讀[模型提示指南](https://github.com/malinskibeniamin/skills/blob/main/shared/model-prompting.md)：依目標模型調整，並保留進行中 API 對話的歷程，而不是照搬其他模型的提示詞或改寫既有前綴。
+
 ## 將資訊放在正確層級 [#depth]
 
 **情境指標**會指出已載入文件之外的資料，並說明何時讀取。指標增加情境負載；省略指標則依賴人的記憶。

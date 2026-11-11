@@ -98,6 +98,11 @@ mkdir -p "$_session_dir" 2>/dev/null || true
 if [ -n "$_input_model" ]; then
   printf '%s\n' "$_input_model" > "$_session_dir/current-model" 2>/dev/null || true
 fi
+if [ "$_input_model" = "claude-fable-5-2" ]; then
+  source "$(dirname "$0")/../../shared/model-prompting.sh"
+  _ctx="${_ctx:+$_ctx
+}$(harness_model_prompting_context)"
+fi
 
 # ── Bind session to current worktree + branch ─────────────────────
 # Every hook asserts against this binding to prevent cross-worktree leakage
