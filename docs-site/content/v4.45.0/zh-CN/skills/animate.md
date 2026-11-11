@@ -1,0 +1,95 @@
+---
+description: 构建、审查或规划有明确目的的网页 UI 动效：过渡、缓动、弹簧、编排、错峰、视图切换与动效审计。直接操控使用 gestures；不用于视频或原生应用。
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - animate
+sidebar:
+  label: /animate
+title: /animate
+type: skill
+---
+![“/animate”技能示意图](/diagrams/skills/animate.svg)
+
+[打开可编辑的 Excalidraw 源文件](/diagrams/skills/animate.excalidraw)
+
+需要界面表面或图标的动效方案时，先阅读[界面兼容规则](https://github.com/malinskibeniamin/skills/blob/v4.45.0/shared/INTERFACES.md#better-ui)，再加载 [better-ui](https://github.com/malinskibeniamin/skills/blob/v4.45.0/jakubkrehel-skills/better-ui/SKILL.md)。上游固定数值不得覆盖项目设计 token或即时反馈。
+
+选择能解释状态变化、又不拖慢用户任务的动效。
+改编自 Emil Kowalski；参见[来源与选取说明](https://github.com/malinskibeniamin/skills/blob/v4.45.0/shared/EMIL-SKILLS-CREDITS.md)。
+录制产品演示时使用[演示录制工具栈](https://github.com/malinskibeniamin/skills/blob/v4.45.0/demo/RECORDING.md)，而不是 UI 动画。
+`/demo` 仍须由用户调用；此链接不授予发布权限。
+
+## 执行边界 [#endpoint]
+
+- 构建/修复：通过项目的 TDD 和交付检查实现所需动效。
+- 审查：报告有证据的缺陷；不改动源代码。
+- 审计/规划/机会探索：按优先级列出改进或有理由的新增动效；不改动源代码。
+  仅在明确要求时保存计划。不要将审计变成一轮实现工作。
+
+## 选择动效处理方向 [#choose-the-motion-lane]
+
+根据症状，而不是“慢”这个词，选择下一步。先检查交互，再建议移除动效、
+缩短时长或修复性能问题。
+
+| 请求 / 观察到的症状 | 本地负责技能 |
+|---|---|
+| “应用感觉很慢”，因为动效让人等待 | [remove-animations](https://github.com/malinskibeniamin/skills/blob/v4.45.0/remove-animations/SKILL.md) 负责移除；本技能负责保留动效的时序 |
+| “侧边栏卡顿” / 画面明显不连贯 | [animation-performance](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animation-performance/SKILL.md)：优化前先记录性能轨迹 |
+| “抽屉松手时跳动” / 轻甩不遵循方向 | [gestures](https://github.com/malinskibeniamin/skills/blob/v4.45.0/gestures/SKILL.md)：跟踪、释放和打断 |
+| “卡片调整大小时，两个视图互相干扰” | 本技能的[编排](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animate/REFERENCE.md#choreography)，不是另一条命令 |
+| “检查整个应用并规划动效修复” | [improve-animations](https://github.com/malinskibeniamin/skills/blob/v4.45.0/improve-animations/SKILL.md)；审计/规划保持只读 |
+| “这里什么该动、什么不该动？” / “审查这个弹出层” | 本技能下方的审查/机会探索模式；输出发现，不实施修改 |
+| “弹出层从按钮展开的效果叫什么？” | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animation-vocabulary/SKILL.md)；仅询问名称不授权实现 |
+
+## 决策顺序 [#decision-sequence]
+
+1. 检查组件、现有动效令牌、已安装的库及版本、输入方式和产品背景。
+   先使用项目现有的 UI 基础组件，不要另造组件。
+2. 说明目的：反馈、空间连续性、状态提示、解释或偶尔的愉悦。
+   重复导航、命令面板和数据阅读界面更适合即时变化。频率只是启发式判断，
+   不是凭空编造的每日使用指标。键盘用户应获得等效反馈，无需等待。
+3. 选择能忠实表达含义且成本最低的机制：状态变化用 CSS 过渡；
+   支持的入场过渡用 `@starting-style`；命令式控制用 WAAPI；
+   手势、布局或退场生命周期用已安装的弹簧/动效库。
+   使用库专有 API 前，先阅读已安装的类型和最新官方文档。
+   拖拽、滑动和抽屉物理效果加载 [gestures](https://github.com/malinskibeniamin/skills/blob/v4.45.0/gestures/SKILL.md)；它负责跟踪、
+   松手速度、阻力、滚动协调与重新抓取的连续性。
+4. 优先显式指定 `transform`/`opacity` 过渡。从当前值重新设定目标；
+   退场完成前保留状态，并处理打断和卸载清理。锚定界面从触发点缩放；居中对话框保持居中。
+5. 复用令牌。新增令牌及组件起始值参见 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animate/REFERENCE.md)；
+   应进行性能分析，而不是假定存在硬件加速。
+6. 从一开始就考虑减少动态效果、悬停能力、焦点和取消。
+   移除非必要运动；即时状态变化也是有效方案。没有动画时也要保留关键含义。
+   用 `(hover: hover) and (pointer: fine)` 限定悬停效果。
+7. 在真实入口测试进入/退出、快速反转、重复触发、键盘、减少动态效果和触摸路径。
+   记录实际观察，以及仍需设备验证的部分。
+
+多个元素响应同一事件时，阅读[编排](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animate/REFERENCE.md#choreography)：
+决定哪些保持静止，让关联部分同时执行，只为有意义的依赖排序。保持交互即时可用；
+防止过期的异步延续重新启动已取消的序列。
+
+## 审查与规划 [#review-and-planning]
+
+仅做动效减法时，加载 [remove-animations](https://github.com/malinskibeniamin/skills/blob/v4.45.0/remove-animations/SKILL.md)。
+需要全代码库审计或按优先级排序的路线图时，加载
+[improve-animations](https://github.com/malinskibeniamin/skills/blob/v4.45.0/improve-animations/SKILL.md)；本技能仍负责动效实现质量。
+
+审查目的/频率、缓动/时长、起点、打断、每帧成本、无障碍和一致性。
+引用 `文件:行号` 以及可见证据或性能轨迹；区分品质建议与可复现缺陷。
+现有的有意权衡是背景，不自动构成问题。
+将发现描述为观察到的行为 -> 建议的行为 -> 为什么有帮助。以正常速度比较相同的
+状态/输入；来源演示是参考，不是本应用结果的证明。
+
+探索机会时，列出合适位置、目的、预期频率、方案和被排除的候选项。
+没有值得增加的动效也是有效结果。制定路线图时，按用户影响和工作量排序已确认的问题；
+每份要求的计划都要包含精确目标值、现有令牌、范围、回退方式和实际体验检查。
+
+简要报告决策、组成、验证和限制。只看代码无法批准主观感受，也不能声称已测得流畅度。
+对于已测得的帧问题，按[依赖加载约定](https://github.com/malinskibeniamin/skills/blob/v4.45.0/writing-for-agents/SKILL-MECHANICS.md#loading-dependencies)
+加载 [animation-performance](https://github.com/malinskibeniamin/skills/blob/v4.45.0/animation-performance/SKILL.md)；
+对于一般视觉评议，加载 [visual-review](https://github.com/malinskibeniamin/skills/blob/v4.45.0/visual-review/SKILL.md)。

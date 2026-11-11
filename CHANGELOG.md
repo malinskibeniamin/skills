@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+## 4.45.0
+
+2026-11-11 -- Publish the accumulated harness updates for Claude Code and Codex.
+
+### Highlights
+
+- Package `/gestures`, `/hill-climb`, and `/reverse-engineer-anything` for both hosts.
+- Refresh pinned Matt Pocock, Poteto/pstack, Theo/tstack, Emil, interface, and
+  shadcn/improve guidance while preserving local execution and permission boundaries.
+- Strengthen evidence-driven review, owned-PR maintenance, proportional verification,
+  concise PR summaries, and visual explanations for backend changes.
+- Update measured performance guidance, dead-code/import-cycle diagnosis,
+  PostgreSQL version discovery, and writable derived server-state guidance.
+- Ship bounded hook failure advice, file-backed Stop dispatch, and owner-scoped
+  model-selection safeguards without changing consumer model settings.
+- Synchronize manifests, marketplaces, the Codex install pin, and immutable docs;
+  leave existing archived releases and the optional Claude mods version unchanged.
+
+### Detailed changes
+
 2026-11-11 -- Let Claude Fable 5.2 run any session or delegated lane the owner names it
 for, including audits outside the hard-task triggers; the default and automatic routes
 are unchanged. The model-switch denial now points at the configured allowlist instead of
