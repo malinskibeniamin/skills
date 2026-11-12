@@ -140,8 +140,9 @@ export default defineConfig({
     metatags: { "application-name": "Agent skills" },
   },
   theme: {
-    accent: "green",
-    radius: "lg",
+    accent: "blue",
+    background: { dark: "#111111", light: "#fcfcfb" },
+    radius: "md",
   },
   title: "Agent skills",
   variables: {

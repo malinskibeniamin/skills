@@ -181,3 +181,41 @@ test.describe("browser language", () => {
     await expect(nextVisit).toHaveURL("/");
   });
 });
+
+for (const locale of [
+  { code: "en", heading: "Before you build" },
+  { code: "pl", heading: "Zanim zaczniesz" },
+  { code: "zh-CN", heading: "开始构建之前" },
+  { code: "zh-TW", heading: "開始建置之前" },
+]) {
+  test(`workflow discovery stays complete and localized: ${locale.code}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 844 });
+    await page.goto(locale.code === "en" ? "/" : `/${locale.code}/`);
+    await expect(
+      page.getByRole("heading", { name: locale.heading, exact: true }),
+    ).toBeVisible();
+    const cards = page.locator(".skill-card");
+    const count = await cards.count();
+    expect(count).toBeGreaterThan(100);
+    const hrefs = await cards.evaluateAll((links) =>
+      links.map((link) => link.getAttribute("href")),
+    );
+    expect(new Set(hrefs).size).toBe(count);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(320);
+    const search = page.getByRole("searchbox");
+    await search.fill("nothing-can-match-this-skill");
+    await expect(cards).toHaveCount(0);
+    await search.fill("tdd");
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first()).toHaveAttribute(
+      "href",
+      `${locale.code === "en" ? "" : `/${locale.code}`}/skills/tdd`,
+    );
+    await search.clear();
+    await expect(cards).toHaveCount(count);
+  });
+}
