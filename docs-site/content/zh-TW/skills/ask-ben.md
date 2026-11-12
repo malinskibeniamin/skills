@@ -88,6 +88,7 @@ type: skill
 | `/teardown` | 建立以證據為依據的技術插圖。 |
 | `/variant` | 依明確要求探索元件設計方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 稽核旗標受眾與清理條件。 |
+| `/learn-taste` | 將設計修正轉化為有理由支持的規則，供後續代理程式使用。 |
 | `/lie-detector` | 找出不可能失敗的測試，以及差異內容無法支持的主張。 |
 | `/maintain-verification-skill` | 依據原始碼與實際運作行為稽核專案驗證器。 |
 | `/make-pr-easy-to-review` | 讓提取要求的歷程與指引更容易審查。 |

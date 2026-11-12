@@ -515,6 +515,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Actionable audit",
     ],
   },
+  "learn-taste": {
+    kind: "pipeline",
+    nodes: [
+      "Collect corrections",
+      "Scope rules + reasons",
+      "Reconcile conflicts",
+      "Save + link guidance",
+    ],
+  },
   launchdarkly: {
     kind: "evidence-funnel",
     nodes: [

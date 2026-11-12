@@ -72,6 +72,7 @@ SHORT_DESCRIPTIONS = {
     "improve-animations": "Audit retained motion and plan prioritized improvements",
     "implement-spec": "Implement a whole spec on one integration branch",
     "launchdarkly": "Audit flag audiences and retirement with LaunchDarkly CLI",
+    "learn-taste": "Turn design corrections into reasoned rules for future agents",
     "lie-detector": "Catch tests that cannot fail and claims the diff does not back",
     "maintain-verification-skill": "Audit a project verifier against source and live behavior",
     "make-pr-easy-to-review": "Make pull request history and guidance easier to review",

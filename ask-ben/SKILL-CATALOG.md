@@ -64,6 +64,7 @@
 | `/teardown` | Create evidence-grounded technical illustrations. |
 | `/variant` | Explore explicitly requested component design variants. |
 | `/launchdarkly` | Audit flag audiences and retirement with LaunchDarkly CLI. |
+| `/learn-taste` | Turn design corrections into reasoned rules for future agents. |
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |

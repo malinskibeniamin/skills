@@ -413,6 +413,11 @@ an explicit artifact command.
 
 The router [ask-ben/SKILL.md](ask-ben/SKILL.md) discloses the generated [complete skill catalog](ask-ben/SKILL-CATALOG.md) on demand.
 
+After a design session, run [`/learn-taste`](learn-taste/SKILL.md) to turn your corrections
+into strict, scoped rules with reasoning and evidence for the next agent. This experimental
+companion to `/retro` saves project-local design guidance and an agent-instruction pointer;
+it does not turn one project's taste into global preferences.
+
 ## How it works
 
 Three layers automation run without manual invocation:
