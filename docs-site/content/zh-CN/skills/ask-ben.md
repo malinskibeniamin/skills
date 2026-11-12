@@ -88,6 +88,7 @@ type: skill
 | `/teardown` | 创建有证据支撑的技术插图。 |
 | `/variant` | 按明确要求探索组件设计备选方案。 |
 | `/launchdarkly` | 使用 LaunchDarkly CLI 审计标志受众和清理条件。 |
+| `/learn-taste` | 将设计修正转化为有理由支持的规则，供后续智能体使用。 |
 | `/lie-detector` | 发现不会失败的测试和缺乏差异支持的声明。 |
 | `/maintain-verification-skill` | 根据源代码和实时行为审计项目验证工具。 |
 | `/make-pr-easy-to-review` | 让拉取请求的历史记录和审查指南更易于审查。 |

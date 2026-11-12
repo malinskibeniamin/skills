@@ -88,6 +88,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/teardown` | Tworzenie ilustracji technicznych opartych na dowodach. |
 | `/variant` | Eksplorowanie wyraźnie zamówionych wariantów projektu komponentu. |
 | `/launchdarkly` | Audyt odbiorców i gotowości do usunięcia flag przez LaunchDarkly CLI. |
+| `/learn-taste` | Zamiana uwag do projektu interfejsu w uzasadnione reguły dla przyszłych agentów. |
 | `/lie-detector` | Wykrywanie testów, które nie mogą zakończyć się niepowodzeniem, i twierdzeń niepopartych zmianami w kodzie. |
 | `/maintain-verification-skill` | Audytowanie narzędzia weryfikacyjnego projektu na podstawie kodu źródłowego i działania rzeczywistej aplikacji. |
 | `/make-pr-easy-to-review` | Ułatwianie przeglądu historii i wskazówek w pull requeście. |
