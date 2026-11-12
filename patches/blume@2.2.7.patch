@@ -1,8 +1,8 @@
-diff --git a/dist/cli/chunk-r5nm9w0c.js b/dist/cli/chunk-r5nm9w0c.js
-index dd0953c8fe6916c345a1de5347da3d41d7c5580a..274c11d58c51ed1305398018b704d4387645a18f 100644
---- a/dist/cli/chunk-r5nm9w0c.js
-+++ b/dist/cli/chunk-r5nm9w0c.js
-@@ -6019,6 +6019,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
+diff --git a/dist/cli/chunk-vnr4fm5s.js b/dist/cli/chunk-vnr4fm5s.js
+index 677151a352814e88dad99f26dd782bb429a5b4b6..0d233e8e5e0b0386926eb5a6e8d0919521cc246f 100644
+--- a/dist/cli/chunk-vnr4fm5s.js
++++ b/dist/cli/chunk-vnr4fm5s.js
+@@ -11354,6 +11354,14 @@ var sourcesOfKind = (config, kind) => config.content.sources.filter((source) =>
  var resolveDocsCollection = (config, projectRoot) => {
    const [first, ...rest] = sourcesOfKind(config, "filesystem");
    if (!first) {
@@ -18,22 +18,19 @@ index dd0953c8fe6916c345a1de5347da3d41d7c5580a..274c11d58c51ed1305398018b704d438
        base: resolveSourceRoot(projectRoot, "docs"),
        exclude: DEFAULT_CONTENT_EXCLUDE,
 diff --git a/src/core/sources/collection.ts b/src/core/sources/collection.ts
-index feafcc9ec67fd0fe32d07cb22bbcd85fec6c6aa2..3aeb46c7ef93115387e89ba6fdd3651cb1997fa5 100644
+index feafcc9ec67fd0fe32d07cb22bbcd85fec6c6aa2..e8a193d8ee93c76aca4eddabbbe0bd3372837517 100644
 --- a/src/core/sources/collection.ts
 +++ b/src/core/sources/collection.ts
-@@ -47,6 +47,17 @@ export const resolveDocsCollection = (
+@@ -47,6 +47,14 @@ export const resolveDocsCollection = (
  ): DocsCollection => {
    const [first, ...rest] = sourcesOfKind(config, "filesystem");
    if (!first) {
-+    // Non-staged custom sources use their local root as the collection base.
-+    const local = sourcesOfKind(config, "custom").find(
-+      ({ options }) => !options.staged && options.contentRoot
-+    )?.options;
++    const local = sourcesOfKind(config, "custom").find(({ options }) => !options.staged && options.contentRoot)?.options;
 +    if (local?.contentRoot) {
 +      return {
 +        base: resolveSourceRoot(projectRoot, local.contentRoot),
-+        exclude: [...(local.exclude ?? DEFAULT_CONTENT_EXCLUDE)],
-+        include: [...(local.include ?? DEFAULT_CONTENT_INCLUDE)],
++        exclude: [...local.exclude ?? DEFAULT_CONTENT_EXCLUDE],
++        include: [...local.include ?? DEFAULT_CONTENT_INCLUDE]
 +      };
 +    }
      return {

@@ -1,0 +1,237 @@
+/* Keep Blume's layout, behavior, and semantic tokens; change only presentation. */
+:root {
+  --blume-foreground: #252525;
+  --blume-muted: #f1f1ef;
+  --blume-muted-foreground: #646464;
+  --blume-border: #e2e2df;
+  --blume-code-background: #f5f5f3;
+  --blume-content-width: 44rem;
+}
+
+:root[data-theme="dark"] {
+  --blume-foreground: #ededed;
+  --blume-muted: #1c1c1c;
+  --blume-muted-foreground: #a6a6a6;
+  --blume-border: #303030;
+  --blume-code-background: #171717;
+}
+
+/* Stable Blume hooks rather than selectors tied to generated utility classes. */
+#blume-content {
+  padding-top: 3.5rem;
+}
+
+#blume-content:has(.skill-directory) > article {
+  max-width: 64rem;
+}
+
+.prose :where(h1) {
+  max-width: 26ch;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 550;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.prose :where(h2) {
+  font-size: 1.5rem;
+  font-weight: 550;
+  letter-spacing: -0.035em;
+}
+
+.blume-nav-link[aria-current="page"] {
+  background: var(--blume-muted);
+  color: var(--blume-foreground);
+}
+
+.skill-directory {
+  margin-top: 2rem;
+}
+
+.skill-directory-search {
+  max-width: 36rem;
+  margin-bottom: 2rem;
+}
+
+.skill-search-label {
+  display: block;
+  margin-bottom: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.skill-search-input {
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--blume-border);
+  border-radius: var(--blume-radius);
+  background: var(--blume-code-background);
+  color: var(--blume-foreground);
+  font-size: 1rem;
+}
+
+.skill-search-input::placeholder {
+  color: var(--blume-muted-foreground);
+}
+
+.skill-search-status {
+  margin: 0.75rem 0 0;
+  color: var(--blume-muted-foreground);
+  font-size: 0.8125rem;
+}
+
+.skill-workflow {
+  padding: 2rem 0 2.5rem;
+  border-top: 1px solid var(--blume-border);
+}
+
+.skill-workflow-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.skill-workflow-number {
+  color: var(--blume-muted-foreground);
+  font-family: var(--blume-font-mono);
+  font-size: 0.6875rem;
+}
+
+.skill-workflow-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  color: var(--blume-foreground);
+}
+
+.skill-workflow-count {
+  color: var(--blume-muted-foreground);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.skill-card-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skill-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.25rem;
+  border: 1px solid var(--blume-border);
+  border-radius: var(--blume-radius);
+  background: linear-gradient(
+    var(--blume-code-background),
+    var(--blume-background)
+  );
+  color: var(--blume-foreground);
+  text-decoration: none;
+}
+
+.skill-card-mark {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 1.25rem;
+  place-items: center;
+  border: 1px solid var(--blume-border);
+  border-radius: 0.5rem;
+  background: var(--blume-background);
+  color: var(--blume-accent);
+  font-family: var(--blume-font-mono);
+  font-size: 1rem;
+}
+
+.skill-card-title {
+  padding-inline-end: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.skill-card-description {
+  margin-top: 0.5rem;
+  color: var(--blume-muted-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+.skill-card-arrow {
+  position: absolute;
+  top: 1.25rem;
+  inset-inline-end: 1.25rem;
+  color: var(--blume-muted-foreground);
+}
+
+.skill-card:hover {
+  border-color: var(--blume-accent);
+  text-decoration: none;
+}
+
+.skill-card:hover .skill-card-arrow {
+  color: var(--blume-accent);
+}
+
+.skill-card:focus-visible,
+.skill-search-input:focus-visible {
+  outline: 2px solid var(--blume-accent);
+  outline-offset: 4px;
+}
+
+.skill-search-empty {
+  padding: 2.5rem 1.25rem;
+  border: 1px dashed var(--blume-border);
+  border-radius: var(--blume-radius);
+  text-align: center;
+}
+
+.skill-search-empty p + p {
+  margin-top: 0.5rem;
+  color: var(--blume-muted-foreground);
+}
+
+@media (min-width: 1280px) {
+  .skill-workflow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: 1.75rem;
+  }
+
+  .skill-workflow-heading {
+    display: block;
+  }
+
+  .skill-workflow-heading h3 {
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 640px) {
+  #blume-content {
+    padding-top: 1.75rem;
+  }
+
+  .skill-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media print {
+  .skill-directory-search {
+    display: none;
+  }
+
+  .skill-card {
+    break-inside: avoid;
+  }
+}

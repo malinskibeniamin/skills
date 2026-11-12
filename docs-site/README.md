@@ -1,6 +1,6 @@
 # Documentation site
 
-Blume 2.2.1 renders canonical repository skills, translations, and archived releases.
+Blume 2.2.7 renders canonical repository skills, translations, and archived releases.
 Node.js 22.19 or newer is required.
 
 ## Verify
@@ -73,13 +73,26 @@ The site's custom filesystem source excludes private `_snippets` and dot paths.
 Change the canonical skill generator, not its ignored `content/skills` output.
 Do not rewrite archived content when adopting a current-version feature.
 
+## Visual theme
+
+`theme.css` uses Blume's supported theme extension point and semantic color tokens;
+there is no ejected layout or fork. Both color modes, the mobile drawer, page actions,
+translations, narration, and agent-readable Markdown stay owned by Blume.
+
+The homepage groups common skills by workflow before the remaining alphabetical
+toolbox. `skill-groups.ts` owns that curation and its localized headings. Every new or
+unlisted skill falls through to the toolbox; search still covers the complete catalog.
+The existing flat Markdown serializer remains exhaustive for non-browser readers.
+
 ## Upgrade patch
 
-`patches/blume@2.2.1.patch` preserves the non-staged custom source's collection root
+`patches/blume@2.2.7.patch` preserves the non-staged custom source's collection root
 in both Blume's source and compiled CLI. Without it, Astro reads the default `docs`
 directory instead of the materialized `content` tree. This fix was not included in
-2.2.1: an unpatched build fails with `BLUME_ENTRY_ID_MISMATCH`. Remove the patch
-only after a future version builds this site without it.
+2.2.7: an unpatched build fails with `BLUME_ENTRY_ID_MISMATCH`. Remove the patch
+only after a future version builds this site without it. The 2.2.7 upgrade also
+migrates canonical dates to `gitFileDates().modified` and uses Blume's shipped deep-import
+declarations instead of local declaration shims.
 
 ## Features not enabled
 

@@ -2,16 +2,6 @@
   "name": "@frontend-skills/docs",
   "type": "module",
   "private": true,
-  "imports": {
-    "#blume-filesystem": {
-      "types": "./blume-filesystem.d.ts",
-      "default": "blume/sources/filesystem.ts"
-    },
-    "#blume-last-modified": {
-      "types": "./blume-last-modified.d.ts",
-      "default": "blume/core/last-modified.ts"
-    }
-  },
   "scripts": {
     "audit": "blume audit --only accessibility --fail-on warning",
     "build": "blume build",
@@ -26,7 +16,7 @@
   "devDependencies": {
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "blume": "2.2.1",
+    "blume": "2.2.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "typescript": "6.0.3",
