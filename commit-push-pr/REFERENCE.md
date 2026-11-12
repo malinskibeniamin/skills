@@ -112,13 +112,17 @@ Run `/quantify-impact` for every PR, including non-UI changes. Use the
 and only essential supporting bullets. The template is the default, not a checklist of
 sections to expand.
 
+Apply `/pr`'s [human-review handoff](../shared/review-contract.md#human-review-handoff)
+after self-verification: assess all five criteria and surface the closest-review paths.
+Keep sensitive-path owner requests/deferred routing current through the metadata contract.
+
 ```
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
 <one sentence capturing the entire change and why it matters>
 
-- Lane: <Keep the lights on | Quality of life | Feature | Taste>; <optional reviewer focus>; see `/product`
-- Testing: <decisive commands/results, before -> after, and gaps>
-- Risk: <door, blast radius, rollout limits, and how to revert>
+- Lane: <Keep the lights on | Quality of life | Feature | Taste>; <scope alignment/deviations, review focus and owner routing/gaps>; see `/product`
+- Testing: <decisive tests, real-entrypoint/computer-use evidence, results and gaps>
+- Risk: <door, blast radius, rollout limits, rollback/recovery, production error detection and gaps>
 EOF
 )"
 ```

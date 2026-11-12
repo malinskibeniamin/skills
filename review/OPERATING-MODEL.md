@@ -48,6 +48,11 @@ work, identify detection, existing flag/staged-rollout options, rollback, and ef
 a revert cannot undo. New services and production changes stay separately authorized.
 The author/operator retains repair context; incident review diagnoses the system.
 
+After verification, use the shared [human-review handoff](../shared/review-contract.md#human-review-handoff)
+to assess verification, alignment, impact, rollback cost and error detection. Record the
+recommended attention and closest-review entry points in existing notes/PR text; scoped
+reviewers keep their assigned lens and report unassessed criteria for the owner to synthesize.
+
 For unfamiliar modules, explain the relevant callers/contracts/failure paths from
 current source rather than rely on reading every trivial diff for shared context.
 

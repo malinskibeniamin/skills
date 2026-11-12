@@ -18,19 +18,22 @@ At start/resume, after material scope, implementation, or evidence changes, and 
 1. Find open PRs linked to this conversation/session/chat; otherwise use `gh pr view` for this branch. Verify open state, repository/head/base and ownership; no unrelated recent PRs or implicit creation.
 2. Compare the published body with the **full PR diff**, original objective and current verification, not the latest turn/commit; compare stack layers with their parents. Check visual captures, callouts, and legend for staleness per [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations).
 3. Load [quantify-impact](../quantify-impact/SKILL.md) separately; reassess business value and product/codebase impact. Reuse valid evidence, rerun invalid comparisons, remove unsupported claims; unknown value is `not established`.
-4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; update the opening sentence to cover the full current change and replace stale bullets in place with concise beneficiary, value, decisive evidence and material risks. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
+4. For authorized write/delivery work, refresh affected captures, callouts, and legend together; update the opening sentence to cover the full current change and replace stale bullets in place with concise beneficiary, value, decisive evidence and material risks. Refresh the [human-review handoff](../shared/review-contract.md#human-review-handoff), including review routing, recovery and detection gaps. Preserve human intent/required evidence; link detail, skip accurate descriptions, omit session logs.
 5. Re-read edited hosted bodies against the published head. Read-only: report drift, no edit. Local/no-push: defer publication; unpublished work is not delivered.
 
 ## Body template
 
-Use this template for the PR body:
+After self-review and verification, assess the five criteria in the
+[human-review handoff](../shared/review-contract.md#human-review-handoff). Use this compact
+template to tell the human the scope and where their attention matters most; link detail
+rather than adding five boilerplate sections. State unknowns/inapplicability with reasons.
 
 ```markdown
 <one sentence capturing the entire change and why it matters>
 
-- Review: <optional focus or decision; omit if none>
-- Testing: <decisive checks and observed results; before -> after; gaps>
-- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
+- Review: <scope alignment/deviations; closest-review paths and why; sensitive-path owner routing or gaps>
+- Testing: <decisive tests and real-entrypoint/computer-use evidence; observed results; gaps>
+- Risk: <blast radius; one-/two-way door, rollout limits and rollback/recovery; production error detection and gaps>
 ```
 
 ## Sections
@@ -92,3 +95,5 @@ Evidence earns its place by the question it answers, not media tier. Keep result
 Name the rollback path and classify the change as a one-way or two-way door. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
 
 Name affected users, callers, contracts, and credible failure modes, including shared consumers.
+Apply the handoff rubric's error-detection assessment alongside recovery; keep material
+visibility gaps explicit rather than treating passing tests or a rollback plan as detection.
