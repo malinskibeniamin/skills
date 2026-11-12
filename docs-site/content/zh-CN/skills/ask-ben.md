@@ -273,6 +273,7 @@ type: skill
 | `/wayfinder` | 通过决策工单梳理庞大且模糊的工作。 |
 | `/webmcp` | 操作页面工具，或构建和审查 WebMCP 接口。 |
 | `/what-did-i-get-done` | 将自己创建的提交汇总为简明的状态更新。 |
+| `/wiki` | 维护附有来源的本地知识和仓库指针。 |
 | `/wizard` | 生成用于手动设置的交互式 Bash 向导。 |
 | `/work-automation-kit` | 安装规划、工单和问题分类工作流。 |
 | `/work` | 编写、验证并交付到请求的终点。 |

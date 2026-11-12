@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "03fb095fdebe1662",
-      "zh-CN": "03fb095fdebe1662",
-      "zh-TW": "03fb095fdebe1662"
+      "pl": "ac9cfc37c9d76d95",
+      "zh-CN": "ac9cfc37c9d76d95",
+      "zh-TW": "ac9cfc37c9d76d95"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -51,9 +51,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "2b6b041c54dae013",
-      "zh-CN": "2b6b041c54dae013",
-      "zh-TW": "2b6b041c54dae013"
+      "pl": "8e4b3a1ac86bc816",
+      "zh-CN": "8e4b3a1ac86bc816",
+      "zh-TW": "8e4b3a1ac86bc816"
     },
     "content/skills/ask-sonner.md": {
       "pl": "9241334c08338154",
@@ -579,6 +579,11 @@
       "pl": "dd47f74421cc3154",
       "zh-CN": "dd47f74421cc3154",
       "zh-TW": "dd47f74421cc3154"
+    },
+    "content/skills/wiki.md": {
+      "pl": "c2a132ced85f038a",
+      "zh-CN": "c2a132ced85f038a",
+      "zh-TW": "c2a132ced85f038a"
     },
     "content/skills/wizard.md": {
       "pl": "476977d44ea83866",

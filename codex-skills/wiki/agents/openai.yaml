@@ -1,0 +1,3 @@
+interface:
+  display_name: "Wiki"
+  short_description: "Maintain local source-cited knowledge and repo pointers"

@@ -249,6 +249,7 @@
 | `/wayfinder` | Map huge, foggy work through decision tickets. |
 | `/webmcp` | Operate page tools or build and audit WebMCP interfaces. |
 | `/what-did-i-get-done` | Summarize authored commits into a concise status update. |
+| `/wiki` | Maintain local source-cited knowledge and repo pointers. |
 | `/wizard` | Generate an interactive Bash wizard for manual setup. |
 | `/work-automation-kit` | Install planning, ticketing, and triage workflows. |
 | `/work` | Author, verify, and deliver through the requested endpoint. |

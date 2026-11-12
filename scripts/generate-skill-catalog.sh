@@ -133,6 +133,7 @@ SHORT_DESCRIPTIONS = {
     "webmcp": "Operate page tools or build and audit WebMCP interfaces",
     "wait-what": "Re-pitch that with simpler language and missing context",
     "what-did-i-get-done": "Summarize authored commits into a concise status update",
+    "wiki": "Maintain local source-cited knowledge and repo pointers",
     "wizard": "Generate an interactive Bash wizard for manual setup",
     "work-automation-kit": "Install planning, ticketing, and triage workflows",
     "work": "Author, verify, and deliver through the requested endpoint",

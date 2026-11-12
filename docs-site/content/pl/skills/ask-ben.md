@@ -273,6 +273,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/wayfinder` | Mapowanie ogromnych, niejasnych zadań za pomocą zgłoszeń decyzyjnych. |
 | `/webmcp` | Obsługa narzędzi strony oraz tworzenie i audyt interfejsów WebMCP. |
 | `/what-did-i-get-done` | Podsumowywanie własnych commitów w zwięzłej aktualizacji statusu. |
+| `/wiki` | Prowadzenie lokalnej wiedzy ze źródłami i wskaźników repozytoriów. |
 | `/wizard` | Generowanie interaktywnego kreatora Bash do ręcznej konfiguracji. |
 | `/work-automation-kit` | Instalowanie przepływów pracy do planowania, tworzenia zadań i selekcji zgłoszeń. |
 | `/work` | Twórz, weryfikuj i dostarczaj do żądanego punktu końcowego. |
