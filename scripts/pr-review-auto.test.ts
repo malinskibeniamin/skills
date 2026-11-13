@@ -722,6 +722,8 @@ if (command === "bootstrap") {
   expect(JSON.parse(f.run(["status"]).out).enabled).toBe(false);
 });
 
+// Fixture Git setup, binding and three CLI calls exceeded the file's 15-second
+// budget on hosted macOS; keep this functional integration check bounded.
 test("missing provider executable pauses dispatch instead of retrying forever", () => {
   const f = fixture();
   f.bind();
@@ -732,7 +734,7 @@ test("missing provider executable pauses dispatch instead of retrying forever", 
   const binding = JSON.parse(f.run(["status"]).out).bindings[0];
   expect(binding.paused).toBe(true);
   expect(binding.seen).toEqual({});
-});
+}, 30_000);
 
 test("scoped Stop dispatcher requires bot findings even without automatic repair", () => {
   const f = fixture();
