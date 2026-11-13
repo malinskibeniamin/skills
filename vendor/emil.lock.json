@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "715c1807e08c497cfd1dc4feb450a2a3300ef2a9",
+  "revision": "f7ce8c02d6e3c8f0d980a44c57bcc41a40254349",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "bc5f6275e48c2c9445adef94929e421a51dd9fc82da06fa3e85e51b16d2ef292",
+      "sha256": "f16b08239cbac69431c3c73c6f7624839f00dd825beeb2cb30e422f266c9c0d0",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -88,6 +88,10 @@
     },
     "skills/improve-animations/SKILL.md": {
       "sha256": "73962447464433476343e2c12cd08ab39cc99a9e5f3c118c5fb54ed897574ef6",
+      "mode": 420
+    },
+    "skills/learn-taste/SKILL.md": {
+      "sha256": "3f972e374bdadc14111589d757ba55114dcb2c25d09499fa56e7cd7dae8b6a43",
       "mode": 420
     },
     "skills/mobile-native/SKILL.md": {

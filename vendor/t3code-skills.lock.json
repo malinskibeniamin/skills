@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/pingdotgg/t3code",
-  "revision": "bc8583bc6409e608557c33d42e02b2d1f1e2072f",
+  "revision": "f313d0a6cb843551fb60e57a454a71e71a3a8c04",
   "skills": [
     {
       "name": "contribution-triage",
@@ -117,7 +117,7 @@
   ],
   "files": {
     ".agents/skills/contribution-triage/SKILL.md": {
-      "sha256": "4ee421e997e4a792a057fc26c56bbdca10dbdc85047d5ac22ee0c2fcbbaee7d8",
+      "sha256": "5ded101ea2aa6a32da0a73387e3c3ff117828508638f4a5c916d62419add526e",
       "mode": 420
     },
     ".agents/skills/test-t3-app/SKILL.md": {
@@ -154,6 +154,10 @@
     },
     ".github/triage/PLAYBOOK.md.upstream": {
       "sha256": "abb8d314e8e7ea67b8c619bb045ecd3095b6114601f21cbb4625e1807f626ccf",
+      "mode": 420
+    },
+    ".github/workflows/pr-limits.yml": {
+      "sha256": "fbd9cab172470a31f199b3355dc03d34bda2f7fd983c64f541dc10d443e0fcd6",
       "mode": 420
     },
     ".repos/effect/.agents/AGENTS.md": {
@@ -293,11 +297,11 @@
       "mode": 420
     },
     "CONTRIBUTING.md": {
-      "sha256": "9083f59b942d66b8904cba436d3ffad1cf09a7bd5c6fb6e9b7022e71f789d3c3",
+      "sha256": "0350e3a8c4869b649a57a78a193a7372869e3f7094f6dfdcb32d5f66d0ed0727",
       "mode": 420
     },
     "CONTRIBUTING.md.upstream": {
-      "sha256": "4d7aaa3bc857e49c8d1ecc962e9532e06d8e1f997eaf2a7737c656ab1706f657",
+      "sha256": "4ee337571cb67cc5b3cdf052ecabbec8826a5e1e5f72f366e19b662e38ccb835",
       "mode": 420
     },
     "LICENSE": {
