@@ -757,8 +757,9 @@ test("repair snapshots retain binary changes and deletions without modifying the
   expect(f.git("diff", "--cached", "--binary")).toBe(index);
 });
 
-// Records every default gate through a separate CLI process. Intel CI reached
-// 16.7s here; keep the 15s file default for the other, shorter scenarios.
+// Records every default gate through a separate CLI process, then checks
+// publication and invalidation. Hosted macOS exceeded 30s; retain the 15s file
+// default for the other, shorter scenarios.
 test("one gate state drives readiness, resumability and a safe PR-body table", () => {
   const f = checkout();
   const plan = f.plan();
@@ -790,7 +791,7 @@ test("one gate state drives readiness, resumability and a safe PR-body table", (
   writeFileSync(join(f.root, "README.md"), "Changed after review\n");
   expect(f.run("check").code).toBe(3);
   expect(f.run("render").text).toContain("Stale");
-}, 30_000);
+}, 60_000);
 
 test("a gate cannot pass a blocking finding or a reasonless clean result", () => {
   const f = checkout();

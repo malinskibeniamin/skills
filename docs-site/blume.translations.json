@@ -16,9 +16,9 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "ff8c98e618221531",
-      "zh-CN": "ff8c98e618221531",
-      "zh-TW": "ff8c98e618221531"
+      "pl": "87408114d257b18b",
+      "zh-CN": "87408114d257b18b",
+      "zh-TW": "87408114d257b18b"
     },
     "content/skills/accessibility.md": {
       "pl": "834a3f0bad573f6a",
@@ -40,6 +40,11 @@
       "zh-CN": "6de228c1fb66e606",
       "zh-TW": "6de228c1fb66e606"
     },
+    "content/skills/animatic.md": {
+      "pl": "b51e985a4f82eb1a",
+      "zh-CN": "b51e985a4f82eb1a",
+      "zh-TW": "b51e985a4f82eb1a"
+    },
     "content/skills/animation-performance.md": {
       "pl": "975ca9745783beac",
       "zh-CN": "975ca9745783beac",
@@ -51,9 +56,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "ac97b29e61d61ef5",
-      "zh-CN": "ac97b29e61d61ef5",
-      "zh-TW": "ac97b29e61d61ef5"
+      "pl": "64c866b50d04058b",
+      "zh-CN": "64c866b50d04058b",
+      "zh-TW": "64c866b50d04058b"
     },
     "content/skills/ask-sonner.md": {
       "pl": "9241334c08338154",
@@ -414,6 +419,11 @@
       "pl": "89121c75ade5709b",
       "zh-CN": "89121c75ade5709b",
       "zh-TW": "89121c75ade5709b"
+    },
+    "content/skills/setup-animatic.md": {
+      "pl": "f23b913c2ad85362",
+      "zh-CN": "f23b913c2ad85362",
+      "zh-TW": "f23b913c2ad85362"
     },
     "content/skills/setup-atlassian-workflow.md": {
       "pl": "fc957e8f7398dbcc",

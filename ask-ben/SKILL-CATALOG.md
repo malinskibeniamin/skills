@@ -4,6 +4,7 @@
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
 | `/animate` | Build and assess purposeful web UI motion. |
+| `/animatic` | Create narrated still-frame videos from topics or PRs. |
 | `/animation-performance` | Diagnose animation frame and rendering bottlenecks. |
 | `/animation-vocabulary` | Name motion effects and distinguish close animation terms. |
 | `/ask-ben` | Route work through Ben's frontend skill harness. |
@@ -68,6 +69,7 @@
 | `/lie-detector` | Catch tests that cannot fail and claims the diff does not back. |
 | `/maintain-verification-skill` | Audit a project verifier against source and live behavior. |
 | `/make-pr-easy-to-review` | Make pull request history and guidance easier to review. |
+| `/matt-animatic` | Matt Pocock source: animatic guidance. |
 | `/matt-ask-matt` | Matt Pocock source: ask matt guidance. |
 | `/matt-chief-of-staff` | Matt Pocock source: chief of staff guidance. |
 | `/matt-claude-handoff` | Matt Pocock source: claude handoff guidance. |
@@ -90,6 +92,7 @@
 | `/matt-research` | Matt Pocock source: research guidance. |
 | `/matt-retro` | Matt Pocock source: retro guidance. |
 | `/matt-scaffold-exercises` | Matt Pocock source: scaffold exercises guidance. |
+| `/matt-setup-animatic` | Matt Pocock source: setup animatic guidance. |
 | `/matt-setup-matt-pocock-skills` | Matt Pocock source: setup matt pocock skills guidance. |
 | `/matt-setup-pre-commit` | Matt Pocock source: setup pre commit guidance. |
 | `/matt-setup-ts-deep-modules` | Matt Pocock source: setup ts deep modules guidance. |
@@ -192,6 +195,7 @@
 | `/reverse-engineer-anything` | Inspect shipped artifacts and runtime evidence with REA. |
 | `/review` | Review a diff with evidence-triggered specialist hats. |
 | `/security-audit` | Review source trust boundaries with Cloudflare's audit workflow. |
+| `/setup-animatic` | Choose and test a repository's animatic toolchain. |
 | `/setup-atlassian-workflow` | Configure opt-in Jira and Atlassian workflows. |
 | `/setup-routines` | Configure automated Claude Code maintenance routines. |
 | `/show-me` | Explain the current topic with concise visual artifacts. |
