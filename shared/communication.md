@@ -44,8 +44,11 @@ If required evidence cannot fit, name the conflict rather than silently dropping
 - **RFC / plan:** problem and stakes -> proposed decision -> alternatives and trade-off ->
   open questions -> verification and rollout. Distinguish proposed from shipped work;
   a retrospective implementation summary is not evidence of prior agreement.
-- **PR:** always open with one sentence capturing the entire change and why it matters,
-  before headings, metadata, bullets, or visuals. Budget at most **10 seconds** for this
+- **PR:** lead with the labeled, full deploy-preview URL when available, or its explicit
+  pending/failed/unavailable state when expected; follow the [preview contract](../pr/SKILL.md#deploy-previews).
+  Immediately after that line (or first when no preview applies), write one sentence
+  capturing the entire change and why it matters, before headings, bullets, or visuals.
+  Budget at most **10 seconds** for this
   first read: a reviewer who reads nothing else should understand the change's meaning.
   Default to at most three short bullets: essential reviewer context, decisive verification,
   and material risk/rollback. Omit redundant headings, repeated rationale, and empty sections.

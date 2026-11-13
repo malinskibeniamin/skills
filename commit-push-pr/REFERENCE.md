@@ -108,12 +108,15 @@ CODEOWNERS review routing. It also owns draft deferral and metadata readback/rec
 ## PR body template (Phase 5)
 
 Run `/quantify-impact` for every PR, including non-UI changes. Use the
-[compact PR contract](../shared/communication.md#match-the-artifact): one opening sentence
-and only essential supporting bullets. The template is the default, not a checklist of
-sections to expand.
+[compact PR contract](../shared/communication.md#match-the-artifact): the
+[deploy-preview line](../pr/SKILL.md#deploy-previews) when applicable, one opening
+sentence and only essential supporting bullets. The template is the default, not a
+checklist of sections to expand.
 
 ```
 gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
+**Deploy preview (<app/provider>):** <full URL or explicit state/reason; omit when inapplicable>
+
 <one sentence capturing the entire change and why it matters>
 
 - Lane: <Keep the lights on | Quality of life | Feature | Taste>; <optional reviewer focus>; see `/product`
