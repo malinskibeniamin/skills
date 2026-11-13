@@ -1,4 +1,13 @@
 # Public discovery/authorization contracts; not a model-adherence evaluation.
+if python3 "$REPO_ROOT/evals/test-animatic-temp.py"; then
+  echo "  PASS  calibration isolates narration and cleans up success and failure"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  calibration temporary workspace safety"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: calibration temporary workspace safety"
+fi
+
 if python3 - "$REPO_ROOT" <<'PY'
 import json
 import pathlib

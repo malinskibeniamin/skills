@@ -5,9 +5,10 @@ Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
 (the `animatic-skill` draft branch, [PR #1422](https://github.com/mattpocock/skills/pull/1422)).
 
 All **41 skills** under `skills/`, every skill-local reference/helper/asset, the
-upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained byte-for-byte
-in `mattpocock/upstream/`. [The lock](mattpocock.lock.json) records the immutable
-revision, complete inventory, SHA-256 digests, executable modes and adapter/owner
+upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained
+in `mattpocock/upstream/`, with the narrowly scoped security patch below. All other
+source files are byte-exact. [The lock](mattpocock.lock.json) records the immutable
+revision, original and patched inventories, patch-input digests, executable modes and adapter/owner
 mapping. This includes `pr` and its [original credits](mattpocock/upstream/skills/engineering/pr/CREDITS.md)
 for Dex Horthy's `show-me` work.
 
@@ -20,6 +21,21 @@ The merged in-progress [software-factory source](mattpocock/upstream/skills/in-p
 now shares this pin and its existing planning owner. It supersedes the separate draft
 snapshot; [compatibility and refresh](software-factory-NOTICE.md) retain local safety controls.
 Non-skill upstream infrastructure, docs site and repository automation are not imported.
+
+## Security patch
+
+[`0001-private-calibration-workspace.patch`](mattpocock-patches/0001-private-calibration-workspace.patch)
+addresses CodeQL alerts 21 and 22 on PR #335. Calibration previously placed a predictable
+PID-named WAV, narration text and SAPI job list directly in shared temporary storage.
+It now creates narration text and SAPI job files exclusively with owner-only mode
+`0o600`, and uses `fs.mkdtempSync` to create a private workspace, with cleanup on success,
+exceptions and the helper's explicit failure exit. The upstream revision stays fixed.
+The importer applies this reviewed patch in a disposable tree, rejects changes
+outside the animatic helper or to file inventory/modes, and records `upstream_files`,
+`patches` and resulting `files` separately. `--check` validates patch-input and output
+digests without altering the repository. A failed patch application stops the refresh;
+review upstream changes before replacing or retiring the patch. No scanner exclusion
+or alert dismissal is used. Run `bash evals/run.sh animatic` for the CLI regression.
 
 ## Refresh
 

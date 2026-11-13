@@ -386,7 +386,7 @@ const toWav = (raw, wav) => run("ffmpeg", ["-y", "-v", "error", "-i", raw, "-ar"
 const speakSapi = async (jobs) => {
   const win = (p) => (isWSL() ? execFileSync("wslpath", ["-w", p]).toString().trim() : p);
   const list = path.join(path.dirname(jobs[0].wav), `.sapi-${process.pid}.json`);
-  fs.writeFileSync(list, JSON.stringify(jobs.map((j) => ({ text: j.text, out: win(j.wav) }))));
+  fs.writeFileSync(list, JSON.stringify(jobs.map((j) => ({ text: j.text, out: win(j.wav) }))), { mode: 0o600, flag: "wx" });
   const q = (s) => `'${s.replace(/'/g, "''")}'`;
   const script = [
     "Add-Type -AssemblyName System.Speech",
@@ -408,7 +408,7 @@ const speakOne = async (engine, text, wav) => {
   const voice = flags.voice === undefined ? [] : ["-v", String(flags.voice)];
   const base = wav.replace(/\.wav$/, ".src");
   const txt = `${base}.txt`;
-  fs.writeFileSync(txt, text);
+  fs.writeFileSync(txt, text, { mode: 0o600, flag: "wx" });
   const raw = engine === "say" ? `${base}.aiff` : `${base}.wav`;
   try {
     if (engine === "say") await run("say", [...voice, "-o", raw, "-f", txt]);
@@ -558,12 +558,20 @@ const SAMPLE =
   "Here's the problem: the limiter counted requests per IP address, not per customer. Behind the load balancer every customer shared one address, so one busy client could block everyone else. The fix is in rate limit dot ts, where line four now keys on the API key instead. Two lines added, one removed, and the test called counts each key separately now passes.";
 
 const calibrate = async () => {
-  const wav = path.join(os.tmpdir(), `animatic-calibrate-${process.pid}.wav`);
-  await synthAll([{ text: SAMPLE, wav, where: "calibration" }]);
-  const rate = wordCount(SAMPLE) / duration(wav);
-  fs.rmSync(wav);
-  saveRate(ttsKey(), rate);
-  return rate;
+  const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "animatic-calibrate-"));
+  const wav = path.join(temporary, "sample.wav");
+  const cleanup = () => fs.rmSync(temporary, { recursive: true, force: true });
+  // synthAll can call process.exit on failure, which bypasses finally.
+  process.once("exit", cleanup);
+  try {
+    await synthAll([{ text: SAMPLE, wav, where: "calibration" }]);
+    const rate = wordCount(SAMPLE) / duration(wav);
+    saveRate(ttsKey(), rate);
+    return rate;
+  } finally {
+    process.removeListener("exit", cleanup);
+    cleanup();
+  }
 };
 
 const speak = async ({ build, moments }) => {
