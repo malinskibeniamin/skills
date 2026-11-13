@@ -1,5 +1,5 @@
 ---
-description: "選擇並測試 animatic 影片的語音、算繪器、風格與串接工具，然後儲存目標儲存庫的設定。明確執行此技能來設定或更換工具鏈。"
+description: "選擇、測試並儲存儲存庫的 animatic 語音、算繪器、風格與串接工具。"
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["setup animatic"]}
 sidebar: {"label":"/setup-animatic"}

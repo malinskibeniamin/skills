@@ -1,6 +1,6 @@
 ---
 name: setup-animatic
-description: Choose and test the voice, renderer, style and stitcher for animatic videos, then save the target repository's configuration. Run explicitly to set up or change the toolchain.
+description: Choose, test and save a repository's animatic voice, renderer, style and stitcher.
 disable-model-invocation: true
 ---
 

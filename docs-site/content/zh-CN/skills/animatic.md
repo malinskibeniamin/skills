@@ -1,5 +1,5 @@
 ---
-description: "将主题、一个或多个 PR 制作成带旁白的静帧 MP4，或按反馈修改已有 animatic。适用于用户请求 animatic 或旁白视频，不适用于普通 PR 交付或网页 UI 动效。"
+description: "为主题或 PR 创建或修改带旁白的静帧 MP4。用于明确请求的 animatic 或旁白视频，不用于普通 PR 交付或网页 UI 动效。"
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["animatic"]}
 sidebar: {"label":"/animatic"}

@@ -1,5 +1,5 @@
 ---
-description: "Wybierz i przetestuj głos, renderer, styl i narzędzie łączenia animatików, a następnie zapisz konfigurację repozytorium docelowego. Uruchamiaj jawnie, aby skonfigurować lub zmienić narzędzia."
+description: "Wybierz, przetestuj i zapisz głos, renderer, styl i narzędzie łączenia animatików w repozytorium."
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["setup animatic"]}
 sidebar: {"label":"/setup-animatic"}

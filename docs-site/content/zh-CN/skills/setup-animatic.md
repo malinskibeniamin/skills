@@ -1,5 +1,5 @@
 ---
-description: "选择并测试 animatic 视频的语音、渲染器、风格和拼接工具，然后保存目标仓库的配置。明确运行此技能来设置或更换工具链。"
+description: "选择、测试并保存仓库的 animatic 语音、渲染器、风格和拼接工具。"
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["setup animatic"]}
 sidebar: {"label":"/setup-animatic"}

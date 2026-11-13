@@ -1,5 +1,5 @@
 ---
-description: "Twórz narracyjne filmy MP4 ze statycznych kadrów, wyjaśniające temat, jeden PR lub kilka PR-ów, albo poprawiaj animatik na podstawie uwag. Używaj przy prośbie o animatik lub film z narracją, nie przy zwykłym dostarczaniu PR ani animacji interfejsu WWW."
+description: "Twórz lub poprawiaj narracyjne MP4 ze statycznych kadrów dla tematu lub PR-ów. Używaj dla żądanych animatików lub filmów z narracją, nie przy zwykłym dostarczaniu PR ani animacji interfejsu WWW."
 related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
 search: {"boost":1,"keywords":["animatic"]}
 sidebar: {"label":"/animatic"}
