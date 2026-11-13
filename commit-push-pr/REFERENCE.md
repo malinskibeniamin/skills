@@ -109,9 +109,10 @@ CODEOWNERS review routing. It also owns draft deferral and metadata readback/rec
 ## PR body template (Phase 5)
 
 Run `/quantify-impact` for every PR, including non-UI changes. Use the canonical
-[PR body template](../pr/SKILL.md#body-template): human title/one-line intent (explicitly
-label agent drafts), UI before/after table, useful prototype link, then one collapsed
-agent-generated description. Preserve human wording on upkeep. Omit inapplicable sections.
+[PR body template](../pr/SKILL.md#body-template): lead with the deploy preview when
+applicable, then one-line human intent (explicitly label agent drafts), UI before/after
+table, useful prototype link and one collapsed agent-generated description. Preserve
+human title and wording on upkeep. Omit inapplicable sections.
 
 Apply the [human-review handoff](../shared/review-contract.md#human-review-handoff)
 after self-verification. Put Lane/Review, Testing, Risk/Rollback and verified attribution
