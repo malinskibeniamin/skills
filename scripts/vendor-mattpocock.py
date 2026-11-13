@@ -27,6 +27,7 @@ OWNERS = {
         "tdd", "to-spec", "to-tickets", "triage", "wayfinder", "wizard", "grilling",
         "handoff", "teach", "to-questionnaire", "wait-what", "writing-for-agents",
         "writing-beats", "writing-fragments", "writing-shape", "software-factory",
+        "animatic", "setup-animatic",
     )},
 }
 

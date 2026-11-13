@@ -31,5 +31,5 @@ run_content_eval "$REPO_ROOT/teach/SKILL.md" 'position.*correct|correct.*positio
   "teaching avoids answer-position clues"
 run_content_eval "$REPO_ROOT/retro/SKILL.md" '[Tt]actical.*[Ss]trategic|[Ss]trategic.*[Tt]actical' \
   "retro separates task completion from future environment improvements"
-run_content_eval "$REPO_ROOT/README.md" '4ae2317ddb22b046e26455e4f9c9b3aaaf62212d' \
+run_content_eval "$REPO_ROOT/README.md" '71009050da79506823464512ee76d71bbc014ce1' \
   "README pins the reviewed upstream refresh"

@@ -68,6 +68,16 @@ existing planning owner, which keeps fit assessment and safety controls. The mer
 source's design language and surveys replace the separately pinned draft; importing
 them grants no provisioning, automated triggers or merge permission.
 
+## Animatic video pipeline
+
+`animatic` and `setup-animatic` are draft sources with unprefixed
+[video](../animatic/SKILL.md) and [setup](../setup-animatic/SKILL.md) owners. Both
+namespaced adapters route through those owners. Load the complete upstream skill
+and its local references there; the renderer and voice helpers resolve from the
+snapshot, while inputs and configuration belong to the target repository.
+Vendoring starts no setup/build. Remote execution needs a named authorized target;
+paid/network speech needs the applicable data-sharing and spending scope.
+
 ## Setup and migrations
 
 - `git-guardrails-claude-code`: enter only for an explicit hook-installation request.
@@ -98,7 +108,7 @@ Claude/Codex discovery and run the import and prompt contract tests before deliv
 ## Integration coverage
 
 Use this family map when reconciling lessons, not as another skill catalog. The lock owns
-the complete 39-source inventory and exact owner mappings. Existing registered workflow
+the complete 41-source inventory and exact owner mappings. Existing registered workflow
 families retain their scope; source-only experiments do not become automatic dependencies.
 
 | Family | Local owners / disposition | Load-bearing lesson |

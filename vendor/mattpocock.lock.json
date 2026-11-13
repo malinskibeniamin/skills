@@ -1,7 +1,16 @@
 {
   "repository": "https://github.com/mattpocock/skills",
-  "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+  "revision": "71009050da79506823464512ee76d71bbc014ce1",
   "skills": [
+    {
+      "name": "matt-animatic",
+      "upstream_name": "animatic",
+      "source": "skills/in-progress/animatic/SKILL.md",
+      "owner": "animatic",
+      "registration": "./matt-skills/matt-animatic/",
+      "short_description": "Matt Pocock source: animatic guidance",
+      "description": "Use the pinned Matt Pocock animatic skill with host compatibility rules."
+    },
     {
       "name": "matt-ask-matt",
       "upstream_name": "ask-matt",
@@ -199,6 +208,15 @@
       "registration": "./matt-skills/matt-scaffold-exercises/",
       "short_description": "Matt Pocock source: scaffold exercises guidance",
       "description": "Use the pinned Matt Pocock scaffold-exercises skill with host compatibility rules."
+    },
+    {
+      "name": "matt-setup-animatic",
+      "upstream_name": "setup-animatic",
+      "source": "skills/in-progress/setup-animatic/SKILL.md",
+      "owner": "setup-animatic",
+      "registration": "./matt-skills/matt-setup-animatic/",
+      "short_description": "Matt Pocock source: setup animatic guidance",
+      "description": "Use the pinned Matt Pocock setup-animatic skill with host compatibility rules."
     },
     {
       "name": "matt-setup-matt-pocock-skills",
@@ -612,7 +630,71 @@
       "mode": 420
     },
     "skills/in-progress/README.md": {
-      "sha256": "bc279931edd2dc862a00e0692522a6c8b97666539a3ab6c519e336dd4e5bf61a",
+      "sha256": "efd91909bfe816e0e16c24a77fabde91d4b9fe3eb1c453b556354c8e6af26c7a",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/FRAMES.md": {
+      "sha256": "0e1b7293c36631217fb4045a4f6145581722e75a45cd9c866a99107aa51fb484",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/OWN-MEDIA.md": {
+      "sha256": "c9e490ca2f433dbcd0602e05329a5b98d25f739c3882804f08d6d921ffa736d3",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/PR.md": {
+      "sha256": "e1de52d2cdb6df748eae7a96ae0dae95c4887c11e08f4fc905d427bb028d1350",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/SKILL.md": {
+      "sha256": "5b87015a66c1eb02a41948e2b51b97a8d7d560d2a247523801193ad82a5d66be",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/STYLE.md": {
+      "sha256": "0218a1fcfe0344771f0a1a4cc6f8eb0484e47824760e26278be20607de4ff77d",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/agents/openai.yaml": {
+      "sha256": "588a7ee095280f3a8b53e76c458621636a38de54d1fd54f3b7d164a0aa4292c1",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/README.md": {
+      "sha256": "223f0845989ba4d1c0547a514eb854193ba3117921c83763968e37524e8ac3b4",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/browser.html": {
+      "sha256": "bba59d353d02b24f05fad38d6c0c1547c9f159e7bbf7a063bcb9f36dcd555960",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/claude-code.html": {
+      "sha256": "44ba3c43f27d6799c8360a5343e8978dbd9265f115f526098cc908cc7c9a4d48",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/diagram.html": {
+      "sha256": "4b89a5741011dfad5e91b18ada029c077d9277481ce853a41287015b205249a5",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/editor.html": {
+      "sha256": "0acdb496e2c0e6a75879d2be5899857bd4f604298b1375c019af5791557b87e8",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/house.css": {
+      "sha256": "86a6fd88d572557b2e7616a7c7bcc9164b8d5c0cf5e7c122701f8943291f9e45",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/terminal.html": {
+      "sha256": "428c02f51db53fb13b54c32d79a7bfdaf7e19c83f44e4726c86308c3dd3345c5",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/kit/title-card.html": {
+      "sha256": "ab28773a7da73c1162cfb1c9eeed08e789699453e3f014a8c6474e77a2c0135c",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/scripts/animatic.mjs": {
+      "sha256": "e9438b5581ce027846b71e42709a349692471fb969d1907c0c4fe71ef8049eec",
+      "mode": 420
+    },
+    "skills/in-progress/animatic/scripts/frames.mjs": {
+      "sha256": "be1678a2aa13ae0b89cdc36d1f087f11cc761c432f0a3df5634c7822f04bf6c6",
       "mode": 420
     },
     "skills/in-progress/chief-of-staff/SKILL.md": {
@@ -639,6 +721,26 @@
       "sha256": "b66fa10079957051be6a812f45e55b67ac394b71d5ba88349962b4c9205802c3",
       "mode": 420
     },
+    "skills/in-progress/setup-animatic/RENDERER.md": {
+      "sha256": "a3df45a0e3dd3c04e38d2bd28df6a4cddda34ed533a50bce5bc142b764644789",
+      "mode": 420
+    },
+    "skills/in-progress/setup-animatic/SKILL.md": {
+      "sha256": "0a483059cb1a5ef9aeb075c4041ddd64d79337343370cd160953bf744e0494ba",
+      "mode": 420
+    },
+    "skills/in-progress/setup-animatic/VOICE.md": {
+      "sha256": "a869144c1c42564fb1bb89284c588513172e05557d6fd52ceb7a46fbfff362ad",
+      "mode": 420
+    },
+    "skills/in-progress/setup-animatic/agents/openai.yaml": {
+      "sha256": "52ee767c6cc5d8bd0761d40c17f4c54b8afefeacc09ec9b30ef9ec3ad619dbec",
+      "mode": 420
+    },
+    "skills/in-progress/setup-animatic/animatic.md": {
+      "sha256": "b5ef314f237c586cd2f16d37f2635ea7db91bd089cf6cead5e3ecc2c57c42438",
+      "mode": 420
+    },
     "skills/in-progress/setup-ts-deep-modules/SKILL.md": {
       "sha256": "29acca66ac99d4532e2a6f0370d8125d7cba1e87c9ac66573203c75189d3e6c7",
       "mode": 420
@@ -652,7 +754,7 @@
       "mode": 420
     },
     "skills/in-progress/software-factory/EXAMPLE-TASKS.md": {
-      "sha256": "34bfb01ced8fbbff8185d347df423533d157c29e8d58bf044f8450602f162875",
+      "sha256": "31c73748cd47b040fb11737f47634bba63b32cc6680000a9b22b6bc898155e49",
       "mode": 420
     },
     "skills/in-progress/software-factory/GIT-HOSTS.md": {
@@ -668,7 +770,7 @@
       "mode": 420
     },
     "skills/in-progress/software-factory/SKILL.md": {
-      "sha256": "645ab761b6cca61a480072b1b510eb05fe0fe5cde2ce0495b6fc234311692253",
+      "sha256": "8a3d04e2ebcf2f863a514784ee0307ef8fb53ac0892deb29b75a406c0c84de7b",
       "mode": 420
     },
     "skills/in-progress/software-factory/TICKET-TRACKERS.md": {

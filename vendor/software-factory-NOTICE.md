@@ -2,7 +2,7 @@
 
 The local `/software-factory` is a planning adapter over Matt Pocock's merged,
 in-progress [PR #1316](https://github.com/mattpocock/skills/pull/1316), reviewed at
-[`4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/in-progress/software-factory).
+[`71009050da79506823464512ee76d71bbc014ce1`](https://github.com/mattpocock/skills/tree/71009050da79506823464512ee76d71bbc014ce1/skills/in-progress/software-factory).
 The source remains in `skills/in-progress/`; merging it is not a stable-release
 endorsement. It supersedes the previously separate draft pin `b59cab42bf1206e1363eafc37f71b21c3bcaa12f`.
 

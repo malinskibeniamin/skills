@@ -1,10 +1,10 @@
 # Matt Pocock skills
 
 Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
-[`4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d)
-(v1.3.2 plus subsequent main-branch changes).
+[`71009050da79506823464512ee76d71bbc014ce1`](https://github.com/mattpocock/skills/tree/71009050da79506823464512ee76d71bbc014ce1)
+(the `animatic-skill` draft branch, [PR #1422](https://github.com/mattpocock/skills/pull/1422)).
 
-All **39 skills** under `skills/`, every skill-local reference/helper/asset, the
+All **41 skills** under `skills/`, every skill-local reference/helper/asset, the
 upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained byte-for-byte
 in `mattpocock/upstream/`. [The lock](mattpocock.lock.json) records the immutable
 revision, complete inventory, SHA-256 digests, executable modes and adapter/owner
@@ -50,7 +50,16 @@ read-only and network-free. Remove the disposable source checkout after verifica
 
 ## Reconciliation at this pin
 
-The latest refresh adds the merged software-factory design language and surveys,
+The animatic draft adds `animatic` and `setup-animatic`, with their complete frame
+kit, scripts and voice recipes. The unprefixed host owners preserve setup,
+remote-target, secret, generated-guidance and publication boundaries. Importing
+the source installs no runtime tools. Runtime dependencies are fetched only when
+a separately authorized setup/build runs; those packages are not vendored or
+pinned by this source lock. The only other skill changes from the prior pin are
+two software-factory clarifications: CI jobs are not factory tasks, and exploration
+leaves evidenced findings without pushing. The planning owner retains that scope.
+
+The prior main-branch refresh added the merged software-factory design language and surveys,
 routes its adapter through the existing planning owner, and reuses shared wikis for
 chief-of-staff. Retro procedures remain scoped and recommend-only without edit authority.
 
