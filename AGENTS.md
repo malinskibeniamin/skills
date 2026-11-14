@@ -15,6 +15,8 @@ Local policy wins.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
+- Browser automation: `agent-browser` by default when user/host permits; read
+  [browser/data replay](shared/verification-replay.md#browser-and-data-tasks).
 
 Follow local idioms. Preserve zoom, worktree isolation,
 secrets, types, generated files; use `exemplars/`.

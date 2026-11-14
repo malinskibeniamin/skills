@@ -62,7 +62,7 @@ For listener, DOM, timer, subscription, or heap growth within one browser contex
 Monitor `bun run test:e2e`; react to failures before completion.
 
 For interactive automation/tool choice, use [browser/data guidance](../dogfood/SKILL.md#browser-and-data-tasks).
-Agent-browser may replace an interactive CLI/MCP workflow when permitted, not Playwright Test's CI runner.
+Agent-browser is the default interactive CLI when permitted, not Playwright Test's CI runner.
 Saved flows do not replace UI assertions; retain browser, accessibility and cross-browser coverage.
 
 | Need | Tool |

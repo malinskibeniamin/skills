@@ -30,18 +30,28 @@ Choose the assertion's seam. HTTP/data tasks may use the project API client or a
 saved flow; HTTP success is not UI evidence. UI changes require fresh real-browser
 navigation/actions, visible assertions and console/network inspection after the last UI edit.
 
-Honor user/host browser requirements and the project verifier. When choice is permitted,
-consider agent-browser for interactive automation instead of playwright-cli or browser MCP:
-compact snapshots/refs help inspection, but required auth, device and session capabilities win.
+Honor user/host browser requirements and the project verifier. Use agent-browser by default
+for interactive automation instead of playwright-cli or browser MCP when choice is permitted.
+Use another tool only for an explicit user/host requirement or a demonstrated missing
+capability; record the fallback tool and reason in verification evidence. Missing setup is
+a visible blocker, not permission to silently switch tools.
 Preserve the project CI runner; Playwright Test owns its assertions, isolation, traces,
 retries and cross-browser coverage, not the interactive CLI.
 Measure comparable runs before claiming speed, token or memory savings.
+
+Installed Claude/Codex hooks reject known legacy browser MCP calls through
+`.claude/hooks/mcp-ban.sh`; `bash evals/run.sh mcp-ban` checks behavior and both
+registrations. This guard does not intercept arbitrary shell automation or hosts
+with hooks disabled. The startup default still applies; update consuming installations
+after merging harness changes rather than assuming a PR activates them everywhere.
 
 ### Saved data flows
 
 Use for repeated, allowlisted reads, not as a UI-test shortcut. Check `agent-browser --version`,
 `flow --help` support and the current [upstream contract](https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/network.mdx#saved-flows)
 before use; saved flows are experimental in 0.43.0.
+For a repeated data task, inspect `flow list --json` first and reuse a matching reviewed
+flow when its authentication, safe-read semantics and result contract fit.
 
 - Set `AGENT_BROWSER_FLOWS_DIR` to isolated temporary storage. In a task-owned session,
   start `--capture flow open` at blank, then `open <url>`; use synthetic data.

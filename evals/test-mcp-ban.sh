@@ -54,6 +54,18 @@ _assert_denied "mcp__claude_ai_Gmail__gmail_search_messages" "gog gmail" "Gmail 
 _assert_denied "mcp__claude-in-chrome__read_page" "agent-browser" "claude-in-chrome -> agent-browser"
 _assert_denied "mcp__chrome-devtools__evaluate_script" "agent-browser" "chrome-devtools -> agent-browser"
 _assert_denied "mcp__playwright__browser_navigate" "agent-browser" "playwright -> agent-browser"
+_assert_denied "mcp__claude_in_chrome__read_page" "agent-browser" "underscore Chrome server -> agent-browser"
+_assert_denied "mcp__chrome_devtools__navigate_page" "agent-browser" "underscore DevTools server -> agent-browser"
+_run_mcp "mcp__playwright__browser_navigate"
+if echo "$_last_stderr" | grep -q 'flow list' \
+   && ! echo "$_last_stderr" | grep -qE 'Alt:|17x|bunx playwright'; then
+  echo "  PASS  browser denial teaches flow discovery without silent fallback or savings claims"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  browser denial retains stale routing"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: browser denial retains stale routing"
+fi
 _assert_denied "mcp__blacksmith__list_runs" "gh run" "blacksmith -> gh"
 _assert_denied "mcp__claude_ai_Google_Calendar__list_events" "gog calendar" "Calendar -> gog"
 _assert_denied "mcp__claude_ai_Google_Drive__files_list" "gog drive" "Drive -> gog"
@@ -136,6 +148,19 @@ else
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: TraceDecay MCP passthrough"
 fi
+
+# Host-required tools and agent-browser's own MCP surface are not legacy fallbacks.
+for tool in mcp__t3_code__preview_open mcp__cua_repl__js mcp__agent_browser__open; do
+  _run_mcp "$tool"
+  if [ "$_last_exit" = 0 ] && [ -z "$_last_stderr" ]; then
+    echo "  PASS  $tool remains available"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $tool was blocked"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: host-required browser or agent-browser blocked"
+  fi
+done
 
 # Migration guard: live guidance should not point agents at the old Workspace CLI.
 old_cli_pattern="\b([g]ws|[g]oogleworkspace[-]cli|@[g]oogleworkspace/cli|Google[ ]Workspace[ ]CLI)\b"

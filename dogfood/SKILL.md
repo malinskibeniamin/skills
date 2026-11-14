@@ -81,7 +81,7 @@ React: [runtime probes](../shared/react-devtools.md).
 
 ## Browser and data tasks
 
-HTTP/data retrieval is not UI evidence; changed UI needs fresh browser actions/assertions.
+Use agent-browser by default when permitted; HTTP/data retrieval is not UI evidence.
 For tool choice or saved flows, read [browser/data replay](../shared/verification-replay.md#browser-and-data-tasks).
 Honor user/host browser requirements and the project verifier.
 

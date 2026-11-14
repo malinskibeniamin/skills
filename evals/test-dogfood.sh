@@ -40,6 +40,14 @@ run_content_eval "$SKILL" "response time.*network.*render.*CPU.*memory" \
 
 # Publication checks: these guard routing/safety instructions, not agent adherence.
 BROWSER_GUIDE="$REPO_ROOT/shared/verification-replay.md"
+for guide in "$REPO_ROOT/CLAUDE.md" "$REPO_ROOT/AGENTS.md"; do
+  run_content_eval "$guide" 'Browser automation:.*agent-browser.*default' \
+    "startup guidance makes agent-browser the default"
+done
+run_content_eval "$BROWSER_GUIDE" 'Use agent-browser by default' \
+  "interactive browser routing is a default rather than a suggestion"
+run_content_eval "$BROWSER_GUIDE" 'fallback.*reason|reason.*fallback' \
+  "browser exceptions carry a verification reason"
 run_content_eval "$SKILL" 'verification-replay.md#browser-and-data-tasks' \
   "direct dogfood invocation reaches browser/data replay guidance"
 run_content_eval "$BROWSER_GUIDE" "HTTP success is not UI evidence" \

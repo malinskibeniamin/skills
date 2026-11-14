@@ -16,6 +16,10 @@ _lib="$(dirname "$0")/_hook-lib.sh"; if [ -f "$_lib" ]; then source "$_lib"; els
 
 _hook_input=$(cat)
 tool_name=$(echo "$_hook_input" | jq -r '.tool_name // empty' 2>/dev/null || true)
+case "$tool_name" in
+  mcp__claude_in_chrome__*) tool_name="mcp__claude-in-chrome__${tool_name#mcp__claude_in_chrome__}" ;;
+  mcp__chrome_devtools__*) tool_name="mcp__chrome-devtools__${tool_name#mcp__chrome_devtools__}" ;;
+esac
 
 case "$tool_name" in
   # Dedicated, opt-in server: page lifecycle plus React inspection, not arbitrary JS.
@@ -92,32 +96,8 @@ case "$tool_name" in
     ;;
 
   # ── Browser automation (Playwright / Chrome DevTools / claude-in-chrome) ──
-  mcp__claude-in-chrome__navigate|mcp__chrome-devtools__navigate_page|mcp__playwright__browser_navigate)
-    msg='Browser MCP banned. Use: agent-browser open <url>. A11y-tree refs (@e1, @e2), not DOM dumps. ~17x smaller than read_page MCP. Alt: bunx playwright open <url>.'
-    ;;
-  mcp__claude-in-chrome__computer|mcp__claude-in-chrome__find)
-    msg='Browser MCP banned. Use: agent-browser click/type/hover <sel-or-@ref>. Get refs via: agent-browser snapshot.'
-    ;;
-  mcp__claude-in-chrome__read_page|mcp__claude-in-chrome__get_page_text)
-    msg='Browser MCP banned. Use: agent-browser snapshot (a11y tree with @e refs). Text only: agent-browser eval "document.body.innerText".'
-    ;;
-  mcp__claude-in-chrome__javascript_tool|mcp__chrome-devtools__evaluate_script)
-    msg='Browser MCP banned. Use: agent-browser eval "<js>". Returns value directly.'
-    ;;
-  mcp__claude-in-chrome__screenshot)
-    msg='Browser MCP banned. Use: agent-browser screenshot [path].'
-    ;;
-  mcp__claude-in-chrome__read_console_messages)
-    msg='Browser MCP banned. Use: agent-browser eval "JSON.stringify(window.__consoleBuf||[])" after wiring console.log proxy, or upgrade agent-browser for console API.'
-    ;;
-  mcp__claude-in-chrome__read_network_requests)
-    msg='Browser MCP banned. Use: agent-browser eval with PerformanceObserver, or curl/httpie for specific endpoints.'
-    ;;
-  mcp__claude-in-chrome__tabs_context_mcp|mcp__claude-in-chrome__tabs_create_mcp|mcp__claude-in-chrome__switch_browser|mcp__claude-in-chrome__resize_window)
-    msg='Browser MCP banned. Use agent-browser directly: agent-browser open <url>. Persistent daemon keeps cookies across calls.'
-    ;;
   mcp__claude-in-chrome__*|mcp__chrome-devtools__*|mcp__playwright__*|mcp__react[-_]devtools__*)
-    msg='Browser MCP banned. Use: agent-browser (brew install vercel/tap/agent-browser). Alt: bunx playwright codegen/open for interactive flows.'
+    msg='Legacy browser MCP blocked. Default to agent-browser in a task-owned session: open <url>, then snapshot -i and act on current refs. For repeated safe reads, check flow --help support and inspect flow list --json before browser navigation. Missing setup is a visible blocker, not a silent tool switch. Preserve host-required browser tools, the scoped React DevTools exception and Playwright Test suites. Read shared/verification-replay.md#browser-and-data-tasks; record any permitted fallback tool and reason.'
     ;;
 
   # ── Blacksmith (CI) = GitHub Actions replacement → use gh CLI ──
