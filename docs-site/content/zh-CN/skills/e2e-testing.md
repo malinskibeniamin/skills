@@ -67,3 +67,5 @@ PR 默认在 Chromium 中运行完整套件；仅运行受影响测试需要 [CI
 | 选择器或 AI 检查 | `agent-browser snapshot` |
 | 视觉冒烟证据 | `agent-browser screenshot --annotate` |
 | 交互式调试 | Playwright UI 模式 |
+
+Browser Use（需主动选择）：[指南](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/BROWSER-USE.md)。
