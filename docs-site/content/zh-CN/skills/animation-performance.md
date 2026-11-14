@@ -56,6 +56,9 @@ type: "skill"
   `transformTemplate`、惯性和逐帧驱动的值仍需主线程工作。
 - 缩放不是高度/padding 的通用替代：它会缩放文字，却不改变文档流。
   先保证正确性，再选择更廉价的渲染路径。
+- [仅使用透明度](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/opacity)
+  不会移除布局占位、命中测试或键盘焦点。用透明度替换 `display`/`visibility` 变化时，
+  保留隐藏状态、inert 状态、卸载和焦点行为；仅设置 `pointer-events: none` 不能阻止键盘聚焦。
 - 在受支持浏览器分析 blur/filter/clip-path；固定的像素阈值证明不了什么。
 - 卸载时取消逐帧循环、观察器和动画，移除临时图层提示。
   记忆化由 React Compiler 负责；不要用 memo 包装代替诊断。

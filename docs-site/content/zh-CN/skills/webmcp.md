@@ -27,6 +27,10 @@ type: skill
 - **与 MCP/Lovable 比较：** 阅读[接口边界](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/tool-authoring.md#surface-boundaries)。
   WebMCP 补充面向服务的 MCP，并不替代它。
 
+- **明确请求评估扩展代理：** 阅读[扩展评估技能](https://github.com/malinskibeniamin/skills/blob/main/vendor/chrome-webmcp/webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md)。
+  只使用经授权的隔离配置文件；保留权限提示。
+  加载此参考资料不授权启动浏览器、安装扩展、付费评估或配置提供商。
+
 ## 通用宿主规则 [#shared-host-rules]
 
 本地规则优先于两份上游快照：遵守任务的结束边界和宿主的实时能力。

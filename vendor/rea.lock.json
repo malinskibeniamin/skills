@@ -1,49 +1,53 @@
 {
   "repository": "https://github.com/morluto/rea",
-  "revision": "160d821ac9a0310afcb8d1fc427862dd6508add5",
-  "version": "6.8.0",
+  "revision": "d74549e495c58eb4a560279fd9f05508401ea0a0",
+  "version": "6.9.0",
   "node": "^22.23.4 || ^24.22.1 || >=26.12.1",
-  "tarball": "https://registry.npmjs.org/rea-agents/-/rea-agents-6.8.0.tgz",
-  "integrity": "sha512-9QDeRnGqEDzABZyr04eLnBXBv/c6I9/TWu/6M0MD4pEfkySI/BIgwTODIbAReX3C1x6hjw9+Jlx4A2yUSPZ9ww==",
+  "tarball": "https://registry.npmjs.org/rea-agents/-/rea-agents-6.9.0.tgz",
+  "integrity": "sha512-KqDn1UR5BMqHoQ3MGAnPuWiSKwgdFaz1L/uUNgrKt+1W8kPtgYP8AWEOXIF1lDIOBVyPuYIIst2iamo1Wf3r8g==",
   "files": {
     "LICENSE": {
       "sha256": "798f9e4d18e49b30bf2f12696c8ced73dc4e1413da375a333d01281543a1ea8b",
       "mode": 420
     },
     "package.json": {
-      "sha256": "b0fc212f6bea9b4ee6e2b3ab0b52dd95402c229da3b8652127e5f131c3445b39",
+      "sha256": "16b2c987c7701f393f32db363f8d340a607873d22384cdbd1e40b0ed5fc1827a",
       "mode": 420
     },
     "skills/reverse-engineer-anything/SKILL.md": {
-      "sha256": "8818b645c9fd348399a50a8678b91cff20215690adad484e70282ff9f2ef91ee",
+      "sha256": "9312fa145b251ea428809634f039fb4ac15f18d59a32d6004a638b2de7d22016",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/android-applications.md": {
-      "sha256": "24ecaa1798eb4f28591884a7deb68df31e90313865515a23e3b466403f1abc39",
+      "sha256": "4fe894d463daaf9175192633186160fc50fb6718b5cc8186bf853377a9f72e7f",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/connection-and-recovery.md": {
-      "sha256": "4754441e63e4252a0b230cf5aa12b78c0716463905305059bb7dea6713ba0bfc",
+      "sha256": "2d78f50f4bad6e50127647256ae89865ad6cc046d1fe460e53a13b830ce814aa",
+      "mode": 420
+    },
+    "skills/reverse-engineer-anything/references/desktop-build.md": {
+      "sha256": "7e0b1ab7ff7372d39681bc88e924b4afbabd95091d13aba72928f55668a82b17",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/environments.md": {
-      "sha256": "83e041f0a5243172af69eaadf62da0699617add3ff1d46b294e4bba7ece9d95f",
+      "sha256": "1be68bc9b15e5ace9b731a64125b64eb457ab0276c7961a41b6fa1240d179007",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/evidence-workflows.md": {
-      "sha256": "f44b68acc6ebaa60c1f5d0670e4f9ff7212d351a0ecc6e6ca77ce38b9177ea57",
+      "sha256": "401e588eec730d26452a3b3ab9bb975a5153424b64643e72151f944cb290cf6f",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/javascript-applications.md": {
-      "sha256": "619cfd15ffdf466452cc32002ae357fefec59d5dcad4c9dfc27630138f0f719d",
+      "sha256": "4d1671a90634320724eb61b53e828c7faaadca77721798cef40e420357f5ff18",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/native-and-artifacts.md": {
-      "sha256": "cf394568ae91e9017d63056adb8872fb1df9e2f6bbe544a95d0fd9f064b06dd5",
+      "sha256": "0943da927abb6f0b231ac609e8f333eaf50a05a0c889dcba41e58a3ba0472a1d",
       "mode": 420
     },
     "skills/reverse-engineer-anything/references/runtime-observation.md": {
-      "sha256": "852bd1e25e9f83f0e8c7d4f8441a043e2b2a7d5e39f729bf22ac77259a0207bd",
+      "sha256": "7f9263b9caea58864da3bc1980037ea399735b8f165d3b96e48e49503a6a1a70",
       "mode": 420
     }
   }

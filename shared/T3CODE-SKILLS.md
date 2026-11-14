@@ -181,8 +181,10 @@ Apply [native verification](#native-verification).
 
 Enter only in a T3 Code checkout with the selected Device host and device available.
 Follow returned executable/target arguments exactly. The copied pairing helper requires
-that target checkout's server CLI; do not run it from this plugin's snapshot. Native
-builds and Metro follow the task's authorization and actual repository scripts. Isolate
+that target checkout's server CLI; do not run it from this plugin's snapshot.
+Pool installs retain `--config` from `device_open`'s `targetArgs`; prepare the matching
+ABI's cached build before acquiring a lease when an authorized build is needed.
+Native builds and Metro follow the task's authorization and actual repository scripts. Isolate
 backend and app connections, prove device reachability, and remove only disposable state
 at teardown. Missing devices stay a named verification gap; do not claim native coverage
 from a browser or a simulated pairing test.

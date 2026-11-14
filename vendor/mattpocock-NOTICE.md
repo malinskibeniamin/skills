@@ -1,7 +1,7 @@
 # Matt Pocock skills
 
 Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
-[`4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d)
+[`5863806dd4e15c63174bee4e7515a4256792ecfa`](https://github.com/mattpocock/skills/tree/5863806dd4e15c63174bee4e7515a4256792ecfa)
 (v1.3.2 plus subsequent main-branch changes).
 
 All **39 skills** under `skills/`, every skill-local reference/helper/asset, the

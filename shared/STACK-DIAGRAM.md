@@ -38,6 +38,8 @@ These rules override conflicting [upstream instructions](../vendor/stack-diagram
   fetched marks, inspect their identity/visibility in both themes, retain source
   attribution and applicable licenses, and state missing/unverified marks. The skill
   does not guarantee trademark permission or endorsement.
+- Kubernetes resource icons use the helper's pinned community source. Retain the
+  Kubernetes Icons Set attribution; keep downloaded icons outside the snapshot.
 - Gallery sharing is explicit-only. Skip upstream Step 7, including its unsolicited
   offer, unless the user asks to publish to that gallery. Before `share.py submit`,
   show both exact PNGs, every label, the title, stack, display name and any optional

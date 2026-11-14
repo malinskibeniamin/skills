@@ -559,7 +559,7 @@ agent-evals/capability-probes/run.sh --dry
 
 **Automatic refresh:** [Daily priority skill updates](shared/priority-skill-updates.md) fetch pstack, Matt Pocock, T3 Code, tstack and Emil into one guarded draft PR. Local owners stay intact; compatibility blockers remain visible and nothing auto-merges.
 
-The complete [mattpocock/skills](https://github.com/mattpocock/skills) suite is vendored locally: **all 39 skills**, including engineering, productivity, misc and in-progress skills, plus every skill-local reference, helper and asset. The byte-exact snapshot is pinned to [upstream `4ae2317d`](https://github.com/mattpocock/skills/tree/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d) in [the inventory lock](vendor/mattpocock.lock.json), with SHA-256 digests, executable modes and the upstream MIT license. Nothing needs installing from the upstream repository. The refresh includes the merged software-factory glossary and surveys; its existing planning owner remains authoritative.
+The complete [mattpocock/skills](https://github.com/mattpocock/skills) suite is vendored locally: **all 39 skills**, including engineering, productivity, misc and in-progress skills, plus every skill-local reference, helper and asset. The byte-exact snapshot is pinned to [upstream `5863806d`](https://github.com/mattpocock/skills/tree/5863806dd4e15c63174bee4e7515a4256792ecfa) in [the inventory lock](vendor/mattpocock.lock.json), with SHA-256 digests, executable modes and the upstream MIT license. Nothing needs installing from the upstream repository. The refresh includes the merged software-factory glossary and surveys; its existing planning owner remains authoritative.
 
 Every source skill is available through an explicit-only `/matt-<upstream-name>` adapter, including previously omitted experiments and misc tools. Existing unprefixed skills keep their local workflow owners and invocation policies; `pr` remains registered, with its full source and Dex Horthy's `show-me` credits included. Existing skills are reconciled with the refresh rather than overwritten. [Host compatibility](shared/MATT-POCOCK.md) preserves toolchains, delivery endpoints and explicit authorization; vendoring starts no agents, hooks or schedules. Skills removed upstream, such as `resolving-merge-conflicts`, remain retired.
 
@@ -644,7 +644,7 @@ local adaptations, and the MIT notice live in
 
 All **16 skills from T3 Code's reviewed checkout** ship as local adapters with
 unchanged upstream instructions, references, helpers and MIT licenses. The source
-is pinned at [`bc8583b`](https://github.com/pingdotgg/t3code/tree/bc8583bc6409e608557c33d42e02b2d1f1e2072f)
+is pinned at [`d899bdd`](https://github.com/pingdotgg/t3code/tree/d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7)
 in [the snapshot lock](vendor/t3code-skills.lock.json).
 
 - CI and imports: `/ci-maintenance`, `/vendored-assets`.

@@ -170,6 +170,9 @@ followups to `childThreadId`.
 
 Default to at most three rounds total unless the user specifies another budget;
 concurrent members count as one round. Round 1 covers the full assigned change.
+Validate arriving findings while other members run, but keep their reviewed checkout
+unchanged until they finish or are canceled. Honor explicitly non-blocking members;
+late results are feedback, not current approval or scores.
 After complete initial coverage, review the repair delta and open findings; widen
 when changed assumptions, baseline or scope invalidate that coverage, following
 the host convergence rules. Send the full brief and ledger even for a delta review.

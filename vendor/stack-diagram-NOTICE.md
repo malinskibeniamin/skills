@@ -1,7 +1,7 @@
 # Stack-diagram source and refresh
 
 The complete skill from [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram)
-is pinned to [commit `1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838`](https://github.com/caru-ini/stack-diagram/tree/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838).
+is pinned to [commit `9175bde8449cc8f5390d6eb72ecc2e1f5bfe21f3`](https://github.com/caru-ini/stack-diagram/tree/9175bde8449cc8f5390d6eb72ecc2e1f5bfe21f3).
 All 19 skill-local files plus the root LICENSE are copied byte-for-byte: entrypoint,
 references, four Python helpers, HTML template, generic pictograms and bundled fonts.
 Upstream promotional screenshots, README, workflow and Git configuration are excluded;
@@ -30,6 +30,10 @@ publication workflow. Host compatibility suppresses unsolicited gallery offers
 and requires an explicit request plus exact-content approval before any upload
 or identity disclosure. Importing or rendering a diagram executes no gallery code.
 
+The current refresh adds official Kubernetes community resource icons from a pinned
+source. The helper resolves aliases without fetching until an icon task requests it.
+Keep the Kubernetes Icons Set attribution and existing download/publication boundaries.
+
 ## Review and refresh
 
 Review the upstream commit diff, skill-local inventory, licenses, script behavior
@@ -39,7 +43,7 @@ and network sources before selecting a new full SHA. Then use a separate clone:
 git clone https://github.com/caru-ini/stack-diagram /tmp/stack-diagram-upstream
 python3 scripts/vendor-stack-diagram.py \
   --source /tmp/stack-diagram-upstream \
-  --revision 1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838
+  --revision 9175bde8449cc8f5390d6eb72ecc2e1f5bfe21f3
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh stack-diagram-vendored-skills
 ```

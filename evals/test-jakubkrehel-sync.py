@@ -94,6 +94,23 @@ class JakubkrehelSyncTest(unittest.TestCase):
             self.assertIn("../../shared/INTERFACES.md", adapter)
         self.assertEqual(self.cli("--check").returncode, 0)
 
+    def test_reviewed_afk_source_is_retained_without_installing_an_autonomous_workflow(self):
+        self.write(self.source, "skills/afk/SKILL.md",
+                   "---\nname: afk\ndescription: Work while away.\n"
+                   "disable-model-invocation: true\n---\nSource reference only.\n")
+        revision = self.commit()
+        result = self.install(revision)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.repo / "vendor/jakubkrehel/skills/afk/SKILL.md").is_file())
+        self.assertTrue((self.repo / "jakubkrehel-skills/teardown/SKILL.md").is_file())
+        self.assertFalse((self.repo / "jakubkrehel-skills/afk").exists())
+        manifest = json.loads((self.repo / ".claude-plugin/plugin.json").read_text())["skills"]
+        self.assertFalse(any("/afk/" in path for path in manifest))
+        self.assertEqual(self.cli("--check").returncode, 0)
+        before = self.snapshot()
+        self.assertEqual(self.install(revision).returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+
     def test_duplicate_host_owner_is_detected_after_install(self):
         self.assertEqual(self.install().returncode, 0)
         path = self.repo / ".claude-plugin/plugin.json"
@@ -102,6 +119,18 @@ class JakubkrehelSyncTest(unittest.TestCase):
         path.write_text(json.dumps(manifest))
         result = self.cli("--check")
         self.assertNotEqual(result.returncode, 0, result.stdout)
+
+    def test_refresh_preserves_interleaved_registration_and_manifest_bytes(self):
+        self.assertEqual(self.install().returncode, 0)
+        path = self.repo / ".claude-plugin/plugin.json"
+        manifest = json.loads(path.read_text())
+        owned = [entry for entry in manifest["skills"] if "jakubkrehel-skills/" in entry]
+        manifest["skills"] = ["./accessibility/", owned[0], "./tdd/", *owned[1:]]
+        path.write_text(json.dumps(manifest, separators=(",", ":")) + "\n")
+        before = path.read_bytes()
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(path.read_bytes(), before)
 
     def test_committed_inputs_and_repeat_import_are_deterministic(self):
         self.assertEqual(self.install().returncode, 0)

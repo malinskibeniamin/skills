@@ -10,13 +10,13 @@ description: "Use when operating a web app through its page tools, or designing,
 - **Operate a page:** read the host rules and Chrome page API below, then the
   complete [Builder.io skill](../vendor/builder-webmcp/skills/webmcp/SKILL.md).
   Preserve open-only behavior; do not launch a development workflow for an app edit.
-- **Build, design, test or audit page tools:** read [tool authoring](references/tool-authoring.md), then the complete
-  internal [Chrome Labs skill](../vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md)
-  and router-selected references. Load only the relevant framework/stage; audits
-  require audit, security and error references. These are packaged dependencies,
-  not separately registered commands.
+- **Build, design, test or audit page tools:** read [tool authoring](references/tool-authoring.md), then the complete internal [Chrome Labs skill](../vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md) and router-selected references.
+  Load only the relevant framework/stage; audits require audit, security and error references. These are packaged dependencies, not separately registered commands.
 - **Compare with MCP/Lovable:** read [surface boundaries](references/tool-authoring.md#surface-boundaries).
   WebMCP complements service-facing MCP; it does not replace it.
+- **Explicit extension-agent evaluation:** read the [extension evaluation skill](../vendor/chrome-webmcp/webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md).
+  Use an authorized isolated profile; preserve permission prompts. Loading this reference
+  grants no browser launch, extension installation, paid eval or provider configuration.
 
 ## Shared host rules
 

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/caru-ini/stack-diagram",
-  "revision": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+  "revision": "9175bde8449cc8f5390d6eb72ecc2e1f5bfe21f3",
   "files": {
     "LICENSE": {
       "sha256": "7b153fc3f5f1ccce2b9ac98a35301c666c025db85d6c44565e13304774d144a9",
@@ -11,7 +11,7 @@
       "mode": 420
     },
     "skills/stack-diagram/SKILL.md": {
-      "sha256": "991a4c80e942200441ad80f3e06440af0e33ab35b6ea20a0573d40c6adcd05a9",
+      "sha256": "e78d88f663b76d20ce6bef862e9ea9088ffb19b409320dbff8c25c73020f14b6",
       "mode": 420
     },
     "skills/stack-diagram/assets/fonts/Geist.woff2": {
@@ -71,7 +71,7 @@
       "mode": 420
     },
     "skills/stack-diagram/scripts/fetch_icons.py": {
-      "sha256": "d6abcda84a0ed16f8cc1ebd0075dcb06c502bec5c06e5748f2a4774d26c61370",
+      "sha256": "51b8318892ad1ba5f2895a44858f363dd76fb81001d49fc4d46a935c769a26fa",
       "mode": 420
     },
     "skills/stack-diagram/scripts/render_png.py": {

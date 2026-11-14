@@ -15,6 +15,8 @@ from pathlib import Path, PurePosixPath
 REPOSITORY = "https://github.com/jakubkrehel/skills"
 # Changes to this inventory or invocation policy require a compatibility review.
 EXPLICIT = {"interface-review", "explain-interface", "break", "state-machine", "variant"}
+# Retain reviewed upstream data without installing another unattended-work owner.
+SOURCE_ONLY = {"afk"}
 METADATA = {
     "better-interface": ("Review interfaces through existing visual review", "Review whole screens or flows across accessibility, layout, copy, typography, color and polish using the existing visual-review owner."),
     "better-ui": ("Polish surfaces, icons and interaction details", "Use for surface geometry, optical alignment, shadows, icon states and UI polish; existing animate guidance owns motion."),
@@ -58,7 +60,7 @@ def discover(payload):
         if PurePosixPath(path).name != "SKILL.md":
             continue
         name = PurePosixPath(path).parent.name
-        if name not in METADATA or path != f"skills/{name}/SKILL.md":
+        if name not in METADATA.keys() | SOURCE_ONLY or path != f"skills/{name}/SKILL.md":
             raise ValueError(f"Unadapted upstream skill: {path}")
         if not re.match(rf"---\nname: {re.escape(name)}\n", data.decode("utf-8")):
             raise ValueError(f"Invalid upstream frontmatter: {path}")
@@ -66,16 +68,16 @@ def discover(payload):
         if not frontmatter or not re.search(r"^description: .+", frontmatter[1], re.M):
             raise ValueError(f"Invalid upstream frontmatter: {path}")
         explicit = bool(re.search(r"^disable-model-invocation: true$", frontmatter[1], re.M))
-        if explicit != (name in EXPLICIT):
+        if explicit != (name in EXPLICIT | SOURCE_ONLY):
             raise ValueError(f"Unreviewed invocation policy: {name}")
         names.add(name)
-    if names != set(METADATA) or not {"LICENSE", "README.md"} <= payload.keys():
+    if names - SOURCE_ONLY != set(METADATA) or not {"LICENSE", "README.md"} <= payload.keys():
         raise ValueError("All 14 reviewed skills, LICENSE and README.md are required")
     return [{"name": name, "source": f"skills/{name}/SKILL.md",
              "registration": f"./jakubkrehel-skills/{name}/",
              "explicit_only": name in EXPLICIT,
              "short_description": METADATA[name][0], "description": METADATA[name][1]}
-            for name in sorted(names)]
+            for name in sorted(names - SOURCE_ONLY)]
 
 
 def adapter(skill):
@@ -200,7 +202,10 @@ def install(repo, source, revision):
         (directory / "SKILL.md").write_text(adapter(skill))
         (directory / "SKILL.md").chmod(0o644)
     lock_path.write_text(json.dumps(lock, indent=2) + "\n")
-    registrations = retained + [s["registration"] for s in skills]
+    wanted = [s["registration"] for s in skills]
+    registrations = [entry for entry in manifest["skills"]
+                     if not entry.startswith("./jakubkrehel-skills/") or entry in wanted]
+    registrations += [entry for entry in wanted if entry not in registrations]
     if manifest["skills"] != registrations:
         manifest["skills"] = registrations
         manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")

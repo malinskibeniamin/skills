@@ -113,6 +113,25 @@ class ReaSyncTest(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertEqual(self.snapshot(), before)
 
+    def test_large_runtime_container_stays_bounded_and_skill_only(self):
+        self.pack()
+        # Gzip permits zero padding; model a large release without a runtime fixture.
+        with self.archive.open("r+b") as archive:
+            archive.truncate(40 * 1024 * 1024)
+        integrity = "sha512-" + base64.b64encode(hashlib.sha512(self.archive.read_bytes()).digest()).decode()
+        result = self.cli("--archive", str(self.archive), "--revision", "a" * 40,
+                          "--integrity", integrity)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((self.repo / "vendor/rea/dist").exists())
+        before = self.snapshot()
+        with self.archive.open("r+b") as archive:
+            archive.truncate(64 * 1024 * 1024 + 1)
+        result = self.cli("--archive", str(self.archive), "--revision", "a" * 40,
+                          "--integrity", integrity)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("byte budget", result.stderr)
+        self.assertEqual(self.snapshot(), before)
+
     def test_runtime_notices_are_not_required_or_shipped_with_the_skill(self):
         self.payload["THIRD_PARTY_NOTICES.md"] = (
             "Runtime attribution — [runtime license](licenses/runtime.txt)\n".encode(), 0o644)

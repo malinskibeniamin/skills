@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/pingdotgg/t3code",
-  "revision": "bc8583bc6409e608557c33d42e02b2d1f1e2072f",
+  "revision": "d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7",
   "skills": [
     {
       "name": "contribution-triage",
@@ -117,7 +117,7 @@
   ],
   "files": {
     ".agents/skills/contribution-triage/SKILL.md": {
-      "sha256": "4ee421e997e4a792a057fc26c56bbdca10dbdc85047d5ac22ee0c2fcbbaee7d8",
+      "sha256": "5ded101ea2aa6a32da0a73387e3c3ff117828508638f4a5c916d62419add526e",
       "mode": 420
     },
     ".agents/skills/test-t3-app/SKILL.md": {
@@ -133,7 +133,7 @@
       "mode": 420
     },
     ".agents/skills/test-t3-mobile/SKILL.md": {
-      "sha256": "eb489ced3cdd5eece91ee4b75117bc8b476986cc788eaa8ee73f7d468427e108",
+      "sha256": "71615107075b0b47358a449a85cc61c4c6093862b149c2d2d15138af3941c9f9",
       "mode": 420
     },
     ".agents/skills/test-t3-mobile/agents/openai.yaml": {
@@ -154,6 +154,10 @@
     },
     ".github/triage/PLAYBOOK.md.upstream": {
       "sha256": "abb8d314e8e7ea67b8c619bb045ecd3095b6114601f21cbb4625e1807f626ccf",
+      "mode": 420
+    },
+    ".github/workflows/pr-limits.yml": {
+      "sha256": "fbd9cab172470a31f199b3355dc03d34bda2f7fd983c64f541dc10d443e0fcd6",
       "mode": 420
     },
     ".repos/effect/.agents/AGENTS.md": {
@@ -293,11 +297,11 @@
       "mode": 420
     },
     "CONTRIBUTING.md": {
-      "sha256": "9083f59b942d66b8904cba436d3ffad1cf09a7bd5c6fb6e9b7022e71f789d3c3",
+      "sha256": "40dec54f0625803c0423d4dad97fd218c6c8fd8b1b7d003a0c5e5a70588ce32d",
       "mode": 420
     },
     "CONTRIBUTING.md.upstream": {
-      "sha256": "4d7aaa3bc857e49c8d1ecc962e9532e06d8e1f997eaf2a7737c656ab1706f657",
+      "sha256": "4ee337571cb67cc5b3cdf052ecabbec8826a5e1e5f72f366e19b662e38ccb835",
       "mode": 420
     },
     "LICENSE": {

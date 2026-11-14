@@ -33,10 +33,10 @@ change the pinned upstream snapshot. Recheck the evolving API during refresh.
 All current skills under `webmcp-skills/skills` from
 [GoogleChromeLabs/webmcp-tools](https://github.com/GoogleChromeLabs/webmcp-tools)
 are vendored unchanged at
-[`24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb`](https://github.com/GoogleChromeLabs/webmcp-tools/tree/24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb/webmcp-skills).
-At this revision that is one skill,
-[build-webmcp-tools](../vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md),
-with its complete reference documentation. Only the skill entrypoint, references
+[`a9d4cf1d34e94afc703a8988ace35cfb8904c4ee`](https://github.com/GoogleChromeLabs/webmcp-tools/tree/a9d4cf1d34e94afc703a8988ace35cfb8904c4ee/webmcp-skills).
+This includes [build-webmcp-tools](../vendor/chrome-webmcp/webmcp-skills/skills/build-webmcp-tools/SKILL.md)
+and [evaluate-webmcp-tools-with-extension](../vendor/chrome-webmcp/webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md),
+with their complete reference documentation. Only skill entrypoints, references
 and upstream notices are included. Example apps, eval suites/fixtures, benchmark
 runners, dependencies and app configuration stay upstream.
 
@@ -45,13 +45,16 @@ Git blob SHAs, SHA-256 digests and executable modes. Retain the
 [Apache-2.0 license](../vendor/chrome-webmcp/webmcp-skills/LICENSE) and
 [NOTICE](../vendor/chrome-webmcp/webmcp-skills/NOTICE) with the snapshot.
 
-The host adapter loads this skill only for design/build/test/audit requests.
+The host adapter loads development guidance only for design/build/test/audit requests;
+extension evaluation has its own explicit task branch and isolated-profile boundary.
 Framework/stage references load progressively; no separate Chrome Labs skill is
 registered with Claude, Codex or the router. Local
 [authoring guidance](references/tool-authoring.md) and
 [checked sources](references/sources.md) add lifecycle/error/computation patterns
 and override stale or host-specific instructions without patching source bytes.
 No browser flags, paid evals, dependencies or hooks are enabled by this import.
+Extension/provider setup, browser access and permission choices remain separately
+authorized; upstream auto-confirm examples never widen host permissions.
 
 ## Refresh Builder.io
 
@@ -81,12 +84,14 @@ git -C /path/to/webmcp-tools archive <full-commit-sha> \
   webmcp-skills/LICENSE webmcp-skills/NOTICE \
   webmcp-skills/skills/build-webmcp-tools/SKILL.md \
   webmcp-skills/skills/build-webmcp-tools/references \
+  webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md \
+  webmcp-skills/skills/evaluate-webmcp-tools-with-extension/references \
   | tar -x -C vendor/chrome-webmcp
 ```
 
 Rebuild `vendor/chrome-webmcp.lock.json` with the same repository/revision/license/
-paths/files schema, using only the four paths in the archive command above.
-For each entry from `git ls-tree -r <full-commit-sha> -- <those-four-paths>`, retain
+paths/files schema, using only the six paths in the archive command above.
+For each entry from `git ls-tree -r <full-commit-sha> -- <those-six-paths>`, retain
 the original path, blob SHA and mode; compute SHA-256 from `git show <sha>:<path>`
 bytes. Keep the guidance-only boundary; do not import upstream example apps or evals.
 The independently pinned inventory digest in
