@@ -67,7 +67,8 @@ Create a single switcher component on the route:
 
 ```tsx
 // pseudo-code -- adapt to the project's framework
-const variant = searchParams.get('variant') ?? 'A';
+const requested = searchParams.get('variant');
+const variant = ['A', 'B', 'C'].find((key) => key === requested) ?? 'A';
 return (
   <>
     {variant === 'A' && <VariantA {...data} />}
@@ -81,6 +82,8 @@ return (
 For sub-shape A (existing page): keep all the existing data fetching above the switcher; only the rendered subtree changes per variant.
 
 For sub-shape B (new page): the throwaway route under `/prototype/<name>` mounts the same switcher.
+
+Missing or unknown variant keys fall back to the first variant, not an empty page.
 
 ### 4. Build the floating switcher
 

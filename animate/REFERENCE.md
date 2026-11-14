@@ -15,8 +15,10 @@ Existing product tokens and measured interaction needs win.
 | Color/hover | Short, unobtrusive | ease |
 | Continuous progress | Match actual progress | linear |
 
-UI should usually settle within 300 ms. Marketing explanations and deliberate holds
-have different purposes; do not apply an interaction budget to an entire film.
+UI should usually settle within 300 ms. Modals, drawers, sheets and toasts can have
+longer intentional timings; do not flag their primitive's timing solely against that budget.
+Marketing explanations and deliberate holds have different purposes; do not apply
+an interaction budget to an entire film.
 
 When a project has no motion tokens, these upstream curves are candidates:
 

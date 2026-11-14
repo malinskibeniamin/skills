@@ -51,6 +51,10 @@ that dropped frames were fixed; a compositor-friendly animation can still feel s
   `transformTemplate`, inertia and frame-driven values still need main-thread work.
 - A scale is not a universal height/padding substitute; it scales text and leaves flow
   unchanged. Preserve correctness before choosing a cheaper rendering path.
+- [Opacity alone](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/opacity)
+  does not remove layout space, hit testing or keyboard focus. Preserve hidden-state,
+  inertness, unmount and focus behavior when replacing `display`/`visibility` changes;
+  `pointer-events: none` alone does not prevent keyboard focus.
 - Profile blur/filter/clip-path on supported browsers; a fixed pixel cutoff proves nothing.
 - Cancel frame loops, observers, and animations on unmount; release temporary layer hints.
   React Compiler owns memoization; avoid adding memo wrappers as a substitute for diagnosis.

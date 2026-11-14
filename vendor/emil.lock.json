@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "715c1807e08c497cfd1dc4feb450a2a3300ef2a9",
+  "revision": "0f2e23b32bb1265e84cff8d3e75785fec953fb1b",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "bc5f6275e48c2c9445adef94929e421a51dd9fc82da06fa3e85e51b16d2ef292",
+      "sha256": "76cd144b4af09ae7df883d21747d0bc4d1baacf18cd1ae52ece91fc7657169aa",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -15,111 +15,115 @@
       "mode": 420
     },
     "skills/animate/RECIPES.md": {
-      "sha256": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2",
+      "sha256": "129cddcba35dedacd307ef2de7f2c71e6d23efd9c1756dde44168241207581f9",
       "mode": 420
     },
     "skills/animate/SKILL.md": {
-      "sha256": "39138996033e0dbe53e73217514116eaeca774bae84a0687c80d445a4e0cc3a6",
+      "sha256": "4ce49ea635ec175b45552bae070ea07b2d6aa5367047994250c1c095b71c8585",
       "mode": 420
     },
     "skills/animate-expo/RECIPES.md": {
-      "sha256": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718",
+      "sha256": "31373774c7eef1d3d9f366b638fa2b722f9c730a98e292cda1aa7df2c2b39a56",
       "mode": 420
     },
     "skills/animate-expo/SKILL.md": {
-      "sha256": "9a01a91701e6563c67677dde6b66ab30f066a5341d42c21a90ba51d99679274a",
+      "sha256": "67e5d2ebe23b3edf52ce9d399532f2ead2bd7eff127919dd1c3bbe489b04dd4d",
       "mode": 420
     },
     "skills/animation-performance/SKILL.md": {
-      "sha256": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
+      "sha256": "6481e7a611b54c0d1d229ac3ac516c05648e63aa79de88c0a1bdc5ae2666ab80",
       "mode": 420
     },
     "skills/animation-vocabulary/SKILL.md": {
-      "sha256": "40d2b27adfdfeb0570a9f20e7d0255109d9233c50603878bcd0dcd04c923fd94",
+      "sha256": "42df33f1583483cc441fcd76693b3399148602705d2e9b8a26665d6b1951cd0b",
       "mode": 420
     },
     "skills/apple-design/SKILL.md": {
-      "sha256": "77bb63b7043bb93aca2ff4ab040c249484eef35682bb6ff7163433c31d30adc7",
+      "sha256": "7fbacf928637e136da6d475358d0639667a3637ba772f03f8e815bb4c0b86946",
       "mode": 420
     },
     "skills/ask-sonner/API.md": {
-      "sha256": "4bb06f482c5757529e3d7a672a30fbeed42d24919a63e2571384a9ce1549aa7f",
+      "sha256": "0e0c44a4a28c5f2ceaefc5fb215bf75febe29166066dd502fc7a47ef390c0593",
       "mode": 420
     },
     "skills/ask-sonner/SKILL.md": {
-      "sha256": "39f3ee185b3aa2cf70a689052ff078953ce7ba5915ed7a9391d232e9d4dcf57f",
+      "sha256": "4350ebfef0437875de80cc989059900b21ad621ea09f4709cc2917e7dee82d46",
       "mode": 420
     },
     "skills/break-ui/CATALOG.md": {
-      "sha256": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15",
+      "sha256": "80522dcc81039bf317bce5adcb7b499e9d9da3c98952abb4dfb34ba6c1c32360",
       "mode": 420
     },
     "skills/break-ui/SKILL.md": {
-      "sha256": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+      "sha256": "fb126d176f3b6bf7dfe71f2ae6620ab3dd81e6282c672a1801720055addfce18",
       "mode": 420
     },
     "skills/choreograph/RECIPES.md": {
-      "sha256": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
+      "sha256": "c256ff760f42d905b19f97becd2c0caaf40a95b41b49770c973281374c9600cf",
       "mode": 420
     },
     "skills/choreograph/SKILL.md": {
-      "sha256": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+      "sha256": "0a6802bb2fd5a3993842d48332b8ab56ae5bab369ffa8700f85f6fcff56b8478",
       "mode": 420
     },
     "skills/emil-design-eng/SKILL.md": {
-      "sha256": "965cc3108047a1f68e504977ae7816c66115b202a32e7509c0b8305314839c54",
+      "sha256": "cdbfe467e6c9a4940c3a19e795cecf1ba659378d7412e06c245c6ae49da47da6",
       "mode": 420
     },
     "skills/find-animation-opportunities/SKILL.md": {
-      "sha256": "d52a377819b84a71930f0c822cfe2849f40301605a2d5c7eccbfa3b257700df2",
+      "sha256": "331479e0d867f90d637ef3ef1bdbbd38498d144ab493442afdfbc138abc751b4",
       "mode": 420
     },
     "skills/gestures/SKILL.md": {
-      "sha256": "0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2",
+      "sha256": "1928c86cce924a2a178ddd156ba5ed0f184665a1f95b549724ffb5ae703e994f",
       "mode": 420
     },
     "skills/improve-animations/AUDIT.md": {
-      "sha256": "63fa8fcf7e7b3a3e252938e55c60e1f399f607e73553163e8dacf9df40f3ebed",
+      "sha256": "90312d201cd8ce7dc8add4147570cd47cdb6c901e9980951d9f7b4851b738524",
       "mode": 420
     },
     "skills/improve-animations/PLAN-TEMPLATE.md": {
-      "sha256": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad",
+      "sha256": "e25250c49937e183cca5bc42a057d9f5407a0cacd30d0aad1a4b6d59d7b2a844",
       "mode": 420
     },
     "skills/improve-animations/SKILL.md": {
-      "sha256": "73962447464433476343e2c12cd08ab39cc99a9e5f3c118c5fb54ed897574ef6",
+      "sha256": "632be90e04261192112571b05abd5708fbb846808a4a7780717ee206daa6c6f6",
+      "mode": 420
+    },
+    "skills/learn-taste/SKILL.md": {
+      "sha256": "d624b8cd475eec24c5dc3f49b0380b56c8dab8399df11b92d7c9685aa8d4d33e",
       "mode": 420
     },
     "skills/mobile-native/SKILL.md": {
-      "sha256": "888b7651d66d66dbac4e72b7c554638eb19bd971d686d6cbdf030a5ef3788f55",
+      "sha256": "705e267bc47ea61e4c6f94d121efeebdb994055f482673b8a72f4a0dd62f1968",
       "mode": 420
     },
     "skills/pick-ui-library/SKILL.md": {
-      "sha256": "675fdce308683256ed617351a9b74d23457a5fbd0a562d9831b9c764b8c5e682",
+      "sha256": "db10dc6b2a0c340d873f69e35140ceb3c929e15664b33fcacd1ecb25c5574df3",
       "mode": 420
     },
     "skills/prototype/PICKER.md": {
-      "sha256": "31a55eec94715cc79942e91e172e539e3031dcd5e2e5ee7c1446cf2caee960a6",
+      "sha256": "6c1d7a8d1f34dbc83a2e2068cd49f42107f1d02fb4e80369bb4e978d1e026b8d",
       "mode": 420
     },
     "skills/prototype/SKILL.md": {
-      "sha256": "bba39c955eb1871c5a02733976ceec5d0324198e0812e667604756489c89f7b9",
+      "sha256": "30def86c5a5a0794a954b2a046d24c847c7129f316d79892abff73d54d79adc0",
       "mode": 420
     },
     "skills/remove-animations/SKILL.md": {
-      "sha256": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
+      "sha256": "228d98a3d05637f2ff8fc2d1c2bd88c14783c8c901105cac39a7ae24a4d3e408",
       "mode": 420
     },
     "skills/review-animations/SKILL.md": {
-      "sha256": "5f9fb98b69cace7107af8b393a4196fd42fa42d98bce0e5afc1f866ff3b8a41c",
+      "sha256": "9ceb5072ce5d5e51b07efa60817c66d06fc6492b7900b44dff5ff0f8f7bcf188",
       "mode": 420
     },
     "skills/review-animations/STANDARDS.md": {
-      "sha256": "8f5fe3f5a04537556dd4e6a37f7a8d6f616d840eb80f2f68b5b594febb170657",
+      "sha256": "2d2c28e9fe98dd55a879bafa1684827c812eb31f6b63fe578141d3978ddc664e",
       "mode": 420
     },
     "skills/write-swift/SKILL.md": {
-      "sha256": "16a4b6adb74e338e55e704ce5753ad54d825438b8a63930eeaede9f3c04c9447",
+      "sha256": "ad8f3af70b627c165ecd73ecdba49449e35301dd845c397cf813f06582bbdac2",
       "mode": 420
     },
     "ui-cheatsheet.md": {

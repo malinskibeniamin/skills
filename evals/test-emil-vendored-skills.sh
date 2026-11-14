@@ -42,7 +42,12 @@ for name in selected:
     license_text = (canonical.parent / "LICENSE").read_text()
     assert "Copyright (c) 2026 Emil Kowalski" in license_text, f"missing notice: {name}"
     assert "Permission is hereby granted" in license_text, f"missing MIT grant: {name}"
-print("  PASS  selected Emil skills load offline on Claude and Codex with licensed resources")
+catalog = (repo / "break-ui/CATALOG.md").read_text()
+domains = set(re.findall(r"\b[\w.+-]+@([\w.-]+\.[A-Za-z]{2,})\b", catalog))
+unsafe = sorted(domain for domain in domains if domain not in ("example.com", "example.org")
+                and not domain.endswith((".example.com", ".example.org", ".test")))
+assert not unsafe, f"Non-reserved fixture email domains: {unsafe}"
+print("  PASS  selected Emil skills load offline on Claude and Codex with licensed resources and safe fixture emails")
 PY
 then
   PASS=$((PASS + 1))
