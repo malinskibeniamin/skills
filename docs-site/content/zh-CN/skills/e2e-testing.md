@@ -67,3 +67,7 @@ PR 在 Chromium 中运行完整套件。将关键路径和可信引擎风险标�
 | 选择器或 AI 检查 | `agent-browser snapshot` |
 | 视觉冒烟证据 | `agent-browser screenshot --annotate` |
 | 交互式调试 | Playwright UI 模式 |
+
+用户请求 Browser Use 实验时，阅读
+[BROWSER-USE.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/BROWSER-USE.md)。
+项目与宿主环境对浏览器的要求仍然优先。

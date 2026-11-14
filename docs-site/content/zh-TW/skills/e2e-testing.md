@@ -67,3 +67,7 @@ Agent-browser 是獲准使用時的預設互動式 CLI，並非 Playwright Test 
 | 選取器或 AI 檢查 | `agent-browser snapshot` |
 | 視覺冒煙證據 | `agent-browser screenshot --annotate` |
 | 互動式除錯 | Playwright UI 模式 |
+
+使用者要求進行 Browser Use 實驗時，閱讀
+[BROWSER-USE.md](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/BROWSER-USE.md)。
+專案與主機環境對瀏覽器的要求仍然優先。
