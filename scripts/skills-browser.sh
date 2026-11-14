@@ -23,7 +23,7 @@ agent-browser not installed. Choose one:
   cargo install agent-browser
   npm install -g agent-browser
 
-Then: agent-browser install  # Downloads Chrome; choose setup explicitly.
+For browser capture/UI: agent-browser install  # Downloads Chrome.
 
 Browser verification BLOCKED until the permitted tool is available; no checks ran.
 EOF
