@@ -79,6 +79,12 @@ Verifier drift routes to `/maintain-verification-skill`; a recurring missing pat
 
 React: [runtime probes](../shared/react-devtools.md).
 
+## Browser and data tasks
+
+HTTP/data retrieval is not UI evidence; changed UI needs fresh browser actions/assertions.
+For tool choice or saved flows, read [browser/data replay](../shared/verification-replay.md#browser-and-data-tasks).
+Honor user/host browser requirements and the project verifier.
+
 ## Receipt
 
 `Verdict: PASS | FAIL | BLOCKED`; entrypoint/actions/observations:

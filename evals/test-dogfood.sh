@@ -38,6 +38,45 @@ run_content_eval "$SKILL" "counts.*ordering.*timing" \
 run_content_eval "$SKILL" "response time.*network.*render.*CPU.*memory" \
   "dogfood measures applicable performance"
 
+# Publication checks: these guard routing/safety instructions, not agent adherence.
+BROWSER_GUIDE="$REPO_ROOT/shared/verification-replay.md"
+run_content_eval "$SKILL" 'verification-replay.md#browser-and-data-tasks' \
+  "direct dogfood invocation reaches browser/data replay guidance"
+run_content_eval "$BROWSER_GUIDE" "HTTP success is not UI evidence" \
+  "data success cannot stand in for browser verification"
+run_content_eval "$BROWSER_GUIDE" "UI changes require fresh real-browser" \
+  "changed UI gets fresh visible behavior evidence"
+run_content_eval "$BROWSER_GUIDE" "user/host browser requirements" \
+  "browser choice preserves host and user policy"
+run_content_eval "$BROWSER_GUIDE" "playwright-cli.*browser MCP" \
+  "interactive tool selection considers agent-browser without replacing CI"
+run_content_eval "$BROWSER_GUIDE" "allowlisted read|allowlisted.*read" \
+  "saved data flows require reviewed safe reads"
+run_content_eval "$BROWSER_GUIDE" 'no `--allow-write`|without `--allow-write`' \
+  "saved-flow reuse does not authorize writes"
+run_content_eval "$BROWSER_GUIDE" "AGENT_BROWSER_FLOWS_DIR" \
+  "captures use isolated temporary flow storage"
+run_content_eval "$BROWSER_GUIDE" "secrets.*PII|PII.*secrets" \
+  "saved artifacts remain sensitive despite upstream redaction"
+run_content_eval "$BROWSER_GUIDE" 'transport.*fellBack|fellBack.*transport' \
+  "flow receipts retain actual transport and fallback provenance"
+run_content_eval "$BROWSER_GUIDE" 'verified.*drift|drift.*verified' \
+  "flow success is checked for schema drift"
+run_content_eval "$BROWSER_GUIDE" 'success: true.*data.ok: true.*data.verified: true' \
+  "flow receipts distinguish actual success from command success"
+run_content_eval "$BROWSER_GUIDE" 'confirmation_required' \
+  "write confirmation does not count as executed work"
+run_content_eval "$BROWSER_GUIDE" 'flow --help.*support|support.*flow --help' \
+  "saved flows check installed command capability first"
+run_content_eval "$BROWSER_GUIDE" 'fast-path claim requires nonempty `data.steps`' \
+  "direct HTTP claims require observed request steps"
+run_content_eval "$BROWSER_GUIDE" 'tier: http.*no per-step.*fellBack.*independent live-backend' \
+  "direct HTTP claims exclude fallback and require backend provenance"
+run_content_eval "$BROWSER_GUIDE" 'route mocks without a backend request' \
+  "HTTP tier alone does not prove a live backend request"
+run_content_eval "$BROWSER_GUIDE" "HTTP-only.*no-fallback|no-fallback.*HTTP-only" \
+  "flow reuse does not promise an unsupported transport restriction"
+
 if grep -q "^disable-model-invocation:" "$SKILL" 2>/dev/null; then
   echo "  FAIL  dogfood must be model-invoked"
   FAIL=$((FAIL + 1))
