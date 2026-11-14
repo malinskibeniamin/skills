@@ -52,8 +52,8 @@ CLAUDE_SESSION_ID= CODEX_SESSION_ID= run_hook_eval \
   "payload-only session retains the requested delivery endpoint" "unpushed"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" \
-  "$(printf '%s' "$_delivery_payload" | jq '.stop_hook_active = true')" 2 \
-  "a repeated successful Stop cannot waive an unpushed commit" "unpushed"
+  "$(printf '%s' "$_delivery_payload" | jq '.stop_hook_active = true')" 0 \
+  "an exhausted Stop retry reports unpushed work without continuing" "unpushed"
 printf '99\n' > "$_delivery_session/stop-block-count"
 CLAUDE_SESSION_ID="$_delivery_sid" HOOK_STOP_BLOCK_CAP_GUARD=1 run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
@@ -105,8 +105,16 @@ git -C "$_delivery_repo" remote set-url origin "$_delivery_remote"
 printf 'uncommitted requested work\n' > requested.txt
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" \
-  "$(printf '%s' "$_delivery_payload" | jq '.stop_hook_active = true')" 2 \
-  "a repeated Stop still requires committing session-owned files" "uncommitted"
+  "$(printf '%s' "$_delivery_payload" | jq '.stop_hook_active = true')" 0 \
+  "an exhausted Stop retry reports uncommitted work without continuing" "uncommitted"
+if [ ! -e "$_delivery_session/task-completed" ]; then
+  echo "  PASS  exhausted delivery retry is not recorded as a completed task"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  exhausted delivery retry is recorded as a completed task"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: exhausted delivery retry completion marker"
+fi
 rm "$_delivery_session/dirty-files-baseline"
 CLAUDE_SESSION_ID="$_delivery_sid" run_hook_eval \
   "$_delivery_repo/.claude/hooks/stop-dispatch.sh" "$_delivery_payload" 2 \
