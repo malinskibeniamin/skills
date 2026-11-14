@@ -29,7 +29,7 @@ Wykonuj dogfood dla każdego istotnego uruchamialnego wycinka i końcowego PR-a 
 1. Ustal bazę porównania przez
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
 2. Sprawdź pełny PR: od merge-base po pracę zatwierdzoną, staged, unstaged i untracked.
-3. Pokryj zmienione uruchamialne ścieżki w rzeczywistych punktach wejścia, w tym zasoby/skrypty umiejętności i zdarzenia hooków.
+3. Pokryj zmienione gałęzie w rzeczywistych punktach wejścia, w tym zasoby/skrypty umiejętności i zdarzenia hooków.
    Samodzielna dokumentacja, testy i ewaluacje nie wymagają weryfikacji w praktyce.
 
 ## Pętla [#loop]
@@ -71,7 +71,7 @@ popraw przez `/tdd` i uruchom ponownie powiązane kontrole. Zmiany unieważniaj�
 
 W rzeczywistym punkcie wejścia powtórz zamierzone użycie i każdą próbę uszkodzenia. Dla błędów odtwórz identyczne
 kroki i sąsiednie zachowanie. Użyj [pakietów odtwarzania](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md) w przypadku
-błędów zależnych od stanu lub powtarzających się problemów z reprodukcją. PASS dotyczy bieżącego stanu uruchamialnego.
+błędów zależnych od stanu lub problemów z reprodukcją. PASS dotyczy bieżącego stanu uruchamialnego.
 
 ## Punkty wejścia [#entrypoints]
 
@@ -89,18 +89,15 @@ Uruchamianie nowych agentów wymaga jawnej delegacji.
 
 Jeśli istnieje lokalna dla projektu umiejętność `verify-*`, użyj jej mechanizmów doctor, drive, evidence i cleanup.
 Tylko UI w checkoutcie T3 Code: ustal [kontekst natywny](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context), a następnie załaduj [weryfikację web/desktop](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md) lub
-[weryfikację natywnej aplikacji mobilnej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md). Brak narzędzi Browser/Device oznacza
-BLOCKED, a nie instalację ani przejście na inny harness.
-Rozbieżność weryfikatora kieruj do `/maintain-verification-skill`; powtarzający się brak ścieżki kieruj do
-`/create-verification-skill` po uzyskaniu dowodu.
+[weryfikację natywnej aplikacji mobilnej](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md). Brak narzędzi Browser/Device oznacza BLOCKED;
+nie instaluj ani nie przechodź na inny harness.
+Rozbieżność weryfikatora kieruj do `/maintain-verification-skill`; powtarzający się brak ścieżki kieruj do `/create-verification-skill` po uzyskaniu dowodu.
 
 React: [inspekcja w czasie działania](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md).
 
 ## Zadania w przeglądarce i praca z danymi [#browser-and-data-tasks]
 
-Domyślnie używaj agent-browser, jeśli jest to dozwolone; pobieranie przez HTTP lub pobieranie danych nie potwierdza działania UI.
-Przy wyborze narzędzia lub korzystaniu z zapisanych przepływów przeczytaj [odtwarzanie zadań w przeglądarce i pracy z danymi](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks).
-Przestrzegaj wymagań użytkownika/hosta dotyczących przeglądarki oraz zasad weryfikatora projektu.
+Przeczytaj [domyślne ustawienia przeglądarki](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks).
 
 ## Potwierdzenie [#receipt]
 

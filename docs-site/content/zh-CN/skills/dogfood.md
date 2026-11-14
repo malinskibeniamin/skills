@@ -69,7 +69,7 @@ UI 内容/布局风险：使用 Skill 工具调用 "break-ui"。在重放和回�
 ### 重放 [#replay]
 
 在真实入口重复预期使用和每项破坏尝试。对于缺陷，重放完全相同的
-步骤并检查相邻行为。对于有状态缺陷或反复出现的复现缺口，使用[重放数据包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
+步骤并检查相邻行为。对于有状态缺陷或复现缺口，使用[重放数据包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
 PASS 绑定当前可运行状态。
 
 ## 入口 [#entrypoints]
@@ -97,9 +97,7 @@ React：[运行时检查](https://github.com/malinskibeniamin/skills/blob/main/s
 
 ## 浏览器和数据任务 [#browser-and-data-tasks]
 
-允许时默认使用 agent-browser；HTTP/数据获取不属于 UI 证据。
-有关工具选择或已保存的流程，请阅读[浏览器/数据重放](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
-遵守用户/宿主环境的浏览器要求，并遵循项目验证器。
+阅读[浏览器默认设置](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
 
 ## 回执 [#receipt]
 

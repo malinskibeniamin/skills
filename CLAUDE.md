@@ -14,11 +14,9 @@ Local policy wins.
 - Tests: `.test.ts` unit, `.test.tsx` integration, `.browser.test.tsx` visual,
   `e2e/*.spec.ts` Playwright; co-locate with source.
 - Services: repo CLI. LaunchDarkly flags: `ldcli` only; read `shared/ldcli.md`.
-- Browser automation: `agent-browser` by default when user/host permits; read
-  [browser/data replay](shared/verification-replay.md#browser-and-data-tasks).
 
-Follow local idioms. Preserve zoom, worktree isolation,
-secrets, types, generated files; use `exemplars/`.
+Follow local idioms. Keep zoom/worktree isolation,
+secrets/types/generated files; use `exemplars/`.
 
 [Code quality](shared/verifiability.md).
 
@@ -57,7 +55,7 @@ Report blockers; uncommitted/unpushed owned work is incomplete.
 PR upkeep: one authorized transport; honor no-monitoring stops.
 Agents/council require host-valid consent. Standing owner consent is reusable only
 within its explicit scope; no nested delegation. Persistent setup needs authorization.
-Isolate browser automation; never take over human-owned browsers/desktop apps.
+Browser automation: agent-browser default; never take over human-owned browsers/apps.
 
 End actions with one status line:
 `🟢 done — <evidence>`, `🟡 awaiting decision — <decision>`, or

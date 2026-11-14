@@ -27,7 +27,7 @@ type: skill
 1. 用下列指令確定比較基線：
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`。
 2. 檢查完整 PR：從合併基點開始，涵蓋已提交、已暫存、未暫存和未追蹤工作。
-3. 在真實入口涵蓋變更的可執行分支，包括技能資源／指令碼和鉤子事件。
+3. 在真實入口涵蓋變更的分支，包括技能資源／指令碼和鉤子事件。
    獨立文件、測試和評估不要求體驗覆蓋。
 
 ## 迴圈 [#loop]
@@ -68,7 +68,7 @@ UI 內容／版面配置風險：使用 Skill 工具呼叫 "break-ui"。在重�
 ### 重放 [#replay]
 
 在真實入口重複預期使用和每項破壞嘗試。對於缺陷，重放完全相同的
-原始步驟並驗證相鄰行為。對於有狀態缺陷或反覆出現的重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
+原始步驟並驗證相鄰行為。對於有狀態缺陷或重現缺口，使用[重放資料包](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
 PASS 繫結目前可執行狀態。
 
 ## 入口 [#entrypoints]
@@ -87,18 +87,15 @@ PASS 繫結目前可執行狀態。
 
 如果存在專案本機的 `verify-*` 技能，使用其檢查、驅動、證據和清理功能。
 僅限 T3 Code 簽出目錄中的 UI：先解析[原生脈絡](https://github.com/malinskibeniamin/skills/blob/main/shared/T3CODE-NATIVE.md#resolve-context)，再載入 [Web／桌面](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-app/SKILL.md)或
-[原生行動版](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。缺少 Browser/Device 工具表示驗證
-BLOCKED，而非安裝或切換至另一套驗證工具。
-驗證器漂移交由 `/maintain-verification-skill` 處理；經證實反覆缺少的路徑則交由
-`/create-verification-skill` 處理。
+[原生行動版](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/test-t3-mobile/SKILL.md)。缺少 Browser/Device 工具表示驗證 BLOCKED；
+請勿安裝或切換至另一套驗證工具。
+驗證器漂移交由 `/maintain-verification-skill` 處理；經證實反覆缺少的路徑則交由 `/create-verification-skill` 處理。
 
 React：[執行階段檢查](https://github.com/malinskibeniamin/skills/blob/main/shared/react-devtools.md)。
 
 ## 瀏覽器與資料任務 [#browser-and-data-tasks]
 
-在允許的情況下，預設使用 agent-browser；HTTP／資料擷取不能作為 UI 證據。
-選擇工具或使用已儲存流程時，請閱讀[瀏覽器／資料重放](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
-遵守使用者／主機的瀏覽器要求與專案驗證器規範。
+請閱讀[瀏覽器預設設定](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
 
 ## 回執 [#receipt]
 
