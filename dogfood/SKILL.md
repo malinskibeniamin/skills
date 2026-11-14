@@ -9,11 +9,11 @@ Dogfood each material runnable slice and final PR at public seams. Tests are not
 
 ## Inventory
 
-1. Resolve the comparison base with
+1. Resolve base with
    `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
-2. Inspect the full PR: merge-base through committed, staged, unstaged, and untracked work.
-3. Cover changed runnable branches at real entrypoints, including skill resources/scripts and hook events.
-   Standalone docs, tests and evals need no experiential coverage.
+2. Inspect full PR: merge-base through committed, staged, unstaged and untracked work.
+3. Cover changed branches at real entrypoints, including skill resources/scripts and hook events.
+   Standalone docs/tests/evals need no experiential coverage.
 
 ## Loop
 
@@ -52,9 +52,9 @@ fix via `/tdd`, and rerun focused checks. Edits invalidate evidence.
 
 ### Replay
 
-At the real entrypoint, repeat intended use and every break attempt. For bugs, replay identical
+Repeat intended use and every break attempt at the real entrypoint. Replay identical bug
 steps and adjacent behavior. Use [replay packets](../shared/verification-replay.md) for
-stateful bugs or recurring repro gaps. PASS binds to the current runnable state.
+stateful bugs/repro gaps. PASS binds to current runnable state.
 
 ## Entrypoints
 
@@ -70,14 +70,17 @@ stateful bugs or recurring repro gaps. PASS binds to the current runnable state.
 
 Fresh agents require explicit delegation.
 
-If a project-local `verify-*` skill exists, use its doctor, drive, evidence, and cleanup.
+Use project-local `verify-*` doctor, drive, evidence and cleanup when available.
 T3 Code checkout UI only: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context), then load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
-[native mobile](../t3code-skills/test-t3-mobile/SKILL.md). Missing Browser/Device tools mean
-BLOCKED, not installing or switching harnesses.
-Verifier drift routes to `/maintain-verification-skill`; a recurring missing path routes to
-`/create-verification-skill` after proof.
+[native mobile](../t3code-skills/test-t3-mobile/SKILL.md). Missing Browser/Device: BLOCKED;
+do not install or switch harnesses.
+Verifier drift: `/maintain-verification-skill`; recurring gaps: `/create-verification-skill` after proof.
 
 React: [runtime probes](../shared/react-devtools.md).
+
+## Browser and data tasks
+
+Read [browser defaults](../shared/verification-replay.md#browser-and-data-tasks).
 
 ## Receipt
 

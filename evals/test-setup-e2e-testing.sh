@@ -35,6 +35,13 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Chromium.*full.*suite|full.*suite.*Chrom
 run_content_eval "$SKILL_DIR/SKILL.md" "Firefox.*WebKit.*@cross-browser|@cross-browser.*Firefox.*WebKit" "SKILL.md scopes secondary browsers to critical journeys"
 run_content_eval "$SKILL_DIR/SKILL.md" "nightly|release gate" "SKILL.md reserves the full browser matrix for a slower lane"
 
+run_content_eval "$SKILL_DIR/SKILL.md" 'dogfood/SKILL.md#browser-and-data-tasks' \
+  "E2E tool choice reaches the shared browser/data owner"
+run_content_eval "$SKILL_DIR/SKILL.md" 'Playwright Test.*CI|CI.*Playwright Test' \
+  "interactive browser automation preserves the Playwright Test runner"
+run_content_eval "$SKILL_DIR/SKILL.md" 'not.*replace.*UI assertions|retain.*UI assertions' \
+  "saved flows retain browser UI assertions"
+
 # ── SETUP.md content (one-time setup, not auto-loaded) ──────────
 
 run_content_eval "$SKILL_DIR/SETUP.md" "playwright/test" "SETUP has Playwright install"
