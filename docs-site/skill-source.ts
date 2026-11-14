@@ -10,8 +10,8 @@ import {
 } from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
 
-import { filesystemSource } from "#blume-filesystem";
-import { gitLastModifiedTimes } from "#blume-last-modified";
+import { gitFileDates } from "blume/core/last-modified.ts";
+import { filesystemSource } from "blume/sources/filesystem.ts";
 
 interface SkillSourceOptions {
   branch: string;
@@ -422,9 +422,7 @@ const localizeSkillSearch = async (
   return changed;
 };
 
-export const createSkillSource = (
-  sourceOptions: SkillSourceOptions,
-): ReturnType<typeof filesystemSource> => {
+export const createSkillSource = (sourceOptions: SkillSourceOptions) => {
   const options = {
     ...sourceOptions,
     repositoryUrl: sourceOptions.repositoryUrl.replace(/\/$/, ""),
@@ -459,7 +457,7 @@ export const createSkillSource = (
       if (sourcePaths.includes(routerPath) && existsSync(catalogPath)) {
         sourcePaths.push(catalogPath);
       }
-      const gitTimes = gitLastModifiedTimes(
+      const { modified: gitTimes } = gitFileDates(
         options.repositoryRoot,
         [...new Set(sourcePaths.map(dirname))],
         sourcePaths,
@@ -489,15 +487,15 @@ export const createSkillSource = (
       if (!existsSync(options.repositoryRoot)) {
         throw new Error(`Repository root not found: ${options.repositoryRoot}`);
       }
-      filesystem.validate();
+      filesystem.validate?.();
     },
-    watch: (onChange) => {
+    watch: (onChange: () => void) => {
       let timeout: ReturnType<typeof setTimeout> | undefined;
       const notify = () => {
         clearTimeout(timeout);
         timeout = setTimeout(onChange, 50);
       };
-      const stopContentWatcher = filesystem.watch(notify);
+      const stopContentWatcher = filesystem.watch?.(notify);
       const watcher = watchFiles(
         options.repositoryRoot,
         { recursive: true },
@@ -513,7 +511,7 @@ export const createSkillSource = (
       );
       return () => {
         clearTimeout(timeout);
-        stopContentWatcher();
+        stopContentWatcher?.();
         watcher.close();
       };
     },
