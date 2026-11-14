@@ -1,5 +1,8 @@
 # Visual Review Reference
 
+Use product, design, engineering, and QA hats. Modes: `plan`, `implemented`,
+`regression`, `release`. Standalone trigger OK.
+
 ## House taste
 
 - Rendering stays honest: show machine truth beside human labels; preserve zero values;
@@ -524,3 +527,81 @@ Every skip gets reason. `not reachable` ok; blank not ok.
 | Screenshot diff | Visual regression tool | baseline compare |
 | Subjective taste issue | Skill rubric/eval example | judgement required |
 | Report rendering | Script | JSON -> HTML transform |
+
+## Target and evidence checks
+
+Use when matching an approved reference or claiming a visible defect fixed. Reuse
+existing captures and the project's visual regression tooling; this adds no device
+matrix, report, snapshot update, independent agent or approval requirement.
+
+### Target before candidate
+
+Keep three identities distinct: approved target, previous implementation and current
+implementation. Preserve the target's source and intended relationships before editing;
+the newest screenshot never silently becomes the requirement. Generated concepts are
+not implemented screenshots.
+
+Compare matching route, state, data, viewport, DPR, zoom, fonts and animation time.
+For a reported defect, reproduce the reporter's framing; other views supplement it.
+Inspect the full frame and native-scale details: endpoints, fade tails, overlaps and
+neighboring content. Use a compact feature -> target observation -> candidate
+observation -> pass/fix/uncertain record only where the comparison needs it.
+Resolve material differences or disclose the limit; a similarity score is not approval.
+
+### Verify the evidence
+
+For captured artifacts and a claimed PNG change, use the bundled read-only helper:
+
+```sh
+bun <harness-root>/visual-review/scripts/check-evidence.ts /absolute/path/evidence.json
+```
+
+It requires the harness checkout's locked dependencies (`bun install --frozen-lockfile`
+at that root when setup is authorized). Do not install packages in the product merely
+to run it. A missing prerequisite is an evidence gap, not a pass; reuse equivalent
+project-native checks where available.
+
+The manifest is task-local/temporary unless it has a concrete maintenance purpose:
+
+```json
+{
+  "schema_version": 1,
+  "artifacts": [
+    { "id": "before", "path": "before.png", "sha256": "<64 lowercase hex characters>" },
+    { "id": "after", "path": "after.png", "sha256": "<64 lowercase hex characters>" }
+  ],
+  "comparisons": [
+    { "baseline": "before", "candidate": "after", "expect": "changed" }
+  ]
+}
+```
+
+Record hashes from the actual capture with `shasum -a 256 <file>` or the capture tool.
+Paths resolve relative to the manifest, not the invoking repository. Artifacts can
+also name original targets, crops or measurement output files. The helper checks
+every file's hash, decodes comparison PNGs, requires equal dimensions and counts
+differing RGBA pixels. `expect` is `changed` for a claimed fix or `unchanged` for a
+control. Optional `changed_pixels` is a claimed count that must equal the measurement.
+It prints JSON and exits 0 only when all checks pass; invalid input/evidence exits
+nonzero without a success receipt. PNG re-encoding alone is not a visual change.
+
+### Claim limits
+
+- A matching hash proves current bytes, not who captured them, their revision,
+  authenticity, or that two screenshots show comparable application state. Check
+  capture provenance and invalidate affected evidence after edits/base movement.
+- A changed pixel count is diagnostic, not a quality/fidelity score. It includes
+  color/alpha differences but does not judge visibility, color management or intent.
+  Nondeterministic pixels can move while the reported defect remains unchanged.
+- Quote quantities only with actual tool output and the inputs it measured. The
+  helper verifies only its own pixel count, not arbitrary luminance, contrast or
+  prose claims. Re-measure unsupported quantities or use qualitative observations.
+  A printed command transcript is attribution, not proof the command executed.
+- Hashing a measurement file does not validate its contents. Neither this helper,
+  inline self-review nor model agreement supplies independent review or user approval.
+  Fresh reviewers still require explicit authorization; never claim independence
+  for an inline pass. Open or close only task-owned visual surfaces.
+
+Sources: [comparison and landmarks](https://github.com/dzhng/skills/blob/873aba8d6331976f92052f54513076abd1ae629f/skills/visual/compare-screenshots/SKILL.md),
+[critique receipts](https://github.com/dzhng/skills/blob/873aba8d6331976f92052f54513076abd1ae629f/skills/visual/screenshot-critique/SKILL.md).
+The local helper is not an import of their scripts or metric thresholds.
