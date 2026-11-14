@@ -1,7 +1,7 @@
 # T3 Code and Effect skill snapshot
 
 All 16 skills and every file inside their skill directories are copied unchanged
-from [pingdotgg/t3code at bc8583b](https://github.com/pingdotgg/t3code/tree/bc8583bc6409e608557c33d42e02b2d1f1e2072f).
+from [pingdotgg/t3code at d899bdd](https://github.com/pingdotgg/t3code/tree/d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7).
 The [lock](t3code-skills.lock.json) records full revision, file digests, executable
 modes and the complete skill inventory. This is a skill snapshot, not a runnable
 T3 or Effect checkout. The local [compatibility contract](../shared/T3CODE-SKILLS.md)
@@ -12,7 +12,7 @@ adapts it without editing upstream bytes.
 - Three project skills: `.agents/skills` in T3 Code. Retain the
   [T3 MIT license](t3code/LICENSE), copyright 2026 T3 Tools Inc.
 - Thirteen reference skills: `.repos/effect/.agents/skills` in the same T3
-  revision. T3's [reference configuration](https://github.com/pingdotgg/t3code/blob/bc8583bc6409e608557c33d42e02b2d1f1e2072f/scripts/lib/reference-repos.ts)
+  revision. T3's [reference configuration](https://github.com/pingdotgg/t3code/blob/d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7/scripts/lib/reference-repos.ts)
   identifies [Effect-TS/effect](https://github.com/Effect-TS/effect) as their origin.
   Retain the [Effect MIT license](t3code/.repos/effect/LICENSE), copyright
   2023 Effectful Technologies Inc. The T3 commit pins these exact copied bytes;
@@ -63,7 +63,7 @@ explicit host metadata/compatibility review before import.
 ```sh
 python3 scripts/vendor-t3code-skills.py \
   --source /path/to/t3code \
-  --revision bc8583bc6409e608557c33d42e02b2d1f1e2072f
+  --revision d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7
 bash scripts/generate-skill-catalog.sh
 python3 scripts/vendor-t3code-skills.py --check
 bash evals/run.sh t3code-vendored-skills

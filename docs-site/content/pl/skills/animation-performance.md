@@ -58,6 +58,10 @@ utraconych klatek; nawet animacja przyjazna kompozytorowi może sprawiać wraże
   `transformTemplate`, bezwładność i wartości sterowane co klatkę nadal wymagają pracy głównego wątku.
 - Skalowanie nie zastępuje zawsze wysokości lub paddingu: skaluje tekst i nie zmienia przepływu.
   Zachowaj poprawność, zanim wybierzesz tańszą ścieżkę renderowania.
+- [Samo opacity](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/opacity)
+  nie usuwa miejsca w układzie ani nie blokuje interakcji wskaźnikiem czy fokusu klawiatury.
+  Przy zastępowaniu zmian `display`/`visibility` zachowaj obsługę ukrycia, stanu `inert`,
+  odmontowania i fokusu; samo `pointer-events: none` nie zapobiega przeniesieniu fokusu z klawiatury.
 - Profiluj blur/filter/clip-path w obsługiwanych przeglądarkach; stała granica pikseli niczego nie dowodzi.
 - Anuluj pętle klatek, obserwatory i animacje przy odmontowaniu; zwalniaj tymczasowe wskazówki warstw.
   React Compiler odpowiada za memoizację; opakowania memo nie zastępują diagnozy.

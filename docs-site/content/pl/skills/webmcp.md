@@ -30,6 +30,10 @@ type: skill
 - **Porównanie z MCP/Lovable:** przeczytaj [granice interfejsów](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/tool-authoring.md#surface-boundaries).
   WebMCP uzupełnia MCP łączące agentów z usługami; nie zastępuje go.
 
+- **Ewaluacja agenta rozszerzenia na wyraźne żądanie:** przeczytaj [umiejętność ewaluacji rozszerzeń](https://github.com/malinskibeniamin/skills/blob/main/vendor/chrome-webmcp/webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md).
+  Używaj autoryzowanego, odizolowanego profilu; zachowaj monity o uprawnienia.
+  Wczytanie tego materiału nie upoważnia do uruchomienia przeglądarki, instalacji rozszerzenia, płatnej ewaluacji ani konfiguracji dostawcy.
+
 ## Wspólne reguły środowiska [#shared-host-rules]
 
 Lokalne reguły mają pierwszeństwo przed oboma źródłami: zachowaj uzgodniony punkt zakończenia i faktyczne możliwości środowiska.

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/t3dotgg/tstack",
-  "revision": "1085050f3baed1ac724caa4a8166145fb2ac88af",
+  "revision": "11e37a74d0a6868c121cd0910ab2b3bd9873b92a",
   "skills": [
     {
       "name": "babysit-pr",
@@ -84,7 +84,7 @@
       "mode": 493
     },
     "skills/council/SKILL.md": {
-      "sha256": "598fb2c7cdd48ddd9643cb22999e1b624c357aa6579aa0af0e7268ae16a8a164",
+      "sha256": "91cab56e85ca2ce2920961b50931573890e0513adbc5a60b33969b1e2501251c",
       "mode": 420
     },
     "skills/file-pr/SKILL.md": {

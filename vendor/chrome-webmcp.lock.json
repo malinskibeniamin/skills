@@ -1,12 +1,14 @@
 {
   "repository": "https://github.com/GoogleChromeLabs/webmcp-tools",
-  "revision": "24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb",
+  "revision": "a9d4cf1d34e94afc703a8988ace35cfb8904c4ee",
   "license": "Apache-2.0",
   "paths": [
     "webmcp-skills/LICENSE",
     "webmcp-skills/NOTICE",
     "webmcp-skills/skills/build-webmcp-tools/SKILL.md",
-    "webmcp-skills/skills/build-webmcp-tools/references"
+    "webmcp-skills/skills/build-webmcp-tools/references",
+    "webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md",
+    "webmcp-skills/skills/evaluate-webmcp-tools-with-extension/references"
   ],
   "files": {
     "webmcp-skills/LICENSE": {
@@ -97,6 +99,16 @@
     "webmcp-skills/skills/build-webmcp-tools/references/vanilla-patterns.md": {
       "blob_sha": "1f2ac0c7b4051b9ccd43c3f1bf1eef0ca59990fb",
       "sha256": "a9f644fd6082d5faa66735b84e2a57b157b58c0dcbf2cf6f83507d3df4164601",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md": {
+      "blob_sha": "4b38c8d392fbd16eaed19b4f056df8d01eabd5d9",
+      "sha256": "825afe5e034fbb487e61b963277a8029d7837e086cfad5e4c9d7df92a6024bc4",
+      "mode": "100644"
+    },
+    "webmcp-skills/skills/evaluate-webmcp-tools-with-extension/references/extension-contract.md": {
+      "blob_sha": "b196143d009a2fb1cf74f91cb55786e88dd4ecd5",
+      "sha256": "dbda7380e965150c47f914fe28e22f760d5add55262cd0d1b190aec4f7c47a9a",
       "mode": "100644"
     }
   }

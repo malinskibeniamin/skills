@@ -1,13 +1,13 @@
 # REA skill snapshot
 
-The published `rea-agents@6.8.0` npm archive supplies the unchanged
-`skills/reverse-engineer-anything/` tree, including all seven reference guides,
-plus its original LICENSE and package.json. Those 10 files
+The published `rea-agents@6.9.0` npm archive supplies the unchanged
+`skills/reverse-engineer-anything/` tree, including all eight reference guides,
+plus its original LICENSE and package.json. Those 11 files
 are reference material, not an installed REA runtime. No executable runtime,
 native engine, upstream plugin manifest, root agent instruction or setup script
 is vendored. Copyright (c) 2026 morluto; [MIT license](rea/LICENSE).
 
-The [upstream runtime attribution](https://github.com/morluto/rea/blob/160d821ac9a0310afcb8d1fc427862dd6508add5/THIRD_PARTY_NOTICES.md)
+The [upstream runtime attribution](https://github.com/morluto/rea/blob/d74549e495c58eb4a560279fd9f05508401ea0a0/THIRD_PARTY_NOTICES.md)
 describes dependencies, native engines and assets not shipped here. Keep it with
 the separately acquired runtime, not this skill-only snapshot: its relative
 links require the wider upstream tree. Future third-party skill helpers/assets
@@ -16,7 +16,7 @@ require their own reviewed license trail before import.
 [The lock](rea.lock.json) records the npm tarball URL and SHA-512 integrity,
 release version, Node requirements, complete selected file SHA-256 digests and
 modes. Source commit
-[`160d821ac9a0310afcb8d1fc427862dd6508add5`](https://github.com/morluto/rea/commit/160d821ac9a0310afcb8d1fc427862dd6508add5)
+[`d74549e495c58eb4a560279fd9f05508401ea0a0`](https://github.com/morluto/rea/commit/d74549e495c58eb4a560279fd9f05508401ea0a0)
 comes from the npm release's SLSA provenance. The registry metadata and provenance
 were inspected and the archive digest checked; the importer does not verify
 attestation signatures or prove that the source commit reproduces the tarball.
@@ -45,9 +45,9 @@ provenance. Do not compute a new trusted digest from an unreviewed download.
 
 ```bash
 python3 scripts/vendor-rea.py \
-  --archive /absolute/path/to/rea-agents-6.8.0.tgz \
-  --revision 160d821ac9a0310afcb8d1fc427862dd6508add5 \
-  --integrity 'sha512-9QDeRnGqEDzABZyr04eLnBXBv/c6I9/TWu/6M0MD4pEfkySI/BIgwTODIbAReX3C1x6hjw9+Jlx4A2yUSPZ9ww=='
+  --archive /absolute/path/to/rea-agents-6.9.0.tgz \
+  --revision d74549e495c58eb4a560279fd9f05508401ea0a0 \
+  --integrity 'sha512-KqDn1UR5BMqHoQ3MGAnPuWiSKwgdFaz1L/uUNgrKt+1W8kPtgYP8AWEOXIF1lDIOBVyPuYIIst2iamo1Wf3r8g=='
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh rea-vendored-skills
 bun run lint:fix
@@ -58,7 +58,9 @@ Repeat import must produce no diff. The importer reads only local archive bytes,
 checks integrity before parsing, preserves file modes, and refuses traversal,
 selected links/duplicates, unreviewed skills/policies, missing linked references,
 drifted or unmanaged outputs and symlinked managed paths before publication.
-The selected payload is bounded to 4 MiB and compressed archive to 32 MiB.
+The selected payload remains bounded to 4 MiB. The reviewed 6.9.0 runtime container
+is 41,851,672 bytes, so the compressed archive cap is 64 MiB; runtime files remain
+excluded. Integrity, path, link, mode, inventory and selected-payload guards are unchanged.
 Validation failures preserve existing work; this is not an atomic transaction
 against concurrent editors or filesystem failures. Run with no concurrent writer.
 
@@ -69,6 +71,6 @@ new config pin. Run the fixture smoke with that runtime and exercise MCP in an
 isolated client before claiming connection coverage. Offline checks prove bytes,
 packaging and importer behavior, not model compliance or all REA capabilities.
 
-Primary sources: [release metadata](https://registry.npmjs.org/rea-agents/6.8.0),
-[npm provenance](https://registry.npmjs.org/-/npm/v1/attestations/rea-agents@6.8.0),
-[upstream installation](https://github.com/morluto/rea/blob/160d821ac9a0310afcb8d1fc427862dd6508add5/docs/installation.md).
+Primary sources: [release metadata](https://registry.npmjs.org/rea-agents/6.9.0),
+[npm provenance](https://registry.npmjs.org/-/npm/v1/attestations/rea-agents@6.9.0),
+[upstream installation](https://github.com/morluto/rea/blob/d74549e495c58eb4a560279fd9f05508401ea0a0/docs/installation.md).

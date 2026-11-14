@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/mattpocock/skills",
-  "revision": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+  "revision": "5863806dd4e15c63174bee4e7515a4256792ecfa",
   "skills": [
     {
       "name": "matt-ask-matt",
@@ -652,7 +652,7 @@
       "mode": 420
     },
     "skills/in-progress/software-factory/EXAMPLE-TASKS.md": {
-      "sha256": "34bfb01ced8fbbff8185d347df423533d157c29e8d58bf044f8450602f162875",
+      "sha256": "31c73748cd47b040fb11737f47634bba63b32cc6680000a9b22b6bc898155e49",
       "mode": 420
     },
     "skills/in-progress/software-factory/GIT-HOSTS.md": {
@@ -668,7 +668,7 @@
       "mode": 420
     },
     "skills/in-progress/software-factory/SKILL.md": {
-      "sha256": "645ab761b6cca61a480072b1b510eb05fe0fe5cde2ce0495b6fc234311692253",
+      "sha256": "8a3d04e2ebcf2f863a514784ee0307ef8fb53ac0892deb29b75a406c0c84de7b",
       "mode": 420
     },
     "skills/in-progress/software-factory/TICKET-TRACKERS.md": {

@@ -1,7 +1,7 @@
 # tstack skill snapshot
 
 All nine skills, every skill-local helper and agent metadata, README and MIT
-license are copied unchanged from [t3dotgg/tstack at 1085050f](https://github.com/t3dotgg/tstack/tree/1085050f3baed1ac724caa4a8166145fb2ac88af).
+license are copied unchanged from [t3dotgg/tstack at 11e37a74](https://github.com/t3dotgg/tstack/tree/11e37a74d0a6868c121cd0910ab2b3bd9873b92a).
 The [lock](tstack.lock.json) records the full revision, source paths, SHA-256
 digests, executable modes and host registration for each skill.
 Retain the [MIT license](tstack/LICENSE), copyright 2026 Theo Browne.
@@ -23,7 +23,7 @@ refresh rather than erasing local work.
 ```sh
 python3 scripts/vendor-tstack.py \
   --source /path/to/tstack \
-  --revision 1085050f3baed1ac724caa4a8166145fb2ac88af
+  --revision 11e37a74d0a6868c121cd0910ab2b3bd9873b92a
 bash scripts/generate-skill-catalog.sh
 bash scripts/generate-hook-configs.sh
 python3 scripts/vendor-tstack.py --check

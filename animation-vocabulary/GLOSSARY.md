@@ -71,7 +71,7 @@
 - **Damping** -- How quickly a spring settles. Lower damping means more bounce and oscillation.
 - **Mass** -- How heavy the animated element feels. More mass makes it slower and more sluggish.
 - **Bounce** -- A spring that overshoots and settles, adding playfulness.
-- **Perceptual duration** -- How long a spring feels finished, even though it keeps micro-settling underneath.
+- **Perceptual duration** -- How long a spring takes to look finished, even though it keeps micro-settling underneath.
 - **Momentum** -- Motion that carries velocity, especially after a drag or interruption.
 - **Velocity** -- How fast and in which direction an element is moving. A spring carries it into the next animation when interrupted, so a flicked element keeps its speed.
 - **Interruptible animation** -- An animation that can be smoothly redirected mid-flight instead of finishing first.

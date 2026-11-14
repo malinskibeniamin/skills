@@ -1,10 +1,10 @@
 # Jakub Krehel interface skills
 
-All 14 skill entrypoints and references come unchanged from
-[jakubkrehel/skills](https://github.com/jakubkrehel/skills/tree/60bf140e43c98b248e6594487384ec967e89d98a),
-commit `60bf140e43c98b248e6594487384ec967e89d98a` (plugin version 1.17.0).
-The snapshot contains all 94 skill-local files, including references, OpenAI
-metadata, viewer assets, generators and tests, plus README and LICENSE: 96 files.
+All 15 upstream skill entrypoints and references come from
+[jakubkrehel/skills](https://github.com/jakubkrehel/skills/tree/031c5bf20429b1ae73e0994bed107bdb259a13fb),
+commit `031c5bf20429b1ae73e0994bed107bdb259a13fb` (reviewed compatible revision).
+The snapshot contains all 96 skill-local files, including references, OpenAI
+metadata, viewer assets, generators and tests, plus README and LICENSE: 98 files.
 Three teardown helper/test files receive the reviewed
 [security patch](jakubkrehel-patches/0001-teardown-input-safety.patch). It checks
 worker origins, numeric debugging ports and drawing IDs, escapes script-delimiter characters
@@ -12,14 +12,14 @@ in CDP code data, and makes the test's script matcher case-insensitive. No scann
 exclusions or alert dismissals are used. This supersedes the initial raw-copy plan;
 all other source bytes and the MIT notice remain unchanged.
 
-This is the latest compatible 14-skill revision reviewed on 2026-11-08.
-All existing skill files match upstream HEAD
-[`157da62016338e8693dcff93d47154a9e36f2157`](https://github.com/jakubkrehel/skills/tree/157da62016338e8693dcff93d47154a9e36f2157);
-later commits add only the separate AFK/away workflow and its README entry.
-That unattended, cross-project workflow is outside this refresh's existing
-selection. It is not imported or registered, and the importer's unknown-skill
-guard remains intact. The refreshed state switcher removes font-weight changes
-that shift button text; existing host owners and invocation policies are unchanged.
+This is the last compatible revision before upstream removed `teardown` at
+`37744ed8`. Preserve that installed capability and its security patch rather than
+silently retiring it. The refresh includes corrected WCAG timing, label hit areas,
+dialog inertness, color conversion, text-box examples, viewport claims, reduced-motion
+recipes and icon-swap guidance. AFK is retained only as source data: its unattended,
+cross-project workflow is not registered or adopted. The importer explicitly allows
+that reviewed source-only skill while still rejecting unknown skills, missing
+installed skills and changed invocation policies. All 14 existing adapters remain.
 
 Copyright (c) 2026 Jakub Krehel. The original [MIT license](jakubkrehel/LICENSE)
 remains beside the source. The import excludes upstream root agent instructions,
@@ -41,7 +41,7 @@ Update the importer's reviewed inventory and compatibility only when required.
 git clone https://github.com/jakubkrehel/skills /tmp/jakubkrehel-skills
 python3 scripts/vendor-jakubkrehel.py \
   --source /tmp/jakubkrehel-skills \
-  --revision 60bf140e43c98b248e6594487384ec967e89d98a
+  --revision 031c5bf20429b1ae73e0994bed107bdb259a13fb
 bash scripts/generate-skill-catalog.sh
 bash evals/run.sh jakubkrehel-vendored-skills
 ```

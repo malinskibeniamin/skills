@@ -21,7 +21,8 @@ REGISTRATION = f"./{NAME}/"
 SKILL = f"skills/{NAME}/SKILL.md"
 # Runtime dependency notices describe code we do not vendor with the instructions.
 REQUIRED = {"LICENSE", "package.json", SKILL}
-MAX_ARCHIVE_BYTES = 32 * 1024 * 1024
+# The 6.9.0 runtime container is ~40 MiB; selected instructions remain capped at 4 MiB.
+MAX_ARCHIVE_BYTES = 64 * 1024 * 1024
 MAX_SKILL_BYTES = 4 * 1024 * 1024
 ADAPTER = '''---
 name: reverse-engineer-anything

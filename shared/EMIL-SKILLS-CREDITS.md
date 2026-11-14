@@ -1,7 +1,7 @@
 # Emil Kowalski skills: selection and provenance
 
 Maintain nine focused web skills from [emilkowalski/skills](https://github.com/emilkowalski/skills),
-reviewed at [`715c1807e08c497cfd1dc4feb450a2a3300ef2a9`](https://github.com/emilkowalski/skills/tree/715c1807e08c497cfd1dc4feb450a2a3300ef2a9/skills).
+reviewed at [`0f2e23b32bb1265e84cff8d3e75785fec953fb1b`](https://github.com/emilkowalski/skills/tree/0f2e23b32bb1265e84cff8d3e75785fec953fb1b/skills).
 They fill motion subtraction, auditing, implementation, frame diagnosis, terminology,
 mobile-platform, data-stress, toast-library, and direct-manipulation gaps. Consolidate overlapping motion workflows;
 preserve existing design/prototype owners. Upstream defaults need adaptation to
@@ -16,7 +16,7 @@ Both paths -> source/license retained -> offline distribution and repository che
 ## Documentation and local use
 
 [Official documentation](https://aiforui.dev/skills) supplies before/after demos,
-example prompts, when-to-use guidance and pairings for 17 skills. Use it for examples,
+example prompts, when-to-use guidance and pairings for 18 skills. Use it for examples,
 not as a runtime dependency or an instruction to install the full upstream suite.
 The selection table below maps those names to our existing owners; `write-swift`
 remains in the source snapshot but is not listed in the new docs.
@@ -50,6 +50,7 @@ All rows refer to `skills/<name>/SKILL.md` at the revision above.
 | [`emil-design-eng`](https://aiforui.dev/skills/emil-design-eng) | Keep existing owner | Its motion/component craft already appears in `visual-review/REFERENCE.md` |
 | [`apple-design`](https://aiforui.dev/skills/apple-design) | Keep existing owner | Continuity, gestures, feedback, and reduced motion overlap `animate`/`visual-review`; avoid another broad taste router |
 | [`prototype`](https://aiforui.dev/skills/prototype) | Keep ours | Existing `prototype/UI.md` owns variants; upstream cleanup conflicts with retained evidence |
+| [`learn-taste`](https://aiforui.dev/skills/learn-taste) | Keep ours | Existing `learn-taste/SKILL.md` owns scoped, evidence-backed design corrections and project persistence; retain its invocation/endpoint contract |
 | [`pick-ui-library`](https://aiforui.dev/skills/pick-ui-library) | Skip | Fixed choices can override the caller's library or registry; use existing primitives and current package evidence |
 | [`animate-expo`](https://aiforui.dev/skills/animate-expo) | Defer | Expo/Reanimated is outside this web harness's current stack |
 | `write-swift` | Defer | Native Swift requires a separate toolchain/version-aware workflow |
@@ -150,14 +151,15 @@ The complete upstream `skills/` tree, README, cheatsheets and MIT license are re
 byte-exact in [`vendor/emil`](../vendor/emil), including deferred and consolidated
 skills as reference material, not registered commands.
 [`vendor/emil.lock.json`](../vendor/emil.lock.json) records the immutable revision and
-SHA-256/mode of every file. Compared with the previous `5206a95` pin, this refresh removes
-two nonexistent skill references (`animation-accessibility` and `debug-animation`) from
-upstream gestures and moves the README newsletter link to `/skills/updates`.
-The skill/resource inventory and license are unchanged. Local gesture guidance already
-used the retained accessibility and verification owners, so it needs no matching rewrite.
-The docs-driven triage and before/after reporting changes live outside the snapshot;
-all nine registrations and the existing choreography owner remain intact. Acceleration
-and perceived feel still require runtime evidence, not instruction checks.
+SHA-256/mode of every file. Compared with the previous `715c180` pin, this refresh retains
+all 19 upstream skills, including `learn-taste`, and the November 13 API/cross-skill fixes.
+The inventory grows from 31 to 32 files; the MIT license is unchanged. Local owners adopt
+timing exceptions, hidden-state safeguards, reserved-domain fixtures, clearer terminology
+and invalid-variant fallback. Existing token, compositor, gesture, reduced-motion and
+audit safeguards already cover the other applicable corrections. Sonner APIs still come
+from installed types/current docs, not the snapshot's prop table. Keep native/fixed-stack
+skills deferred and all nine registrations intact; `learn-taste` retains its existing owner.
+Instruction checks do not prove rendered behavior, frame rate or perceived feel.
 
 Refresh explicitly from a separate upstream checkout; nothing fetches on skill invocation:
 
@@ -190,4 +192,4 @@ bun run type:check
 ```
 
 Each adapted skill includes the upstream MIT license, copyright 2026 Emil Kowalski,
-from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/715c1807e08c497cfd1dc4feb450a2a3300ef2a9/LICENSE).
+from [LICENSE at the reviewed revision](https://github.com/emilkowalski/skills/blob/0f2e23b32bb1265e84cff8d3e75785fec953fb1b/LICENSE).

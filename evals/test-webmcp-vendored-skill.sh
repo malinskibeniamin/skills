@@ -29,13 +29,15 @@ try:
 
     chrome_lock = json.loads((root / "vendor/chrome-webmcp.lock.json").read_text())
     assert chrome_lock["repository"] == "https://github.com/GoogleChromeLabs/webmcp-tools"
-    assert chrome_lock["revision"] == "24cb5cb0d4b6609aac5426f90a5de6ddb847bdeb"
+    assert chrome_lock["revision"] == "a9d4cf1d34e94afc703a8988ace35cfb8904c4ee"
     assert chrome_lock["license"] == "Apache-2.0"
     chrome = root / "vendor/chrome-webmcp"
     actual = {p.relative_to(chrome).as_posix() for p in chrome.rglob("*") if p.is_file()}
-    guidance = "webmcp-skills/skills/build-webmcp-tools/"
-    assert all(name in {"webmcp-skills/LICENSE", "webmcp-skills/NOTICE", guidance + "SKILL.md"}
-               or name.startswith(guidance + "references/") for name in actual), "Chrome Labs snapshot must contain guidance only, not example apps or eval fixtures"
+    guidance = ("webmcp-skills/skills/build-webmcp-tools/",
+                "webmcp-skills/skills/evaluate-webmcp-tools-with-extension/")
+    assert all(name in {"webmcp-skills/LICENSE", "webmcp-skills/NOTICE"}
+               or any(name == prefix + "SKILL.md" or name.startswith(prefix + "references/")
+                      for prefix in guidance) for name in actual), "Chrome Labs snapshot must contain guidance only, not example apps or eval fixtures"
     assert actual == set(chrome_lock["files"]), "incomplete Chrome Labs skill snapshot"
     inventory = ""
     for name, entry in sorted(chrome_lock["files"].items()):
@@ -48,7 +50,7 @@ try:
         mode = "100755" if path.stat().st_mode & 0o111 else "100644"
         assert mode == entry["mode"], f"Chrome Labs mode changed: {name}"
         inventory += f"{mode} blob {blob}\t{name}\n"
-    assert hashlib.sha256(inventory.encode()).hexdigest() == "dcdb601bd7643ba0a216e3056fa658d5ac07c37e27da1ecdefb6f145857a4acb", "Chrome Labs inventory differs from pinned Git tree"
+    assert hashlib.sha256(inventory.encode()).hexdigest() == "263439588e0202ca75b14ef5af48ddaa38cbfa29d77a89e57e2f07c2e73d2eb4", "Chrome Labs inventory differs from pinned Git tree"
     assert "Apache License" in (chrome / "webmcp-skills/LICENSE").read_text()
 
     adapter = root / "webmcp/SKILL.md"

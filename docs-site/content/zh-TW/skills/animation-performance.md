@@ -56,6 +56,9 @@ type: "skill"
   `transformTemplate`、慣性和逐影格驅動的值仍需主執行緒工作。
 - 縮放不是高度/padding 的通用替代：它會縮放文字，卻不改變文件流。
   先保證正確性，再選擇更廉價的算繪路徑。
+- [僅使用透明度](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/opacity)
+  不會移除版面配置空間、命中測試或鍵盤焦點。以透明度取代 `display`/`visibility` 變化時，
+  保留隱藏狀態、inert 狀態、卸載與焦點行為；僅設定 `pointer-events: none` 無法防止鍵盤聚焦。
 - 在受支援瀏覽器分析 blur/filter/clip-path；固定的畫素閾值證明不了什麼。
 - 解除安裝時取消逐影格迴圈、觀察器和動畫，移除臨時圖層提示。
   記憶化由 React Compiler 負責；不要用 memo 包裝代替診斷。

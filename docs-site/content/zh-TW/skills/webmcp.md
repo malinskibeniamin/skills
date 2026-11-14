@@ -27,6 +27,10 @@ type: skill
 - **與 MCP/Lovable 比較：** 閱讀[介面邊界](https://github.com/malinskibeniamin/skills/blob/main/webmcp/references/tool-authoring.md#surface-boundaries)。
   WebMCP 補充面向服務的 MCP，並不取代它。
 
+- **明確要求的擴充功能代理評估：** 閱讀[擴充功能評估技能](https://github.com/malinskibeniamin/skills/blob/main/vendor/chrome-webmcp/webmcp-skills/skills/evaluate-webmcp-tools-with-extension/SKILL.md)。
+  使用獲授權的隔離設定檔；保留權限提示。
+  載入此參考資料不代表獲准啟動瀏覽器、安裝擴充功能、執行付費評估或設定供應商。
+
 ## 共用宿主規則 [#shared-host-rules]
 
 本地規則優先於兩份上游快照：遵守任務的結束邊界與宿主的即時能力。
