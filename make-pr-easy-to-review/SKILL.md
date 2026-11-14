@@ -35,6 +35,9 @@ Visual diagrams/file maps belong to `/visual-recap`; this skill edits PR text on
 - Put meaningful `/quantify-impact` `## Proven impact` (`Metric | Before | After | Delta`) first with command/environment. Otherwise use normal value summary; no fake empty table. Below threshold says `Value not proven`.
 - Add accurate TL;DR; separate core from generated/mechanical files.
 - Name risky behavior, migration order, rollout, tests, and useful issue/dashboard/design links.
+- Apply the five-criterion [human-review handoff](../shared/review-contract.md#human-review-handoff)
+  to existing self-review/verification evidence; identify closest-review paths, owner-routing
+  and detection/recovery gaps without inventing evidence or changing approval policy.
 
 ## Guardrails
 

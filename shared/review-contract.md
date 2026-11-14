@@ -68,11 +68,37 @@ does not replace objective inspection; a scoped gate does not take over sibling 
 
 ## Consequences choose scrutiny
 
-Assess reachable impact, sensitive boundaries, reversibility and recovery evidence, not
-diff size alone. For costly or hard-to-reverse failures, recommend targeted human line review
-of the risky paths and name remaining uncertainty. For bounded reversible changes, retain
-the scope/direction skim alongside objective evidence. Unknown impact needs investigation,
-not a low-risk label. Record the consequence and recommended scrutiny in the receipt.
+After self-review and verification, prepare the human-review handoff below against the
+complete current diff and requested outcome. Assess consequences, not diff size or agent
+confidence. Reuse existing receipts/PR text; this adds no report file or receipt-schema fields.
+
+### Human-review handoff
+
+Assess all five criteria. Cite decisive evidence or state the gap; mark a criterion
+inapplicable only with a reason. A green test suite does not settle the other four.
+
+| Criterion | Evidence the human needs |
+|---|---|
+| **Verification** | Changed contracts covered by tests, exact commands/results, and remaining gaps. For runnable user flows, link applicable real end-to-end computer-use artifacts (captures, recordings or replay receipts) with scenario/revision; follow [proportionate verification](verifiability.md#proportionate-verification). Distinguish automated tests from observed use; unavailable execution/media is a limit, not proof. |
+| **Alignment** | Compare the full diff with the issue, PR description and explicit requirements. Explain material deviations and account for generated/mechanical changes; remove unrelated drive-by fixes from author work or flag them in read-only review. A matching PR description alone does not prove alignment with the original request. |
+| **Impact** | Name affected users, callers, shared contracts and reachable failure paths, especially auth, permissions, billing and data integrity. Give the risky file/symbol entry points. Resolve sensitive-path code owners using existing repository policy and [review routing](../commit-push-pr/references/metadata.md#codeowners-review-routing); authorized PR delivery requests the verified reviewers, while read-only review only recommends them. Expose missing owners/access and draft-deferred requests. |
+| **Rollback cost** | Classify a **two-way door** (cheaply reversible) or **one-way door** (destructive or costly to reverse). Give the actual rollback/forward-recovery procedure, prerequisites and irreversible effects; distinguish inspected plans from tested recovery. A code revert cannot restore deleted data or undo external charges. |
+| **Error detection** | Trace a credible production failure from the changed path to its signal: swallowed, surfaced to the caller, logged, or reported to error monitoring. Name the existing alert/dashboard/query and responder or authorized agent route when present, and what is unverified. Prefer actionable monitored reporting over logs alone; swallowed errors or unobserved alerts are visibility gaps. For non-deployable changes, explain the applicable consumer/CI feedback instead. |
+
+Conclude with the recommended human attention and **where to start**: bounded reversible
+work can use a scope/direction spot-check; sensitive boundaries, weak verification, costly
+recovery or poor detection warrant targeted line review by the appropriate owner. Name
+the paths, unresolved questions and evidence that would change that recommendation.
+Do not average away a serious risk with stronger criteria or label unknown impact low risk.
+
+Keep test status, material risks, rollback and detection gaps visible in the compact PR
+body; link/collapse detailed evidence. Five assessments do not require five headings, a
+numeric score or extra reviewer rounds. Reassess affected criteria after scope/head/base
+changes. This rubric recommends scrutiny, not approval or production readiness.
+
+Use existing observability and incident routes. Adding Sentry, alert webhooks, credentials,
+production probes or agent-triggered remediation needs separate authorization; an alert
+relay is investigation input, not permission to change production or expose private data.
 
 Preserve the consumer's human-approval policy, including explicit owner opt-outs. Never
 invent reviewer counts, weaken protections, fabricate human sign-off, or turn a recommendation

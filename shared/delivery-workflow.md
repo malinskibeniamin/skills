@@ -66,7 +66,9 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
    Its read-only
    contract governs that assessment; this author request owns repairing concrete findings.
    Select [risk-based depth](../review/OPERATING-MODEL.md); retain runnable proof and
-   recovery limits before asking for human attention. Stop at the first clean pass.
+   recovery limits before asking for human attention. Prepare the five-criterion
+   [human-review handoff](review-contract.md#human-review-handoff) with evidence gaps,
+   closest-review paths and verified sensitive-path owner routing. Stop at the first clean pass.
    After two unsuccessful self-review passes, reassess the approach/missing context;
    review repairs and prior findings, not unrelated old code. Reassessment never clears
    unresolved findings or grants delegation.
