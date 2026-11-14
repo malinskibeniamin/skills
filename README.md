@@ -430,9 +430,17 @@ Three layers automation run without manual invocation:
 reject silent completion once, and enforce only the requested endpoint. Local implementation
 never auto-commits or opens a PR.
 
+Failed checks request repair with exit `2` and diagnostics on stderr; exit `1`
+is a non-blocking hook error, not a failed-check signal. The dispatcher allows
+one automatic repair attempt per turn using `stop_hook_active`; checks that still
+block are surfaced without marking completion. Informational notes never request
+continuation. Claude's [eight-consecutive-block cap](https://code.claude.com/docs/en/hooks-guide#stop-hook-hits-the-block-cap)
+resets on tool calls, so it is not a total retry limit.
+
 **Auto-loading skills**: Skills with `paths:` frontmatter auto-load when Claude work on matching files. Write test -> TDD patterns load. Edit route -> TanStack Router patterns load. No `/skill-name` invocation needed.
 
-Never see hook output directly. Claude just produce better code, with tests, accessible, secure, type-safe -- without asking each thing individually.
+Claude receives blocking diagnostics to repair the work; non-blocking notes and
+unresolved failures after the repair attempt remain visible to the user.
 
 ### Configuration
 
