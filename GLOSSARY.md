@@ -124,6 +124,12 @@ A browser or desktop-app session the person is actively using or has configured.
 verification uses an isolated session and never closes or takes over the human-owned one.
 _Avoid_: Browser automation session
 
+**Automatic review policy**:
+A versioned user-local rule selecting a repository, author and contribution area for
+scheduled review/re-review, publication severities and optional clean-candidate approval.
+It is distinct from the original feature session responsible for repairs.
+_Avoid_: Prompt-only permission, human approval, maintenance owner
+
 **PR review binding**:
 An opt-in, user-local association from a same-repository PR to its feature worktree,
 provider, and exact native session UUID. Automated review arrival resumes that owner;
@@ -131,9 +137,10 @@ delivery is not proof that its findings were fixed.
 _Avoid_: Fresh repair agent, latest session, automatic merge
 
 **Trusted review trigger**:
-A new or edited comment/review by an explicitly allowed GitHub login. It wakes the
-owner to inspect all applicable feedback, not merely that author's findings.
-_Avoid_: Every bot, applicability verdict
+A new or edited comment/review by an explicitly allowed GitHub login, or a validated
+controller-published review receipt. It wakes the original owner to inspect all
+applicable feedback. Ordinary replies from the publishing account do not self-trigger.
+_Avoid_: Comment text as authority, applicability verdict
 
 ## Example dialogue
 

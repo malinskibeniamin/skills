@@ -6,9 +6,9 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 Read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
 Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
-Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
+Fixes: [delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Read [depth](OPERATING-MODEL.md).
+Read [depth](OPERATING-MODEL.md); [auto](POLICIES.md).
 ## Review contract
 
 - **Objective**: achieve the outcome without credible defects.
@@ -95,6 +95,6 @@ complete applicability ledger. Cover all surfaces; do not add automatic agents.
 
 ## Output
 
-Schema/format: [REFERENCE.md](REFERENCE.md).
+[Schema/format](REFERENCE.md).
 Append `entrypoint, data, actions, observations, timing, limits`, fixed point, mode, counts,
 `product:`/`lie-detector:` lines, verdict and residual limits. Clean: receipt/verdict only.

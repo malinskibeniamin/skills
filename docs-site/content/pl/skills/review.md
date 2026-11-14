@@ -29,6 +29,8 @@ Przeglądaj ustalony zakres. Zachowaj jednego właściciela; delegowanie wymaga 
 
 Dobierz głębokość i zasady zbieżności według [modelu przeglądu](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md); ryzyko zmienia zakres kontroli, nie uprawnienia. Przeczytaj też [kontrakt dwóch rodzajów przeglądu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md).
 
+Automatyczne przeglądy i ich wstrzymywanie: [polityki](https://github.com/malinskibeniamin/skills/blob/main/review/POLICIES.md).
+
 ## Kontrakt przeglądu [#review-contract]
 
 - **Cel**: ustal, czy diff osiąga oczekiwany wynik bez wiarygodnego defektu.
