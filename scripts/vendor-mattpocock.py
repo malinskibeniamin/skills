@@ -16,6 +16,8 @@ REPOSITORY = "https://github.com/mattpocock/skills"
 SNAPSHOT = "vendor/mattpocock/upstream"
 ADAPTERS = "matt-skills"
 LOCK = "vendor/mattpocock.lock.json"
+PATCHES = "vendor/mattpocock-patches"
+PATCH_TARGETS = {"skills/in-progress/animatic/scripts/animatic.mjs"}
 OWNERS = {
     "ask-matt": "ask-ben", "code-review": "review",
     "grill-me": "grilling", "grill-with-docs": "grilling",
@@ -27,6 +29,7 @@ OWNERS = {
         "tdd", "to-spec", "to-tickets", "triage", "wayfinder", "wizard", "grilling",
         "handoff", "teach", "to-questionnaire", "wait-what", "writing-for-agents",
         "writing-beats", "writing-fragments", "writing-shape", "software-factory",
+        "animatic", "setup-animatic",
     )},
 }
 
@@ -96,7 +99,7 @@ def adapter(skill):
 
 
 def managed_paths(repo):
-    for name in ("vendor", "vendor/mattpocock", SNAPSHOT, LOCK, ADAPTERS,
+    for name in ("vendor", "vendor/mattpocock", SNAPSHOT, LOCK, PATCHES, ADAPTERS,
                  ".claude-plugin", ".claude-plugin/plugin.json"):
         if (repo / name).is_symlink():
             raise ValueError(f"Managed path must not be a symlink: {name}")
@@ -113,15 +116,35 @@ def validate_registration(repo, skills, entries):
                 raise ValueError(f"Missing or duplicate host owner: {owner}")
 
 
-def check(repo, *, refresh_descriptions=False):
+def patch_inventory(repo):
+    patches = inventory(repo / PATCHES)
+    if any(not name.endswith(".patch") for name in patches):
+        raise ValueError("Security patch directory accepts only reviewed .patch files")
+    return patches
+
+
+def validate_patch_scope(upstream_files, files):
+    if files.keys() != upstream_files.keys():
+        raise ValueError("Security patches must preserve the complete upstream inventory")
+    for name, record in files.items():
+        if record["mode"] != upstream_files[name]["mode"] or (record != upstream_files[name] and name not in PATCH_TARGETS):
+            raise ValueError(f"Security patch outside approved animatic helper: {name}")
+
+
+def check(repo, *, refresh_descriptions=False, check_patch_inputs=True):
     managed_paths(repo)
     lock = json.loads((repo / LOCK).read_text())
     if lock["repository"] != REPOSITORY or not re.fullmatch(r"[0-9a-f]{40}", lock["revision"]):
         raise ValueError("Invalid upstream provenance")
+    if check_patch_inputs and patch_inventory(repo) != lock.get("patches", {}):
+        raise ValueError("Security patch inputs drifted; review and rerun the importer")
+    if lock.get("patches") and "upstream_files" not in lock:
+        raise ValueError("Patched snapshots must retain the upstream inventory")
     source = repo / SNAPSHOT
     files = inventory(source)
     if files != lock["files"]:
         raise ValueError("Snapshot bytes, executable modes or inventory drifted")
+    validate_patch_scope(lock.get("upstream_files", files), files)
     skills = discover({p: ((source / p).read_bytes(), record["mode"]) for p, record in files.items()})
     comparable = lambda rows: [{k: v for k, v in row.items() if k not in ("description", "short_description")} for row in rows]
     if (comparable(skills) != comparable(lock["skills"]) if refresh_descriptions else skills != lock["skills"]):
@@ -155,7 +178,7 @@ def install(repo, source, revision):
             raise ValueError(f"Unsafe upstream entry: {path}")
         payload[path] = (git(source, "cat-file", "blob", oid), int(mode[-3:], 8))
     skills = discover(payload)
-    previous = check(repo, refresh_descriptions=True) if (repo / LOCK).exists() else None
+    previous = check(repo, refresh_descriptions=True, check_patch_inputs=False) if (repo / LOCK).exists() else None
     if not previous and ((repo / SNAPSHOT).exists() or (repo / ADAPTERS).exists()):
         raise ValueError("Import would overwrite unmanaged files")
     manifest_path = repo / ".claude-plugin/plugin.json"
@@ -189,7 +212,14 @@ def install(repo, source, revision):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(data)
             target.chmod(mode)
+        upstream_files = inventory(stage / "source")
+        patches = patch_inventory(repo)
+        for name in patches:
+            patch = (repo / PATCHES / name).resolve()
+            subprocess.run(["git", "apply", "--check", str(patch)], cwd=stage / "source", check=True)
+            subprocess.run(["git", "apply", str(patch)], cwd=stage / "source", check=True)
         files = inventory(stage / "source")
+        validate_patch_scope(upstream_files, files)
         for skill in skills:
             target = stage / "adapters" / skill["name"] / "SKILL.md"
             target.parent.mkdir(parents=True)
@@ -200,7 +230,8 @@ def install(repo, source, revision):
                 shutil.rmtree(destination)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(staged, destination)
-    lock = {"repository": REPOSITORY, "revision": revision, "skills": skills, "files": files}
+    lock = {"repository": REPOSITORY, "revision": revision, "skills": skills,
+            "patches": patches, "upstream_files": upstream_files, "files": files}
     (repo / LOCK).write_text(json.dumps(lock, indent=2) + "\n")
     manifest_path.write_text(updated_manifest)
     if previous:
