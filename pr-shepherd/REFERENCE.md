@@ -4,7 +4,8 @@ Run one idempotent sweep over the authenticated user's open PRs in the current r
 
 ## Contract
 
-- Newest first; default limit 20. Finish one sweep: no background loop or future-comment polling.
+- Newest first; default limit 20. Finish one sweep; use the author delivery policy for
+  authorized continuation. No background loop or future-comment polling.
 - Keep user-local XDG state keyed by repo and PR URL.
 - Repair only this workspace's PR; route other worktrees.
 - Bind review, dogfood, feedback, and CI to the HEAD SHA; a new head invalidates them.
@@ -29,10 +30,16 @@ State defaults to `${XDG_STATE_HOME:-$HOME/.local/state}/frontend-skills/pr-shep
 ## Route
 
 Inspect `git worktree list --porcelain`.
+With `--dry-run`, discover and report only: no sends, launches, watches or state writes.
 
-- Other worktree owns head: inspect read-only and report its path/action.
+- In native T3, resolve the [existing PR owner](../shared/T3CODE-NATIVE.md#find-the-existing-pr-owner)
+  before routing repairs, including owners in another project. Preserve the requested scope.
+- Other worktree owns head: inspect read-only. Route authorized repairs to its verified
+  existing T3 author/coordinator; otherwise report the path and needed action. Report the
+  thread link and delivery state separately from repair completion; do not acknowledge
+  a routed PR as clean without current verification.
 - No worktree owns head: request an isolated workspace; do not create one.
-- Current worktree owns head: proceed. `--dry-run` writes nothing.
+- Current worktree owns head: proceed.
 
 Compare `git status --short` and `git rev-parse HEAD` to the snapshot. Dirty, mismatched, or conflicted state blocks; never reset, stash, discard, or overwrite it.
 
@@ -44,7 +51,11 @@ Refresh GitHub state, then:
 2. For CI, inspect logs, reproduce, add a failing public-contract regression for changed behavior, repair, verify, commit, push, and refresh.
 3. Apply `/review` inline; no agents or panel. Fix findings, rerun affected checks, refresh HEAD.
 4. Run `/dogfood`; `skipped` requires no runnable behavior and `blocked` stays active.
-5. After a push, `gh pr checks <number> --watch` may watch that run only.
+5. After a push, refresh the published head and CI. In native T3, use the owning session's
+   [native PR continuation](../shared/T3CODE-NATIVE.md#continue-the-owning-session) and
+   current host watch/handoff rules; do not use `gh --watch`, sleeps or a second watcher.
+   Outside T3, an authorized foreground `gh pr checks <number> --watch` may watch that run
+   only. Neither transport grants approval or merge permission.
 
 Never acknowledge an uninspected head. Use `deferred` for unresolved owner decisions.
 

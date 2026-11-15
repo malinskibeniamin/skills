@@ -53,6 +53,35 @@ host happens to expose Browser or Device tools. A resolver result is not a dogfo
 
 ## PR monitoring
 
+### Find the existing PR owner
+
+For cross-worktree PR maintenance or an existing-session follow-up, resolve ownership
+before starting a writer. Use the exposed tools' current schemas and host permissions:
+
+1. Match the full PR identity (host, repository, number) against threads' `pullRequests`,
+   not only legacy `linkedPullRequest`. List the target project explicitly; paginate and
+   include subagent threads when needed. `t3_thread_search` supplies leads, not exhaustive
+   coverage: it skips subagents. Search titles, branches and messages for unlinked work,
+   but do not treat a mention as ownership. Use `list_thread_pull_requests` when link
+   details are needed; cached link state is not a fresh host check.
+2. Read each candidate thread before choosing it. Confirm its original task, current run,
+   branch/worktree and parent/child lineage against the PR's current remote head. A
+   coordinator may own maintenance through a child worktree. Resolve competing owners;
+   if ownership remains uncertain, inspect read-only and report the gap rather than
+   starting a duplicate writer. Another environment requires an available authorized link.
+3. Keep audits read-only. For authorized repairs, send the verified existing top-level
+   author/coordinator a bounded follow-up: PR URL/head, concrete finding, evidence,
+   constraints and delivery endpoint. Preserve its model, draft state and active work;
+   do not restart it or write its branch concurrently. New delegated reviews/re-checks
+   require fresh `delegate_task` calls and delegation consent, not reuse of a finished
+   reviewer through `t3_thread_send`. New top-level threads require an explicit request.
+4. Read back delivery and report the returned thread link. A delivered message or running
+   repair is not a fix, resolved feedback or verified push. Keep continuation with one
+   owner; do not add a second watcher for a routed PR. Verify the published head, checks
+   and feedback before reporting completion.
+
+### Continue the owning session
+
 Host and repository are separate: a T3 host can watch a PR for another application.
 For `pr_watch: native`, save repository/PR, verified head/base, evidence and pending work
 to the session checkpoint. If the local dispatcher is configured, first select this owner
