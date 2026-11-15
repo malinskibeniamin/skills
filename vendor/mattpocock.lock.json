@@ -376,6 +376,10 @@
     "0001-private-calibration-workspace.patch": {
       "sha256": "5c54dd6ff81043f5b02ab4573429f485222fc8ec8d52e12292b09c08a82c825d",
       "mode": 420
+    },
+    "0002-failed-speech-and-linked-assets.patch": {
+      "sha256": "22ba04e0699e93b44bfca83eb3b847202ee3f1cb78df232b308c3b0734ae3933",
+      "mode": 420
     }
   },
   "upstream_files": {
@@ -1246,7 +1250,7 @@
       "mode": 420
     },
     "skills/in-progress/animatic/scripts/animatic.mjs": {
-      "sha256": "9d60b8e066eb67f7cb424b4794d9d692b3a88256ed024ffff5d02a8140f8a83d",
+      "sha256": "29d5baec7f60ccd87dd9ccf1e3b489374a5a03aec4a04dec7d24d9db9c34bcfc",
       "mode": 420
     },
     "skills/in-progress/animatic/scripts/frames.mjs": {

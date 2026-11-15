@@ -8,6 +8,15 @@ else
   ERRORS="$ERRORS\n  FAIL: calibration temporary workspace safety"
 fi
 
+if python3 "$REPO_ROOT/evals/test-animatic-runtime.py"; then
+  echo "  PASS  failed speech retries without caching partial audio; custom HTML reloads linked assets"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  animatic speech failure or linked-asset invalidation"
+  FAIL=$((FAIL + 1))
+  ERRORS="$ERRORS\n  FAIL: animatic speech failure or linked-asset invalidation"
+fi
+
 if python3 - "$REPO_ROOT" <<'PY'
 import json
 import pathlib

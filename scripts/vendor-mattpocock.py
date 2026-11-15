@@ -119,16 +119,16 @@ def validate_registration(repo, skills, entries):
 def patch_inventory(repo):
     patches = inventory(repo / PATCHES)
     if any(not name.endswith(".patch") for name in patches):
-        raise ValueError("Security patch directory accepts only reviewed .patch files")
+        raise ValueError("Patch directory accepts only reviewed .patch files")
     return patches
 
 
 def validate_patch_scope(upstream_files, files):
     if files.keys() != upstream_files.keys():
-        raise ValueError("Security patches must preserve the complete upstream inventory")
+        raise ValueError("Helper patches must preserve the complete upstream inventory")
     for name, record in files.items():
         if record["mode"] != upstream_files[name]["mode"] or (record != upstream_files[name] and name not in PATCH_TARGETS):
-            raise ValueError(f"Security patch outside approved animatic helper: {name}")
+            raise ValueError(f"Patch outside approved animatic helper: {name}")
 
 
 def check(repo, *, refresh_descriptions=False, check_patch_inputs=True):
@@ -137,7 +137,7 @@ def check(repo, *, refresh_descriptions=False, check_patch_inputs=True):
     if lock["repository"] != REPOSITORY or not re.fullmatch(r"[0-9a-f]{40}", lock["revision"]):
         raise ValueError("Invalid upstream provenance")
     if check_patch_inputs and patch_inventory(repo) != lock.get("patches", {}):
-        raise ValueError("Security patch inputs drifted; review and rerun the importer")
+        raise ValueError("Patch inputs drifted; review and rerun the importer")
     if lock.get("patches") and "upstream_files" not in lock:
         raise ValueError("Patched snapshots must retain the upstream inventory")
     source = repo / SNAPSHOT

@@ -19,7 +19,7 @@ These rules take precedence over the source snapshot:
   Source commands are examples, not permission to install a different harness,
   formatter, package manager or test runner. Inspect named commands before use;
   unavailable host capabilities remain a reported limitation.
-- Change snapshot bytes only through the importer and reviewed security patches;
+- Change snapshot bytes only through the importer and reviewed animatic helper patches;
   retain the upstream revision and both original/output digests in the lock.
   All other source bytes stay unchanged. The snapshot is reference material, not a runnable
   upstream checkout. Resolve skill-local references there, but execute repository

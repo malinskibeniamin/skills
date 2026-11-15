@@ -206,7 +206,8 @@ const CSS = () => {
 const sha = (s) => createHash("sha1").update(s).digest("hex").slice(0, 16);
 
 // Every page in one browser, a few at a time. A frame whose page has not
-// changed since the last render keeps its PNG.
+// changed since the last render keeps its PNG. Custom HTML is always rendered:
+// its linked stylesheets, images, scripts and fonts are not in the page hash.
 const render = async ({ dir, build, moments }) => {
   const css = CSS();
   const warnings = [];
@@ -236,8 +237,8 @@ const render = async ({ dir, build, moments }) => {
         die(`entry ${m.n}: ${e.message}`);
       }
     }
-    const key = m.page ? sha(m.page) : sha(fs.readFileSync(m.html, "utf8") + css + m.html);
-    if (cache[m.png]?.key === key && fs.existsSync(m.png)) {
+    const key = m.page ? sha(m.page) : null;
+    if (key !== null && cache[m.png]?.key === key && fs.existsSync(m.png)) {
       for (const w of cache[m.png].warnings) warnings.push(`${m.n}: ${w}`);
       for (const f of cache[m.png].fixes) notes.push(`${m.n}: ${f}`);
       continue;
@@ -428,15 +429,10 @@ const speakCommand = async (command, text, wav, where) => {
   const quoted = (s) => `'${s.replace(/'/g, `'\\''`)}'`;
   const cmd = command.replaceAll("{out}", quoted(base)).replaceAll("{text}", quoted(text));
   const written = () => fs.readdirSync(path.dirname(base)).filter((f) => f.startsWith(path.basename(base))).map((f) => path.join(path.dirname(base), f));
-  let failed;
   try {
     await run(cmd, [], { shell: true, input: text, inherit: true });
-  } catch (e) {
-    failed = e;
-  }
-  const raw = written().find((f) => fs.statSync(f).size > 0);
-  try {
-    if (!raw) throw new Error(failed ? failed.message : `the command wrote nothing (or an empty file) at ${base}.*`);
+    const raw = written().find((f) => fs.statSync(f).size > 0);
+    if (!raw) throw new Error(`the command wrote nothing (or an empty file) at ${base}.*`);
     await toWav(raw, wav);
   } finally {
     for (const f of written()) fs.rmSync(f, { force: true });
@@ -511,7 +507,7 @@ const synthAll = async (jobs) => {
       }
     } else if (!command && engine === "kokoro") for (const j of todo) await attempt(j)();
     else await pool(todo, 4, (j) => attempt(j)());
-    todo = todo.filter((j) => !voiced(j.wav));
+    todo = todo.filter((j) => errors.has(j) || !voiced(j.wav));
   }
   for (const j of todo) fs.rmSync(j.wav, { force: true });
   if (todo.length) {
