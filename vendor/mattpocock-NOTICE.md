@@ -1,13 +1,14 @@
 # Matt Pocock skills
 
 Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
-[`5863806dd4e15c63174bee4e7515a4256792ecfa`](https://github.com/mattpocock/skills/tree/5863806dd4e15c63174bee4e7515a4256792ecfa)
-(v1.3.2 plus subsequent main-branch changes).
+[`71009050da79506823464512ee76d71bbc014ce1`](https://github.com/mattpocock/skills/tree/71009050da79506823464512ee76d71bbc014ce1)
+(the `animatic-skill` draft branch, [PR #1422](https://github.com/mattpocock/skills/pull/1422)).
 
-All **39 skills** under `skills/`, every skill-local reference/helper/asset, the
-upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained byte-for-byte
-in `mattpocock/upstream/`. [The lock](mattpocock.lock.json) records the immutable
-revision, complete inventory, SHA-256 digests, executable modes and adapter/owner
+All **41 skills** under `skills/`, every skill-local reference/helper/asset, the
+upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained
+in `mattpocock/upstream/`, with the narrowly scoped helper patches below. All other
+source files are byte-exact. [The lock](mattpocock.lock.json) records the immutable
+revision, original and patched inventories, patch-input digests, executable modes and adapter/owner
 mapping. This includes `pr` and its [original credits](mattpocock/upstream/skills/engineering/pr/CREDITS.md)
 for Dex Horthy's `show-me` work.
 
@@ -20,6 +21,30 @@ The merged in-progress [software-factory source](mattpocock/upstream/skills/in-p
 now shares this pin and its existing planning owner. It supersedes the separate draft
 snapshot; [compatibility and refresh](software-factory-NOTICE.md) retain local safety controls.
 Non-skill upstream infrastructure, docs site and repository automation are not imported.
+
+## Reviewed helper patches
+
+[`0001-private-calibration-workspace.patch`](mattpocock-patches/0001-private-calibration-workspace.patch)
+addresses CodeQL alerts 21 and 22 on PR #335. Calibration previously placed a predictable
+PID-named WAV, narration text and SAPI job list directly in shared temporary storage.
+It now creates narration text and SAPI job files exclusively with owner-only mode
+`0o600`, and uses `fs.mkdtempSync` to create a private workspace, with cleanup on success,
+exceptions and the helper's explicit failure exit. The upstream revision stays fixed.
+[`0002-failed-speech-and-linked-assets.patch`](mattpocock-patches/0002-failed-speech-and-linked-assets.patch)
+propagates custom speech-command errors through cleanup before conversion, retries
+errored jobs even if they wrote readable WAVs, and removes failed output rather than
+caching partial narration. Custom HTML is always re-rendered because linked CSS,
+images, fonts and scripts are not covered by its page hash. Generated self-contained
+frames and embedded images retain content-based caching.
+
+The importer applies these reviewed patches in a disposable tree, rejects changes
+outside the animatic helper or to file inventory/modes, and records `upstream_files`,
+`patches` and resulting `files` separately. `--check` validates patch-input and output
+digests without altering the repository. A failed patch application stops the refresh;
+review upstream changes before replacing or retiring a patch. No scanner exclusion
+or alert dismissal is used. Run `bash evals/run.sh animatic` for the CLI regressions.
+Speech and browser boundary fixtures exercise retry/cache decisions without installing
+runtime tools; they do not prove real speech synthesis or browser rendering.
 
 ## Refresh
 
@@ -50,7 +75,16 @@ read-only and network-free. Remove the disposable source checkout after verifica
 
 ## Reconciliation at this pin
 
-The latest refresh adds the merged software-factory design language and surveys,
+The animatic draft adds `animatic` and `setup-animatic`, with their complete frame
+kit, scripts and voice recipes. The unprefixed host owners preserve setup,
+remote-target, secret, generated-guidance and publication boundaries. Importing
+the source installs no runtime tools. Runtime dependencies are fetched only when
+a separately authorized setup/build runs; those packages are not vendored or
+pinned by this source lock. The only other skill changes from the prior pin are
+two software-factory clarifications: CI jobs are not factory tasks, and exploration
+leaves evidenced findings without pushing. The planning owner retains that scope.
+
+The prior main-branch refresh added the merged software-factory design language and surveys,
 routes its adapter through the existing planning owner, and reuses shared wikis for
 chief-of-staff. Retro procedures remain scoped and recommend-only without edit authority.
 

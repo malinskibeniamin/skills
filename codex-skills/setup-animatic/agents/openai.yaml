@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Animatic"
+  short_description: "Choose and test a repository's animatic toolchain"
+policy:
+  allow_implicit_invocation: false

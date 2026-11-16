@@ -1,5 +1,6 @@
-"""Public importer contract: complete, pinned, lossless and safe to refresh."""
+"""Public importer contract: complete, pinned, auditable and safe to refresh."""
 
+import difflib
 import hashlib
 import json
 import subprocess
@@ -13,6 +14,58 @@ SCRIPT = ROOT / "scripts/vendor-mattpocock.py"
 
 
 class MattSyncTest(unittest.TestCase):
+    def security_patch(self, target, before="before\n", after="after\n"):
+        self.write(self.source, target, before)
+        revision = self.commit() if self.git("status", "--porcelain").strip() else self.git("rev-parse", "HEAD").strip()
+        patch = "".join(difflib.unified_diff(before.splitlines(True), after.splitlines(True),
+                                            fromfile=f"a/{target}", tofile=f"b/{target}"))
+        self.write(self.repo, "vendor/mattpocock-patches/0001-calibration.patch", patch)
+        return revision
+
+    def test_security_patch_retains_both_inventories_and_rejects_input_drift(self):
+        target = "skills/in-progress/animatic/scripts/animatic.mjs"
+        revision = self.security_patch(target)
+        result = self.install(revision)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        lock = json.loads((self.repo / "vendor/mattpocock.lock.json").read_text())
+        self.assertIn("upstream_files", lock)
+        self.assertEqual(lock["upstream_files"][target]["sha256"], hashlib.sha256(b"before\n").hexdigest())
+        self.assertEqual(lock["files"][target]["sha256"], hashlib.sha256(b"after\n").hexdigest())
+        self.assertEqual((self.repo / "vendor/mattpocock/upstream" / target).read_text(), "after\n")
+        before = self.snapshot()
+        self.assertEqual(self.install(revision).returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(self.cli("--check").returncode, 0)
+        lock_path = self.repo / "vendor/mattpocock.lock.json"
+        published = lock_path.read_text()
+        del lock["upstream_files"]
+        lock_path.write_text(json.dumps(lock))
+        self.assertNotEqual(self.cli("--check").returncode, 0)
+        lock_path.write_text(published)
+        patch = self.repo / "vendor/mattpocock-patches/0001-calibration.patch"
+        patch.write_text(patch.read_text() + "\n")
+        self.assertNotEqual(self.cli("--check").returncode, 0)
+
+    def test_security_patch_cannot_change_attribution(self):
+        self.assertEqual(self.install().returncode, 0)
+        self.security_patch("LICENSE", "MIT License\nCopyright Matt Pocock\n", "Changed license\n")
+        before = self.snapshot()
+        result = self.install()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("outside approved animatic helper", result.stderr)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_security_patch_cannot_add_a_file_even_at_an_approved_path(self):
+        self.assertEqual(self.install().returncode, 0)
+        target = "skills/in-progress/animatic/scripts/animatic.mjs"
+        self.write(self.repo, "vendor/mattpocock-patches/0001-create.patch",
+                   f"--- /dev/null\n+++ b/{target}\n@@ -0,0 +1 @@\n+unexpected\n")
+        before = self.snapshot()
+        result = self.install()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("preserve the complete upstream inventory", result.stderr)
+        self.assertEqual(self.snapshot(), before)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

@@ -24,6 +24,8 @@
     "mattpocock-v1"
   ],
   "skills": [
+    "./animatic/",
+    "./setup-animatic/",
     "./accessibility/",
     "./agent-watchdog/",
     "./aip/",
@@ -195,6 +197,8 @@
     "./matt-skills/matt-writing-for-agents/",
     "./matt-skills/matt-writing-fragments/",
     "./matt-skills/matt-writing-shape/",
+    "./matt-skills/matt-animatic/",
+    "./matt-skills/matt-setup-animatic/",
     "./tstack-skills/babysit-pr/",
     "./tstack-skills/council/",
     "./tstack-skills/file-pr/",

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Animatic"
+  short_description: "Create narrated still-frame videos from topics or PRs"

@@ -1,8 +1,12 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { z } from "zod";
+
+// Sequences launch multiple real hook processes. Hosted macOS startup can exceed
+// Bun's 5-second default without any hook or assertion failing.
+setDefaultTimeout(15_000);
 
 const cleanup: string[] = [];
 const bashOutputSchema = z

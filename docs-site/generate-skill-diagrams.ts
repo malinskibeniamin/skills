@@ -61,6 +61,24 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  animatic: {
+    kind: "pipeline",
+    nodes: [
+      "Gather topic or PR sources",
+      "Write timed storyboard",
+      "Render + voice + stitch",
+      "Verify frames; hand over MP4",
+    ],
+  },
+  "setup-animatic": {
+    kind: "user-flow",
+    nodes: [
+      "Inspect authorized machine",
+      "Choose voice + tools",
+      "Test sample and one frame",
+      "Save tested repo config",
+    ],
+  },
   "hill-climb": {
     kind: "feedback-loop",
     nodes: [
