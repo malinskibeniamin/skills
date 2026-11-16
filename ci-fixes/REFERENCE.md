@@ -1,14 +1,15 @@
 # CI audit
 
-Keep the original points 1-21 stable; the audit continues beyond them. Assess every
-indexed check; implement only evidence-backed improvements. Read
-[measurement and decision records](references/measurement.md) once, then the deep
-sections for the jobs/contracts under investigation. A whole-suite audit uses all
-sections; a focused repair still marks the other checks with an evidenced decision.
+Keep points 1-21 stable; the audit continues beyond them. Start with
+[measurement and budgets](references/measurement.md), then follow the observed bottleneck
+into the relevant sections. A whole-CI audit assesses every point; a focused repair covers
+its bottleneck and affected safety contracts, marking other areas out of scope without
+inventing decisions or requiring a full audit first. Implement only evidence-backed changes.
+The [full-suite pre-merge boundary](SKILL.md#protect-the-merge-boundary) applies in every mode.
 
 | Point | Decision to resolve | Deep investigation |
 | --- | --- | --- |
-| 1. Nightly | Which delayed failures are acceptable, and what stays on PRs? | [Routing, detection latency, required-check safety](references/jobs.md#1-nightly-routing) |
+| 1. Nightly | What belongs on PRs, before merge, or in supplemental nightly runs? | [Routing, detection latency, required-check safety](references/jobs.md#1-nightly-routing) |
 | 2. Job speed | Which phase actually limits this job? | [Profiling and removal of repeated work](references/jobs.md#2-job-runtime) |
 | 3. Caching | Is restoration cheaper and correct for every relevant input? | [Cache classes, break-even, invalidation, trust](references/jobs.md#3-cache-economics-and-correctness) |
 | 4. Actions upgrades | Can every action safely move to its latest stable release? | [Nested inventory, SHA verification, migration](references/jobs.md#4-github-actions-upgrades) |

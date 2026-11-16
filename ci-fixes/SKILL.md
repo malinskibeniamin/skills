@@ -5,75 +5,88 @@ description: "Diagnose and fix slow or flaky CI, inefficient jobs, and low-signa
 
 # CI fixes
 
-Make meaningful CI green sooner, with less compute and no lost regression protection.
-Optimize time from commit to the last required check, not just individual test duration.
-Preserve the requested endpoint: audits and plans stay read-only; implement only when asked.
-Do not create schedules, buy runners, change branch protection, or start agents as a side effect.
+Make CI faster without letting it lie, whatever the stack. Optimize commit-to-required-result
+latency, not just test duration; track compute separately. Audits/plans stay read-only.
+Implement only when asked; install no audit tool, provision no runner, change no hosted policy,
+create no schedules, and start no agents as a side effect.
+
+## Protect the merge boundary
+
+- The full regression suite must pass on the candidate combined with the current target
+  branch before merge. Selection narrows PR feedback only; nightly or post-merge runs are
+  not substitutes. Prefer a merge queue; without one, require equivalent fresh pre-merge
+  proof. Report missing protection; changing queue/protection settings needs authorization.
+- Keep first-attempt failures visible. Fix the cause instead of adding test retries,
+  widening timeouts, skipping/quarantining tests, or weakening assertions/coverage for speed.
+  Bounded idempotent infrastructure recovery is a [separate case](references/operations.md#29-infrastructure-outage-containment).
 
 ## Establish the baseline
 
-1. Resolve the target repository, branch, workflows, reusable/composite actions, scripts,
-   test configs, required checks, and relevant instruction files. Inspect actual commands.
-2. Collect comparable recent runs, including failures and reruns: commit/run URLs, queue
-   time, job dependencies, setup/build/test/upload time, cache state, runner resources,
-   workers, shard durations, test counts, and first-attempt failures. Use provider-native
-   logs/reports; unavailable history is unknown, not evidence of speed or reliability.
-3. Draw the critical path from prerequisites through the final required result. Separate
-   wall-clock latency from total runner-minutes/cost; record sample size and environment.
+1. Resolve the repository, branch, workflows/callers, actual scripts/test configs, required
+   checks, merge policy, and local instructions. Identify the full-suite pre-merge lane.
+2. Collect comparable recent runs, including failures/reruns: commit/run URLs, queue time,
+   dependencies, setup/build/test/upload time, cache state, resources, workers, shards,
+   executed test counts, and first-attempt failures. Prefer existing provider-native reports;
+   missing history is unknown, not evidence of speed or reliability.
+3. Trace the critical path through the last required result. Identify its largest removable
+   wait or repeated cost before assuming tests are slow. Record workload and sample size.
+   Use the [measurement protocol and starting budgets](references/measurement.md): PR result
+   under 2 minutes median / 3 minutes p95, unless the owner sets another target. Goals are
+   not guarantees or permission to drop protection; report unsupported tails as unknown.
 
 ## Choose the smallest useful change
 
-Read the complete [CI audit](REFERENCE.md). Assess every indexed check; record each applicable
-job's decision as **adopt**, **reject**, **defer**, or **not applicable**, with evidence.
-Do not change every lever just because it exists. Rank by measured critical-path savings,
-compute savings, confidence, and implementation/maintenance risk. Unknowns need a small
-experiment, not invented estimates. Never delay fast jobs merely to align finish times.
+Use the [CI audit index](REFERENCE.md) to route the observed bottleneck, not as a mandatory
+migration checklist. A whole-CI audit assesses every point; a focused repair investigates
+only its bottleneck and affected safety contracts, marking the rest out of scope.
+Record **adopt**, **reject**, **defer**, or **not applicable** with evidence for assessed points;
+unknown is not not-applicable. Rank measured critical-path gains, compute, confidence, and
+maintenance risk. Fix the biggest evidenced bottleneck first, then remeasure.
 
-The original checks are a foundation, not a ceiling. Follow the index into delivery
-integrity, operations, and governance when relevant. Extend it for an uncovered failure
-only with a distinct protected contract, falsifiable experiment, acceptance signal, and
-owner; cross-link overlapping checks instead of multiplying them. Broader diagnosis grants
-no permission to provision services, expose data, or change security/delivery policy.
+Extend the index only for a distinct protected contract with a falsifiable experiment,
+acceptance signal, and owner; cross-link overlap. Broader diagnosis grants no permission
+to provision services, expose data, or change security/delivery policy.
 
 Load supporting guidance only for the work being performed:
 
 - Workflow edits: [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md), including its
   canonical source and trust-boundary rules. Keep credentials, caches, artifacts, and forks safe.
-- Test pruning: [test audit](../test-audit/SKILL.md). Identify each retained contract and its
-  primary test owner before deletion; speed and line coverage alone do not justify removal.
+- Test pruning: [test audit](../test-audit/SKILL.md). Name each retained contract and primary
+  test owner before deletion; speed and coverage percentages alone do not justify removal.
 - Flake diagnosis: [diagnosing bugs](../diagnosing-bugs/SKILL.md). Reproduce first-attempt
   failures and fix the owner or harness; passing on retry is not a fix.
-- Tool upgrades: [upgrade dependency](../upgrade-dependency/SKILL.md). Verify current stable
-  releases, migration guides, and runner compatibility from primary sources at execution time.
+- Tool changes: [upgrade dependency](../upgrade-dependency/SKILL.md). Verify version support,
+  migration, and runner compatibility from primary sources. Benchmark alternatives alongside
+  existing gates before replacement; named vendors/tools are candidates, not defaults.
 
-For implementation, change one coherent bottleneck at a time. New behavior and repairs
-start with a failing public-contract test; configuration and documentation use executable
-validation rather than tests that grep the instructions. Preserve unrelated work.
+Change one coherent bottleneck at a time; when PRs are requested, keep each optimization
+small and independently measurable without splitting an existing owned PR unasked.
+Add a failing public-contract test only for an uncovered behavioral risk; configuration
+and documentation use executable validation, not tests that grep instructions.
 
 ## Prove the improvement
 
-- Run workflow syntax/repository gates and the affected tests. Exercise cache miss, hit,
-  and invalidation paths; compare selected tests against a full-suite reference when changing
-  selection. Verify failure propagation, missing shards, and required-check completion.
-- Benchmark before/after on the same workload, runner, tool versions, worker count, and
-  cache conditions except for the variable under test. Repeat runs; report raw timings,
-  sample counts, median and tail where meaningful, runner-minutes, and queue time separately.
-- After changing workers, isolation, or distribution, exercise repeated and reordered
-  runs at the proposed concurrency. Inspect memory, CPU, flakes, and shared-state races.
-- For pruning, compare full retained-suite line/branch coverage with the same instrumentation,
-  thresholds, exclusions, and source denominator. Preserve unique failure detection and
-  critical journeys, not only percentages; use targeted negative controls or mutations.
-- Run full regression checks appropriate to the changed contracts. Report hosted-only or
-  unavailable verification explicitly; local success is not proof of GitHub CI success.
-
-Green means correct work actually ran. Keep failures visible: no swallowed exits,
-`continue-on-error`, weakened assertions/coverage, permanent skips/quarantine, or retries
-that conceal flaky tests. Never move a broken test to nightly to claim a fix.
+- Run workflow/repository gates and affected tests. Exercise cache miss, hit, and invalidation;
+  verify shard completeness, failure propagation, and required-check completion.
+- For selection, compare with full-suite results, force full execution on lockfile/CI-config
+  changes or uncertain inputs, and deliberately omit a relevant change in a disposable
+  selector experiment: the full pre-merge gate must catch it. Restore and verify green.
+- Compare before/after on matched workload, runner, versions, workers, and cache conditions
+  except the variable under test. Repeat real runs; report raw samples, median, supported
+  tails, queue time, and runner-minutes separately. Local timing is not hosted CI proof.
+- For workers/isolation/distribution, exercise repeated and reordered runs at the proposed
+  concurrency; inspect memory, CPU, shared-state races, and first-attempt failures.
+- For pruning, preserve unique failure detection and critical journeys with negative controls;
+  compare line/branch coverage using the same instrumentation, exclusions, and denominator.
+- Verify the full-suite pre-merge event/ref and stale-base invalidation. Missing hosted access
+  or runs remain explicit gaps, not evidence of safety. Never hold fast jobs open for symmetry.
 
 ## Handoff
 
-Lead with the result and its limit. Include the critical bottleneck, decisions for indexed
-checks, before/after evidence and sample/cache conditions, changed test ownership and
-deletion rationale, version/source verification dates, actual commands/run URLs, unresolved
-risks, and rollback. Distinguish measured gains from proposed experiments. Keep detailed
-receipts in the repository's existing evidence location; summarize rather than dumping logs.
+Lead with the result and its limit: bottleneck, assessed decisions, real before/after total
+CI latency and compute, sample/cache conditions, commands/run URLs, protection proof, remaining
+risks, and rollback. Include changed test ownership/deletion rationale and version/source dates
+when relevant. Separate measured gains from proposals; unavailable totals stay unknown.
+Finish reversible in-scope work first; consolidate needs for accounts, secrets, paid capacity,
+or policy changes into one actionable owner list. Keep receipts in the existing evidence
+location; summarize rather than dumping logs.

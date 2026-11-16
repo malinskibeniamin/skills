@@ -31,7 +31,8 @@ to create either, nor evidence that monitoring is already installed.
 
 **Inspect** workflow sources alongside actual hosted settings: required/advisory checks,
 rulesets, check names and producing apps, event coverage, environments, reusable workflow
-callers, and existing merge-queue behavior if configured. Resolve the current owner
+callers, and full-suite pre-merge behavior, including merge-queue events and tested combined refs.
+Check that candidate/base updates invalidate stale proof. Resolve the current owner
 policy and exceptions; a README or saved payload can be stale. Identify who owns each
 job, test contract, generated configuration, and exception, including retirement consumers.
 
@@ -46,6 +47,8 @@ static instruction checks do not establish agent behavior or human approval.
 owner/disposition, and job retirement preserves live callers. [GitHub branch protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
 and rulesets must be inspected in the target repository; do not infer them from another
 project's defaults. Preserve advisory CI where chosen and required checks where required.
-Changing protection, merge policy, or credentials remains a reserved decision; never
-silently bootstrap stronger or weaker gates. Unknown hosted state is deferred evidence,
+The full-suite pre-merge boundary is the optimization safety target; missing protection
+must be reported, not silently fixed. Changing protection, merge policy, or credentials
+remains a reserved decision; never bootstrap stronger or weaker gates without authorization.
+Unknown hosted state is deferred evidence,
 not proof that policy is satisfied or permission to block delivery against owner intent.

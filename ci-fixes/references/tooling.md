@@ -72,6 +72,21 @@ cost, or narrower failure detection. Save the result so novelty does not restart
 failed experiment next audit. Adopt one reversible slice; add new tests only for newly
 distinct contracts, not to celebrate a framework capability.
 
+### Static-analysis and formatting candidates
+
+When lint, typecheck, or format is the measured bottleneck, compare supported alternatives
+against the repository's existing rules and language surface. Oxlint, TypeScript 7, a
+supported `bun check`, and Oxfmt are optional candidates, not a prescribed
+stack. Verify the candidate's current stable availability, CLI, plugins, declaration/emit
+behavior, and compatibility from official docs and the installed binary; an absent command
+is not a migration plan. Preserve repository-owned script names where practical.
+
+Run old and candidate checks side by side on the same valid sources and representative
+known-bad cases. Compare diagnostic/rule coverage, type errors, formatting/ignore behavior,
+exit status, and runtime before removing the old gate. A faster green result with fewer
+checks is not equivalent. Reject or retain complementary checks for meaningful gaps;
+avoid a permanent duplicate lane once equivalence is established.
+
 ## 21. Risk-based nightly browsers
 
 **Inspect:** start with supported users/platforms, observed engine-specific bugs, and the
@@ -98,8 +113,9 @@ reuse contract scenarios instead of multiplying fixtures across engines. Keep ne
 in browser lanes and fail unexpected traffic just as on PRs. Do not describe Linux WebKit
 or a device preset as exhaustive Safari/real-device proof.
 
-Choose full nightly matrices only when the full surface warrants them; otherwise tag a
-small risk-based set. Nightly cadence, freshness, failure ownership, manual replay, and PR
+The declared regression suite, including required engine/platform contracts, still runs
+before merge; nightly expansion cannot replace it. Choose supplemental full nightly
+matrices only when the extra surface warrants them; otherwise tag a small risk-based set. Nightly cadence, freshness, failure ownership, manual replay, and PR
 promotion rules follow [point 1](jobs.md#1-nightly-routing). Reassess lanes when APIs,
 supported platforms, or bug evidence change, and retire ones that no longer protect a
 distinct risk. A flaky extra-browser lane must be diagnosed, not tolerated as nightly noise.

@@ -623,7 +623,11 @@ The command discovers every skill recursively, copies the complete source tree u
 
 [`/ci-fixes`](ci-fixes/SKILL.md) audits CI latency, test signal, and delivery integrity:
 nightly routing, caching, workers/shards, affected-only selection, runner sizing, upgrades,
-flake repair, and evidence-backed test pruning. The extensible audit also covers reproducible
+flake repair, and evidence-backed test pruning. Start with the measured bottleneck, using
+2-minute median / 3-minute p95 PR feedback as starting goals, not guarantees. Selection
+narrows PR feedback only; the full suite validates the fresh combined candidate before
+merge, preferably in a merge queue. Vendors/tools remain optional measured candidates.
+The extensible audit also covers reproducible
 builds, artifact identity, execution trust, rollout compatibility, recovery, diagnostics,
 evidence privacy, and policy drift. PR browser tests mock backend traffic; optimizations
 must preserve unique regression detection and coverage.

@@ -34,6 +34,10 @@ and their callers in scope. Inspect triggers, actor/fork status, checkout revisi
 credentials, inputs, caches and artifacts together. Resolve platform semantics from
 current GitHub documentation, not a nearby workflow. Reviews stay read-only; permission
 to maintain one workflow does not authorize unrelated service or repository settings.
+For latency, selection, caching, sharding, or flaky-test work, load [CI fixes](../ci-fixes/SKILL.md)
+and its relevant audit sections. That owner supplies the bottleneck-first measurement,
+truthful-green checks, and full-suite pre-merge boundary; this adapter retains workflow
+trust-boundary review. Use the target's existing tools before installing an audit integration.
 
 ## vendored-assets
 
