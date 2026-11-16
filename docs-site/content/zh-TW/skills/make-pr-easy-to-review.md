@@ -1,9 +1,17 @@
 ---
-title: /make-pr-easy-to-review
 description: 整理雜亂的 PR 歷史記錄並加入審查指引，且不改變程式碼行為。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - make pr easy to review
 sidebar:
   label: /make-pr-easy-to-review
+title: /make-pr-easy-to-review
+type: skill
 ---
 ![「/make-pr-easy-to-review」技能的示意圖](/diagrams/skills/make-pr-easy-to-review.svg)
 
@@ -11,7 +19,7 @@ sidebar:
 
 整理 PR，讓審查者能快速了解其意圖、重要檔案與風險。預設目標是在不改變行為的前提下提升可審查性。
 
-## 工作流程
+## 工作流程 [#workflow]
 
 1. 從使用者提供的 URL 或目前分支確認目標 PR。
 2. 檢查提交、差異大小、變更路徑、產生的檔案，以及 PR 說明。
@@ -22,12 +30,12 @@ sidebar:
    對堆疊進行連鎖變更，都需要明確取得整個堆疊的核准。
 5. 套用安全的改善，接著確認工作樹或差異仍符合預期的程式碼內容。
 
-## 歷史記錄整理
+## 歷史記錄整理 [#history]
 
 只有在使用者提出要求或同意計畫時，才能重寫歷史記錄。重寫前：
 
 ```bash
-gh pr view <PR> --json title,headRefName,baseRefName,state,commits
+gh pr view <PR> --json title,headRefName,baseRefName,state,commits --jq '{title,headRefName,baseRefName,state,commits}'
 git fetch origin <headRefName> <baseRefName>
 ORIGINAL_TREE=$(git rev-parse origin/<headRefName>^{tree})
 ```
@@ -42,15 +50,11 @@ ORIGINAL_TREE=$(git rev-parse origin/<headRefName>^{tree})
 
 重寫後，確認內容完全一致：
 
-```bash
-echo "Original tree: $ORIGINAL_TREE"
-echo "Current tree:  $(git rev-parse HEAD^{tree})"
-git diff origin/<headRefName> --stat
-```
+輸出 `Original tree: $ORIGINAL_TREE` 與 `Current tree: $(git rev-parse HEAD^{tree})`，並檢查 `git diff origin/<headRefName> --stat`。
 
 若工作樹發生非預期變更，請勿推送。
 
-## 審查指引
+## 審查指引 [#guidance]
 
 如需視覺化脈絡（圖表、檔案對照圖、附註解的逐步說明），請執行 `/visual-recap`——不要在此重複製作。此技能只會改善 PR 文字本身：
 
@@ -59,8 +63,9 @@ git diff origin/<headRefName> --stat
 - 將核心檔案與產生的檔案或機械性變更檔案分開。
 - 明確指出高風險的行為變更、遷移順序、推出計畫，以及測試涵蓋範圍。
 - 若議題追蹤系統、儀表板或設計文件有助於說明意圖，請加入其連結。
+- 對既有自我審查與驗證證據套用[人工審查交接資料](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)中的五項標準；指出最需要仔細審查的路徑，以及程式碼擁有者指派、錯誤偵測與復原方面的缺口，不虛構證據，也不變更核准政策。
 
-## 防護原則
+## 防護原則 [#guardrails]
 
 - 絕不可將有意義的行為變更隱藏在「整理」之中。
 - 除非使用者明確要求，否則不得略過掛鉤。

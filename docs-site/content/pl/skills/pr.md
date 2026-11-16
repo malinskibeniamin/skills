@@ -31,19 +31,19 @@ Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementac
 1. Znajdź otwarte PR-y jawnie powiązane z tą rozmową, sesją lub czatem; w przeciwnym razie sprawdź bieżącą gałąź przez `gh pr view`. Zweryfikuj stan otwarty, repozytorium, gałąź źródłową, bazę i własność. Nie wybieraj niepowiązanego ostatniego PR-a. Brak otwartego PR-a oznacza brak aktualizacji i nie daje zgody na jego utworzenie.
 2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica. Sprawdź aktualność zrzutów, oznaczeń i legendy zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations).
 3. Osobno załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md). Ponownie oceń wartość biznesową i wpływ na produkt lub bazę kodu; wykorzystaj nadal aktualne dowody, powtórz unieważnione porównania i usuń niepoparte twierdzenia. Gdy wartość jest nieznana, napisz `not established`.
-4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj pierwsze zdanie tak, aby obejmowało całą aktualną zmianę. Zastępuj nieaktualne punkty zwięzłą informacją o odbiorcy, wartości, rozstrzygających dowodach i istotnych ryzykach. Zachowaj intencję autora i wymagane dowody; podlinkuj szczegóły, pomiń poprawne opisy i nie dodawaj dziennika sesji.
+4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj pierwsze zdanie tak, aby obejmowało całą aktualną zmianę. Zastępuj nieaktualne punkty zwięzłą informacją o odbiorcy, wartości, rozstrzygających dowodach i istotnych ryzykach. Odśwież [materiał do przeglądu przez człowieka](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff), w tym dobór recenzentów oraz luki w odzyskiwaniu i wykrywaniu błędów. Zachowaj intencję autora i wymagane dowody; podlinkuj szczegóły, pomiń poprawne opisy i nie dodawaj dziennika sesji.
 5. Po edycji ponownie odczytaj opis z serwera i sprawdź, czy opisuje opublikowany stan gałęzi źródłowej. Żądania tylko do odczytu zgłaszają rozbieżności bez edycji. Wyraźny zakaz wypychania lub zakres lokalny odracza publikację; nie opisuj nieopublikowanej pracy jako dostarczonej.
 
 ## Szablon opisu [#body-template]
 
-Użyj tego szablonu do napisania opisu PR:
+Po samodzielnym przeglądzie i weryfikacji oceń pięć kryteriów z [materiału do przeglądu przez człowieka](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff). Ten zwięzły szablon ma wyjaśniać zakres zmiany i wskazywać, gdzie uwaga człowieka jest najważniejsza; podlinkuj szczegóły zamiast dodawać pięć szablonowych sekcji. Uzasadnij każdą niewiadomą i każde kryterium uznane za nieadekwatne.
 
 ```markdown
 <one sentence capturing the entire change and why it matters>
 
-- Review: <optional focus or decision; omit if none>
-- Testing: <decisive checks and observed results; before -> after; gaps>
-- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
+- Review: <scope alignment/deviations; closest-review paths and why; sensitive-path owner routing or gaps>
+- Testing: <decisive tests and real-entrypoint/computer-use evidence; observed results; gaps>
+- Risk: <failure modes; one-/two-way door, blast radius, rollout limits, and how to revert/recover; production error detection and gaps>
 ```
 
 ## Sekcje [#sections]
@@ -86,3 +86,4 @@ Dobieraj materiały według [dowodów wizualnych commit-push-pr](https://github.
 Wskaż sposób wycofania zmiany i określ, czy są to drzwi jednokierunkowe, czy dwukierunkowe. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
 
 Wymień dotkniętych użytkowników, wywołujących, kontrakty i wiarygodne scenariusze awarii, w tym współdzielonych odbiorców.
+Obok odzyskiwania oceń wykrywanie błędów zgodnie z kryteriami przekazania do przeglądu. Jawnie wskaż istotne luki w widoczności awarii; przechodzące testy ani plan wycofania zmiany nie zastępują wykrywania błędów.
