@@ -35,9 +35,12 @@ Przed wyborem aktualnych API Playwright, Testcontainers, axe-core lub przegląda
 Uruchamiaj axe na każdej stronie, ale automatyczne testy dostępności wykrywają tylko część problemów.
 Sam axe nie potwierdza poprawnej kolejności nawigacji klawiaturą, fokusu, nazw, zoomu ani działania technologii asystujących.
 
-W PR-ach uruchamiaj pełny zestaw w Chromium. Oznacz krytyczne ścieżki i wiarygodne ryzyka silnika
-tagiem `@cross-browser`; uruchom je w Firefox i WebKit. Pełną macierz zostaw na nocne
-uruchomienia lub bramkę wydania. Emulacja nie pozwala zweryfikować działania w każdej przeglądarce konkretnej marki ani na każdym fizycznym urządzeniu.
+W PR-ach domyślnie uruchamiaj pełny zestaw w Chromium; wybór tylko zależnych testów wymaga dowodu bezpiecznego zachowania z
+[CI fixes](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/SKILL.md).
+Pełny zestaw regresji uruchamiaj przed scaleniem na aktualnym połączonym kandydacie, najlepiej
+w kolejce scalania. Oznacz krytyczne ścieżki i wiarygodne ryzyka silnika tagiem `@cross-browser`;
+uruchom je w Firefox i WebKit również przed scaleniem. Dodatkowe nocne macierze rozszerzają
+pokrycie, nie zastępują wymaganych kontraktów. Emulacja nie dowodzi działania każdej marki przeglądarki ani fizycznego urządzenia.
 
 ## Determinizm [#determinism]
 
@@ -54,7 +57,7 @@ uruchomienia lub bramkę wydania. Emulacja nie pozwala zweryfikować działania 
 - W trybie testowym utrzymuj ulotny interfejs, ale sprawdzaj trwałe skutki zamiast tekstu toasta.
 - Specyfikacje schowka i uprawnień uruchamiaj w Chromium; gdzie indziej pokryj równoważny wynik.
 - Buforuj logi backendu lub kontenera przez teardown i przechwytuj awarie startu. Maskuj sekrety.
-- Jedno ponowienie w CI jest tylko tymczasowe, celem jest zero. Lokalnie preferuj zwięzły reporter.
+- Utrzymuj zero ponowień testów w CI; diagnozuj błędy pierwszej próby, zamiast ponawiać do zielonego. Lokalnie preferuj zwięzły reporter.
 - Usuń testy samego renderu; każda ścieżka sprawdza skutek działania użytkownika.
 
 ## Eksploracja generowana i długotrwała [#generated-and-long-lived-exploration]

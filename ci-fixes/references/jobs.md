@@ -1,7 +1,7 @@
 # Job execution: points 1-11
 
-Use the [measurement protocol](measurement.md); record a decision for every point in
-the [audit index](../REFERENCE.md). Apply the target repository's package manager,
+Use the [measurement protocol](measurement.md); record decisions for points assessed under
+the [audit scope](../REFERENCE.md). Apply the target repository's package manager,
 installed runner APIs, trust boundaries, and required-check policy.
 
 ## 1. Nightly routing
@@ -12,15 +12,22 @@ merge. Distinguish long exhaustive exploration from a slow but uniquely critical
 Security, authorization, migration, packaging, and compatibility checks are not optional
 just because they run slowly; preserve their relevant PR contracts.
 
-**Experiment:** partition by detection budget: always-on critical checks, graph-selected
-PR checks, and broader nightly/manual/release checks. Keep changed-risk coverage on PRs
-even when the broader sweep moves. Estimate compute using run frequency as well as job
-duration; one nightly full run can replace many redundant PR matrices, but it adds a
-larger attribution window and delayed feedback. Record who owns a nightly failure.
+**Experiment:** separate fast PR feedback, full-suite pre-merge validation, and supplemental
+nightly/manual/release exploration. Selection may narrow PRs, never the full pre-merge suite.
+Prefer a merge queue testing the combined candidate; verify every required producer handles
+GitHub's `merge_group` event and reports against its tested SHA. Without a queue, full-suite
+proof must become stale when the candidate or target changes, before allowing a merge.
+A push-to-main run is too late. Inspect actual settings read-only; report a missing boundary
+without changing protection or enabling a queue. Follow current
+[merge-queue documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue).
 
-**Accept only if:** PRs retain adequate proof and required-check consumers still resolve
-correctly. A changed trigger must not strand a required status or make omitted checks
-look executed. Prove actual selection and manual recovery. Nightly work needs a visible
+Estimate compute using run frequency as well as duration. Supplemental nightly runs can
+expand fuzzing, soak, or optional compatibility exploration; they cannot replace the declared
+regression suite before merge. Record their failure owner and delayed-detection risk.
+
+**Accept only if:** PRs retain adequate proof, the full suite passes before merge on the
+fresh combined candidate, and required-check consumers still resolve correctly. A changed
+trigger must not strand a required status or make omitted checks look executed. Prove actual selection and manual recovery. Nightly work needs a visible
 freshness/failure signal; a missing run is not a passing run. GitHub schedules can be
 delayed or dropped and run from the default branch, so they are not an exact-time SLA.
 Check schedule timezone and inactivity behavior in the current
@@ -41,6 +48,10 @@ application through a barrel in each unit. Measure process startup and collectio
 before consolidating tiny files or changing pools. Reuse expensive immutable data, not mutable
 state shared between tests. Consult version-matched
 [Vitest profiling/performance guidance](https://vitest.dev/guide/improving-performance).
+Where repeated module/environment setup dominates, trial `isolate: false` only in compatible
+projects that clean up shared state; measure file parallelism separately. It is not a global
+default or permission to run test bodies concurrently. Stress repeated/reordered files and
+verify mocks, timers, globals, and async teardown cannot leak before accepting the change.
 
 **Accept only if:** the same selected contracts execute, setup/cleanup semantics remain
 correct, and teardown has no leaked handles or work left running after success. Split a
@@ -61,7 +72,13 @@ time-sensitive, or secret-dependent test results are not automatically hermetic.
 For complete paths, estimate `expected cost = hit rate * hit cost + miss rate * miss cost`;
 include cache-save work and setup that remains on both paths. Measure eviction/key churn
 and stampedes across shards. Choose one writer or compatible immutable writes; do not
-duplicate an identical huge upload from every shard.
+duplicate an identical huge upload from every shard. Seed reusable caches from trusted
+successful default-branch runs where supported. If a remote task cache already exists,
+verify authorized CI can write as well as read; reproduce a task that misses every run and
+repair its declared inputs/outputs or unstable key. Never pass write credentials to untrusted
+PR code to improve hit rate; preserve the cache's trust model. Verify remote reuse across
+clean runners using [Turborepo's remote-cache model](https://turborepo.dev/docs/core-concepts/remote-caching)
+or the installed system's equivalent.
 
 **Accept only if:** keys cover relevant OS/architecture, runtime/tool versions, lockfiles,
 source, configuration, task arguments, and output-affecting environment inputs. Test a
@@ -162,8 +179,11 @@ not in a workflow-level key that cannot access the matrix.
 **Accept only if:** total final-check latency improves and concurrent jobs cannot corrupt
 shared state. Simulate a superseding commit and cancellation during setup/body/teardown;
 confirm the current head still receives a complete result. GitHub's `concurrency` controls
-overlapping runs; it does not turn on test workers. Default pending-run replacement and
-optional queueing have distinct semantics: inspect the current
+overlapping runs; it does not turn on test workers. Cancel superseded PR feedback runs,
+not default-branch or merge-group validation. Separate their group identities; disabling
+`cancel-in-progress` alone does not prevent replacement of pending runs. Preserve every
+required candidate's result. Pending-run replacement and optional queueing have distinct
+semantics: inspect the current
 [concurrency documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency)
 rather than assuming FIFO ordering or adding a global lock.
 
@@ -182,16 +202,20 @@ merge refs and merge queues. The comparison must cover unvalidated changes; comp
 the latest push can omit earlier PR work or failures since the last successful main run.
 Map changed files to owning targets and transitive reverse dependents. Model schemas,
 generated inputs, fixtures, shared setup, runtime assets, environment/configuration,
-lockfiles, and toolchains; add explicit global invalidators. For deletions/renames, consider
-the previous graph as well as the new one so vanished edges do not hide former consumers.
+lockfiles, and toolchains. Lockfile and CI-configuration changes force the full suite;
+add other global invalidators for shared setup/config/toolchain inputs. For deletions/renames,
+consider the previous graph as well as the new one so vanished edges do not hide former consumers.
 
 **Accept only if:** shadow runs compare selection with full-suite results on representative
 leaf, shared, config, fixture, rename/delete, and unknown-input changes. Inject a related
-regression and prove it is selected and caught. Missing history/base, incomplete graph,
-unmapped inputs, or uncertain prior success must broaden to the safe full suite. A truly
+regression and prove it is selected and caught. Separately make a deliberately unsound
+selector omit that change in a disposable experiment: the full pre-merge lane must still
+run and reject it. Restore the selector/defect, then verify a valid control passes. A full
+lane using the same affected filter is not independent protection. Missing history/base,
+incomplete graph, unmapped inputs, or uncertain prior success must broaden to the safe full suite. A truly
 empty selection needs a published reason, not a missing required check. Log why each target
-was selected; keep a full-suite reference lane to catch drift. Task-result caching additionally
-needs complete content/environment inputs and hermetic outputs, not a successful old job
+was selected; retain the full-suite pre-merge lane, not just a nightly reference. Task-result
+caching additionally needs complete content/environment inputs and hermetic outputs, not a successful old job
 keyed only by branch name.
 
 ## 9. Runner fit
@@ -206,8 +230,11 @@ queueing separately before proposing a larger machine.
 **Experiment:** compare authorized runner sizes with appropriately retuned workers. Hold
 architecture constant first; architecture changes can affect native modules, emulation,
 binary availability, and correctness. Measure useful throughput and cost for the full job,
-including provisioning and downloads. CPU capacity unused during network waits will not
-become a speedup merely by doubling cores; low RAM may matter more than vCPU count.
+including provisioning and downloads. StarSling, Blacksmith, and other runner providers
+are optional candidates when measured queue/provisioning time is the bottleneck, not
+required migrations. Verify current availability, security, pricing, and account needs
+before any authorized trial; use existing capacity first. CPU capacity unused during network
+waits will not become a speedup merely by doubling cores; low RAM may matter more than vCPU count.
 
 **Accept only if:** the chosen machine reduces the relevant latency or compute cost without
 new compatibility or isolation risk. Keep OS-specific proof where the product needs it;
@@ -224,7 +251,14 @@ the longest path and slack, not just the visually longest test job. A heavy aggr
 upload or coverage merge can be the last gate even after all tests finish.
 
 **Experiment:** eliminate duplicate prerequisites; overlap independent build/analysis;
-install only needed browser engines/system packages; use condition-based service readiness.
+install only needed browser engines/system packages and only in their consuming jobs;
+start only the service containers that job uses, with condition-based readiness. Trial a
+blobless checkout when transfer dominates, preserving commit history needed by affected
+selection/versioning and accounting for deferred blob downloads; inspect the installed
+[checkout action's filter behavior](https://github.com/actions/checkout#usage).
+Keep lint, typecheck, build, and tests parallel where there is no real dependency. Split
+migration checks and unrelated apps out of a slow job only while preserving their own
+required gates and complete selection; relocation must not remove pre-merge protection.
 Compare a shared setup/build artifact with repeated local preparation. For example, a
 3-minute shared build plus 1-minute transfer adds 4 minutes before fan-out; that is worse
 than overlapping 2-minute local builds despite reducing repeated compute. Include cache

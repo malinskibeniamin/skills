@@ -31,7 +31,7 @@ type: skill
 
 每個頁面都執行 axe，但自動化無障礙檢查只覆蓋一部分。僅透過 axe 不能證明鍵盤順序、焦點、名稱、縮放或輔助技術行為。
 
-PR 在 Chromium 中執行完整套件。將關鍵路徑和可信引擎風險標記為 `@cross-browser`，並在 Firefox 與 WebKit 中執行。完整瀏覽器矩陣留給夜間通道或釋出閘門。模擬不能證明所有品牌瀏覽器或實體裝置。
+PR 預設在 Chromium 中執行完整套件；僅執行受影響測試需要 [CI fixes](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/SKILL.md) 中的失敗封閉驗證。完整迴歸套件必須在合併前對目前組合候選版本執行，優先使用合併佇列。將關鍵路徑和可信引擎風險標記為 `@cross-browser`，也在合併前於 Firefox 與 WebKit 執行。補充夜間矩陣可擴充覆蓋，但不能取代必要契約。模擬不能證明所有品牌瀏覽器或實體裝置。
 
 ## 確定性 [#determinism]
 
@@ -44,7 +44,7 @@ PR 在 Chromium 中執行完整套件。將關鍵路徑和可信引擎風險標�
 - 測試模式下讓短暫 UI 保持可見，但斷言持久副作用而非 toast 文字。
 - 剪貼簿和權限特定規範在 Chromium 執行；其他瀏覽器覆蓋等價結果。
 - 緩衝後端或容器記錄直到 teardown，並擷取啟動失敗。遮蔽機密。
-- CI 只允許一次重試作為臨時措施，目標為零；本機使用簡潔 reporter。
+- CI 測試重試維持為零；診斷首次失敗，不要重試到通過。本機使用簡潔 reporter。
 - 刪除僅驗證渲染的規範；每段旅程都要觸發使用者造成的副作用。
 
 ## 生成式與長時間探索 [#generated-and-long-lived-exploration]

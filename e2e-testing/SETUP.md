@@ -24,12 +24,12 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? 'github' : 'html',
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:3000',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     screenshot: { mode: 'only-on-failure', fullPage: true },
   },
   projects: [
@@ -57,7 +57,12 @@ test('checkout completes @cross-browser', async ({ page }) => {
 ```
 
 The default run executes every test in Chromium and tagged tests in Firefox/WebKit.
-Set `FULL_BROWSER_MATRIX=1` in a nightly lane or release gate to run every test everywhere.
+This declared regression suite runs before merge on the fresh combined candidate, including
+its tagged engine-risk checks; affected-only execution narrows PR feedback only.
+Set `FULL_BROWSER_MATRIX=1` for supplemental nightly/release exploration, or before merge
+when the product contract requires every test on every engine. When splitting browser jobs,
+install only each job's selected engines and OS dependencies. Keep retries at zero and capture
+first-attempt traces with `retain-on-failure`; a retry-only trace mode records nothing here.
 
 ### 3. Add package.json scripts
 
@@ -107,7 +112,9 @@ export { expect } from '@playwright/test'
 
 ## Testcontainers Setup
 
-Spin up real backend services for integration-level e2e:
+Use real backend services only in a separately identified integration lane when that contract
+needs them; PR browser tests use [mocked backend traffic](../ci-fixes/references/test-signal.md#18-mock-pr-browser-network).
+Start only the containers a job consumes and wait for observed readiness, not fixed sleeps.
 
 ```ts
 import { GenericContainer, Wait } from 'testcontainers'

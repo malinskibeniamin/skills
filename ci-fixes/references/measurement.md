@@ -23,6 +23,22 @@ Separate three outcomes:
 - **Protection:** retained contracts, first-attempt failure rate, caught negative controls,
   line/branch coverage on the same source denominator, and feedback deferred off PRs.
 
+## Starting budgets, not a checklist
+
+Unless the owner defines another target, investigate PR commit-to-required-result latency
+against **under 2 minutes median and under 3 minutes p95**. Use **under 10 seconds runner
+queue/provisioning**, **under 30 seconds setup per job**, and **under 60 seconds test execution
+per shard** as starting phase budgets. They are hypotheses for this repository, not universal
+SLAs, additive guarantees, fixed timeout values, or a mandate to change every phase.
+Define queue/provisioning boundaries from provider timestamps so setup is not counted twice.
+
+Fix the phase that actually dominates the critical path. Report PR-feedback and full-suite
+pre-merge latency separately; making PRs faster cannot be sold as faster full validation.
+Keep sample counts and cache/workload strata beside median and p95; with insufficient data,
+report observed ranges and mark p95 unestablished. Preserve failures/cancellations rather than
+cherry-picking completed green runs. These are starting optimization goals,
+not measured performance of any runner or tool.
+
 ## Locate the critical path
 
 For each DAG node, model `finish = max(predecessor finishes) + queue + execution`;

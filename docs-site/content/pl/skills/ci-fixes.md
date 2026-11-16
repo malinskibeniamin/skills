@@ -1,86 +1,108 @@
 ---
-description: "Diagnozuj i naprawiaj wolne lub niestabilne CI, nieefektywne zadania oraz testy o niskiej wartości. Używaj do optymalizacji czasu, cache, shardów, wyboru zależnych testów, maszyn i narzędzi."
-related: ["/skills/development-lifecycle","/skills/tdd","/skills/review"]
-search: {"boost":1,"keywords":["ci fixes"]}
-sidebar: {"label":"/ci-fixes"}
-title: "/ci-fixes"
-type: "skill"
+description: >-
+  Diagnozuj i naprawiaj wolne lub niestabilne CI, nieefektywne zadania oraz
+  testy o niskiej wartości. Używaj do optymalizacji czasu, cache, shardów,
+  wyboru zależnych testów, maszyn i narzędzi.
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - ci fixes
+sidebar:
+  label: /ci-fixes
+title: /ci-fixes
+type: skill
 ---
 ![Diagram umiejętności /ci-fixes](/diagrams/skills/ci-fixes.svg)
 
 [Otwórz edytowalne źródło Excalidraw](/diagrams/skills/ci-fixes.excalidraw)
 
-Skróć czas do miarodajnego zielonego CI, zużywając mniej zasobów i zachowując ochronę przed regresjami.
-Optymalizuj czas od commita do ostatniej wymaganej kontroli, nie tylko czas testów.
-Zachowaj żądany punkt końcowy: audyty i plany są tylko do odczytu; wdrażaj zmiany wyłącznie na prośbę.
-Nie twórz przy okazji harmonogramów, nie kupuj maszyn, nie zmieniaj ochrony gałęzi ani nie uruchamiaj agentów.
+Przyspiesz CI bez fałszywie zielonych wyników, niezależnie od stosu. Optymalizuj czas od commita
+do wymaganego wyniku, nie tylko testy; zasoby licz osobno. Audyty i plany są tylko do odczytu.
+Wdrażaj wyłącznie na prośbę; nie instaluj przy okazji narzędzi audytowych, nie twórz maszyn,
+nie zmieniaj polityki hostingu, nie twórz harmonogramów i nie uruchamiaj agentów.
 
-## Ustal punkt odniesienia
+## Chroń granicę scalania [#protect-the-merge-boundary]
 
-1. Ustal docelowe repozytorium, gałąź, workflow, akcje wielokrotnego użytku i złożone, skrypty,
-   konfigurację testów, wymagane kontrole oraz właściwe instrukcje. Sprawdź rzeczywiste polecenia.
-2. Zbierz porównywalne ostatnie wykonania, także błędne i ponowione: adresy commitów i wykonań,
-   czas kolejki, zależności zadań, czas przygotowania, budowania, testów i przesyłania, stan cache,
-   zasoby maszyn, liczbę workerów, czasy shardów, liczbę testów i błędy pierwszych prób.
-   Korzystaj z raportów dostawcy; brak historii oznacza niewiedzę, nie dowód szybkości ani niezawodności.
-3. Rozrysuj ścieżkę krytyczną od przygotowań do końcowego wymaganego wyniku. Oddziel czas
-   rzeczywisty od sumy minut pracy maszyn i kosztu; zapisz liczbę próbek oraz środowisko.
+- Pełny zestaw testów regresji musi przejść przed scaleniem na kandydacie połączonym z aktualną
+  gałęzią docelową. Selekcja zawęża tylko informację zwrotną w PR; testy nocne ani po scaleniu
+  nie zastępują tej ochrony. Preferuj kolejkę scalania, a bez niej wymagaj równoważnego,
+  aktualnego dowodu przed scaleniem. Zgłoś brak ochrony; zmiana ustawień wymaga upoważnienia.
+- Zachowaj błędy pierwszej próby. Napraw przyczynę zamiast dodawać ponowienia testów,
+  zwiększać limity czasu, pomijać lub izolować testy albo osłabiać asercje i pokrycie dla szybkości.
+  Ograniczone, idempotentne odzyskiwanie infrastruktury to [osobny przypadek](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/references/operations.md#29-infrastructure-outage-containment).
 
-## Wybierz najmniejszą użyteczną zmianę
+## Ustal punkt odniesienia [#establish-the-baseline]
 
-Przeczytaj cały [audyt CI](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/REFERENCE.md).
-Oceń każdą kontrolę z indeksu; dla właściwych zadań zapisz decyzję **przyjmij**, **odrzuć**,
-**odrocz** albo **nie dotyczy**, wraz z dowodami. Nie stosuj każdej dostępnej optymalizacji.
-Ustal priorytety według zmierzonych oszczędności na ścieżce krytycznej i zasobach, pewności
-oraz ryzyka wdrożenia i utrzymania. Niewiadome wymagają małego eksperymentu, nie zmyślonych
-szacunków. Nigdy nie opóźniaj szybkich zadań tylko po to, by kończyły się równocześnie.
+1. Ustal repozytorium, gałąź, workflow i wywołujących, rzeczywiste skrypty i konfiguracje testów,
+   wymagane kontrole, politykę scalania oraz lokalne instrukcje. Wskaż pełny przebieg przed scaleniem.
+2. Zbierz porównywalne ostatnie wykonania, także nieudane i ponowione: adresy commitów i wykonań,
+   kolejki, zależności, przygotowanie, budowanie, testy, wysyłanie, cache, zasoby, workery,
+   shardy, liczbę wykonanych testów i błędy pierwszych prób. Preferuj istniejące raporty dostawcy;
+   brak historii oznacza niewiedzę, nie dowód szybkości ani niezawodności.
+3. Prześledź ścieżkę krytyczną do ostatniego wymaganego wyniku. Zanim uznasz testy za wolne,
+   znajdź największe usuwalne oczekiwanie lub powtarzaną pracę. Zapisz obciążenie i liczbę próbek.
+   Stosuj [protokół pomiarów i budżety początkowe](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/references/measurement.md):
+   wynik PR poniżej 2 minut mediany i 3 minut p95, chyba że właściciel ustali inny cel.
+   Cele nie są gwarancją ani zgodą na osłabienie ochrony; nieudowodnione ogony rozkładu pozostają nieznane.
 
-Pierwotne kontrole są podstawą, nie limitem. Gdy to istotne, przejdź z indeksu do
-integralności dostarczania, operacji i zarządzania. Dodawaj kontrolę dla nieobjętej awarii
-wyłącznie z odrębnym chronionym kontraktem, falsyfikowalnym eksperymentem, kryterium
-akceptacji i właścicielem; nakładające się kontrole łącz odsyłaczami, zamiast je mnożyć.
-Szersza diagnoza nie uprawnia do tworzenia usług, ujawniania danych ani zmiany polityki
-bezpieczeństwa lub dostarczania.
+## Wybierz najmniejszą użyteczną zmianę [#choose-the-smallest-useful-change]
+
+Użyj [indeksu audytu CI](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/REFERENCE.md),
+aby znaleźć instrukcje dla zaobserwowanego wąskiego gardła, nie obowiązkową listę migracji.
+Pełny audyt ocenia każdy punkt; naprawa celowana bada tylko wąskie gardło i powiązane kontrakty
+bezpieczeństwa, oznaczając resztę jako poza zakresem. Dla ocenionych punktów zapisz **przyjmij**,
+**odrzuć**, **odrocz** lub **nie dotyczy** z dowodem; niewiadome nie oznacza nie dotyczy.
+Porządkuj według zmierzonych zysków na ścieżce krytycznej, zasobów, pewności i ryzyka utrzymania.
+Najpierw napraw największe potwierdzone wąskie gardło, potem zmierz ponownie.
+
+Rozszerz indeks tylko o odrębny chroniony kontrakt z falsyfikowalnym eksperymentem, sygnałem
+akceptacji i właścicielem; łącz nakładające się punkty odsyłaczami. Szersza diagnoza nie uprawnia
+do tworzenia usług, ujawniania danych ani zmiany polityki bezpieczeństwa lub dostarczania.
 
 Wczytuj dodatkowe instrukcje tylko dla wykonywanej pracy:
 
 - Zmiany workflow: [utrzymanie CI](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/ci-maintenance/SKILL.md),
-  w tym źródło kanoniczne i granice zaufania. Chroń poświadczenia, cache, artefakty i forki.
+  wraz ze źródłem kanonicznym i granicami zaufania. Chroń poświadczenia, cache, artefakty i forki.
 - Usuwanie testów: [audyt testów](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md).
-  Przed usunięciem wskaż zachowane kontrakty i główny test każdego z nich; szybkość i samo pokrycie linii nie wystarczą.
-- Niestabilne testy: [diagnozowanie błędów](https://github.com/malinskibeniamin/skills/blob/main/diagnosing-bugs/SKILL.md).
-  Odtwórz błędy pierwszej próby i napraw właściciela zachowania albo narzędzia; udane ponowienie nie jest naprawą.
-- Aktualizacje: [aktualizacja zależności](https://github.com/malinskibeniamin/skills/blob/main/upgrade-dependency/SKILL.md).
-  Sprawdź aktualne stabilne wydania, migracje i zgodność maszyn w źródłach pierwotnych podczas wykonywania zadania.
+  Przed usunięciem wskaż zachowany kontrakt i główny test; szybkość i procent pokrycia nie wystarczą.
+- Niestabilność: [diagnozowanie błędów](https://github.com/malinskibeniamin/skills/blob/main/diagnosing-bugs/SKILL.md).
+  Odtwórz błędy pierwszej próby i napraw właściciela lub harness; udane ponowienie nie jest naprawą.
+- Zmiany narzędzi: [aktualizacja zależności](https://github.com/malinskibeniamin/skills/blob/main/upgrade-dependency/SKILL.md).
+  Sprawdź wsparcie wersji, migrację i zgodność maszyn w źródłach pierwotnych. Porównaj alternatywę
+  z obecną bramką przed zastąpieniem; nazwani dostawcy i narzędzia to kandydaci, nie domyślne wybory.
 
-Podczas wdrażania zmieniaj jedno spójne wąskie gardło naraz. Nowe zachowanie i naprawy
-zaczynaj od niedziałającego testu publicznego kontraktu; konfigurację i dokumentację
-sprawdzaj wykonywalnymi narzędziami, nie testami wyszukującymi tekst instrukcji. Zachowaj cudze zmiany.
+Zmieniaj jedno spójne wąskie gardło naraz. Gdy żądane są PR-y, każda optymalizacja ma być mała
+i mierzalna osobno; nie dziel istniejącego własnego PR bez prośby. Dodaj niedziałający test
+publicznego kontraktu tylko dla nieobjętego ryzyka behawioralnego; konfigurację i dokumentację
+sprawdzaj wykonywalnymi narzędziami, nie testami wyszukującymi tekst instrukcji.
 
-## Udowodnij poprawę
+## Udowodnij poprawę [#prove-the-improvement]
 
-- Uruchom kontrole składni workflow, kontrole repozytorium oraz właściwe testy. Sprawdź brak,
-  trafienie i unieważnienie cache; po zmianie wyboru testów porównaj go z pełnym zestawem.
-  Zweryfikuj propagację błędów, brakujące shardy i ukończenie wymaganych kontroli.
-- Porównuj ten sam zakres pracy, maszynę, wersje narzędzi, liczbę workerów i stan cache,
-  z wyjątkiem badanej zmiennej. Powtórz pomiary; podaj surowe czasy, liczbę próbek, medianę
-  i ogon rozkładu, gdy mają sens, a także osobno minuty pracy maszyn i czas kolejki.
-- Po zmianie workerów, izolacji lub podziału uruchamiaj testy wielokrotnie i w zmienionej
-  kolejności przy docelowej współbieżności. Sprawdź pamięć, CPU, niestabilność i wyścigi stanu.
-- Po usuwaniu porównaj pokrycie linii i gałęzi pełnego zachowanego zestawu z taką samą
-  instrumentacją, progami, wykluczeniami i zakresem kodu. Zachowaj wykrywanie unikalnych błędów
-  oraz krytyczne ścieżki, nie tylko procenty; stosuj celowane kontrole negatywne lub mutacje.
-- Uruchom pełne kontrole regresji właściwe dla zmienionych kontraktów. Jawnie wymień
-  weryfikację dostępną tylko na hostowanych maszynach lub niedostępną; lokalny sukces nie dowodzi sukcesu CI na GitHubie.
+- Uruchom bramki workflow i repozytorium oraz właściwe testy. Sprawdź brak, trafienie i unieważnienie
+  cache, kompletność shardów, propagację błędów oraz ukończenie wymaganych kontroli.
+- Dla selekcji porównaj wynik z pełnym zestawem. Zmiany lockfile lub konfiguracji CI i niepewne
+  wejścia wymuszają pełne wykonanie. W jednorazowym eksperymencie celowo pomiń istotną zmianę:
+  pełna bramka przed scaleniem musi ją wykryć. Przywróć stan i potwierdź zielony wynik.
+- Porównuj dopasowane obciążenie, maszynę, wersje, workery i cache, poza badaną zmienną. Powtarzaj
+  rzeczywiste wykonania; raportuj próbki, medianę, uzasadnione ogony, kolejkę i minuty maszyn osobno.
+  Pomiar lokalny nie dowodzi zachowania hostowanego CI.
+- Dla workerów, izolacji i dystrybucji powtarzaj i zmieniaj kolejność przy proponowanej współbieżności;
+  sprawdź pamięć, CPU, wyścigi współdzielonego stanu i błędy pierwszej próby.
+- Przy usuwaniu testów zachowaj unikalne wykrywanie błędów i krytyczne ścieżki, używając kontroli
+  negatywnych. Porównuj pokrycie linii i gałęzi przy tej samej instrumentacji, wykluczeniach i mianowniku.
+- Sprawdź zdarzenie i ref pełnego zestawu przed scaleniem oraz unieważnienie dowodu po zmianie bazy.
+  Brak dostępu lub wykonań na hostingu jest luką, nie dowodem bezpieczeństwa. Nie opóźniaj szybkich zadań dla symetrii.
 
-Zielony wynik oznacza, że właściwa praca naprawdę się wykonała. Zachowaj widoczność błędów:
-bez ukrywania kodów wyjścia, `continue-on-error`, osłabiania asercji i pokrycia, trwałych
-pominięć lub kwarantanny ani ponowień maskujących niestabilność. Nigdy nie przenoś uszkodzonego testu na noc, by ogłosić naprawę.
+## Przekazanie [#handoff]
 
-## Przekazanie
-
-Zacznij od wyniku i jego ograniczeń. Podaj wąskie gardło, decyzje dla kontroli z indeksu,
-dowody przed i po wraz z próbkami i stanem cache, zmienione przypisanie kontraktów do testów,
-powody usunięć, daty weryfikacji wersji i źródeł, rzeczywiste polecenia i adresy wykonań,
-nierozwiązane ryzyka oraz sposób wycofania. Oddziel zmierzone zyski od proponowanych eksperymentów.
-Szczegółowe dowody przechowuj w istniejącym miejscu repozytorium; podsumuj je zamiast wklejać logi.
+Zacznij od wyniku i ograniczeń: wąskie gardło, ocenione decyzje, rzeczywisty łączny czas CI
+oraz zasoby przed i po, próbki i cache, polecenia i adresy wykonań, dowód ochrony, ryzyka oraz
+wycofanie. Gdy istotne, dodaj właścicieli testów, uzasadnienie usunięć i daty sprawdzenia wersji
+oraz źródeł. Oddziel zmierzone zyski od propozycji; niedostępne sumy pozostają nieznane.
+Najpierw zakończ odwracalną pracę w zakresie; zbierz potrzeby kont, sekretów, płatnych zasobów
+i zmian polityki w jedną listę dla właściciela. Dowody zachowaj w istniejącym miejscu;
+podsumuj je zamiast wklejać logi.

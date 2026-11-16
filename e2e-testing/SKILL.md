@@ -24,9 +24,12 @@ browser APIs. Setup belongs in [SETUP.md](SETUP.md).
 Run axe on every page, but automated accessibility covers only a subset. An axe-only pass
 does not prove keyboard order, focus, names, zoom, or assistive-technology behavior.
 
-On PRs, run the full suite in Chromium. Tag critical journeys and credible engine risks
-`@cross-browser`; run those in Firefox and WebKit. Reserve the full browser matrix for a
-nightly lane or release gate. Emulation cannot prove every branded browser or physical device.
+On PRs, run the full suite in Chromium by default; affected-only selection needs the proof in
+[CI fixes](../ci-fixes/SKILL.md). Run the full regression suite before merge on the current
+combined candidate, preferably in a merge queue. Tag critical journeys and credible engine
+risks `@cross-browser`; run those in Firefox and WebKit before merge too. Supplemental nightly
+matrices may expand coverage, not replace required contracts. Emulation cannot prove every
+branded browser or physical device.
 
 ## Determinism
 
@@ -43,7 +46,9 @@ nightly lane or release gate. Emulation cannot prove every branded browser or ph
 - Keep ephemeral UI visible in test mode, but assert lasting side effects rather than toast text.
 - Run clipboard and permission-specific specs in Chromium; cover equivalent outcomes elsewhere.
 - Buffer backend/container logs through teardown and capture startup failures. Redact secrets.
-- Use one CI retry only as a stopgap and zero as the goal. Prefer compact local reporters.
+- Use zero test retries; preserve first-attempt failures and fix their cause. Follow
+  [CI flake diagnosis](../ci-fixes/references/test-signal.md#12-diagnose-flakes), not retry-to-green.
+  Prefer compact local reporters.
 - Delete render-only specs; each journey exercises a user-caused side effect.
 
 ## Generated and long-lived exploration
