@@ -29,19 +29,19 @@ type: skill
 1. 查找与此对话、会话或聊天明确关联的已打开 PR；否则通过 `gh pr view` 检查当前分支。核实打开状态、仓库、源分支、基分支和归属；绝不选择无关的近期 PR。没有已打开的 PR 就无需维护，也不意味着可以创建 PR。
 2. 将已发布的描述与**完整 PR 差异**、原始目标及当前验证结果对照，而非只看最近一轮对话或提交。对于堆叠 PR，逐一对照父分支评估受影响的层。 按照[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)检查截图、标记和图例是否过时。
 3. 单独加载 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新评估业务价值及产品或代码库影响；复用仍有效的证据，重跑已失效的比较，并删除缺乏依据的主张。价值未知时明确写出 `not established`。
-4. 对已获授权的修改或交付工作，一并刷新受影响的截图、标记和图例；更新开头一句话，使其概括当前完整变更，并就地替换过时条目，简明说明受益方、价值、决定性证据及实质风险。保留作者意图和必需证据；链接到详情，跳过准确的描述，不追加会话日志。
+4. 对已获授权的修改或交付工作，一并刷新受影响的截图、标记和图例；更新开头一句话，使其概括当前完整变更，并就地替换过时条目，简明说明受益方、价值、决定性证据及实质风险。更新[人工审查交接材料](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)，包括审查人指派、恢复方案和错误检测方面的缺口。保留作者意图和必需证据；链接到详情，跳过准确的描述，不追加会话日志。
 5. 编辑后重新读取托管平台上的正文，确认其描述的是已发布的源分支状态。只读请求仅报告偏差，不编辑。明确要求仅本地修改或禁止推送时，暂缓发布；绝不将未发布的工作描述为已交付。
 
 ## 正文模板 [#body-template]
 
-使用以下模板编写 PR 描述：
+完成自我审查和验证后，评估[人工审查交接材料](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)中的五项标准。用这个精简模板说明变更范围，以及最需要人工关注的部分；通过链接提供细节，不要增加五个套话章节。对未知项或不适用项说明原因。
 
 ```markdown
 <one sentence capturing the entire change and why it matters>
 
-- Review: <optional focus or decision; omit if none>
-- Testing: <decisive checks and observed results; before -> after; gaps>
-- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
+- Review: <scope alignment/deviations; closest-review paths and why; sensitive-path owner routing or gaps>
+- Testing: <decisive tests and real-entrypoint/computer-use evidence; observed results; gaps>
+- Risk: <failure modes; one-/two-way door, blast radius, rollout limits, and how to revert/recover; production error detection and gaps>
 ```
 
 ## 各部分 [#sections]
@@ -84,3 +84,4 @@ PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前�
 说明回滚路径，并将变更归类为单向门或双向门。双向门容易退回；破坏性或难以逆转的决策属于单向门。
 
 列明受影响的用户、调用方、契约和可信的故障模式，包括共享使用方。
+在说明恢复方案时，同时按照交接标准评估错误检测；明确列出重要的故障可见性缺口，不要把测试通过或回滚计划当作错误检测的替代品。

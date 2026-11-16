@@ -29,19 +29,19 @@ type: skill
 1. 尋找與此對話、工作階段或聊天明確關聯的已開啟 PR；否則透過 `gh pr view` 檢查目前分支。確認開啟狀態、儲存庫、來源分支、基底分支及歸屬；不可選擇無關的近期 PR。沒有已開啟的 PR 就無須維護，也不代表可以建立 PR。
 2. 將已發布的說明與**完整 PR 差異**、原始目標及目前的驗證結果比對，而非只看最近一輪對話或提交。對堆疊 PR，逐一對照父分支評估受影響的層級。 依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)檢查擷取畫面、標記及圖例是否過時。
 3. 個別載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新評估商業價值及產品或程式碼庫影響；重用仍有效的證據、重跑已失效的比較，並移除缺乏依據的主張。價值未知時，明確寫出 `not established`。
-4. 對已獲授權的修改或交付工作，一併更新受影響的擷取畫面、標記及圖例；更新開頭一句話，使其涵蓋目前完整變更，並原地替換過時項目，精簡說明受益對象、價值、關鍵證據及實質風險。保留作者意圖及必要證據；連結至詳細資料、略過準確的說明，不附加工作階段紀錄。
+4. 對已獲授權的修改或交付工作，一併更新受影響的擷取畫面、標記及圖例；更新開頭一句話，使其涵蓋目前完整變更，並原地替換過時項目，精簡說明受益對象、價值、關鍵證據及實質風險。更新[人工審查交接資料](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)，包括審查人員指派、復原方案與錯誤偵測方面的缺口。保留作者意圖及必要證據；連結至詳細資料、略過準確的說明，不附加工作階段紀錄。
 5. 編輯後重新讀取託管平台上的內文，確認其描述的是已發布的來源分支狀態。唯讀要求僅回報偏差，不進行編輯。明確要求僅本機修改或禁止推送時，延後發布；不可將尚未發布的工作描述為已交付。
 
 ## 內文範本 [#body-template]
 
-使用以下範本撰寫 PR 說明：
+完成自我審查與驗證後，評估[人工審查交接資料](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)中的五項標準。用這個精簡範本說明變更範圍，以及最需要人工關注的部分；透過連結提供細節，不要增加五個制式區段。對未知項目或不適用項目說明原因。
 
 ```markdown
 <one sentence capturing the entire change and why it matters>
 
-- Review: <optional focus or decision; omit if none>
-- Testing: <decisive checks and observed results; before -> after; gaps>
-- Risk: <affected contracts, failure modes, rollout limits, and how to revert>
+- Review: <scope alignment/deviations; closest-review paths and why; sensitive-path owner routing or gaps>
+- Testing: <decisive tests and real-entrypoint/computer-use evidence; observed results; gaps>
+- Risk: <failure modes; one-/two-way door, blast radius, rollout limits, and how to revert/recover; production error detection and gaps>
 ```
 
 ## 各區段 [#sections]
@@ -84,3 +84,4 @@ type: skill
 說明回復路徑，並將變更歸類為單向門或雙向門。雙向門容易退回；破壞性或難以逆轉的決策屬於單向門。
 
 列明受影響的使用者、呼叫端、契約及可信的失敗模式，包括共用的使用端。
+說明復原方案時，同時依照交接標準評估錯誤偵測；明確列出重要的故障可見性缺口，不要把測試通過或回復計畫當成錯誤偵測的替代品。
