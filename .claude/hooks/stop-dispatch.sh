@@ -77,9 +77,12 @@ while IFS= read -r script; do
   if [ "$status" -eq 2 ]; then
     message=$(extract_message "$err")
     [ -z "$message" ] && message=$(extract_message "$out")
-    [ -n "$message" ] && printf '[%s] %s\n' "${script%.sh}" "$message" >>"$blocks"
+    [ -n "$message" ] || message="check requested a retry (exit 2) without diagnostics; inspect the hook directly."
+    printf '[%s] %s\n' "${script%.sh}" "$message" >>"$blocks"
   elif [ "$status" -ne 0 ]; then
-    printf '[%s] check exited %s; inspect the hook directly.\n' "${script%.sh}" "$status" >>"$notes"
+    message=$(extract_message "$err")
+    [ -z "$message" ] && message=$(extract_message "$out")
+    printf '[%s] check exited %s; inspect the hook directly.\n%s\n' "${script%.sh}" "$status" "$message" >>"$notes"
   else
     message=$(extract_message "$out")
     [ -n "$message" ] && printf '[%s] %s\n' "${script%.sh}" "$message" >>"$notes"
@@ -90,15 +93,25 @@ if [ -s "$blocks" ]; then
   # Completion runs alongside the other checks; a status line cannot release
   # the endpoint while another check still rejects the turn.
   [ -n "$session_dir" ] && rm -f "$session_dir/task-completed"
-  message=$(cat "$blocks")
+  message=$(cat "$blocks" "$notes")
+  # Claude's eight-block cap resets on tool use, so it cannot bound repair
+  # loops. Recheck the repair, but never request another continuation when
+  # this turn already resumed from a Stop hook. Keep unresolved checks visible
+  # without marking the endpoint complete or releasing its activity.
+  if printf '%s' "$input" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then
+    jq -n --arg message "Stop-hook retry exhausted. Unresolved checks (not a pass):
+$message" '{suppressOutput:true,systemMessage:$message}'
+    exit 0
+  fi
   jq -n --arg message "$message" '{suppressOutput:true,systemMessage:$message}' >&2
   exit 2
 fi
 
 if [ -s "$notes" ]; then
   message=$(cat "$notes")
-  jq -n --arg message "$message" \
-    '{hookSpecificOutput:{hookEventName:"Stop",additionalContext:$message}}'
+  # additionalContext continues a Stop turn even with exit 0. Notes and
+  # hook errors are non-blocking diagnostics, not repair requests.
+  jq -n --arg message "$message" '{suppressOutput:true,systemMessage:$message}'
 fi
 
 # Release activity only after every blocking Stop check passed.
