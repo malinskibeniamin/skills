@@ -1,5 +1,6 @@
 import { type ChangeEvent, useId, useState } from "react";
 
+import { groupSkills } from "../skill-groups.ts";
 import {
   filterSkills,
   skillHref,
@@ -25,24 +26,24 @@ export default function SkillSearch({ locale, skills }: SkillSearchProps) {
     trimmedQuery.length === 0
       ? messages.all(skills.length)
       : messages.matches(matches.length, trimmedQuery);
+  const groups = trimmedQuery
+    ? [{ id: "matches", title: "", skills: matches }]
+    : groupSkills(matches, locale);
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.currentTarget.value);
   };
 
   return (
-    <section className="not-prose mt-6">
-      <div className="mb-5">
-        <label
-          className="mb-2 block font-medium text-foreground text-sm"
-          htmlFor={inputId}
-        >
+    <section className="skill-directory not-prose">
+      <div className="skill-directory-search">
+        <label className="skill-search-label" htmlFor={inputId}>
           {messages.label}
         </label>
         <input
           aria-controls={resultsId}
           autoComplete="off"
-          className="min-h-12 w-full rounded-blume border border-border bg-background px-4 py-3 text-base text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background pointer-fine:text-sm"
+          className="skill-search-input"
           id={inputId}
           onChange={handleQueryChange}
           placeholder={messages.placeholder}
@@ -50,37 +51,59 @@ export default function SkillSearch({ locale, skills }: SkillSearchProps) {
           type="search"
           value={query}
         />
+        <p aria-live="polite" className="skill-search-status">
+          {status}
+        </p>
       </div>
 
-      <p aria-live="polite" className="mb-4 text-muted-foreground text-sm">
-        {status}
-      </p>
-
-      <div className="grid gap-4 sm:grid-cols-2" id={resultsId}>
-        {matches.map((skill) => (
-          <a
-            className="block rounded-blume border border-border bg-background p-5 text-inherit no-underline! transition-colors hover:border-accent hover:no-underline! focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            href={skillHref(locale, skill.name)}
-            key={skill.name}
+      <div id={resultsId}>
+        {groups.map((group, index) => (
+          <section
+            aria-labelledby={
+              group.title ? `${resultsId}-${group.id}` : undefined
+            }
+            className={group.title ? "skill-workflow" : ""}
+            key={group.id}
           >
-            <p className="mt-0! mb-1.5! font-medium text-foreground">
-              /{skill.name}
-            </p>
-            <p className="m-0! text-muted-foreground text-sm">
-              {skill.description}
-            </p>
-          </a>
+            {group.title ? (
+              <div className="skill-workflow-heading">
+                <span aria-hidden="true" className="skill-workflow-number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 id={`${resultsId}-${group.id}`}>{group.title}</h3>
+                <span className="skill-workflow-count">
+                  {group.skills.length}
+                </span>
+              </div>
+            ) : null}
+            <div className="skill-card-grid">
+              {group.skills.map((skill) => (
+                <a
+                  className="skill-card"
+                  href={skillHref(locale, skill.name)}
+                  key={skill.name}
+                >
+                  <span aria-hidden="true" className="skill-card-mark">
+                    /
+                  </span>
+                  <span className="skill-card-title">/{skill.name}</span>
+                  <span className="skill-card-description">
+                    {skill.description}
+                  </span>
+                  <span aria-hidden="true" className="skill-card-arrow">
+                    ↗
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
 
       {matches.length === 0 ? (
-        <div className="rounded-blume border border-border bg-muted/30 px-5 py-8 text-center">
-          <p className="m-0! font-medium text-foreground">
-            {messages.emptyTitle}
-          </p>
-          <p className="mt-2! mb-0! text-muted-foreground text-sm">
-            {messages.emptyDescription}
-          </p>
+        <div className="skill-search-empty">
+          <p>{messages.emptyTitle}</p>
+          <p>{messages.emptyDescription}</p>
         </div>
       ) : null}
     </section>
