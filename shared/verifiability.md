@@ -17,6 +17,11 @@ documented behavior (for example date-fns formatting or lodash/ramda helpers). A
 self-comparisons, duplicate layers and wrappers/seams added only to make tests possible.
 When a new test is warranted, show it fails for the intended regression before the fix.
 
+When correctness depends on state history or asynchronous completion order, or when
+changing exploratory tests, follow the
+[stateful verification gate](../tdd/PROPERTY-BASED-TESTING.md#stateful-verification-gate).
+Reuse adequate checks; this trigger requires a risk assessment, not a new test framework.
+
 Inspect changed UI; retain a focused screenshot/comparison only when it resolves a visual
 question or helps review. Video, annotations, reports and replay files remain conditional.
 Backend/API/Protobuf/contract, architecture, data-flow or workflow changes without explanatory

@@ -61,6 +61,19 @@ run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "[Ss]hrink|[Mm]inimi[sz]
 run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "deterministic.*regression|regression.*deterministic" "property guide converts findings into deterministic regressions"
 run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "no required runner|runner-neutral|tool-neutral" "property guide does not impose a vendor dependency"
 
+# Public instruction contracts: these check publication/routing, not agent adherence.
+run_content_eval "$REPO_ROOT/shared/verifiability.md" "PROPERTY-BASED-TESTING" "shared verification routes stateful work to the property owner"
+run_content_eval "$REPO_ROOT/shared/change-evidence.md" "PROPERTY-BASED-TESTING" "author and review evidence routing reaches the stateful contract"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "Stateful verification gate" "stateful changes have a required evidence gate"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "Regression.*discovery.*not interchangeable" "the guide distinguishes regression protection from discovery"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "fuzzing is not.*DST" "the guide separates simulation assurance from browser exploration"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "seed alone.*(not|does not)" "the guide rejects seed-only browser determinism claims"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "initial (fixture|state)" "portable failures retain their starting state"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "completion order|response order" "stateful verification names the controlled schedule"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "not replace an explorer.*regression" "engine replacement preserves discovery capability rather than one example"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "baseline.*candidate|candidate.*baseline" "incremental detection claims require a paired baseline"
+run_content_eval "$SKILL_DIR/PROPERTY-BASED-TESTING.md" "do not prove agent adherence" "guidance checks do not claim to prove business correctness"
+
 # ── Coverage is diagnostic, never a quota ───────────────────────
 run_content_eval "$SKILL_DIR/SKILL.md" "Coverage.*never a target|never a target.*Coverage" "SKILL.md rejects coverage targets"
 run_content_eval "$SKILL_DIR/REFERENCE.md" "Coverage as Investigation" "REFERENCE treats coverage as investigation"
