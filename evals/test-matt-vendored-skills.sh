@@ -226,7 +226,7 @@ run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "single, self-contained HTML fi
 run_content_eval "$REPO_ROOT/prototype/LOGIC.md" "Guided walkthroughs" "logic prototype includes guided scenarios"
 run_content_eval "$REPO_ROOT/prototype/UI.md" "primary source" "UI variants are retained as primary-source evidence"
 
-run_content_eval "$REPO_ROOT/prototype/SKILL.md" "question, evidence, and verdict" \
+run_content_eval "$REPO_ROOT/prototype/SKILL.md" "question, evidence,? and verdict" \
   "prototype preserves its durable verdict"
 
 # Matt 2026-07 questionnaire skill.

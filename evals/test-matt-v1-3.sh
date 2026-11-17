@@ -43,14 +43,14 @@ else
   echo "  PASS  pr is model-invoked"
   PASS=$((PASS + 1))
 fi
-run_content_eval "$PR" '^- Risk: .*failure modes.*how to revert' "compact pr template retains risk and rollback"
+run_content_eval "$PR" '^- Risk / Rollback: .*failure modes.*recovery.*detection' "compact pr template retains risk and rollback"
 run_content_eval "$PR" "one-way or two-way" "pr makes a door call"
 run_content_eval "$PR" "Name affected users, callers, contracts, and credible failure modes" "pr names the blast radius"
 run_content_eval "$REPO_ROOT/pr/CREDITS.md" "Dex Horthy" "pr credits show-me"
 run_content_eval "$REPO_ROOT/pr/SUMMARY-VIEWS.md" "runtime control flow as a call tree" "pr keeps the full summary view menu"
 run_content_eval "$PR" "SUMMARY-VIEWS\.md" "pr links its summary view menu"
 run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" 'follows? `/pr`' "commit-push-pr template builds on pr"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" '^- Risk: .*door, blast radius, rollout limits, and how to revert' "compact publication template retains merge risk and rollback"
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" '\[PR body template\]\(\.\./pr/SKILL\.md#body-template\)' "publication routes to the verified canonical risk/rollback template"
 if grep -q '^```tsx$' "$REPO_ROOT/show-me/SKILL.md" "$REPO_ROOT/pr/SUMMARY-VIEWS.md"; then
   echo "  FAIL  component trees use text fences"
   FAIL=$((FAIL + 1))

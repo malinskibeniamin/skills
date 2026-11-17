@@ -101,7 +101,7 @@ run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" 'apply the `/
   "PR review routine applies product"
 run_content_eval "$REPO_ROOT/setup-routines/routines/pr-review.md" '`product:` and `lie-detector:` verdict lines' \
   "PR review approvals carry the product verdict"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" '^- Lane: <Keep the lights on .*`/product`' \
+run_content_eval "$REPO_ROOT/pr/SKILL.md" '^- Lane / Review: <beneficiary, scope' \
   "PR body template declares the product lane"
 run_content_eval "$REPO_ROOT/grilling/SKILL.md" 'Skill tool separately with "product" for value' \
   "grilling routes the value axis to product"

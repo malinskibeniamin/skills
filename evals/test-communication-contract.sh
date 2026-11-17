@@ -43,31 +43,39 @@ run_content_eval "$CONTRACT" 'one sentence.*entire change.*why it matters' \
   "every PR opens with the whole change and its purpose in one sentence"
 run_content_eval "$CONTRACT" '10 seconds' \
   "the PR opening has a ten-second first-read budget"
-run_content_eval "$CONTRACT" 'at most three short bullets' \
+run_content_eval "$CONTRACT" 'routine review/testing/risk detail stays inside' \
   "PR supporting prose has a compact default instead of a section inventory"
-run_content_eval "$CONTRACT" 'collapsed.*details|details.*collapsed' \
+run_content_eval "$CONTRACT" 'collapsed agent-generated description' \
   "long required receipts stay available outside the main read"
 
-# Templates are public prompts: prove neither entrypoint puts headings or metadata
-# ahead of the opening sentence. This checks guidance, not generated PR quality.
-if python3 - "$PR_CONTRACT" "$REPO_ROOT/commit-push-pr/REFERENCE.md" "$REPO_ROOT/.github/pull_request_template.md" <<'PY'
+# Public prompts: canonical scaffold, publication routing and GitHub front door.
+# Follow supporting prose through its required reference instead of duplicating it.
+if python3 - "$PR_CONTRACT" "$REPO_ROOT/commit-push-pr/REFERENCE.md" "$REPO_ROOT/.github/pull_request_template.md" <<'PY_CHECK'
+import re
 import sys
 from pathlib import Path
 
-for path, marker, end in zip(sys.argv[1:], ("```markdown\n", "<<'EOF'\n", ""), ("\n```", "\nEOF", "")):
-    body = Path(path).read_text()
-    if marker:
-        body = body.split(marker, 1)[1].split(end, 1)[0]
-    body = body.strip()
-    opening = body.split("\n\n", 1)[0]
-    assert "\n" not in opening and not opening.startswith(("#", "-", "*")), path
-    assert "one sentence" in opening and "entire change" in opening and "why it matters" in opening, path
-    lines = body.splitlines()
-    assert not any(line.startswith("#") for line in lines), f"section inventory: {path}"
-    assert 1 <= sum(line.startswith("- ") for line in lines) <= 3, f"bullet budget: {path}"
-PY
+canonical, publication, github = [Path(path).read_text() for path in sys.argv[1:]]
+body = canonical.split("```markdown\n", 1)[1].split("\n```", 1)[0].strip()
+opening = body.split("\n\n", 1)[0]
+assert "\n" not in opening and "human-authored line about the change and why" in opening
+assert "explicitly labeled agent draft" in opening
+assert "../pr/SKILL.md#body-template" in publication
+assert github.index("One line: what changes and why") < github.index("| Before | After |")
+for prompt in (body, github):
+    visible = re.sub(r"<!--.*?-->", "", prompt, flags=re.S)
+    assert visible.count("<details>") == visible.count("</details>") == 1
+    before, detail = visible.split("<details>", 1)
+    assert "| Before | After |" in before
+    assert "<summary>Agent-generated description</summary>" in detail
+    assert "UI packaging:" in visible
+    assert 1 <= sum(line.startswith("- ") for line in detail.splitlines()) <= 3
+    assert not any(line.startswith("- ") for line in before.splitlines())
+    assert not any(line.startswith("#") for line in visible.splitlines())
+assert "SUMMARY-VIEWS.md#supporting-description" in canonical
+PY_CHECK
 then
-  echo '  PASS  all PR templates use a standalone whole-change sentence and at most three bullets'
+  echo '  PASS  PR templates preserve human intent, UI comparisons and packaging, and collapsed agent detail'
   PASS=$((PASS + 1))
 else
   echo '  FAIL  a PR template buries the opening or expands into a wall of text'
@@ -75,17 +83,18 @@ else
   ERRORS="$ERRORS\n  FAIL: PR opening sentence placement"
 fi
 
-run_content_eval "$PR_CONTRACT" 'scope, contracts, verification, or rollout risk' \
+PR_DESCRIPTION="$REPO_ROOT/pr/SUMMARY-VIEWS.md"
+run_content_eval "$PR_DESCRIPTION" 'scope, contracts, verification, or rollout risk' \
   "PR decision context is limited to consequential departures"
-run_content_eval "$PR_CONTRACT" 'prior choice -> new evidence -> current choice -> review consequence' \
+run_content_eval "$PR_DESCRIPTION" 'prior choice -> new evidence -> current choice -> review consequence' \
   "PR guidance carries decision changes from existing records to review"
-run_content_eval "$PR_CONTRACT" 'self-contained.*empty.*never invent' \
+run_content_eval "$PR_DESCRIPTION" 'self-contained.*empty.*never invent' \
   "PR rationale stands alone without empty or invented history"
-run_content_eval "$PR_CONTRACT" 'authorized, redacted.*accessible to reviewers' \
+run_content_eval "$PR_DESCRIPTION" 'authorized, redacted.*accessible to reviewers' \
   "optional session context preserves authorization and reviewer access"
-run_content_eval "$PR_CONTRACT" 'otherwise give safe standalone rationale' \
+run_content_eval "$PR_DESCRIPTION" 'otherwise give safe standalone rationale' \
   "unavailable session context has a safe prose fallback"
-run_content_eval "$PR_CONTRACT" 'neither correctness nor diligence' \
+run_content_eval "$PR_DESCRIPTION" 'neither correctness nor diligence' \
   "session activity is not a quality certificate"
-run_content_eval "$PR_CONTRACT" 'current diff and execution evidence' \
+run_content_eval "$PR_DESCRIPTION" 'current diff and execution evidence' \
   "session claims remain subject to current implementation evidence"

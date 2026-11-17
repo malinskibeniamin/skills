@@ -12,7 +12,7 @@ else
 fi
 
 for file in domain-modeling/SKILL.md domain-modeling/GLOSSARY-FORMAT.md \
-  grilling/SKILL.md improve-codebase-architecture/SKILL.md pr/SKILL.md \
+  grilling/SKILL.md improve-codebase-architecture/SKILL.md pr/SUMMARY-VIEWS.md \
   prime/REFERENCE.md wait-what/SKILL.md work-automation-kit/REFERENCE.md \
   work-automation-kit/templates/domain.md; do
   run_content_eval "$REPO_ROOT/$file" 'GLOSSARY\.md' "consumer uses the glossary convention: $file"
