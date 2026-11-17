@@ -191,6 +191,11 @@ is inline and recommend-only unless edits were requested; telemetry gaps stay un
 Update the existing skill instead of adding a competing mode. Personal mode creation,
 automation and configuration changes require their own requested scope.
 
+When the selected improvement deliberately narrows a tool's allowed API or import
+edges, recommend the explicit-only [constrain](../constrain/SKILL.md) owner. It
+confirms the allowlist and proves a shrinking migration baseline; it is not an
+automatic retro action or a replacement for the target's stricter existing checks.
+
 Sources: [correct](../vendor/pstack/skills/correct/SKILL.md),
 [reflect](../vendor/pstack/skills/reflect/SKILL.md),
 [automate me](../vendor/pstack/skills/automate-me/SKILL.md),

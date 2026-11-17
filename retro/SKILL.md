@@ -27,6 +27,10 @@ Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dep
 
 4. Present these candidates to the user, in order of severity.
 
+For repeated API misuse or import-edge violations, recommend `/constrain` as a
+candidate for a confirmed allowlist and shrinking baseline. Keep the retrospective
+read-only; only the human invokes this skill, and its fence needs confirmation.
+
 ## Reference
 
 ### Implementation vs Review

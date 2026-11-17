@@ -23,6 +23,11 @@ watched skill/support/license inputs do not advance locks or create update-only 
 T3 also watches support files recorded by its importer. Sources, refs and executables
 cannot be substituted through workflow inputs.
 
+Matt's locked draft supplements are fetched at their own immutable revisions and
+preserved by the importer. A supplement that collides with a newly merged base
+blocks that source's refresh until explicitly reconciled; the updater never drops
+a draft pin or replaces local policy to obtain a green run.
+
 ## Operation
 
 - Run **Refresh priority skills** manually for an immediate refresh. Its `dry_run`

@@ -43,6 +43,7 @@ SHORT_DESCRIPTIONS = {
     "codex": "Delegate bounded work through the Codex CLI",
     "commit-push-pr": "Commit, push, and publish a reviewable pull request",
     "connect-query": "Build typed ConnectRPC data flows with Connect Query",
+    "constrain": "Fence tool APIs and import edges with checked allowlists",
     "create-verification-skill": "Create a project-local real-app verification harness",
     "demo": "Create a customer-facing feature recording",
     "development-lifecycle": "Author work through its requested delivery endpoint",

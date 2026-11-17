@@ -61,6 +61,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  constrain: {
+    kind: "pipeline",
+    nodes: [
+      "Inspect one tool + current usage",
+      "Confirm allowed API + import edges",
+      "Build checks + shrinking baseline",
+      "Prove failures; record limits",
+    ],
+  },
   "package-my-work": {
     kind: "pipeline",
     nodes: [

@@ -4,7 +4,8 @@ Source: [mattpocock/skills](https://github.com/mattpocock/skills), reviewed at
 [`71009050da79506823464512ee76d71bbc014ce1`](https://github.com/mattpocock/skills/tree/71009050da79506823464512ee76d71bbc014ce1)
 (the `animatic-skill` draft branch, [PR #1422](https://github.com/mattpocock/skills/pull/1422)).
 
-All **41 skills** under `skills/`, every skill-local reference/helper/asset, the
+All **41 skills** under `skills/` at that base, plus the supplemental `constrain`
+draft below (**42 total**), every skill-local reference/helper/asset, the
 upstream README and [MIT license](mattpocock/upstream/LICENSE) are retained
 in `mattpocock/upstream/`, with the narrowly scoped helper patches below. All other
 source files are byte-exact. [The lock](mattpocock.lock.json) records the immutable
@@ -21,6 +22,26 @@ The merged in-progress [software-factory source](mattpocock/upstream/skills/in-p
 now shares this pin and its existing planning owner. It supersedes the separate draft
 snapshot; [compatibility and refresh](software-factory-NOTICE.md) retain local safety controls.
 Non-skill upstream infrastructure, docs site and repository automation are not imported.
+
+## Constrain draft supplement
+
+The complete `skills/in-progress/constrain/` directory (entrypoint and OpenAI
+invocation metadata) is pinned byte-exact to
+[`f4413d9e642c3c1e274afdfad5d990ccf5552d10`](https://github.com/mattpocock/skills/tree/f4413d9e642c3c1e274afdfad5d990ccf5552d10/skills/in-progress/constrain)
+from Matt's draft [PR #1441](https://github.com/mattpocock/skills/pull/1441).
+Its license is byte-identical to the retained MIT license. The lock's `supplements`
+records this independent source revision, selected directory and license digest;
+`upstream_files` and `files` include both inputs. Existing base bytes and reviewed
+animatic patches are unchanged. Replacing the base with this sibling draft would
+remove animatic, so the supplement adds only the requested skill, not its whole branch.
+
+Both `/constrain` and `/matt-constrain` load the [local owner](../constrain/SKILL.md).
+It preserves user confirmation, inline research without delegation consent, existing
+lint engines, strictness and suppression controls. Routing, retro and agent-writing
+guidance recommend it for deliberate API/import-graph restrictions; they cannot
+invoke it automatically. Importing applies no restrictions to this harness or its
+consumers. Upstream reports no real-project trial yet; instruction/distribution
+checks do not establish agent adherence or improved task success.
 
 ## Reviewed helper patches
 
@@ -72,6 +93,23 @@ produce no additional diff, even when other vendors follow Matt's registrations.
 Refresh output identifies added, changed and removed skills for reconciliation;
 removing a source adapter does not retire its local owner. `--check` is local,
 read-only and network-free. Remove the disposable source checkout after verification.
+
+Supplemental pins are preserved on ordinary refreshes. Fetch their locked commits
+into the same source Git store first; the priority updater does this automatically.
+To reproduce this supplement explicitly, keeping the base above:
+
+```bash
+git -C "$source_dir/upstream" fetch origin f4413d9e642c3c1e274afdfad5d990ccf5552d10
+python3 scripts/vendor-mattpocock.py --source "$source_dir/upstream" \
+  --revision 71009050da79506823464512ee76d71bbc014ce1 \
+  --supplement f4413d9e642c3c1e274afdfad5d990ccf5552d10:skills/in-progress/constrain
+```
+
+Repeat `--supplement <full-sha>:skills/<category>/<skill>` for multiple drafts;
+an explicit list replaces the previous list. The importer rejects missing skills,
+unsafe entries, license differences and collisions with base source. When a draft
+merges into the reviewed base, retire that supplement explicitly (use
+`--no-supplements` when none remain); do not silently overwrite or discard a pin.
 
 ## Reconciliation at this pin
 

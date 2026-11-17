@@ -213,6 +213,32 @@ if result is not None: print(json.dumps(result))
         self.assertNotEqual(result.returncode,0)
         self.assertIn('offline', result.stderr.lower())
 
+    def test_live_fetch_preserves_pinned_draft_without_moving_main_candidate(self):
+        source = self.sources/'mattpocock'
+        self.git(source, 'checkout', '-qb', 'draft-tool')
+        self.write(source, 'skills/in-progress/draft-tool/SKILL.md', 'Pinned draft\n')
+        draft = self.commit(source)
+        self.git(source, 'checkout', '-q', 'main')
+        lock = self.repo/'vendor/mattpocock.lock.json'
+        data = json.loads(lock.read_text())
+        data['supplements'] = [{'revision': draft, 'path': 'skills/in-progress/draft-tool'}]
+        lock.write_text(json.dumps(data))
+        importer = self.repo/'scripts/vendor-mattpocock.py'
+        importer.write_text(importer.read_text().replace(
+            "    lock.write_text(json.dumps(data)+'\\n')",
+            "    import subprocess\n"
+            "    for extra in data.get('supplements', []):\n"
+            "        subprocess.run(['git','-C',a.source,'cat-file','-e',extra['revision']+'^{commit}'],check=True)\n"
+            "    lock.write_text(json.dumps(data)+'\\n')"))
+        self.commit(self.repo)
+        result = subprocess.run(['python3', str(SCRIPT), '--repo-root', str(self.repo)],
+                                env=self.transport(), capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        matt = next(row for row in report['sources'] if row['name'] == 'mattpocock')
+        self.assertEqual(matt['status'], 'updated', matt)
+        self.assertEqual(matt['after'], self.after['mattpocock'])
+
     def test_publishes_one_draft_and_dispatches_ci_without_an_approval_click(self):
         env=self.transport()
         result=self.hosted(env)

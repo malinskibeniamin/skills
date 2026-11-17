@@ -1,0 +1,5 @@
+interface:
+  display_name: "Constrain"
+  short_description: "Fence tool APIs and import edges with checked allowlists"
+policy:
+  allow_implicit_invocation: false
