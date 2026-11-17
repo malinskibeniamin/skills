@@ -145,6 +145,8 @@ def refresh(root, sources, apply):
                     git(source, 'fetch', '--quiet', '--depth=1', url, before)
                     git(source, 'fetch', '--quiet', '--depth=1', url, 'refs/heads/main')
                     revision = sha(git(source, 'rev-parse', 'FETCH_HEAD^{commit}').decode().strip())
+                    for supplement in lock.get('supplements', []):
+                        git(source, 'fetch', '--quiet', '--depth=1', url, sha(supplement['revision']))
                 record['after'] = revision
                 # Include T3 support/policy files previously reached through relative links.
                 if name == 't3code':

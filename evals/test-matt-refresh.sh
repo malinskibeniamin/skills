@@ -34,3 +34,17 @@ run_content_eval "$REPO_ROOT/shared/ticket-graph.md" 'self-blockers and cycles' 
   "build-ticket preflight covers invalid dependency graphs"
 run_content_eval "$REPO_ROOT/improve-codebase-architecture/SKILL.md" 'not changes or passing tests.*read-only' \
   "architecture recommendations distinguish design claims from implemented proof"
+
+# Published instruction contracts, not evidence of model adherence.
+run_content_eval "$REPO_ROOT/constrain/SKILL.md" '^disable-model-invocation: true$' \
+  "constrain stays explicit-only"
+run_content_eval "$REPO_ROOT/constrain/SKILL.md" 'confirmation before' \
+  "constrain confirms the fence before rules or baselines change"
+run_content_eval "$REPO_ROOT/constrain/SKILL.md" 'Gather.*inline unless the user explicitly' \
+  "constrain gathers inline without delegation consent"
+run_content_eval "$REPO_ROOT/constrain/SKILL.md" 'suppression controls and stricter policies' \
+  "constrain preserves existing enforcement while adding its scoped ratchet"
+for owner in ask-ben retro; do
+  run_content_eval "$REPO_ROOT/$owner/SKILL.md" 'recommend `/constrain`' \
+    "$owner recommends the user-invoked constraint owner"
+done

@@ -29,13 +29,48 @@ OWNERS = {
         "tdd", "to-spec", "to-tickets", "triage", "wayfinder", "wizard", "grilling",
         "handoff", "teach", "to-questionnaire", "wait-what", "writing-for-agents",
         "writing-beats", "writing-fragments", "writing-shape", "software-factory",
-        "animatic", "setup-animatic",
+        "animatic", "setup-animatic", "constrain",
     )},
 }
 
 
 def git(source, *args):
     return subprocess.check_output(["git", "-C", str(source), *args])
+
+
+def read_source(source, revision, prefix=None):
+    if not re.fullmatch(r"[0-9a-f]{40}", revision):
+        raise ValueError("Revision must be a full lowercase commit SHA")
+    if git(source, "rev-parse", f"{revision}^{{commit}}").decode().strip() != revision:
+        raise ValueError("Revision must identify a commit")
+    payload = {}
+    for entry in git(source, "ls-tree", "-rz", revision).split(b"\0"):
+        if not entry:
+            continue
+        header, raw_path = entry.split(b"\t", 1)
+        path = raw_path.decode("utf-8")
+        selected = path.startswith(prefix + "/") if prefix else path.startswith("skills/")
+        if not (selected or path in ("LICENSE", "README.md")):
+            continue
+        mode, kind, oid = header.decode().split()
+        if PurePosixPath(path).is_absolute() or ".." in PurePosixPath(path).parts or kind != "blob" or mode not in ("100644", "100755"):
+            raise ValueError(f"Unsafe upstream entry: {path}")
+        payload[path] = (git(source, "cat-file", "blob", oid), int(mode[-3:], 8))
+    if not {"LICENSE", "README.md"} <= payload.keys():
+        raise ValueError("Upstream LICENSE and README.md are required")
+    return payload
+
+
+def validate_supplements(supplements, files):
+    paths = set()
+    for record in supplements:
+        path = record["path"]
+        if (not re.fullmatch(r"[0-9a-f]{40}", record["revision"])
+                or not re.fullmatch(r"skills/[a-z0-9-]+/[a-z0-9-]+", path)
+                or path in paths or f"{path}/SKILL.md" not in files
+                or record["license_sha256"] != files["LICENSE"]["sha256"]):
+            raise ValueError("Invalid supplemental provenance, skill path or license")
+        paths.add(path)
 
 
 def inventory(root):
@@ -144,6 +179,7 @@ def check(repo, *, refresh_descriptions=False, check_patch_inputs=True):
     files = inventory(source)
     if files != lock["files"]:
         raise ValueError("Snapshot bytes, executable modes or inventory drifted")
+    validate_supplements(lock.get("supplements", []), lock.get("upstream_files", files))
     validate_patch_scope(lock.get("upstream_files", files), files)
     skills = discover({p: ((source / p).read_bytes(), record["mode"]) for p, record in files.items()})
     comparable = lambda rows: [{k: v for k, v in row.items() if k not in ("description", "short_description")} for row in rows]
@@ -159,28 +195,29 @@ def check(repo, *, refresh_descriptions=False, check_patch_inputs=True):
     return lock
 
 
-def install(repo, source, revision):
+def install(repo, source, revision, supplement_specs=None):
     managed_paths(repo)
-    if not re.fullmatch(r"[0-9a-f]{40}", revision):
-        raise ValueError("Revision must be a full lowercase commit SHA")
-    if git(source, "rev-parse", f"{revision}^{{commit}}").decode().strip() != revision:
-        raise ValueError("Revision must identify a commit")
-    payload = {}
-    for entry in git(source, "ls-tree", "-rz", revision).split(b"\0"):
-        if not entry:
-            continue
-        header, raw_path = entry.split(b"\t", 1)
-        path = raw_path.decode("utf-8")
-        if not (path.startswith("skills/") or path in ("LICENSE", "README.md")):
-            continue
-        mode, kind, oid = header.decode().split()
-        if PurePosixPath(path).is_absolute() or ".." in PurePosixPath(path).parts or kind != "blob" or mode not in ("100644", "100755"):
-            raise ValueError(f"Unsafe upstream entry: {path}")
-        payload[path] = (git(source, "cat-file", "blob", oid), int(mode[-3:], 8))
-    skills = discover(payload)
     previous = check(repo, refresh_descriptions=True, check_patch_inputs=False) if (repo / LOCK).exists() else None
     if not previous and ((repo / SNAPSHOT).exists() or (repo / ADAPTERS).exists()):
         raise ValueError("Import would overwrite unmanaged files")
+    payload = read_source(source, revision)
+    if supplement_specs is None:
+        supplement_specs = [f'{s["revision"]}:{s["path"]}' for s in (previous or {}).get("supplements", [])]
+    supplements = []
+    for spec in supplement_specs:
+        supplemental_revision, separator, path = spec.partition(":")
+        if not separator or not re.fullmatch(r"skills/[a-z0-9-]+/[a-z0-9-]+", path):
+            raise ValueError("Supplement must be <full-sha>:skills/<category>/<skill>")
+        extra = read_source(source, supplemental_revision, path)
+        if extra["LICENSE"][0] != payload["LICENSE"][0]:
+            raise ValueError("Supplement must share the retained upstream license")
+        selected = {p: value for p, value in extra.items() if p.startswith(path + "/")}
+        if f"{path}/SKILL.md" not in selected or payload.keys() & selected.keys():
+            raise ValueError("Supplement must add a complete skill without replacing existing source; retire merged supplements explicitly")
+        payload.update(selected)
+        supplements.append({"revision": supplemental_revision, "path": path,
+                            "license_sha256": hashlib.sha256(extra["LICENSE"][0]).hexdigest()})
+    skills = discover(payload)
     manifest_path = repo / ".claude-plugin/plugin.json"
     manifest_text = manifest_path.read_text()
     manifest = json.loads(manifest_text)
@@ -213,6 +250,7 @@ def install(repo, source, revision):
             target.write_bytes(data)
             target.chmod(mode)
         upstream_files = inventory(stage / "source")
+        validate_supplements(supplements, upstream_files)
         patches = patch_inventory(repo)
         for name in patches:
             patch = (repo / PATCHES / name).resolve()
@@ -232,6 +270,8 @@ def install(repo, source, revision):
             shutil.copytree(staged, destination)
     lock = {"repository": REPOSITORY, "revision": revision, "skills": skills,
             "patches": patches, "upstream_files": upstream_files, "files": files}
+    if supplements:
+        lock["supplements"] = supplements
     (repo / LOCK).write_text(json.dumps(lock, indent=2) + "\n")
     manifest_path.write_text(updated_manifest)
     if previous:
@@ -253,14 +293,19 @@ def main():
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--source", type=Path, help="Git checkout containing the reviewed source commit")
     parser.add_argument("--revision", help="Reviewed full upstream commit SHA")
+    supplemental = parser.add_mutually_exclusive_group()
+    supplemental.add_argument("--supplement", action="append", default=None,
+                              help="Add a draft skill as <full-sha>:skills/<category>/<skill>; repeatable, replaces the prior list")
+    supplemental.add_argument("--no-supplements", action="store_const", const=[], dest="supplement",
+                              help="Explicitly retire supplemental pins; omitted flags preserve them")
     parser.add_argument("--check", action="store_true", help="Verify local bytes, modes, owners and registrations; no writes or network")
     args = parser.parse_args()
     if args.check:
-        if args.source or args.revision:
-            parser.error("--check reads local state; omit --source and --revision")
+        if args.source or args.revision or args.supplement is not None:
+            parser.error("--check reads local state; omit source, revision and supplemental flags")
         check(args.repo_root.resolve())
     elif args.source and args.revision:
-        install(args.repo_root.resolve(), args.source.resolve(), args.revision)
+        install(args.repo_root.resolve(), args.source.resolve(), args.revision, args.supplement)
     else:
         parser.error("Provide --source and --revision, or --check")
 

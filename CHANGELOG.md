@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Vendor Matt Pocock's draft `/constrain` at `f4413d9e` without replacing the
+  animatic snapshot. Register explicit-only Claude/Codex entrypoints and route
+  discovery, retro and harness improvements through a host-safe owner. Preserve
+  project checkers, user confirmation and suppression policies; apply no default
+  bans. Add pinned supplemental import, fidelity and refresh-safety checks.
+
 ## 4.45.0
 
 2026-11-11 -- Publish the accumulated harness updates for Claude Code and Codex.

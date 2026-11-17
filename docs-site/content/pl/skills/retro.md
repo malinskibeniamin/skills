@@ -43,6 +43,8 @@ Oddziel bieżące dostarczenie rezultatu od strategicznych propozycji usprawnien
 
 4. Przedstaw tych kandydatów użytkownikowi w kolejności od najpoważniejszych.
 
+Przy powtarzającym się błędnym użyciu API lub naruszaniu zależności importów zaproponuj `/constrain`: potwierdzoną listę dozwolonych elementów i malejącą bazę naruszeń. Retrospektywa pozostaje tylko do odczytu; umiejętność uruchamia człowiek, a ograniczenia wymagają potwierdzenia.
+
 ## Materiały referencyjne [#reference]
 
 ### Implementacja a przegląd [#implementation-vs-review]

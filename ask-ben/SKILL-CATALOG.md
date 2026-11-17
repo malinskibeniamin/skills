@@ -20,6 +20,7 @@
 | `/codex` | Delegate bounded work through the Codex CLI. |
 | `/commit-push-pr` | Commit, push, and publish a reviewable pull request. |
 | `/connect-query` | Build typed ConnectRPC data flows with Connect Query. |
+| `/constrain` | Fence tool APIs and import edges with checked allowlists. |
 | `/create-verification-skill` | Create a project-local real-app verification harness. |
 | `/cli-for-agents` | Design non-interactive, composable agent-friendly CLIs. |
 | `/demo` | Create a customer-facing feature recording. |
@@ -75,6 +76,7 @@
 | `/matt-claude-handoff` | Matt Pocock source: claude handoff guidance. |
 | `/matt-code-review` | Matt Pocock source: code review guidance. |
 | `/matt-codebase-design` | Matt Pocock source: codebase design guidance. |
+| `/matt-constrain` | Matt Pocock source: constrain guidance. |
 | `/matt-diagnosing-bugs` | Matt Pocock source: diagnosing bugs guidance. |
 | `/matt-domain-modeling` | Matt Pocock source: domain modeling guidance. |
 | `/matt-git-guardrails-claude-code` | Matt Pocock source: git guardrails claude code guidance. |

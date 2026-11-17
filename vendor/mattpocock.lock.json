@@ -57,6 +57,15 @@
       "description": "Use the pinned Matt Pocock codebase-design skill with host compatibility rules."
     },
     {
+      "name": "matt-constrain",
+      "upstream_name": "constrain",
+      "source": "skills/in-progress/constrain/SKILL.md",
+      "owner": "constrain",
+      "registration": "./matt-skills/matt-constrain/",
+      "short_description": "Matt Pocock source: constrain guidance",
+      "description": "Use the pinned Matt Pocock constrain skill with host compatibility rules."
+    },
+    {
       "name": "matt-diagnosing-bugs",
       "upstream_name": "diagnosing-bugs",
       "source": "skills/engineering/diagnosing-bugs/SKILL.md",
@@ -723,6 +732,14 @@
       "sha256": "2308a672978864633286fb9f0792b08657e501426b3f7883fc418d5d2eac5eb0",
       "mode": 420
     },
+    "skills/in-progress/constrain/SKILL.md": {
+      "sha256": "7591be7fbe7e80468479dc22bb8356c4822ccf9cafabfec592e37d1999717939",
+      "mode": 420
+    },
+    "skills/in-progress/constrain/agents/openai.yaml": {
+      "sha256": "45102a0bbb372b06e0166098c4ae18e9e57d5a3a3898ea1c1fce7b740e025d13",
+      "mode": 420
+    },
     "skills/in-progress/loop-me/SKILL.md": {
       "sha256": "e44d1cc3e760fb86ac42964c2a5f1fcac511715db50fb375f3f7be814de1eaa7",
       "mode": 420
@@ -1273,6 +1290,14 @@
       "sha256": "2308a672978864633286fb9f0792b08657e501426b3f7883fc418d5d2eac5eb0",
       "mode": 420
     },
+    "skills/in-progress/constrain/SKILL.md": {
+      "sha256": "7591be7fbe7e80468479dc22bb8356c4822ccf9cafabfec592e37d1999717939",
+      "mode": 420
+    },
+    "skills/in-progress/constrain/agents/openai.yaml": {
+      "sha256": "45102a0bbb372b06e0166098c4ae18e9e57d5a3a3898ea1c1fce7b740e025d13",
+      "mode": 420
+    },
     "skills/in-progress/loop-me/SKILL.md": {
       "sha256": "e44d1cc3e760fb86ac42964c2a5f1fcac511715db50fb375f3f7be814de1eaa7",
       "mode": 420
@@ -1481,5 +1506,12 @@
       "sha256": "eacb24b2a618cfb81dacb0416f4fdd75ddf3a8060f8ddb99aae1b1e301907e4b",
       "mode": 420
     }
-  }
+  },
+  "supplements": [
+    {
+      "revision": "f4413d9e642c3c1e274afdfad5d990ccf5552d10",
+      "path": "skills/in-progress/constrain",
+      "license_sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+    }
+  ]
 }

@@ -82,6 +82,13 @@ paid/network speech needs the applicable data-sharing and spending scope.
 
 ## Setup and migrations
 
+- `constrain` -> [local fence owner](../constrain/SKILL.md): explicit-only,
+  user-confirmed allowlists for one tool, with inline Community/Usage research
+  unless delegation is authorized. Preserve existing lint engines, suppression
+  controls and stricter checks; baseline only the newly agreed rules. Vendoring
+  creates no restrictions. The draft is a supplemental pin so the existing
+  animatic source and its reviewed patches remain intact.
+
 - `git-guardrails-claude-code`: enter only for an explicit hook-installation request.
   Scope project versus global settings, preserve existing hooks and verify behavior.
   Vendoring never activates this hook or changes delivery permissions.
@@ -110,7 +117,7 @@ Claude/Codex discovery and run the import and prompt contract tests before deliv
 ## Integration coverage
 
 Use this family map when reconciling lessons, not as another skill catalog. The lock owns
-the complete 41-source inventory and exact owner mappings. Existing registered workflow
+the complete 42-source inventory and exact owner mappings. Existing registered workflow
 families retain their scope; source-only experiments do not become automatic dependencies.
 
 | Family | Local owners / disposition | Load-bearing lesson |
@@ -120,6 +127,7 @@ families retain their scope; source-only experiments do not become automatic dep
 | Module and domain design | `codebase-design`, `domain-modeling`, `improve-codebase-architecture`, `prototype` | Deep interfaces, deletion test, dependency-aware testing and durable vocabulary; read-only recommendations do not claim implemented invariants. |
 | Implementation and delivery | `development-lifecycle`, `review`, `pr`, `triage`, `handoff` | Incremental checks, separate spec/standards evidence, validated review scope and context pointers; host endpoint and publication rules win. |
 | Diagnosis and learning loops | `diagnosing-bugs`, `tdd`, `research`, `retro` | Exact-symptom RED, independent oracle, primary sources and checks before more steering prose; already covered by these owners. |
+| Tool constraints | `constrain`; recommended by routing, retro and agent-writing guidance | Confirm an allowlisted API/import graph, enforce through project checks, and prove debt only shrinks; explicit-only, no default stack bans. |
 | Teaching and writing | `teach`, `wait-what`, `writing-for-agents`, `writing-beats`, `writing-fragments`, `writing-shape` | Mission-linked practice, context pointers and user-led prose; existing owners preserve these, without new autonomous triggers. |
 | Setup and specialized tools | `work-automation-kit`, `wizard`; source-only setup/migration/course adapters | Preserve project tools, human-only steps, test-only casts and course-specific scope; installation remains explicit. |
 | Automation experiments | `software-factory`; `chief-of-staff`, `claude-handoff`, `loop-me` adapters | Bounded pilot, evidence-backed memory and workflow specifications; no automatic sessions, schedules or provisioning. |

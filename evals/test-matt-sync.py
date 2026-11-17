@@ -112,6 +112,79 @@ class MattSyncTest(unittest.TestCase):
         return {p.relative_to(self.repo).as_posix(): (p.read_bytes(), p.stat().st_mode & 0o777)
                 for p in self.repo.rglob("*") if p.is_file()}
 
+    def draft(self):
+        path = "skills/in-progress/draft-tool"
+        self.write(self.source, f"{path}/SKILL.md",
+                   "---\nname: draft-tool\ndescription: Draft tool.\n---\nConstrain an API.\n")
+        helper = self.write(self.source, f"{path}/scripts/check.sh", "#!/bin/sh\necho draft-ok\n")
+        helper.chmod(0o755)
+        return path, self.commit()
+
+    def test_supplement_is_pinned_complete_and_preserved_on_refresh(self):
+        self.assertEqual(self.install().returncode, 0)
+        before = self.snapshot()
+        path, revision = self.draft()
+        result = self.cli("--source", str(self.source), "--revision", self.revision,
+                          "--supplement", f"{revision}:{path}")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        lock = json.loads((self.repo / "vendor/mattpocock.lock.json").read_text())
+        self.assertEqual(lock["revision"], self.revision)
+        self.assertEqual(lock["supplements"], [{"revision": revision, "path": path,
+                         "license_sha256": hashlib.sha256((self.source / "LICENSE").read_bytes()).hexdigest()}])
+        for relative, content in before.items():
+            if relative.startswith("vendor/mattpocock/upstream/"):
+                self.assertEqual(self.snapshot()[relative], content)
+        helper = self.repo / "vendor/mattpocock/upstream" / path / "scripts/check.sh"
+        self.assertEqual(subprocess.check_output([str(helper)], text=True), "draft-ok\n")
+        self.assertIn("./matt-skills/matt-draft-tool/",
+                      json.loads((self.repo / ".claude-plugin/plugin.json").read_text())["skills"])
+        self.assertEqual(self.cli("--check").returncode, 0)
+        published = self.snapshot()
+        self.write(self.source, f"{path}/SKILL.md", "Uncommitted changes are not source inputs\n")
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.snapshot(), published)
+        self.git("reset", "--hard", self.revision)
+        self.write(self.source, "README.md", "Reviewed base refresh\n")
+        result = self.install(self.commit())
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(subprocess.check_output([str(helper)], text=True), "draft-ok\n")
+        self.assertEqual(json.loads((self.repo / "vendor/mattpocock.lock.json").read_text())["supplements"],
+                         lock["supplements"])
+        result = self.cli("--source", str(self.source), "--revision", self.revision, "--no-supplements")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse(helper.exists())
+        self.assertFalse((self.repo / "matt-skills/matt-draft-tool").exists())
+
+    def test_invalid_supplements_cannot_partially_install(self):
+        self.assertEqual(self.install().returncode, 0)
+        path, revision = self.draft()
+        before = self.snapshot()
+        for supplement, reason in ((f"main:{path}", "full lowercase commit SHA"),
+                                   (f"{revision}:skills/../LICENSE", "Supplement must be"),
+                                   (f"{revision}:skills/in-progress/missing", "must add a complete skill"),
+                                   (f"{revision}:skills/engineering/pr", "without replacing existing source")):
+            with self.subTest(supplement=supplement):
+                result = self.cli("--source", str(self.source), "--revision", self.revision,
+                                  "--supplement", supplement)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(reason, result.stderr)
+                self.assertEqual(self.snapshot(), before)
+        for mutation in ("license", "symlink"):
+            with self.subTest(mutation=mutation):
+                if mutation == "license":
+                    self.write(self.source, "LICENSE", "Different license\n")
+                else:
+                    (self.source / path / "escape").symlink_to("/tmp/outside")
+                changed = self.commit()
+                result = self.cli("--source", str(self.source), "--revision", self.revision,
+                                  "--supplement", f"{changed}:{path}")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("share the retained upstream license" if mutation == "license" else "Unsafe upstream entry",
+                              result.stderr)
+                self.assertEqual(self.snapshot(), before)
+                self.git("reset", "--hard", revision)
+
     def test_complete_import_includes_pr_helpers_and_credits_without_replacing_host(self):
         result = self.install()
         self.assertEqual(result.returncode, 0, result.stderr)
