@@ -26,7 +26,7 @@ type: skill
 選擇成本最低且能如實反映問題的形式：
 
 - 邏輯／狀態的不確定性 -> 小型可執行狀態模型；請參閱 [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md)。
-- UI／互動的不確定性 -> 應用程式內探索或[可分享的審查網站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；設計尚未確定時提供具有實質差異的變體。
+- UI 與互動 -> 應用程式內探索或[可分享的審查網站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；設計尚未確定時提供具有實質差異的變體。
 - API／工具的不確定性 -> 對沙箱或測試資料進行最小化呼叫。
 
 可行時，將可運作的成品放在 `.context/prototypes/<question>/` 下；只有當實際執行環境必須載入時，才放在
@@ -42,7 +42,7 @@ type: skill
 - 否則，請將其保留在 `.context/prototypes/<question>/` 下並回報路徑。在清理可交付的差異前，請將任何
   位於程式碼樹內的成品移動或複製至該處。請勿刪除。
 
-請在議題、ADR、實作筆記或
+請在議題、ADR、筆記或
 實作提交中記錄問題、證據與結論。main 僅保留經驗證的正式環境決策。
 
 ## 限制條件 [#constraints]

@@ -46,7 +46,6 @@ Dla checkoutów T3 lub pracy z Effect ustal [kontekst natywny](https://github.co
 
 Załaduj [dobór dowodów zmiany](https://github.com/malinskibeniamin/skills/blob/main/shared/change-evidence.md) i właściwych właścicieli. Oceń wiarygodne ryzyko; zarejestruj bazę przed edycją tylko wtedy, gdy porównanie wizualne jest przydatne lub wymagane. Wykorzystuj istniejące testy, narzędzia pomocnicze i aktualne dowody.
 
-Każda tworzona zmiana UI: wczytaj [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md); wykorzystaj nagranie z weryfikacji i dostarcz aktualny, dopracowany klip bez rozszerzania zakresu publikacji.
 
 Przy powtarzalnej optymalizacji według stałej ewaluacji załaduj [hill-climb](https://github.com/malinskibeniamin/skills/blob/main/hill-climb/SKILL.md).
 

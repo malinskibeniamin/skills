@@ -1,6 +1,7 @@
 # Recording craft
 
-This is the shared craft layer for every authored UI change and requested UI clips. `/demo` owns its customer-facing
+This is the shared craft layer for every authored UI change and requested UI clips.
+For PR scope, freshness and the completion gate, use [per-PR delivery](#per-pr-delivery). `/demo` owns its customer-facing
 workflow; [review videos](../commit-push-pr/VIDEO.md) own PR evidence and media gates.
 Reuse their recorder, sidecars, renderer pin and attachment procedure. No new renderer or
 installation is required merely to record. These defaults are local heuristics, not Emil's
@@ -111,3 +112,48 @@ requested endpoint; an inaccessible or unreviewed export is not a finished packa
 - [Playwright video](https://playwright.dev/docs/videos): explicit capture size and context close.
 - [Playwright mouse](https://playwright.dev/docs/api/class-mouse#mouse-move): real intermediate movement.
 - [Pointer types](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/pointerType): input-specific cues.
+
+
+## Per-PR delivery
+
+Apply this in every repository consuming the harness, on every authored PR with a
+consumer/end-user-facing UI delta. Cover web, mobile/native, desktop and end-user CLI/TUI
+surfaces, including authenticated, admin/operator and embedded UI-not just public pages.
+Changed styling, text, layout, responsive states, accessibility and interaction all count;
+component/library PRs use their real consumer or existing runnable example. API-only,
+headless internals and behavior-preserving mechanical work can declare non-applicability.
+
+Review the full PR against its actual base, not just the latest commit. Package the changed
+user journeys and results; one clip or a concise set of chapters may cover related changes.
+Every materially distinct affected surface needs coverage, not one recording per file or edit.
+For static changes, show the real entry into the changed state; do not fabricate activity.
+Mixed UI/backend PRs still require the clip and any unexplained non-UI contract diagram.
+The before/after screenshot table remains separate evidence, not a replacement for the clip.
+For end-user CLI/TUI, retain the original asciinema cast; record its real playback when an
+inline PR video is needed rather than synthesizing terminal output or discarding the replay.
+
+Before PR creation, after UI follow-up edits or relevant base movement, and before handoff:
+load this skill, inspect/reuse still-current captures, refresh invalidated beats, and check
+playback against the published head. Put the reviewer-accessible recording inline in the
+PR body with a short account of covered journeys and any untested surface. Keep draft or
+ready state as found. Local, commit-only and push-only endpoints keep their publication stops;
+review-only work evaluates missing packaging without capturing, editing or posting.
+
+Every PR body must include exactly one visible declaration, outside code/comments:
+
+- UI change: `UI packaging: https://approved-host.example/demo.mp4` (or a native GitHub video
+  attachment URL). Display that same recording inline; keep captions/playback checks.
+- No UI delta: `UI packaging: not applicable - <concrete non-UI reason>`.
+- Recording explicitly waived by the owner: `UI packaging: waived - <reason>; approval: <reference>`.
+  Name the actual approval; missing access is a blocker, not permission to invent a waiver.
+
+The existing lifecycle Stop hook invokes `scripts/pr-visual-evidence.py` for PR/ship
+endpoints in Claude and Codex consumers. It requires the declaration plus the existing
+visual evidence contract; screenshots, diagrams, hidden examples, local paths and a generic
+`Visual evidence: not applicable` line cannot silently stand in for UI packaging.
+This is a publication-presence gate, not automatic UI-scope detection or a media/MIME,
+accessibility, freshness or playback verifier. Opaque GitHub attachment URLs are author-attested
+recordings. Authors/reviewers still verify truthful scope, actual owner approval, complete
+coverage, media type, reader access and correspondence to the current head. A passing gate
+alone is not evidence that the skill ran or the UI works. Installation ships the hook;
+it does not change consumer-hosted branch protection or deploy updates to existing installs.

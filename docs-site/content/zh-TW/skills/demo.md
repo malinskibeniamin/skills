@@ -19,7 +19,6 @@ type: skill
 
 將已完成的工作轉化為向客戶證明價值的成果。閱讀 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
 
-UI 片段需載入 [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md) 的錄影技巧；本流程仍負責故事、原始檔、輸出及發布終點。
 
 ## 規範 [#contract]
 

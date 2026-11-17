@@ -585,7 +585,11 @@ Nine focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills)
 `/package-my-work` automatically packages every authored UI change and requested clips with deliberate resolution, mouse/touch/keyboard
 cues, detail focus and readable pacing. It feeds `/demo` and UI PR recordings through
 the existing capture/rendering stack, reusing verification footage without expanding
-upload/publication permissions. Missing required capture access needs a blocker or explicit waiver. This is a
+upload/publication permissions. [Per-PR delivery](package-my-work/PACKAGING.md#per-pr-delivery)
+covers every consumer/end-user-facing UI PR across consuming repositories, including mixed
+changes and follow-ups. The completion hook requires an explicit recording/non-UI/owner-waiver
+declaration; screenshots and diagrams alone cannot substitute. Missing required capture
+access needs a blocker or explicit waiver. This is a
 [local adaptation of Emil's posted brief](package-my-work/PROVENANCE.md), not his unpublished
 course skill or an expansion of the pinned public-source snapshot.
 

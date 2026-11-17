@@ -19,7 +19,6 @@ type: skill
 
 Przekształć ukończoną pracę w dowód wartości dla klienta. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md).
 
-Dla nagrań UI wczytaj [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md): zasady nagrywania. Ten proces nadal odpowiada za historię, pliki źródłowe, wynik i punkt końcowy publikacji.
 
 ## Kontrakt [#contract]
 

@@ -10,6 +10,8 @@ type: "skill"
 
 [Open the editable Excalidraw source](/diagrams/skills/package-my-work.excalidraw)
 
+每個使用本機制的儲存庫中，面向消費者或終端使用者的 UI 變更都必須按 PR 製作錄影，包括混合變更與後續更新；重用仍有效的素材。參見[範圍與完成閘門](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md#per-pr-delivery)。
+
 
 交付每次撰寫的 UI 變更時，都要製作精緻錄影，並在迭代間重用仍有效的素材。讓工作容易看清，而不是誇大成果。閱讀 [PACKAGING.md](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md)。
 這是依據 [Emil Kowalski 發布的簡介](https://x.com/emilkowalski/status/2122704498334339368) 撰寫的本機適配，不是其未公開課程技能的副本；參見[來源說明](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PROVENANCE.md)。
@@ -30,6 +32,7 @@ type: "skill"
 ## 職責交接 [#handoffs]
 
 - `/demo` 負責客戶故事、`demos/<slug>/` 中的原始檔與輸出、旁白與導覽、圖表替代方案及要求的發布。該技能仍僅由使用者明確叫用；不叫用它也能使用共用錄影配方。
+- 每個 UI PR（包括混合變更及後續更新）都必須提供已發布錄影，並依[逐 PR 交付規則](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md#per-pr-delivery)明確宣告包裝狀態。
 - PR 互動證據遵循 `commit-push-pr/VIDEO.md`，重用同一段真實錄影。每次撰寫的 UI 變更都需精緻片段；純審查維持唯讀。
 - 產品動態效果仍由 `/animate` 或 `/gestures` 負責。包裝改變呈現，不改變交付行為。終端機重播沿用 `/demo` 的 asciinema 配方。
 

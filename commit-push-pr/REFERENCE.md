@@ -191,6 +191,15 @@ branch. Never publish private evidence without authorization. Re-read the hosted
 local paths and localhost links are not reviewer-accessible proof. CLI readback proves
 publication, not playback. Do not launch a browser just to verify publication.
 
+Every consumer/end-user-facing UI PR in every consuming repository follows
+[per-PR packaging](../package-my-work/PACKAGING.md#per-pr-delivery), including mixed changes,
+component consumers and UI follow-ups. Refresh the current recording in the hosted body.
+Every PR declares `UI packaging: <hosted recording URL>`, a concrete non-UI reason with
+`UI packaging: not applicable - <reason>`, or an explicit owner waiver with
+`UI packaging: waived - <reason>; approval: <reference>`. Screenshots/diagrams are not
+substitutes for a UI recording. Scope, approval, current-head coverage and playback remain
+author/review responsibilities; the presence gate cannot certify them.
+
 Before completion, `lifecycle-stop.sh` reads the hosted body and runs
 `scripts/pr-visual-evidence.py`: include a hosted Markdown image/video, HTML image/video,
 standalone GitHub attachment URL, or a non-empty inline Mermaid diagram. For docs-only,

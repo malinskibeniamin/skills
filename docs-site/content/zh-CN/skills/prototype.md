@@ -26,7 +26,7 @@ type: skill
 选择成本最低且能如实验证问题的形式：
 
 - 逻辑/状态不确定性 -> 一个小型可执行状态模型；参见 [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md)。
-- UI/交互不确定性 -> 应用内探索或[可分享的审查网站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；设计尚未确定时提供有实质差异的变体。
+- UI 与交互 -> 应用内探索或[可分享的审查网站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；设计尚未确定时提供有实质差异的变体。
 - API/工具不确定性 -> 针对沙箱或固定测试数据执行一次最小调用。
 
 尽可能将可运行的产物放在 `.context/prototypes/<question>/` 下；只有实际运行时必须加载它们时，才放在目标旁边。清楚标记所有放入代码树的产物。
@@ -39,7 +39,7 @@ type: skill
   `prototype/<name>` 分支，并在议题或决策记录中留下上下文指针。
 - 否则，将其保留在 `.context/prototypes/<question>/` 下并报告路径。在清理可交付的差异前，将所有放入代码树的产物移动或复制到该目录。不要删除它。
 
-在议题、ADR、实现说明或实现提交中记录问题、证据和结论。主分支只保留经过验证的生产决策。
+在议题、ADR、笔记或提交中记录问题、证据和结论。主分支只保留经过验证的生产决策。
 
 ## 约束 [#constraints]
 

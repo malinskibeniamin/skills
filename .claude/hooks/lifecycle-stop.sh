@@ -136,7 +136,7 @@ if ! visual_result=$(printf '%s' "$pr_body" | python3 "$(dirname "$0")/../../scr
   hook_stop_block "$visual_result"
 fi
 
-# This hook checks publication and visual-evidence presence. The author owns upkeep and
+# This hook checks publication, the per-PR UI packaging declaration and visual-evidence presence. The author owns upkeep and
 # native wake registration; publication alone is not production readiness.
 # Hosted merge policy and merge authorization remain separate from delivery.
 exit 0

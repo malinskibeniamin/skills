@@ -10,6 +10,8 @@ type: "skill"
 
 [Open the editable Excalidraw source](/diagrams/skills/package-my-work.excalidraw)
 
+Każda tworzona zmiana UI widoczna dla odbiorcy lub użytkownika końcowego w każdym repozytorium korzystającym z mechanizmu wymaga przygotowanego nagrania dla danego PR-a. Obejmuje to mieszane PR-y i kolejne aktualizacje; wykorzystuj nadal aktualne ujęcia. [Zakres i bramka zakończenia](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md#per-pr-delivery).
+
 
 Przy dostarczaniu każdej tworzonej zmiany UI przygotuj dopracowane nagranie; wykorzystuj aktualne ujęcia między iteracjami. Ułatwiaj zobaczenie pracy, nie upiększaj jej możliwości. Przeczytaj [PACKAGING.md](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md).
 To lokalna adaptacja [opisu Emila Kowalskiego](https://x.com/emilkowalski/status/2122704498334339368), a nie kopia nieopublikowanej umiejętności z kursu; [pochodzenie](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PROVENANCE.md).
@@ -30,6 +32,7 @@ Ustal funkcję i rewizję, rzeczywisty punkt wejścia, odbiorcę i kanał, propo
 ## Przekazanie odpowiedzialności [#handoffs]
 
 - `/demo` odpowiada za historię klienta, źródła i wyniki w `demos/<slug>/`, narrację, przewodnik, diagram zastępczy i zamówioną publikację. Wywołuje go tylko użytkownik; jego wspólne przepisy można stosować bez wywołania umiejętności.
+- Każdy PR ze zmianą UI, również mieszany lub aktualizowany, wymaga opublikowanego nagrania i jawnej deklaracji zgodnie z [dostarczaniem dla każdego PR-a](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/PACKAGING.md#per-pr-delivery).
 - Dowody interakcji w PR korzystają z `commit-push-pr/VIDEO.md` i tego samego rzeczywistego ujęcia. Każda tworzona zmiana UI wymaga dopracowanego klipu; sam przegląd pozostaje tylko do odczytu.
 - Animacje produktu należą do `/animate` lub `/gestures`. Pakowanie zmienia prezentację, nie dostarczane zachowanie. Powtórki terminala pozostają przy przepisach asciinema w `/demo`.
 

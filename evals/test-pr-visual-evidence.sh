@@ -109,7 +109,7 @@ for body in \
   '<video src="https://example.com/flow.mp4" controls></video>' \
   'https://github.com/user-attachments/assets/1234' \
   'Visual evidence: not applicable — formatting only; contract and behavior unchanged.'; do
-  printf '%s\n' "$body" > "$VISUAL_BODY"
+  printf '%s\nUI packaging: not applicable — API-only change.\n' "$body" > "$VISUAL_BODY"
   CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
     "$visual_input" 0 "hosted evidence or explicit scoped exception permits completion: ${body:0:45}"
 done
@@ -123,11 +123,39 @@ for body in \
   $'```markdown\n![Example](https://example.com/example.png)\n```' \
   '<!-- ![Hidden](https://example.com/hidden.png) -->' \
   'Visual evidence: not applicable —'; do
-  printf '%s\n' "$body" > "$VISUAL_BODY"
+  printf '%s\nUI packaging: not applicable — API-only change.\n' "$body" > "$VISUAL_BODY"
   CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
     "$visual_input" 2 "missing, local, empty or hidden evidence is rejected: ${body:0:45}" 'visual evidence'
 done
 
+# Every PR declares whether consumer/end-user UI changed; unrelated visuals cannot
+# silently satisfy the recording requirement. These exercise the real Stop hook.
+for body in \
+  '![UI screenshot](https://example.com/screen.png)' \
+  $'UI packaging: https://example.com/demo.mp4\n```mermaid\nflowchart LR\n  A-->B\n```' \
+  $'UI packaging: https://example.com/old.mp4\n<video src="https://example.com/new.mp4" controls></video>' \
+  $'```mermaid\nflowchart LR\n  A-->B\n```' \
+  $'UI packaging: https://example.com/screen.png\n![UI screenshot](https://example.com/screen.png)' \
+  $'UI packaging: /tmp/demo.mp4\n![UI screenshot](https://example.com/screen.png)' \
+  $'UI packaging: https://localhost/demo.mp4\n![UI screenshot](https://example.com/screen.png)' \
+  $'<!-- UI packaging: https://example.com/demo.mp4 -->\n![UI screenshot](https://example.com/screen.png)' \
+  $'```markdown\nUI packaging: https://example.com/demo.mp4\n```\n![UI screenshot](https://example.com/screen.png)' \
+  $'UI packaging: not applicable —\n![UI screenshot](https://example.com/screen.png)' \
+  $'UI packaging: waived — recorder missing\n![UI screenshot](https://example.com/screen.png)'; do
+  printf '%s\n' "$body" > "$VISUAL_BODY"
+  CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+    "$visual_input" 2 "UI packaging declaration rejects missing/invalid evidence: ${body:0:45}" 'UI packaging'
+done
+for body in \
+  $'UI packaging: https://example.com/demo.mp4\n<video src="https://example.com/demo.mp4" controls></video>' \
+  $'UI packaging: https://github.com/user-attachments/assets/1234\nhttps://github.com/user-attachments/assets/1234' \
+  $'UI packaging: waived — capture access unavailable; approval: user message in this PR.\n![UI state](https://example.com/state.png)'; do
+  printf '%s\n' "$body" > "$VISUAL_BODY"
+  CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
+    "$visual_input" 0 "explicit recording or owner waiver permits completion: ${body:0:45}"
+done
+
+printf 'UI packaging: not applicable — API-only change.\n' > "$VISUAL_BODY"
 printf 'ship\n' > "$visual_session/task-endpoint"
 CLAUDE_SESSION_ID="$visual_sid" run_hook_eval "$REPO_ROOT/.claude/hooks/lifecycle-stop.sh" \
   "$visual_input" 2 'ship endpoint retains the same visual requirement' 'visual evidence'

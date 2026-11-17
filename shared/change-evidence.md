@@ -8,7 +8,9 @@ An author request owns implementation and publication only through its requested
 Apply [proportionate verification](verifiability.md#proportionate-verification) before
 selecting owners. The table routes relevant expertise, not a checklist of artifacts:
 reuse current checks; create output only for a concrete risk, explanation or explicit
-requirement. The owner requires automatic packaging for every authored UI change; reuse captures across iterations.
+requirement. Every consumer/end-user UI PR in every consuming repository requires
+[per-PR packaging](../package-my-work/PACKAGING.md#per-pr-delivery), including mixed changes
+and follow-up pushes; reuse still-current captures across iterations.
 
 | Changed behavior / needed explanation | Owner and completion evidence |
 |---|---|

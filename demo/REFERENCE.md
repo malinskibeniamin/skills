@@ -16,7 +16,7 @@
 
 ## Storyboard
 
-For UI footage, use [packaging craft](../package-my-work/PACKAGING.md) for capture
+For UI footage, load [package-my-work](../package-my-work/SKILL.md) for capture
 resolution, input-specific cues, detail focus and delivery-size playback checks. Reuse
 the same take and stack below; packaging does not expand publication permission.
 

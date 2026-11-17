@@ -6,8 +6,6 @@ argument-hint: "[branch, PR, feature, or path]"
 ---
 
 Turn finished work into customer proof. Read [REFERENCE.md](REFERENCE.md).
-For UI clips, load [package-my-work](../package-my-work/SKILL.md) for recording craft;
-this workflow retains the story, source/output and publication endpoint.
 
 ## Contract
 

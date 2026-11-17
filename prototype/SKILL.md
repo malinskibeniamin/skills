@@ -7,7 +7,7 @@ For product/design forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-p
 
 Prove one named question, not an early production branch.
 
-Choose cheapest faithful shape: logic/state executable model ([LOGIC.md](LOGIC.md)); UI in-app exploration or a [shareable review website](UI.md#shareable-review-prototype), with meaningful variants when the design is open; API/tool minimal sandbox/fixture call.
+Choose cheapest faithful shape: [logic/state model](LOGIC.md); UI in-app or a [shareable review website](UI.md#shareable-review-prototype), variants for open designs; API/tool sandbox/fixture.
 
 Use `.context/prototypes/<question>/`, or target-adjacent only when real runtime must load it; mark in-tree artifacts.
 
@@ -18,7 +18,7 @@ Keep runnable prototypes as primary sources; never merge prototype-only code to 
 - When the requested endpoint authorizes commits, use isolated `prototype/<name>` plus an issue/decision context pointer.
 - Otherwise keep under `.context/prototypes/<question>/`, report path, and move/copy in-tree artifacts there before cleaning the ship diff. Do not delete.
 
-Record the question, evidence, and verdict in an issue, ADR, implementation notes or commit. Main: only validated production decisions.
+Record question, evidence and verdict in an issue, ADR, notes or commit. Main: only validated production decisions.
 
 ## Constraints
 

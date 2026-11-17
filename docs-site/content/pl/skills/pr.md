@@ -47,12 +47,14 @@ Kolejność: jedno zdanie o zmianie i jej celu -> tabela zrzutów przed/po dla U
 | --- | --- |
 | ![Previous state](<hosted-before-image>) | ![New state](<hosted-after-image>) |
 
-[Try the prototype](<reviewer-accessible-url>) — <states/variants; access requirement>
+[Try the prototype](<reviewer-accessible-url>) - <states/variants; access requirement>
 
 <details>
 <summary>Agent-generated description</summary>
 
 - Lane / Review: <beneficiary, scope, closest-review paths and owner routing/gaps>
+UI packaging: <adres opublikowanego nagrania albo jawny powód braku zmian UI/odstąpienie właściciela zgodnie z package-my-work>
+
 - Testing: <commands, observed results, real-entrypoint evidence and gaps>
 - Risk / Rollback: <failure modes, blast radius, recovery, detection and gaps>
 
@@ -72,44 +74,10 @@ Gdy interakcje, trudno dostępne stany lub alternatywne podejścia warto wyprób
 Wdrażaj wyłącznie przez udokumentowany, zatwierdzony proces Quick Site z SSO lub równoważny prywatny podgląd w docelowym repozytorium. Odszukaj jego polecenie i konfigurację. [Quick Shopify](https://shopify.engineering/quick) jest inspiracją, nie dostępem do infrastruktury ani przenośnym poleceniem wdrożenia. Gdy hosting lub SSO są niedostępne, zachowaj działający artefakt, zgłoś lukę i użyj zrzutów; nie publikuj po cichu publicznie ani nie dodawaj infrastruktury hostingu lub uwierzytelniania. Sprawdź dostęp recenzenta, docelowy stan linku i ładowanie zasobów; zanim nazwiesz witrynę chronioną SSO, potwierdź odmowę dostępu po wylogowaniu. Oznacz symulacje i niezweryfikowany dostęp. Powiąż URL i artefakt z przeglądaną rewizją; po istotnej zmianie odśwież je lub oznacz jako nieaktualne. Stosuj [zasady przechowywania prototypów](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention).
 
 
-## Sekcje [#sections]
+## Opis i ryzyko [#description-and-risk]
 
-Pierwsze zdanie to wymagany skrót, nie wstęp; przestrzegaj [budżetu uwagi dla PR](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact). Poniżej zostaw tylko potrzebne szczegóły. Poniższe tematy to wskazówki dla autora, nie obowiązkowe nagłówki. Zwijaj szczegóły agenta zgodnie z szablonem; wymagane materiały wizualne umieść po pierwszym zdaniu i ewentualnym istotnym ostrzeżeniu. Używaj języka domeny użytkownika z `GLOSSARY.md`.
-
-### Podsumowanie [#summary]
-
-Wskaż kwestie wymagające uwagi recenzenta tylko wtedy, gdy to przydatne; nie powtarzaj pierwszego zdania. Oddziel zmiany główne od plików generowanych lub mechanicznych; wskaż przydatne punkty wejścia do przeglądu bez inwentarza wszystkich plików. Oddziel zaobserwowane wyniki od oczekiwań.
-
-Opis PR ma być zwięzłym podsumowaniem dla operatora: zachowanie i wartość, rozstrzygające dowody, decyzje domenowe, pozostałe ryzyko i sposób odzyskiwania oraz następne działanie; szczegóły podlinkuj, aby ułatwić wznowienie pracy. Osobne podsumowania HTML lub wizualne wymagają wyraźnej prośby; zachowaj przegląd pełnego diffu i wymagane dowody wizualne.
-
-Wybierz najmniejszy widok z [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md).
-
-#### Zmienione decyzje [#changed-decisions]
-
-Opisz istotne odstępstwa od zapisanego planu lub kontraktu rezultatu, jeśli zmieniają zakres, kontrakty, weryfikację lub ryzyko wdrożenia. Wykorzystaj istniejące notatki lub mapy intencji:
-poprzedni wybór -> nowe dowody -> obecny wybór -> konsekwencje dla przeglądu.
-Opis PR musi być samowystarczalny; pomijaj puste historie zmian i nigdy nie wymyślaj wcześniejszego planu ani uzgodnień.
-
-Fragmenty sesji są opcjonalnym kontekstem. Używaj tylko istotnych fragmentów, dopuszczonych do udostępnienia, z usuniętymi danymi wrażliwymi i dostępnych dla recenzentów; w przeciwnym razie podaj bezpieczne, samodzielne uzasadnienie.
-Nie rozszerzaj zakresu udostępniania ani uprawnień do wykonywania działań tylko po to, by podać link. Długość sesji lub liczba tur nie dowodzi poprawności ani staranności; sprawdzaj twierdzenia na podstawie bieżącego diffu i dowodów z wykonania.
-
-Umieść wizualizacje obok tekstu, który wspierają. Pokaż tylko kluczowe wywołania, pliki, właściwości, stany i granice.
-
-Pomiń widoki, które nie pomagają zrozumieć zmiany.
-
-### Dowody [#evidence]
-
-Konkretne dowody, że zmiana działa. Preferuj krótkie polecenie i wynik; dla UI pokazuj porównanie przed/po zgodnie z szablonem, a dla innych zmian tylko przydatne media. Wymień niewykonane kontrole i niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
-
-Używaj [adnotacji wizualnych](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations) tylko wtedy, gdy trudno znaleźć różnicę. Przy szerokich zmianach UI korzystaj z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps), gdy ułatwiają zrozumienie; unikaj powielonych zrzutów i osobnych podsumowań.
-
-Przy zmianach backendu, API, Protobuf, kontraktów, architektury, przepływu danych lub procesów, których nie wyjaśniają zrzuty ani nagranie, dołącz [diagram backendowy](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md) bezpośrednio po zdaniu otwierającym; aktualizuj nieaktualne utrzymywane diagramy. Preferuj Excalidraw, a gdy renderowanie lub publikacja zawiedzie, użyj Mermaid bezpośrednio w opisie. Zachowaj wyniki testów: diagram wyjaśnia, ale nie dowodzi poprawności. [Kontrakt dowodów wizualnych](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5) określa dopuszczalne wyjątki i bramkę sprawdzającą opublikowany opis przed zakończeniem.
-
-Dobieraj materiały według [dowodów wizualnych commit-push-pr](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Każda tworzona zmiana UI wymaga aktualnego klipu przez [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md). Inne powierzchnie nagrywaj, gdy wymaga tego interakcja lub ruch albo na żądanie. Sam przegląd pozostaje tylko do odczytu. Dowód jest przydatny ze względu na pytanie, na które odpowiada, a nie klasę medium. Podawaj zwięzłe, rzeczywiste wyniki testów, nie rekonstrukcje.
-
-### Ryzyko scalenia [#merge-danger]
-
-Wskaż sposób wycofania zmiany i określ, czy są to drzwi jednokierunkowe, czy dwukierunkowe. Drzwi dwukierunkowe pozwalają tanio się wycofać; decyzje destrukcyjne lub trudne do odwrócenia są jednokierunkowe.
-
-Wymień dotkniętych użytkowników, wywołujących, kontrakty i wiarygodne scenariusze awarii, w tym współdzielonych odbiorców.
-Obok odzyskiwania oceń wykrywanie błędów zgodnie z kryteriami przekazania do przeglądu. Jawnie wskaż istotne luki w widoczności awarii; przechodzące testy ani plan wycofania zmiany nie zastępują wykrywania błędów.
+Przed pisaniem lub aktualizacją opisu przeczytaj [wskazówki do opisu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#supporting-description): dowody, zmiany decyzji i ryzyko.
+Opis PR-a jest zwięzłym podsumowaniem operacyjnym; osobne artefakty podsumowujące wymagają wyraźnego żądania.
+Odpowiednie kontrakty poza UI wymagają [diagramów backendowych](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md); nagrania UI pozostają obowiązkowe według `package-my-work`.
+Wskaż sposób wycofania zmiany oraz określ, czy decyzja jest jedno- czy dwukierunkowa.
+Nazwij dotkniętych użytkowników, wywołujących, kontrakty i wiarygodne awarie, także u współdzielonych odbiorców.

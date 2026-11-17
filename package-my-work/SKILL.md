@@ -4,7 +4,8 @@ description: Package UI recordings with deliberate resolution, input cues, detai
 argument-hint: "[feature, URL, PR, or existing recording] [audience/channel]"
 ---
 
-Package every authored UI change at delivery, reusing current captures across iterations.
+Package every authored consumer/end-user UI change in every consuming repository, per PR;
+reuse current captures across iterations. [Scope and completion gate](PACKAGING.md#per-pr-delivery).
 Make the work easy to see, not more impressive than it is. Read [PACKAGING.md](PACKAGING.md).
 Local adaptation of [Emil Kowalski's packaging brief](https://x.com/emilkowalski/status/2122704498334339368),
 not a copy of his unpublished course skill; [provenance](PROVENANCE.md).
@@ -40,7 +41,9 @@ repository delivery policy still owns requested source changes.
 - `/demo` owns the customer story, `demos/<slug>/` source/output, narration/walkthrough,
   diagram fallback and its requested publication. Its explicit-only invocation remains
   with the user; these shared recording recipes are usable without invoking `/demo`.
-- Requested PR interaction evidence follows `commit-push-pr/VIDEO.md`, reusing the same
+- Every UI PR (including mixed changes and follow-ups) requires the hosted recording and
+  explicit packaging declaration in [per-PR delivery](PACKAGING.md#per-pr-delivery).
+- PR interaction evidence follows `commit-push-pr/VIDEO.md`, reusing the same
   real take. Every authored UI change needs a polished clip; a review request stays read-only.
 - Product motion stays with `/animate` or `/gestures`; packaging changes presentation,
   not shipped behavior. Terminal replays stay with `/demo`'s asciinema recipes.

@@ -45,12 +45,14 @@ type: skill
 | --- | --- |
 | ![Previous state](<hosted-before-image>) | ![New state](<hosted-after-image>) |
 
-[Try the prototype](<reviewer-accessible-url>) — <states/variants; access requirement>
+[Try the prototype](<reviewer-accessible-url>) - <states/variants; access requirement>
 
 <details>
 <summary>Agent-generated description</summary>
 
 - Lane / Review: <beneficiary, scope, closest-review paths and owner routing/gaps>
+UI packaging: <已發布錄影 URL，或依 package-my-work 明確說明非 UI 原因/擁有者豁免>
+
 - Testing: <commands, observed results, real-entrypoint evidence and gaps>
 - Risk / Rollback: <failure modes, blast radius, recovery, detection and gaps>
 
@@ -70,44 +72,10 @@ UI 變更依照[視覺證據契約](https://github.com/malinskibeniamin/skills/b
 僅使用目標儲存庫已有文件、獲核准且受 SSO 保護的 Quick Site 或同等私人預覽流程部署。查找該流程的指令與設定；[Shopify Quick](https://shopify.engineering/quick) 僅是靈感，並不提供基礎設施存取權或通用部署指令。託管或 SSO 無法使用時，保留可執行產物、說明缺口並使用擷取畫面；不得默默改為公開發布或新增託管、驗證基礎設施。確認審查者存取權、連結目標狀態及資源載入；聲稱受 SSO 保護前，確認登出後無法存取。明確標示模擬行為及未經驗證的存取權。將 URL 與產物綁定至審查版本；相關變更後更新或標示過時。遵循[原型保留政策](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention)。
 
 
-## 各區段 [#sections]
+## 描述與風險 [#description-and-risk]
 
-開頭一句是必要的首讀摘要，不是開場白；遵循 [PR 注意力預算](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact)。下方只保留補充細節。以下主題是作者指引，不是必要標題。依範本摺疊代理詳細資料；必要視覺媒體內嵌於開頭及必要警告之後。使用 `GLOSSARY.md` 中使用者的領域語言。
-
-### 摘要 [#summary]
-
-僅在有幫助時補充審查重點，不要重複開頭一句話。區分核心變更與產生或機械性檔案；指出有用的審查入口，不逐一羅列檔案。區分已觀察到的結果和預期。
-
-將 PR 內文作為操作者的精簡摘要：行為與價值、關鍵證據、領域決策、剩餘風險與復原方式，以及下一步行動；透過連結提供詳細資料，以利恢復工作。獨立的 HTML 或視覺回顧產物需要明確要求；仍須審查完整差異並提供必要的視覺證據。
-
-從 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中選擇最小視圖。
-
-#### 決策變更 [#changed-decisions]
-
-當實作相對於已記錄的計畫或成果契約出現實質偏離，影響範圍、契約、驗證方式或推出風險時，請說明這些變更。沿用既有筆記或意圖圖：
-先前選擇 -> 新證據 -> 目前選擇 -> 對審查的影響。
-讓 PR 說明本身完整清楚；省略空泛的變更歷程，絕不虛構先前計畫或共識。
-
-工作階段摘錄僅為選用背景資訊。只使用相關、已獲授權、已遮蔽敏感資料且審查者可存取的摘錄；否則提供安全、完整的理由說明。
-不要只為提供連結而擴大分享範圍或執行權限。工作階段長度或互動輪數無法證明正確性或用心程度；請依據目前差異與執行證據核實各項說法。
-
-將視覺內容放在其支持的文字旁。只顯示關鍵呼叫、檔案、屬性、狀態與邊界。
-
-省略無法增進理解的視圖。
-
-### 證據 [#evidence]
-
-提供證明變更有效的具體證據。優先簡述指令及結果；UI 變更依內文範本提供前後比較，其他變更僅在有幫助時附媒體。說明未執行的檢查與不確定性；測試通過不代表人工審查或共識。
-
-只在差異難以定位時使用[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。大範圍 UI 工作可在有助於理解時使用 [UI 變更圖](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重複截圖與獨立回顧檔案。
-
-對於後端、API、Protobuf、契約、架構、資料流或工作流程變更，如果截圖或影片無法解釋受影響的行為，必須在開頭一句之後內嵌加入[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，並更新過時的維護圖表。優先使用 Excalidraw；繪製或託管失敗時使用內嵌 Mermaid。保留測試證據：圖表用於解釋，不代表已證明正確性。[視覺證據契約](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)規定適用範圍內的例外，以及檢查已發布內文的完成閘門。
-
-依 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)選擇媒體。 每次撰寫的 UI 變更都需要透過 [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md) 提供目前版本片段。其他介面僅在互動、動態效果需要或使用者要求時錄影；純審查維持唯讀。 證據的價值在於回答的問題，而非媒體等級。測試結果應簡潔、真實，不要重新建構或虛構。
-
-### 合併風險 [#merge-danger]
-
-說明回復路徑，並將變更歸類為單向門或雙向門。雙向門容易退回；破壞性或難以逆轉的決策屬於單向門。
-
-列明受影響的使用者、呼叫端、契約及可信的失敗模式，包括共用的使用端。
-說明復原方案時，同時依照交接標準評估錯誤偵測；明確列出重要的故障可見性缺口，不要把測試通過或回復計畫當成錯誤偵測的替代品。
+撰寫或更新內文前，閱讀[補充描述指南](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#supporting-description)，了解證據、決策變更及風險。
+PR 內文是供操作者使用的精簡摘要；額外摘要產物必須由使用者明確要求。
+符合條件的非 UI 契約需要[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)；UI 錄影仍須遵循 `package-my-work`。
+說明回復路徑，並判斷變更是單向門還是雙向門。
+列出受影響的使用者、呼叫端、契約及可信故障模式，包括共用消費端。
