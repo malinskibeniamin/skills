@@ -30,6 +30,8 @@ Edytuj wyłącznie katalog umiejętności weryfikacji: jej plik `SKILL.md`, map�
 6. **Sklasyfikuj problem.** Błędny opis dla użytkownika oznacza nieaktualną dokumentację. Działające zachowanie, którego mechanizm testowy nie potrafi uruchomić, oznacza lukę w tym mechanizmie. Niedziałające zachowanie produktu oznacza lukę w produkcie: zgłoś ją i pozostaw kod produktu bez zmian.
 7. **Zakończ.** Usuń zasoby utworzone podczas przebiegu i potwierdź, że dowody pozostały dostępne. Ponownie przeczytaj zmienione pliki weryfikatora. Dostarcz wynik przez punkt końcowy wskazany przez wywołującego.
 
+Porównuj czas zimnego startu, czas ścieżki i powtarzalność z punktem odniesienia. Diagnozuj niestabilność przez [audyt testów](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#flaky-checks); usuwaj nieaktualne lub powielone przepisy dopiero po wskazaniu pozostałego właściciela kontraktu.
+
 ## Potwierdzenie
 
 - **Wynik:** `clean | changed | blocked`.

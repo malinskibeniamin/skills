@@ -5,6 +5,7 @@ description: "Audit tests for value. Use when reviewing, sweeping, or pruning lo
 
 When proving changed behavior or maintaining verification, read the [Poteto adaptation](../shared/POTETO-NATIVE.md#verification).
 Three modes, one value bar. Authoring mode gates every new or changed test at write time; `/tdd` routes here. Audit mode runs focused sweeps of tests that re-assert source, duplicate stronger proof, couple behavior to implementation, or keep test-only production seams alive. Continue broad audits as separate coherent follow-up PRs; optimize for confidence, not deletion count. Campaign mode prunes one whole subsystem's test surface (every test file a package, app, or core area owns); before starting one, read [CAMPAIGN.md](CAMPAIGN.md).
+
 ## Authoring gate
 
 Before adding any test, answer four questions; a missing answer means do not add it yet:
@@ -64,17 +65,14 @@ Keep a test when it independently enforces a public API, SDK, protocol, config, 
 
 Static or slow is not a deletion reason. A test that resembles implementation may still be the independent contract; prove otherwise before removing it.
 
+## Flaky checks
+
+Read [diagnosis and removal rules](REFERENCE.md#flaky-checks) before repairing, quarantining or deleting a flaky check.
+
 ## Candidate evidence
 
-Record every field below before editing. A missing field means the candidate is not ready for deletion:
-
-- exact test name and location;
-- what failure it can actually detect;
-- non-test callers of the covered production or support seam;
-- stronger remaining owner-boundary proof, or why no proof is needed;
-- relevant history and the reason the test or seam exists;
-- production or test-support deletion unlocked;
-- risk and the focused validation command.
+Before deletion, record every field in [candidate evidence](REFERENCE.md#candidate-evidence).
+A missing field means the candidate is not ready.
 
 ## Edit shape
 

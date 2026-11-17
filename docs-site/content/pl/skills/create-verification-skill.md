@@ -64,6 +64,8 @@ Utwórz `features/README.md` oraz po jednym pliku dla każdej z 3–5 najważnie
 
 Mapuj każdy punkt wejścia. Brak wymaganych danych początkowych oblewa ścieżkę: zapisz go w `Pułapkach`, nigdy nie osłabiaj ścieżki.
 
+Łącz każde działanie z obserwowalnym oczekiwanym wynikiem, aby mapa służyła też jako kryteria oceny. Właściciele kodu doskonalą je na rzeczywistych błędach i poprawnych przypadkach kontrolnych, nie na pewności agenta.
+
 ## Udowodnij działanie wygenerowanej umiejętności [#prove-the-generated-skill]
 
 Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowaną rzeczywistą ścieżkę użytkownika, dowody i czyszczenie. Potwierdź, że dowody przetrwały, a utworzone procesy i stan nie pozostały. Posprzątaj po nieudanych próbach, popraw instrukcje i odtwórz ścieżkę. Niewykonany weryfikator jest wersją roboczą.
@@ -71,3 +73,5 @@ Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowa
 Wymień luki konfiguracji środowiska zastępczego; pozostają niezweryfikowane do odtworzenia w środowisku docelowym.
 
 Kieruj audyty rozbieżności do `/maintain-verification-skill`, a pracę nad funkcjami do `/dogfood`.
+
+Mierz zimny start i ścieżki użytkownika; zachowaj diagnostykę błędów. Powtarzaj przebieg z czystego stanu; popraw wolne lub niestabilne kroki przed zwiększeniem współbieżności.

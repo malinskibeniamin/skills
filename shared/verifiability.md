@@ -26,6 +26,30 @@ in temporary/ignored scratch and summarize commands, results and material limits
 Persist only requested artifacts, existing required outputs or a reusable maintenance asset.
 Stop when the requested behavior and credible risks are covered; preserve project gates.
 
+### Choose the evidence loop
+
+- **User journey or integration:** run the real system through its project-local verifier
+  and feature map; use [dogfood](../dogfood/SKILL.md). Passing isolated tests cannot
+  establish that the whole flow works. A feature-map action and expected result form the rubric.
+- **Large input/state space:** use [property tests](../tdd/PROPERTY-BASED-TESTING.md)
+  for round trips, invariants, idempotency or independent-model agreement.
+- **Behavior-preserving migration/rewrite:** use [differential tests](../tdd/DIFFERENTIAL-TESTING.md)
+  against the pinned old system, with explicit approved differences.
+
+Run cheap deterministic checks after each slice; run relevant heavier journeys before
+committing/publishing. Keep commands, candidate revision (including WIP), result and limits
+in existing receipts/PR notes; record `none` with a reason when unverified. This is reporting,
+not a new commit stamp or executable gate. Edits invalidate affected evidence.
+
+After two unsuccessful repairs of the same check, challenge the shared premise and probe
+it before a third. If that check still fails after three repair-and-rerun rounds, stop
+automatic repair of that failure and request human help with expected/actual behavior,
+attempts and remaining hypothesis. Preserve the failure; unrelated work may continue.
+This is per failure, not a lifetime feedback budget or permission to skip required checks.
+
+Adapted from the [user-supplied verification article](https://x.com/addyosmani/status/2122590683055993308).
+These are harness policies, not independently verified claims about another team's results.
+
 ## Dead code and duplication
 
 For unused/unreachable code, dead stores, duplicate functions/branches or feature

@@ -81,6 +81,14 @@ type: skill
 
 靜態檢查或執行緩慢都不是刪除理由。看似驗證實作的測試，仍可能是獨立的契約驗證；移除前，請先證明並非如此。
 
+## 不穩定的檢查 [#flaky-checks]
+
+修復、隔離或刪除不穩定檢查前，閱讀[診斷與刪除規則](https://github.com/malinskibeniamin/skills/blob/main/test-audit/REFERENCE.md#flaky-checks)。
+
+診斷性重跑是為了檢驗明確的原因；反覆重試直到通過不算驗證。保留第一次失敗，在既有邊界控制狀態、時間與隨機性，以可觀察條件取代固定等待，修復後從乾淨狀態重放。不要為了宣稱通過而悄悄略過檢查、放寬斷言、增加固定等待或重試次數。
+
+若根因仍未知，依[修復上限](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#choose-the-evidence-loop)回報失敗檢查與未涵蓋的契約。隔離或刪除檢查須遵循儲存庫負責人的政策，並提供下方的候選項目證據；僅有不穩定結果不足以刪除真正的迴歸測試。明確保留涵蓋缺口。
+
 ## 候選項目證據 [#candidate-evidence]
 
 編輯前，請記錄以下每個欄位。只要缺少任何欄位，該候選項目就尚未準備好刪除：

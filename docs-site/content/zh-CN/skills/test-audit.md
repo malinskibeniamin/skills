@@ -81,6 +81,14 @@ type: skill
 
 静态检查或运行缓慢都不是删除理由。看似在验证实现的测试，仍可能承担独立契约的验证职责；删除前应证明并非如此。
 
+## 不稳定的检查 [#flaky-checks]
+
+修复、隔离或删除不稳定检查前，阅读[诊断和删除规则](https://github.com/malinskibeniamin/skills/blob/main/test-audit/REFERENCE.md#flaky-checks)。
+
+诊断性重跑是为了检验明确的原因；反复重试直到通过不算验证。保留第一次失败，在现有边界控制状态、时间和随机性，用可观察条件替代固定等待，修复后从干净状态重放。不要为了宣称通过而悄悄跳过检查、放宽断言、增加固定等待或重试次数。
+
+若根因仍未知，按[修复上限](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#choose-the-evidence-loop)报告失败检查和未覆盖的契约。隔离或删除检查需要遵循仓库负责人的政策并提供下方的候选项证据；仅有不稳定结果不足以删除真实回归测试。明确保留覆盖缺口。
+
 ## 候选项证据 [#candidate-evidence]
 
 编辑前记录以下每个字段。任何字段缺失，都意味着该候选项尚不具备删除条件：

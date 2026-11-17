@@ -18,6 +18,7 @@ Good property shapes include:
 - **Round trip:** decoding an encoded supported value returns the same value.
 - **Reference agreement:** the implementation agrees with a simpler independent model.
 - **Invariant:** every reachable transition preserves a domain rule.
+- **Idempotency:** normalization, retry or migration repeated has the same observable effect as once.
 - **Metamorphic relation:** a meaningful input transformation has a predictable effect.
 - **Boundary rejection:** invalid state never crosses a request, storage, or mutation boundary.
 

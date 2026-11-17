@@ -6,9 +6,9 @@ description: Use for evidence-backed review of diff-introduced defects in branch
 Read [Poteto](../shared/POTETO-NATIVE.md#review-and-diagnosis).
 
 Keep one owner; explicit delegation. Do not edit, commit, push or post without intent.
-Fixes: [author delivery](../shared/delivery-workflow.md). Posting comments need intent.
+Fixes: [delivery](../shared/delivery-workflow.md). Posting comments need intent.
 
-Read [depth](OPERATING-MODEL.md).
+Read [depth/rules](OPERATING-MODEL.md).
 ## Review contract
 
 - **Objective**: achieve the outcome without credible defects.
@@ -32,7 +32,7 @@ Recheck identity; drift invalidates evidence.
 
 ### Inspect
 
-1. Read spec/rules, full diff, callers/behavior and applicable `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`. Do not trust a PR summary.
+1. Read spec/rules, full diff, callers/behavior and base `REVIEW.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`. Do not trust a PR summary.
 2. For changed assumptions, reverse-trace authoritative producers, schemas, storage,
    consumers and public surfaces. Search by domain concept, field and emitted value,
    not only the changed symbol.

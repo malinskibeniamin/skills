@@ -3,37 +3,37 @@ name: create-verification-skill
 description: Create a project-local skill that launches, drives, observes, and cleans up the real app. Use when a repository lacks a repeatable way to prove UI, CLI, API, or service behavior.
 ---
 
-For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
+For verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
 
 Reuse any existing verifier. T3 Code: load
 [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
 [mobile](../t3code-skills/test-t3-mobile/SKILL.md) per affected surface;
 their adapters own native rules.
 
-For uncovered flows, use the canonical skill root, else
+Uncovered flows: canonical skill root, else
 `.agents/skills/verify-<app>/`. Never mirror host roots or duplicate covered flows.
 
 ## Interview the repository
 
-Discover before asking:
+Discover first:
 
 - **Surface:** primary and secondary UI, CLI, API, mobile, desktop, or library entrypoints.
-- **Launch:** repository-native command, readiness signal, ports, environment, seed data, and authentication.
+- **Launch:** repo command, readiness, ports, env, seed data and auth.
 - **Drive:** existing Playwright, PTY, HTTP, debug, or app harness before generic tools.
-- **Observe:** screenshots, accessibility snapshots, transcripts, responses, logs, exit codes, and durable side effects.
-- **Isolate:** per-run ports, profiles, data, fixtures. Never drive a shared human instance.
+- **Observe:** screenshots, a11y snapshots, transcripts, responses, logs, exits and durable effects.
+- **Isolate:** per-run ports/profiles/data/fixtures. Never drive a human instance.
 
-Report failed launch prerequisites; never invent instructions.
+Report setup gaps; invent none.
 
-For agent-DX or worktree setup requests, use [the capability-gap and cold-start checks](references/agent-dx.md).
+For agent-DX/worktree setup, use [the capability-gap and cold-start checks](references/agent-dx.md).
 
 ## Generate
 
-Write matching `name: verify-<app>` frontmatter and concrete **Launch**, **Doctor**, **Drive**, **Evidence**, **Cleanup** sections:
+Use `name: verify-<app>`: **Launch**, **Doctor**, **Drive**, **Evidence**, **Cleanup**.
 
-- **Launch:** exact start and teardown commands that reach a usable app from empty data, including migrations and seed data. A listening port or healthy database alone is not readiness.
+- **Launch:** start/teardown commands reaching a usable app from empty data, including migrations and seed data. A listening port or healthy database alone is not readiness.
 - **Doctor:** one read-only check for app identity, build, process or port ownership, data isolation, and auth.
-- **Drive:** literal commands and stable handles from this repository. Prefer roles, accessible names, routes, prompt strings, and public APIs over coordinates or internals.
+- **Drive:** repo commands and stable handles. Prefer roles, accessible names, routes, prompt strings, and public APIs over coordinates or internals.
 - **Evidence:** capture action and result. Verify side effects through a second public view; mock only existing production boundaries.
 - **Cleanup:** stop only processes and scratch state this run created. Never kill by process name. Evidence survives cleanup.
 
@@ -41,19 +41,25 @@ Make/document executable helpers. For stateful bugs/recurring repro gaps, prove 
 
 ## Seed the feature map
 
-Create `features/README.md` and top 3-5 feature files. Ground [the example](references/feature-map-example/README.md) in repo evidence. Each owns:
+Create `features/README.md` and 3-5 feature files. Ground [the example](references/feature-map-example/README.md) in repo evidence. Each owns:
 
 1. `Sub-features`
 2. `How to get to it (user POV)`
 3. `Driving it with <harness>`
 4. `Gotchas`
 
+Pair actions with expected results as a grading rubric; code owners refine it against defects
+and valid controls, not agent confidence.
+
 Map every entrypoint. Missing seed-data prerequisites fail the journey: record in `Gotchas`, never weaken it.
 
 ## Prove the generated skill
 
-Execute generated skill: launch, doctor, one mapped real journey, evidence and cleanup. Preserve evidence; leave no created process/state. Clean failed attempts, fix and replay. Unexecuted verifiers are drafts.
+Execute generated skill: launch, doctor, one mapped real journey, evidence and cleanup. Keep evidence; clean created process/state and failed attempts; fix and replay. Unexecuted verifiers are drafts.
 
-List stand-in setup gaps; leave them unverified until replayed on the target.
+Time cold-start/journeys; keep failure diagnostics. Repeat clean-state runs; fix slow/flaky
+steps before expanding concurrency.
+
+List stand-in gaps as unverified until target replay.
 
 Route drift audits to `/maintain-verification-skill` and feature work to `/dogfood`.

@@ -50,7 +50,7 @@ type: skill
 
 ### 检查 [#inspect]
 
-1. 阅读请求或规格、规则、完整差异、调用点和行为。不要让 PR 摘要凌驾于代码。读取适用的 `REVIEW.md`、`CODING_STANDARDS.md` 和 `CONTRIBUTING.md`（若存在）。
+1. 阅读规格、差异、调用方和行为，并从[可信基线](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#trusted-rules-and-diff-triggers)加载适用的 `REVIEW.md`、`CODING_STANDARDS.md` 和 `CONTRIBUTING.md`。单独评判规则变更，不要相信 PR 摘要。
 2. 对每个变化的假设，反向追踪权威生产者、模式、
    存储、消费者和公共表面。按领域概念、字段和输出
    值搜索，不只搜索变更符号。

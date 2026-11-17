@@ -39,6 +39,8 @@ type: skill
 - **源文本代理：**删除那些扫描实现、CSS、标记或配置，并将其中的标记或正则表达式作为运行时证明的测试。如果行为很重要，请在公共接缝处替换这些测试；对于语法，请使用静态分析。仅当内容属于公共输出时，才保留内容断言。
 - **垂直切片：**使用垂直切片：每次完成一个红灯测试及其绿灯实现；批量测试编码的是想象中的行为。
 
+- 重写或迁移时，保持行为一致并阅读 [DIFFERENTIAL-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/DIFFERENTIAL-TESTING.md)；固定旧系统这一比较依据，并明确获准的差异。
+
 ## 工作流 [#workflow]
 
 ### 契约 [#contract]

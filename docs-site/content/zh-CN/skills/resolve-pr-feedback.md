@@ -80,6 +80,8 @@ bash scripts/pr-unresolved-count.sh --verbose
 
 ## 迭代策略 [#iteration-policy]
 
+遵循[同一失败的修复上限](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#choose-the-evidence-loop)；升级求助时保留未解决检查的讨论串，不代表已处置或通过。
+
 - AI 自审：结果无问题时停止；两次未通过后，[重新评估方案和上下文](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#make-review-converge)。
 - 人工反馈：不设迭代轮次上限；交接前必须处理每个讨论串。
 - 自动修复：对未变化的事件去重；新发现不会耗尽整个生命周期的反馈处理预算。对受阻的 CI 去重，但不禁用后续反馈处理或基分支维护。运行器或归属问题必须明确可见，不能算作完成。
