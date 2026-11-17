@@ -107,7 +107,7 @@ run_content_eval "$REPO_ROOT/go/REFERENCE.md" "real entrypoint and one credible 
   "go reference preserves experiential evidence without a skill chain"
 run_content_eval "$REPO_ROOT/commit-push-pr/SKILL.md" "/dogfood|[Dd]ogfood" \
   "PR creation requires dogfood evidence"
-run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "Retain current dogfood evidence for runnable changes" \
+run_content_eval "$REPO_ROOT/commit-push-pr/REFERENCE.md" "Retain.*dogfood (receipt|evidence) for runnable changes" \
   "compact PR guidance retains dogfood evidence for runnable changes"
 
 run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"./dogfood/"' \

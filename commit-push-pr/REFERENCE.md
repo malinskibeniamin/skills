@@ -152,9 +152,12 @@ The compact body follows `/pr`; its conditional evidence requirements still appl
 
 ## Frontend/customer-facing detection + screenshot table (Phase 5)
 
-Select evidence for the visual risk, not every visible pixel. Inspect affected rendered
-behavior and shared consumers. Every authored UI change needs one current packaged clip,
-not an automatic media set, new runner or snapshot. Preserve existing required checks.
+Separate verification depth from publication format. Inspect affected rendered behavior
+and shared consumers at risk-appropriate depth; UI PRs use the comparable before/after
+table in the [PR body contract](../pr/SKILL.md#body-template) and the required current
+[packaged recording](../package-my-work/PACKAGING.md#per-pr-delivery). A routine edit
+needs no extra media bundle, report, device matrix, runner or new snapshot test. Preserve
+stronger project-specific checks; reuse their captures instead of another pipeline.
 
 1. **Scope:** resolve the real PR base (parent for stacks) and inspect the complete diff,
    including staged/unstaged/relevant untracked work. Identify affected surfaces and states;
@@ -204,10 +207,17 @@ Before completion, `lifecycle-stop.sh` reads the hosted body and runs
 `scripts/pr-visual-evidence.py`: include a hosted Markdown image/video, HTML image/video,
 standalone GitHub attachment URL, or a non-empty inline Mermaid diagram. For docs-only,
 formatting, mechanical or other changes with no behavior/contract/relationship delta,
-use `Visual evidence: not applicable - <concrete reason>`. Authored UI changes require a packaged clip or an explicit owner waiver;
-they cannot use a routine-edit exception. Eligible backend changes still need their diagram. Exemptions
+use `Visual evidence: not applicable - <concrete reason>`. A UI-source edit with no rendered
+change may use that exception. Authored visible UI changes require a packaged clip or an
+explicit owner waiver; they report unavailable comparisons rather than claiming non-UI
+scope. Eligible backend changes still need their diagram. Exemptions
 are reviewable author assertions, not machine-verified scope. The gate checks presence,
 not diagram correctness, accessibility or coverage; author/review still owns those.
+The general visual-presence check accepts a single image or diagram; UI packaging is
+checked separately. Neither check enforces the UI table, revision freshness, access
+controls or real-app verification. Record route/state -> actions -> observed outcome,
+relevant failure/recovery, revision and skips in the Testing bullet; label prototype-only
+results separately. A gate pass is not a visual-review PASS.
 Commit/push-only and genuine blocked/awaiting-decision endpoints retain their stops.
 
 Optional annotation/extra-media gaps do not block delivery; required UI clips remain

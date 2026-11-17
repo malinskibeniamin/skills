@@ -22,8 +22,14 @@ changing exploratory tests, follow the
 [stateful verification gate](../tdd/PROPERTY-BASED-TESTING.md#stateful-verification-gate).
 Reuse adequate checks; this trigger requires a risk assessment, not a new test framework.
 
-Inspect changed UI; retain a focused screenshot/comparison only when it resolves a visual
-question or helps review. Video, annotations, reports and replay files remain conditional.
+Inspect changed UI with risk-based verification. UI PR publication follows the
+[before/after comparison contract](../pr/SKILL.md#body-template); explain an unavailable
+or inapplicable comparison. Every authored UI change also follows
+[package-my-work](../package-my-work/SKILL.md) for its required recording, respecting the
+requested endpoint's publication stop. Outside publication, supporting captures stay
+need/requirement-based. This format does not mandate a new test runner or full device/state
+matrix; extra media, annotations, reports and replay files remain conditional. Preserve
+stronger project-specific test and evidence requirements.
 Backend/API/Protobuf/contract, architecture, data-flow or workflow changes without explanatory
 screenshots/video require a [diagram](../excalidraw-diagram/PR-WORKFLOW.md), with inline Mermaid
 as the renderer-independent fallback. Reuse captures across checks; keep output
