@@ -31,24 +31,50 @@ Na początku lub po wznowieniu sesji, po istotnych zmianach zakresu, implementac
 1. Znajdź otwarte PR-y jawnie powiązane z tą rozmową, sesją lub czatem; w przeciwnym razie sprawdź bieżącą gałąź przez `gh pr view`. Zweryfikuj stan otwarty, repozytorium, gałąź źródłową, bazę i własność. Nie wybieraj niepowiązanego ostatniego PR-a. Brak otwartego PR-a oznacza brak aktualizacji i nie daje zgody na jego utworzenie.
 2. Porównaj opublikowany opis z **pełną różnicą PR-a**, pierwotnym celem i aktualną weryfikacją, nie tylko ostatnią turą lub commitem. W stosach oceniaj każdą zmienioną warstwę względem jej rodzica. Sprawdź aktualność zrzutów, oznaczeń i legendy zgodnie z [adnotacjami wizualnymi](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations).
 3. Osobno załaduj [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md). Ponownie oceń wartość biznesową i wpływ na produkt lub bazę kodu; wykorzystaj nadal aktualne dowody, powtórz unieważnione porównania i usuń niepoparte twierdzenia. Gdy wartość jest nieznana, napisz `not established`.
-4. Przy autoryzowanej pracy obejmującej zmiany lub dostarczenie odświeżaj razem zmienione zrzuty, oznaczenia i legendę; zaktualizuj pierwsze zdanie tak, aby obejmowało całą aktualną zmianę. Zastępuj nieaktualne punkty zwięzłą informacją o odbiorcy, wartości, rozstrzygających dowodach i istotnych ryzykach. Odśwież [materiał do przeglądu przez człowieka](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff), w tym dobór recenzentów oraz luki w odzyskiwaniu i wykrywaniu błędów. Zachowaj intencję autora i wymagane dowody; podlinkuj szczegóły, pomiń poprawne opisy i nie dodawaj dziennika sesji.
+4. Przy autoryzowanych zmianach odświeżaj razem zrzuty, oznaczenia i legendę. Zachowaj pierwsze zdanie człowieka (zgłoś nieaktualną intencję do edycji przez autora); aktualizuj otwarcia napisane przez agenta i zastępuj jego nieaktualne punkty zwięzłą informacją o odbiorcy, wartości, dowodach i istotnych ryzykach. Odśwież [materiał do przeglądu przez człowieka](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff), w tym dobór recenzentów, odzyskiwanie i luki wykrywania. Zachowaj intencję człowieka i wymagane dowody; podlinkuj szczegóły, pomiń poprawne opisy i dziennik sesji.
 5. Po edycji ponownie odczytaj opis z serwera i sprawdź, czy opisuje opublikowany stan gałęzi źródłowej. Żądania tylko do odczytu zgłaszają rozbieżności bez edycji. Wyraźny zakaz wypychania lub zakres lokalny odracza publikację; nie opisuj nieopublikowanej pracy jako dostarczonej.
 
 ## Szablon opisu [#body-template]
 
-Po samodzielnym przeglądzie i weryfikacji oceń pięć kryteriów z [materiału do przeglądu przez człowieka](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff). Ten zwięzły szablon ma wyjaśniać zakres zmiany i wskazywać, gdzie uwaga człowieka jest najważniejsza; podlinkuj szczegóły zamiast dodawać pięć szablonowych sekcji. Uzasadnij każdą niewiadomą i każde kryterium uznane za nieadekwatne.
+Użyj zwięzłego tytułu opisującego rezultat, zgodnego z konwencjami repozytorium. Tytuł i pierwsze zdanie należą do autora-człowieka: zachowaj dostarczone brzmienie. Jeśli tworzy je agent, oznacz je jako szkic do edycji przez człowieka; nie przypisuj mu autorstwa ani akceptacji. Autoryzowany szkic PR można opublikować. Przy aktualizacji zachowaj tekst człowieka i zgłoś zmianę intencji zamiast po cichu go przepisywać.
+
+Kolejność: jedno zdanie o zmianie i jej celu -> tabela zrzutów przed/po dla UI -> klikalny prototyp, gdy przydatny -> opis agenta w jednym zwiniętym `<details>`. Link do prototypu może też poprzedzać tabelę. Pomijaj nieadekwatne sekcje zamiast publikować puste pola. Stosuj ten układ:
 
 ```markdown
-<one sentence capturing the entire change and why it matters>
+<one human-authored line about the change and why, or an explicitly labeled agent draft>
 
-- Review: <scope alignment/deviations; closest-review paths and why; sensitive-path owner routing or gaps>
-- Testing: <decisive tests and real-entrypoint/computer-use evidence; observed results; gaps>
-- Risk: <failure modes; one-/two-way door, blast radius, rollout limits, and how to revert/recover; production error detection and gaps>
+| Before | After |
+| --- | --- |
+| ![Previous state](<hosted-before-image>) | ![New state](<hosted-after-image>) |
+
+[Try the prototype](<reviewer-accessible-url>) — <states/variants; access requirement>
+
+<details>
+<summary>Agent-generated description</summary>
+
+- Lane / Review: <beneficiary, scope, closest-review paths and owner routing/gaps>
+- Testing: <commands, observed results, real-entrypoint evidence and gaps>
+- Risk / Rollback: <failure modes, blast radius, recovery, detection and gaps>
+
+<verified model/harness attribution when required>
+
+</details>
 ```
+
+Przed szczegółami umieść krótkie **widoczne ostrzeżenie** o nieudanej lub zablokowanej weryfikacji, istotnych ryzykach, kosztownym wycofaniu lub lukach wykrywania. Zwijaj rutynowe dowody, nie blokery. W opisie agenta oceń wszystkie pięć kryteriów [przekazania do przeglądu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff), bez pięciu szablonowych nagłówków. Zachowaj wymagane odnośniki, kryteria akceptacji i pola repozytorium.
+
+Dla zmian UI używaj porównywalnych rzeczywistych zrzutów bazy i kandydata zgodnie z [kontraktem dowodów wizualnych](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5). Wyjaśnij brak lub nieadekwatność porównania; nie wymyślaj stanu „przed” ani nie przedstawiaj zastępczych URL-i jako dowodów. Dla zmian poza UI pomiń tabelę i zachowaj wymagane diagramy. Prototyp uzupełnia, a nie zastępuje zrzuty i testy.
+
+### Klikalne prototypy do przeglądu [#clickable-review-prototypes]
+
+Gdy interakcje, trudno dostępne stany lub alternatywne podejścia warto wypróbować, podlinkuj [prototyp UI](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype). Użyj rzeczywistych komponentów, fontów, tokenów i dostawców motywu aplikacji w lekkiej witrynie; granice Electron, kodu natywnego i backendu izoluj oznaczonymi fixturami. Recenzent powinien trafić do właściwego stanu bez pobierania gałęzi i konfiguracji pełnego środowiska. Dla otwartego pytania projektowego udostępnij istotnie różne podejścia z bezpośrednimi URL-ami wariantów i stanów. Ustalona mała zmiana nie wymaga wariantów ani nowego prototypu.
+
+Wdrażaj wyłącznie przez udokumentowany, zatwierdzony proces Quick Site z SSO lub równoważny prywatny podgląd w docelowym repozytorium. Odszukaj jego polecenie i konfigurację. [Quick Shopify](https://shopify.engineering/quick) jest inspiracją, nie dostępem do infrastruktury ani przenośnym poleceniem wdrożenia. Gdy hosting lub SSO są niedostępne, zachowaj działający artefakt, zgłoś lukę i użyj zrzutów; nie publikuj po cichu publicznie ani nie dodawaj infrastruktury hostingu lub uwierzytelniania. Sprawdź dostęp recenzenta, docelowy stan linku i ładowanie zasobów; zanim nazwiesz witrynę chronioną SSO, potwierdź odmowę dostępu po wylogowaniu. Oznacz symulacje i niezweryfikowany dostęp. Powiąż URL i artefakt z przeglądaną rewizją; po istotnej zmianie odśwież je lub oznacz jako nieaktualne. Stosuj [zasady przechowywania prototypów](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention).
+
 
 ## Sekcje [#sections]
 
-Pierwsze zdanie jest wymaganym skrótem, a nie zbędnym wstępem; przestrzegaj [budżetu uwagi dla PR](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact). Poniżej zostaw tylko potrzebne szczegóły. Poniższe tematy to wskazówki dla autora, nie obowiązkowe nagłówki PR. Długie raporty podlinkuj lub zwiń; wymagane materiały wizualne umieść bezpośrednio po pierwszym zdaniu. Używaj języka domeny użytkownika z `GLOSSARY.md`.
+Pierwsze zdanie to wymagany skrót, nie wstęp; przestrzegaj [budżetu uwagi dla PR](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact). Poniżej zostaw tylko potrzebne szczegóły. Poniższe tematy to wskazówki dla autora, nie obowiązkowe nagłówki. Zwijaj szczegóły agenta zgodnie z szablonem; wymagane materiały wizualne umieść po pierwszym zdaniu i ewentualnym istotnym ostrzeżeniu. Używaj języka domeny użytkownika z `GLOSSARY.md`.
 
 ### Podsumowanie [#summary]
 
@@ -73,7 +99,7 @@ Pomiń widoki, które nie pomagają zrozumieć zmiany.
 
 ### Dowody [#evidence]
 
-Konkretne dowody, że zmiana działa. Preferuj krótkie polecenie i wynik; pokazuj porównanie przed i po, gdy wyjaśnia zmianę, nie jako automatyczny wymóg multimediów. Wymień niewykonane kontrole i pozostałe niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
+Konkretne dowody, że zmiana działa. Preferuj krótkie polecenie i wynik; dla UI pokazuj porównanie przed/po zgodnie z szablonem, a dla innych zmian tylko przydatne media. Wymień niewykonane kontrole i niewiadome; przechodzące testy nie dowodzą przeglądu ani zgody ludzi.
 
 Używaj [adnotacji wizualnych](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations) tylko wtedy, gdy trudno znaleźć różnicę. Przy szerokich zmianach UI korzystaj z [map zmian interfejsu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps), gdy ułatwiają zrozumienie; unikaj powielonych zrzutów i osobnych podsumowań.
 

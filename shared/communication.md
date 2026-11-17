@@ -44,15 +44,14 @@ If required evidence cannot fit, name the conflict rather than silently dropping
 - **RFC / plan:** problem and stakes -> proposed decision -> alternatives and trade-off ->
   open questions -> verification and rollout. Distinguish proposed from shipped work;
   a retrospective implementation summary is not evidence of prior agreement.
-- **PR:** always open with one sentence capturing the entire change and why it matters,
-  before headings, metadata, bullets, or visuals. Budget at most **10 seconds** for this
-  first read: a reviewer who reads nothing else should understand the change's meaning.
-  Default to at most three short bullets: essential reviewer context, decisive verification,
-  and material risk/rollback. Omit redundant headings, repeated rationale, and empty sections.
-  Link long evidence or put required receipts in one collapsed `<details>` block; keep
-  test status, material risks, and rollback visible. Required visual media stays inline
-  after the opening. Add prose only for a consequential decision or safety requirement
-  that cannot fit. A file-by-file changelog cannot replace the why.
+- **PR:** open with one sentence capturing the entire change and why it matters, before
+  headings or metadata. Budget at most **10 seconds** for this first read. Preserve the
+  human's title/line; mark agent drafts for human editing without claiming endorsement.
+  Follow the [PR body owner](../pr/SKILL.md#body-template): UI before/after table and useful
+  clickable prototype outside one collapsed agent-generated description. Keep failed/blocked
+  checks, material risks, costly recovery and detection gaps visible as a short warning;
+  routine review/testing/risk detail stays inside. Omit empty sections and unrelated media.
+  A file-by-file changelog cannot replace the why.
 - **Review / reply:** findings first, with evidence, consequence, and correction. Reply to
   feedback with the change made, a reasoned disagreement, or a concrete unresolved question;
   paraphrasing the comment is not an answer. Keep value judgments separate from defects.

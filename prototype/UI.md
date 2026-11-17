@@ -11,9 +11,32 @@ If the question is about logic/state rather than what something looks like -- wr
 - "Try a different layout for the settings screen."
 - Any time the user would otherwise spend a day picking between three vague mockups in their head.
 
-## Two sub-shapes -- strongly prefer sub-shape A
+## Shareable review prototype
 
-A UI prototype is much easier to judge when it's **butting up against the rest of the app** -- real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
+For a clickable PR preview, prefer a lightweight standalone website over requiring the full
+app/Electron build or a reviewer to arrange dev state. Import the real app UI components,
+fonts, styles, design tokens and theme providers directly, with representative surrounding
+app chrome/density. Do not approximate them with lookalike markup. Reuse existing build
+support; isolate native IPC, backend/auth and mutations behind labeled synthetic fixtures.
+If the components cannot run faithfully on the web without production refactoring, report
+the constraint and use real-app captures rather than expanding the shipping diff.
+
+Provide direct links to relevant states and, for unresolved design questions, several
+structurally different approaches. Reuse the variant switcher below; it must stay available
+in an isolated deployed prototype even with a production-mode web build. Keep prototype
+routes/switchers out of production app builds, not out of the review website.
+
+Follow [clickable review prototypes](../pr/SKILL.md#clickable-review-prototypes) for approved
+SSO-gated Quick Site deployment, reviewer access, revision freshness and PR placement.
+One run/build command, safe fixture data and labeled simulations; no production mutations,
+secrets or customer data. Compare relevant themes/states and exercise variant links/reloads.
+Website evidence proves only the simulated UI, not Electron/native/backend integration.
+Retain the runnable source under the [retention policy](SKILL.md#retention), linked from the
+PR/decision context; prototype-only scaffolding stays out of the shippable diff.
+
+## In-app exploration: two sub-shapes -- prefer A
+
+For in-app exploration rather than a shareable review website, a UI prototype is easier to judge when it's **butting up against the rest of the app** -- real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
 
 ### Sub-shape A -- adjustment to an existing page (preferred)
 
@@ -32,6 +55,8 @@ Before committing to sub-shape B, sanity-check: is there really no existing page
 In both sub-shapes the floating bottom bar is identical.
 
 ## Process
+
+Apply this process within the chosen standalone review website or in-app host.
 
 ### 1. State the question and pick N
 
@@ -98,7 +123,7 @@ Behaviour:
 - Clicking an arrow updates the URL search param (use the framework's router -- `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
 - Keyboard: `<-` and `->` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
 - Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
-- Hidden in production builds -- gate on `process.env.NODE_ENV !== 'production'` or an equivalent check, so a stray prototype merge can't ship the bar to users.
+- Keep out of production app builds using the project's existing environment/build boundary. In an isolated review website, keep the switcher visible even for optimized production builds. App code follows the project's env accessor, not direct `process.env` reads.
 
 Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
 
