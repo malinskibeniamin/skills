@@ -103,7 +103,7 @@ UI 變更依照[視覺證據契約](https://github.com/malinskibeniamin/skills/b
 
 對於後端、API、Protobuf、契約、架構、資料流或工作流程變更，如果截圖或影片無法解釋受影響的行為，必須在開頭一句之後內嵌加入[後端圖表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，並更新過時的維護圖表。優先使用 Excalidraw；繪製或託管失敗時使用內嵌 Mermaid。保留測試證據：圖表用於解釋，不代表已證明正確性。[視覺證據契約](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)規定適用範圍內的例外，以及檢查已發布內文的完成閘門。
 
-依 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)選擇媒體。只有互動或動態效果需要，或使用者要求時才錄製真實流程；其他情況靜態圖片與指令結果已足夠。證據的價值在於回答的問題，而非媒體等級。測試結果應簡潔、真實，不要重新建構或虛構。
+依 [commit-push-pr 視覺證據](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)選擇媒體。 每次撰寫的 UI 變更都需要透過 [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md) 提供目前版本片段。其他介面僅在互動、動態效果需要或使用者要求時錄影；純審查維持唯讀。 證據的價值在於回答的問題，而非媒體等級。測試結果應簡潔、真實，不要重新建構或虛構。
 
 ### 合併風險 [#merge-danger]
 

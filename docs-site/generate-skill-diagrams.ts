@@ -61,6 +61,15 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  "package-my-work": {
+    kind: "pipeline",
+    nodes: [
+      "Every authored UI change",
+      "Capture real actions at readable resolution",
+      "Match input cues; focus key details",
+      "Inspect export; deliver within scope",
+    ],
+  },
   animatic: {
     kind: "pipeline",
     nodes: [

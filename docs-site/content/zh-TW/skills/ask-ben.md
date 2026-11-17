@@ -136,6 +136,7 @@ type: skill
 | `/matt-writing-fragments` | Matt Pocock 原始技能指南：`writing-fragments`。 |
 | `/matt-writing-shape` | Matt Pocock 原始技能指南：`writing-shape`。 |
 | `/mobile-native` | 修復手機網頁的檢視區、觸控和鍵盤行為。 |
+| `/package-my-work` | 製作構圖清楚、輸入提示準確的 UI 錄影。 |
 | `/plan-arbiter` | 比較相互競爭的計畫，並選擇有依據的方向。 |
 | `/plow-ahead` | 在例行的不確定情況下自主繼續推進。 |
 | `/postgresql` | 根據工作負載實證設計並操作 PostgreSQL。 |

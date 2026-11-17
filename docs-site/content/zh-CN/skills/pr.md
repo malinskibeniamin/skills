@@ -103,7 +103,7 @@ PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前�
 
 对于后端、API、Protobuf、契约、架构、数据流或工作流变更，如果截图或视频未能解释受影响的行为，必须在开头一句之后内联加入[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，并更新过时的维护图表。优先使用 Excalidraw；渲染或托管失败时使用内联 Mermaid。保留测试证据：图表用于解释，不证明正确性。[视觉证据契约](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)规定了适用范围内的例外和检查已发布正文的完成门禁。
 
-按 [commit-push-pr 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)选择媒体。只有交互或动效需要，或用户要求时才录制真实流程；其他情况下静态图片和命令结果足够。证据的价值在于回答的问题，不在于媒体等级。测试结果应简洁、真实，不要重构或虚构。
+按 [commit-push-pr 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)选择媒体。 每次编写的 UI 变更都需要通过 [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md) 提供当前版本片段。其他界面仅在交互、动效需要或用户要求时录制；纯审查保持只读。 证据的价值在于回答的问题，不在于媒体等级。测试结果应简洁、真实，不要重构或虚构。
 
 ### 合并风险 [#merge-danger]
 

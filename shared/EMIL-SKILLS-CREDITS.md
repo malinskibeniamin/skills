@@ -55,6 +55,17 @@ All rows refer to `skills/<name>/SKILL.md` at the revision above.
 | [`animate-expo`](https://aiforui.dev/skills/animate-expo) | Defer | Expo/Reanimated is outside this web harness's current stack |
 | `write-swift` | Defer | Native Swift requires a separate toolchain/version-aware workflow |
 
+## Posted packaging brief
+
+[`/package-my-work`](../package-my-work/SKILL.md) is a separate local adaptation of
+[Emil's packaging brief](https://x.com/emilkowalski/status/2122704498334339368): resolution,
+input-specific cues/movement, detail zoom and presentation craft. Its source was not present
+in the public repository/catalog on November 17, 2026; [provenance](../package-my-work/PROVENANCE.md)
+distinguishes the supplied brief from unpublished course material. No upstream bytes or
+new license claims were added to the nine-skill snapshot. `/demo` and requested PR videos
+reuse its craft layer. The owner requires a polished clip for every authored UI change;
+review-only requests stay read-only and publication retains its original scope.
+
 ## Adapted files
 
 - `gestures/SKILL.md` and `REFERENCE.md`: upstream same-name entrypoint; separate

@@ -30,6 +30,8 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 
 Load [change evidence](../shared/change-evidence.md) and owners; assess risk.
 Capture needed baselines; reuse checks.
+Every authored UI change: load [package-my-work](../package-my-work/SKILL.md);
+reuse verification footage and deliver a current polished clip, without expanding publication.
 
 Fixed evals: [hill-climb](../hill-climb/SKILL.md).
 

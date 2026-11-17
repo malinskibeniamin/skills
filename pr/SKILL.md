@@ -138,7 +138,8 @@ Use the [visual-evidence contract](../commit-push-pr/REFERENCE.md#frontendcustom
 for scoped exceptions and the hosted-body completion gate.
 
 Select media per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
-Record real flows only when interaction/motion needs it or requested; stills/results suffice otherwise.
+Every authored UI change needs a current clip via [package-my-work](../package-my-work/SKILL.md).
+Other surfaces: record when interaction/motion needs it or requested. Review-only stays read-only.
 Evidence earns its place by the question it answers, not media tier. Keep results concise and actual.
 
 ### Merge Danger

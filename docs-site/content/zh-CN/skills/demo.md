@@ -19,6 +19,8 @@ type: skill
 
 将已完成的工作转化为面向客户的成果证明。阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
 
+UI 片段需加载 [package-my-work](https://github.com/malinskibeniamin/skills/blob/main/package-my-work/SKILL.md) 的录制技巧；本流程仍负责故事、源文件、输出和发布终点。
+
 ## 约定 [#contract]
 
 1. 确定目标范围；默认覆盖当前整个分支或 PR 自 merge-base 以来的内容，包括已提交、已暂存、未暂存及相关的未跟踪工作。

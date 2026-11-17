@@ -41,7 +41,7 @@
       width: "28px",
       height: "36px",
       transform: "translate(-60px, -60px)",
-      transition: reducedMotion ? "none" : "transform 350ms ease-out",
+      opacity: "0",
       filter: "drop-shadow(0 1px 2px #000)",
     });
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -61,7 +61,6 @@
     cursor.append(svg);
 
     let target = null;
-    let inputMode = "keyboard";
     let clickAnimation;
     const updateTarget = () => {
       const box = target?.isConnected ? target.getBoundingClientRect() : null;
@@ -84,16 +83,6 @@
     };
     const moveTo = (x, y) => {
       cursor.style.transform = `translate(${x}px, ${y}px)`;
-    };
-    const focusTarget = () => {
-      const box = target?.getBoundingClientRect();
-      if (!box) return;
-      moveTo(
-        target.matches("input, textarea, [contenteditable]")
-          ? box.right - Math.min(28, box.width / 2)
-          : box.left + box.width / 2,
-        box.top + box.height / 2,
-      );
     };
     const pulse = (x, y) => {
       clickAnimation?.cancel();
@@ -118,55 +107,74 @@
         { duration: 900, easing: "ease-out" },
       );
     };
+    let contactId = null;
+    const hideContact = () => {
+      clickAnimation?.cancel();
+      ring.style.opacity = "0";
+      contactId = null;
+    };
+    const showContact = (event) => {
+      cursor.style.opacity = "0";
+      Object.assign(ring.style, {
+        left: `${event.clientX}px`,
+        top: `${event.clientY}px`,
+        transform: "translate(-50%, -50%)",
+        opacity: "1",
+      });
+    };
     addEventListener(
-      "mousemove",
-      (event) => moveTo(event.clientX, event.clientY),
-      true,
-    );
-    addEventListener(
-      "focusin",
+      "pointermove",
       (event) => {
-        markTarget(event.target);
-        if (inputMode === "keyboard") focusTarget();
+        if (event.pointerType === "touch" || event.pointerType === "pen") {
+          if (event.pointerId === contactId) showContact(event);
+          return;
+        }
+        cursor.style.opacity = "1";
+        moveTo(event.clientX, event.clientY);
       },
       true,
     );
+    addEventListener("focusin", (event) => markTarget(event.target), true);
     addEventListener(
       "pointerdown",
       (event) => {
-        inputMode = "pointer";
-        moveTo(event.clientX, event.clientY);
+        if (!event.isPrimary) return;
         markTarget(event.target);
-        pulse(event.clientX, event.clientY);
-      },
-      true,
-    );
-    addEventListener(
-      "keydown",
-      (event) => {
-        inputMode = "keyboard";
-        markTarget(event.target);
-        focusTarget();
-        if (
-          (event.key === "Enter" || event.key === " ") &&
-          target?.matches(
-            "button, a, input[type=checkbox], input[type=radio], [role=button], [role=checkbox], [role=switch], [role=menuitem]",
-          )
-        ) {
-          const box = target?.getBoundingClientRect();
-          if (box) pulse(box.left + box.width / 2, box.top + box.height / 2);
+        hideContact();
+        if (event.pointerType === "touch" || event.pointerType === "pen") {
+          contactId = event.pointerId;
+          showContact(event);
+        } else {
+          cursor.style.opacity = "1";
+          moveTo(event.clientX, event.clientY);
+          pulse(event.clientX, event.clientY);
         }
       },
       true,
     );
+    for (const type of ["pointerup", "pointercancel"]) {
+      addEventListener(
+        type,
+        (event) => {
+          if (event.pointerId === contactId) hideContact();
+        },
+        true,
+      );
+    }
     addEventListener(
-      "input",
+      "keydown",
       (event) => {
+        cursor.style.opacity = "0";
+        hideContact();
         markTarget(event.target);
-        focusTarget();
       },
       true,
     );
+    addEventListener("input", (event) => markTarget(event.target), true);
+    addEventListener("blur", () => {
+      cursor.style.opacity = "0";
+      hideContact();
+    });
     addEventListener("scroll", updateTarget, { capture: true, passive: true });
     addEventListener("resize", updateTarget, { passive: true });
     new MutationObserver(updateTarget).observe(document.documentElement, {

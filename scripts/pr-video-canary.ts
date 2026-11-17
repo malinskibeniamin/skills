@@ -6,6 +6,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { chromium, expect, type Locator, type Page } from "@playwright/test";
 import { z } from "zod";
+import { verifyCursorInput } from "./pr-video-cursor-canary";
 import { verifyDemoMedia } from "./demo-media-canary";
 
 const root = resolve(import.meta.dir, "..");
@@ -57,6 +58,7 @@ const browser = await chromium.launch().catch((cause: unknown) => {
   throw cause;
 });
 try {
+  await verifyCursorInput(browser, root);
   await verifyIdleRejection();
   await verifyDemoMedia(root, out, browser);
   const shortTakePacing = await verifyShortTakePacing();
@@ -287,10 +289,14 @@ try {
         metric.targetOutline > 200,
         `${side}/${state}: action target highlight missing (${metric.targetOutline})`,
       );
-      assert(
-        metric.cursor > 40,
-        `${side}/${state}: visible cursor missing (${metric.cursor})`,
-      );
+      if (state === "typing") {
+        assert(metric.cursor < 5, `${side}/${state}: invented keyboard cursor`);
+      } else {
+        assert(
+          metric.cursor > 40,
+          `${side}/${state}: visible cursor missing (${metric.cursor})`,
+        );
+      }
       if (pulse)
         assert(
           metric.clickRing > 15,
