@@ -7,7 +7,7 @@ For product/design forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-p
 
 Prove one named question, not an early production branch.
 
-Choose cheapest faithful shape: logic/state executable model ([LOGIC.md](LOGIC.md)); UI several meaningful variants ([UI.md](UI.md)); API/tool minimal sandbox/fixture call.
+Choose cheapest faithful shape: logic/state executable model ([LOGIC.md](LOGIC.md)); UI in-app exploration or a [shareable review website](UI.md#shareable-review-prototype), with meaningful variants when the design is open; API/tool minimal sandbox/fixture call.
 
 Use `.context/prototypes/<question>/`, or target-adjacent only when real runtime must load it; mark in-tree artifacts.
 

@@ -107,37 +107,28 @@ CODEOWNERS review routing. It also owns draft deferral and metadata readback/rec
 
 ## PR body template (Phase 5)
 
-Run `/quantify-impact` for every PR, including non-UI changes. Use the
-[compact PR contract](../shared/communication.md#match-the-artifact): one opening sentence
-and only essential supporting bullets. The template is the default, not a checklist of
-sections to expand.
+Run `/quantify-impact` for every PR, including non-UI changes. Use the canonical
+[PR body template](../pr/SKILL.md#body-template): human title/one-line intent (explicitly
+label agent drafts), UI before/after table, useful prototype link, then one collapsed
+agent-generated description. Preserve human wording on upkeep. Omit inapplicable sections.
 
-Apply `/pr`'s [human-review handoff](../shared/review-contract.md#human-review-handoff)
-after self-verification: assess all five criteria and surface the closest-review paths.
-Keep sensitive-path owner requests/deferred routing current through the metadata contract.
+Apply the [human-review handoff](../shared/review-contract.md#human-review-handoff)
+after self-verification. Put Lane/Review, Testing, Risk/Rollback and verified attribution
+inside the details. Keep failed/blocked checks, material risks, costly recovery and detection
+gaps visible as a short warning. Retain required repository fields and owner routing.
 
-```
-gh pr create --base <base> --assignee @me --title '<concise outcome>' --body "$(cat <<'EOF'
-<one sentence capturing the entire change and why it matters>
+Create with `gh pr create --base <base> --assignee @me --title '<concise outcome>'
+--body-file <body>`; add `--draft` when requested. For prototypes, follow
+[clickable review prototypes](../pr/SKILL.md#clickable-review-prototypes); a prototype does
+not replace [visual evidence](#frontendcustomer-facing-detection--screenshot-table-phase-5)
+or prove full-app/backend behavior.
 
-- Lane: <Keep the lights on | Quality of life | Feature | Taste>; <scope alignment/deviations, review focus and owner routing/gaps>; see `/product`
-- Testing: <decisive tests, real-entrypoint/computer-use evidence, results and gaps>
-- Risk: <failure modes; one-/two-way door, blast radius, rollout limits, and how to revert/recover; production error detection and gaps>
-EOF
-)"
-```
-
-Place useful or explicitly required visual media inline after the opening; follow
-[visual evidence](#frontendcustomer-facing-detection--screenshot-table-phase-5).
-Routine visible edits need no automatic media bundle.
-
-Link long logs/matrices and specialist receipts, or put them in one collapsed
-`<details>` block. Retain the current dogfood receipt for runnable changes, dependency
-upgrade evidence for dependency diffs, stack context for dependent PRs, and material
-changed decisions. These are conditional evidence, not default expanded sections.
+Retain current dogfood evidence for runnable changes, dependency upgrade evidence for
+dependency diffs, stack context for dependent PRs, and material changed decisions inside
+the agent description. These are conditional evidence, not default expanded sections.
 Measured impact uses `/quantify-impact`'s `## Proven impact` table and method; unsupported
-performance claims retain `Value not proven`. Keep test status, material risks, and
-rollback visible. No commit dump, repeated rationale, or separate recap artifact.
+performance claims retain `Value not proven`. No commit dump, repeated rationale or
+separate recap artifact.
 
 Use a body file for long bodies rather than fragile shell quoting. For native media, pass
 each referenced local file with `--attach <path>` on create or edit. GitHub CLI rewrites
@@ -170,7 +161,8 @@ new runner or snapshot. Preserve existing required checks and explicit user/proj
 2. **Check:** run relevant existing visual tests when applicable. Inspect mismatches before
    intended baseline updates, then rerun normally. Never bulk-accept or weaken assertions
    to pass. Add a new case/runner only for a credible uncovered risk, not every visible edit.
-3. **Capture when useful:** prefer one focused screenshot or comparable base/candidate pair.
+3. **Capture:** UI PRs use a before/after screenshot table per the [PR body owner](../pr/SKILL.md#body-template).
+   For non-UI changes, capture only when useful; explain unavailable/inapplicable UI comparisons.
    Use real revisions, matching fixtures/state/viewport/theme; wait for readiness, not sleeps.
    Reuse current captures. Reconstruct a needed base without disturbing the active worktree;
    never fabricate a before image or alter fixture data to manufacture a difference.

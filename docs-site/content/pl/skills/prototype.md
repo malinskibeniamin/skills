@@ -1,13 +1,21 @@
 ---
-title: /prototype
 description: >-
   Twórz tymczasowe dowody rozstrzygające nierozwiązane kwestie dotyczące logiki,
   interakcji lub warstwy wizualnej. Użyj, gdy działający przykład pozwoli
   wyjaśnić zachowanie lub niepewność dotyczącą interfejsu przed podjęciem
   decyzji.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - prototype
 sidebar:
   label: /prototype
+title: /prototype
+type: skill
 ---
 ![Diagram umiejętności /prototype](/diagrams/skills/prototype.svg)
 
@@ -22,14 +30,13 @@ Prototyp odpowiada na jedno konkretnie określone pytanie. Jest dowodem, a nie w
 Wybierz najprostszy wariant, który wiernie odwzorowuje problem:
 
 - Niepewność dotycząca logiki lub stanu -> mały wykonywalny model stanu; zobacz [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md).
-- Niepewność dotycząca interfejsu lub interakcji -> kilka istotnie różniących się wariantów; zobacz
-  [UI.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md).
+- Niepewność dotycząca UI lub interakcji -> eksploracja w aplikacji albo [witryna do udostępnienia recenzentom](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype), z istotnie różnymi wariantami, gdy projekt jest otwarty.
 - Niepewność dotycząca API lub narzędzia -> minimalne wywołanie w środowisku testowym lub z użyciem fixtury.
 
 Jeśli to możliwe, umieść działające artefakty w `.context/prototypes/<question>/`, a obok
 docelowego kodu tylko wtedy, gdy muszą zostać załadowane przez rzeczywiste środowisko uruchomieniowe. Wyraźnie oznacz każdy artefakt znajdujący się w drzewie projektu.
 
-## Przechowywanie
+## Przechowywanie [#retention]
 
 Zachowaj ukończony prototyp jako wykonywalne **źródło pierwotne**, ale nigdy nie scalaj kodu
 przeznaczonego wyłącznie do prototypowania z główną gałęzią:
@@ -42,7 +49,7 @@ przeznaczonego wyłącznie do prototypowania z główną gałęzią:
 Zapisz pytanie, dowody i werdykt w zgłoszeniu, ADR, notatkach implementacyjnych lub
 zatwierdzeniu implementującym zmianę. W głównej gałęzi pozostaje wyłącznie zweryfikowana decyzja produkcyjna.
 
-## Ograniczenia
+## Ograniczenia [#constraints]
 
 1. Najpierw używaj biblioteki standardowej i istniejących zależności; bez tworzenia szkieletu niezwiązanego z
    pytaniem.

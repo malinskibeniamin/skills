@@ -91,8 +91,9 @@ recovery or poor detection warrant targeted line review by the appropriate owner
 the paths, unresolved questions and evidence that would change that recommendation.
 Do not average away a serious risk with stronger criteria or label unknown impact low risk.
 
-Keep test status, material risks, rollback and detection gaps visible in the compact PR
-body; link/collapse detailed evidence. Five assessments do not require five headings, a
+Keep failed/blocked test status, material risks, costly rollback and detection gaps visible
+in the compact PR body; routine status/recovery and detailed evidence belong in the
+[collapsed agent description](../pr/SKILL.md#body-template). Five assessments do not require five headings, a
 numeric score or extra reviewer rounds. Reassess affected criteria after scope/head/base
 changes. This rubric recommends scrutiny, not approval or production readiness.
 
