@@ -123,3 +123,67 @@ function expandSkill(command: string): string {
   return `use the ${skillName} skill`;
 }
 ```
+
+
+## Supporting description
+
+The opening sentence is the required first read, not a preamble; follow the
+[PR attention budget](../shared/communication.md#match-the-artifact). Keep only supporting
+detail below it. The topics below are author guidance, not required PR headings.
+Keep agent detail collapsed per the body template; retain required visual media inline after the
+opening and any essential warning. Use the user's domain language from `GLOSSARY.md`.
+
+### Summary
+
+Add reviewer focus only when useful; do not repeat the opening sentence. Separate core
+changes from generated or mechanical files; name useful review entry points without a
+file-by-file inventory. Distinguish observed results from expectations.
+
+Use the PR body as the operator digest: behavior/value, decisive evidence, domain decisions,
+remaining risk/recovery and next action; link detail for resumption. Separate HTML or visual
+recap artifacts need an explicit request; retain full-diff review and required visual evidence.
+
+Choose the smallest view from [SUMMARY-VIEWS.md](SUMMARY-VIEWS.md).
+
+#### Changed decisions
+
+Surface material departures from a recorded plan or outcome contract when
+scope, contracts, verification, or rollout risk changes. Reuse existing notes or intent maps:
+prior choice -> new evidence -> current choice -> review consequence.
+Keep the PR self-contained; omit empty histories and never invent a prior plan or agreement.
+
+Session excerpts are optional context. Use only relevant,
+authorized, redacted excerpts accessible to reviewers; otherwise give safe standalone rationale.
+Do not widen sharing or execution access just to provide a link. Session length or turn count proves
+neither correctness nor diligence; verify claims against the current diff and execution evidence.
+
+Place visuals beside their supporting text. Show only load-bearing calls, files, props, states, and boundaries.
+
+### Evidence
+
+Concrete evidence that the change works. Prefer a short command/result; show before/after
+for UI changes per the body template; for other changes, include media only when useful. Name checks not run and
+remaining uncertainty; passing tests are not evidence of human review or consensus.
+
+Use [visual annotations](../commit-push-pr/REFERENCE.md#visual-annotations) for hard-to-find deltas;
+[UI change maps](SUMMARY-VIEWS.md#ui-change-maps) for broad UI only when helpful. Avoid duplicate captures/recaps.
+
+For backend/API/Protobuf/contract, architecture, data-flow or workflow changes without
+explanatory screenshots/video, include [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md)
+inline after the opening; refresh stale maintained diagrams. Prefer Excalidraw, with inline
+Mermaid when rendering/hosting fails. Keep test evidence: a diagram explains, not proves.
+Use the [visual-evidence contract](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)
+for scoped exceptions and the hosted-body completion gate.
+
+Select media per [commit-push-pr visual evidence](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
+Every authored UI change needs a current clip via [package-my-work](../package-my-work/SKILL.md).
+Other surfaces: record when interaction/motion needs it or requested. Review-only stays read-only.
+Evidence earns its place by the question it answers, not media tier. Keep results concise and actual.
+
+### Merge Danger
+
+Name the rollback path and classify the change as a one-way or two-way door. Two-way doors are cheap to undo; destructive or hard-to-reverse decisions are one-way doors.
+
+Name affected users, callers, contracts, and credible failure modes, including shared consumers.
+Apply the handoff rubric's error-detection assessment alongside recovery; keep material
+visibility gaps explicit rather than treating passing tests or a rollback plan as detection.

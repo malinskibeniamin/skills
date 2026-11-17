@@ -136,6 +136,7 @@ Przed poleceniem lub pominięciem umiejętności przeczytaj jej kanoniczny `SKIL
 | `/matt-writing-fragments` | Wskazówki źródłowe Matta Pococka: `writing-fragments`. |
 | `/matt-writing-shape` | Wskazówki źródłowe Matta Pococka: `writing-shape`. |
 | `/mobile-native` | Naprawianie mobilnego viewportu, dotyku i klawiatury w WWW. |
+| `/package-my-work` | Przygotowuj nagrania UI z czytelnym kadrem i wskaźnikami wejścia. |
 | `/plan-arbiter` | Porównywanie konkurencyjnych planów i wybieranie uzasadnionego kierunku. |
 | `/plow-ahead` | Autonomiczne kontynuowanie pracy mimo typowych niejasności. |
 | `/postgresql` | Projektowanie i obsługiwanie PostgreSQL na podstawie danych o obciążeniu. |

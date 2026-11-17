@@ -19,6 +19,7 @@ type: skill
 
 Przekształć ukończoną pracę w dowód wartości dla klienta. Przeczytaj [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md).
 
+
 ## Kontrakt [#contract]
 
 1. Ustal zakres; domyślnie obejmuje całą bieżącą gałąź lub PR od merge-base, w tym zmiany zatwierdzone, dodane do indeksu, niedodane do indeksu i istotne nieśledzone pliki.

@@ -45,12 +45,14 @@ type: skill
 | --- | --- |
 | ![Previous state](<hosted-before-image>) | ![New state](<hosted-after-image>) |
 
-[Try the prototype](<reviewer-accessible-url>) — <states/variants; access requirement>
+[Try the prototype](<reviewer-accessible-url>) - <states/variants; access requirement>
 
 <details>
 <summary>Agent-generated description</summary>
 
 - Lane / Review: <beneficiary, scope, closest-review paths and owner routing/gaps>
+UI packaging: <已发布录屏 URL，或按 package-my-work 明确说明非 UI 原因/所有者豁免>
+
 - Testing: <commands, observed results, real-entrypoint evidence and gaps>
 - Risk / Rollback: <failure modes, blast radius, recovery, detection and gaps>
 
@@ -70,44 +72,10 @@ UI 变更按照[视觉证据契约](https://github.com/malinskibeniamin/skills/b
 仅使用目标仓库已记录、获批准且受 SSO 保护的 Quick Site 或等效私有预览流程部署。查找该流程的命令和配置；[Shopify Quick](https://shopify.engineering/quick) 仅是灵感，并不提供基础设施访问权或通用部署命令。托管或 SSO 不可用时，保留可运行产物、说明缺口并使用截图；不得默默转为公开发布或新增托管、认证基础设施。核实审查者访问权限、链接目标状态和资源加载；声称受 SSO 保护前，确认退出登录后无法访问。明确标识模拟行为和未经验证的访问权限。将 URL 和产物绑定到审查版本；相关变更后刷新或标记过时。遵守[原型保留策略](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention)。
 
 
-## 各部分 [#sections]
+## 描述与风险 [#description-and-risk]
 
-开头一句是必需的首读摘要，不是引言；遵守 [PR 注意力预算](https://github.com/malinskibeniamin/skills/blob/main/shared/communication.md#match-the-artifact)。下方只保留补充细节。以下主题是作者指引，不是必需标题。按模板折叠代理详情；必需视觉媒体内嵌在开头及必要警告之后。使用 `GLOSSARY.md` 中的用户领域语言。
-
-### 摘要 [#summary]
-
-仅在有帮助时补充审阅重点，不要重复开头一句话。区分核心变更与生成或机械性文件；指出有用的审查入口，不逐一罗列文件。区分已观察到的结果和预期。
-
-将 PR 正文作为操作者的简明摘要：行为与价值、关键证据、领域决策、剩余风险与恢复方式，以及下一步操作；通过链接提供详情，方便恢复工作。单独的 HTML 或可视化回顾产物需要明确请求；仍须审查完整差异并提供必需的可视化证据。
-
-从 [SUMMARY-VIEWS.md](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md) 中选择最小视图。
-
-#### 决策变更 [#changed-decisions]
-
-如果相对已记录的计划或结果契约，范围、契约、验证方式或发布风险发生实质性变化，请说明这些偏离。复用现有笔记或意图图：
-先前选择 -> 新证据 -> 当前选择 -> 对审阅的影响。
-PR 内容应独立完整；省略空洞的变更历史，绝不要虚构先前计划或共识。
-
-会话摘录只提供可选上下文。仅使用相关、获准共享、已脱敏且审阅者可访问的摘录；否则提供安全、独立完整的理由说明。
-不要只为提供链接而扩大共享范围或执行权限。会话长度或交互轮数既不能证明正确性，也不能证明认真程度；请根据当前差异和执行证据核实相关说法。
-
-将可视化放在其支持的文字旁。只显示关键调用、文件、属性、状态和边界。
-
-省略无法增进理解的视图。
-
-### 证据 [#evidence]
-
-提供变更有效的具体证据。优先简述命令及结果；UI 变更按正文模板提供前后比较，其他变更仅在有帮助时附媒体。说明未执行的检查和不确定性；测试通过不代表人工审查或共识。
-
-仅在差异难以定位时使用[视觉标注](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)。广泛的 UI 工作可在有助于理解时使用 [UI 变更图](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#ui-change-maps)；避免重复截图和独立总结文件。
-
-对于后端、API、Protobuf、契约、架构、数据流或工作流变更，如果截图或视频未能解释受影响的行为，必须在开头一句之后内联加入[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)，并更新过时的维护图表。优先使用 Excalidraw；渲染或托管失败时使用内联 Mermaid。保留测试证据：图表用于解释，不证明正确性。[视觉证据契约](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)规定了适用范围内的例外和检查已发布正文的完成门禁。
-
-按 [commit-push-pr 视觉证据](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5)选择媒体。只有交互或动效需要，或用户要求时才录制真实流程；其他情况下静态图片和命令结果足够。证据的价值在于回答的问题，不在于媒体等级。测试结果应简洁、真实，不要重构或虚构。
-
-### 合并风险 [#merge-danger]
-
-说明回滚路径，并将变更归类为单向门或双向门。双向门容易退回；破坏性或难以逆转的决策属于单向门。
-
-列明受影响的用户、调用方、契约和可信的故障模式，包括共享使用方。
-在说明恢复方案时，同时按照交接标准评估错误检测；明确列出重要的故障可见性缺口，不要把测试通过或回滚计划当作错误检测的替代品。
+撰写或更新正文前，阅读[补充描述指南](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#supporting-description)，了解证据、决策变化和风险。
+PR 正文是供操作人员使用的精简摘要；额外总结产物必须由用户明确要求。
+符合条件的非 UI 契约需要[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)；UI 录屏仍须遵循 `package-my-work`。
+说明回滚路径，并判断变更是单向门还是双向门。
+列出受影响的用户、调用方、契约及可信故障模式，包括共享消费者。

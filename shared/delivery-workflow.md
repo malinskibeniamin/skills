@@ -75,7 +75,10 @@ Inspect -> verify -> repair -> repeat until current evidence passes.
 5. Dependency version upgrades verify lockfile, clean install/build, and every
    affected call site against current primary documentation. When the change claims measurable impact,
    repeat the same baseline/candidate scenario under [quantify-impact](../quantify-impact/SKILL.md).
-6. Bind verification and captures to the head SHA and base revision and scenario. Any relevant
+6. Every consumer/end-user-facing UI PR in every consuming repository requires
+   [packaged recording delivery](../package-my-work/PACKAGING.md#per-pr-delivery), including
+   mixed PRs and follow-up pushes. A screenshot table or backend diagram does not replace it.
+   Bind verification and captures to the head SHA and base revision and scenario. Any relevant
    edit or base movement invalidates affected receipts; replay those before claiming success.
 7. Leave [shared area context](repo-navigation.md#leave-shared-context) when the work reveals
    a missing or stale contract. Update its existing owner, not a parallel session diary.

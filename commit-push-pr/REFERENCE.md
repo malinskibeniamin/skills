@@ -70,8 +70,9 @@ reports separate from author self-review. Without delegation consent, review inl
 
 For customer-facing changes, inspect affected rendering with `/visual-review` at the
 risk-appropriate depth. Apply [proportionate verification](../shared/verifiability.md#proportionate-verification):
-a small label/style edit does not automatically need screenshots, video, new visual tests,
-or an evidence waiver. Preserve explicit project/user requirements; report real limits.
+every authored UI change requires [package-my-work](../package-my-work/SKILL.md) and a
+current polished clip. Extra screenshots/tests stay risk-based; report missing required
+capture access as blocked unless explicitly waived. Preserve other project/user requirements.
 
 A named review skill is guidance, not a separate approval gate. Self-review loads
 `/review` through author delivery; a standalone review request remains read-only.
@@ -152,8 +153,8 @@ The compact body follows `/pr`; its conditional evidence requirements still appl
 ## Frontend/customer-facing detection + screenshot table (Phase 5)
 
 Select evidence for the visual risk, not every visible pixel. Inspect affected rendered
-behavior and shared consumers; a routine label/style edit needs no automatic media set,
-new runner or snapshot. Preserve existing required checks and explicit user/project evidence.
+behavior and shared consumers. Every authored UI change needs one current packaged clip,
+not an automatic media set, new runner or snapshot. Preserve existing required checks.
 
 1. **Scope:** resolve the real PR base (parent for stacks) and inspect the complete diff,
    including staged/unstaged/relevant untracked work. Identify affected surfaces and states;
@@ -166,10 +167,10 @@ new runner or snapshot. Preserve existing required checks and explicit user/proj
    Use real revisions, matching fixtures/state/viewport/theme; wait for readiness, not sleeps.
    Reuse current captures. Reconstruct a needed base without disturbing the active worktree;
    never fabricate a before image or alter fixture data to manufacture a difference.
-4. **Record only when needed:** use video for requested demos or interaction/motion that
-   stills cannot adequately explain. Follow [review-video storytelling](VIDEO.md) and
-   `scripts/pr-video.sh` for real capture/composition. Do not automatically create a video,
-   GIF, flow file, annotated copy and HTML report for the same change.
+4. **Package UI changes:** load [package-my-work](../package-my-work/SKILL.md) for every
+   authored UI change. Reuse current real footage; follow [review-video storytelling](VIDEO.md)
+   for capture/composition and inline PR media. Non-UI recordings remain need/request-based.
+   Keep supporting GIFs, annotations and reports conditional; review-only stays read-only.
 5. **Diagram fallback:** backend/API/Protobuf/contract, architecture, data-flow or workflow
    changes without explanatory captures require a source-grounded architecture, sequence or
    flow diagram inline after the opening. Follow [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md):
@@ -190,18 +191,27 @@ branch. Never publish private evidence without authorization. Re-read the hosted
 local paths and localhost links are not reviewer-accessible proof. CLI readback proves
 publication, not playback. Do not launch a browser just to verify publication.
 
+Every consumer/end-user-facing UI PR in every consuming repository follows
+[per-PR packaging](../package-my-work/PACKAGING.md#per-pr-delivery), including mixed changes,
+component consumers and UI follow-ups. Refresh the current recording in the hosted body.
+Every PR declares `UI packaging: <hosted recording URL>`, a concrete non-UI reason with
+`UI packaging: not applicable - <reason>`, or an explicit owner waiver with
+`UI packaging: waived - <reason>; approval: <reference>`. Screenshots/diagrams are not
+substitutes for a UI recording. Scope, approval, current-head coverage and playback remain
+author/review responsibilities; the presence gate cannot certify them.
+
 Before completion, `lifecycle-stop.sh` reads the hosted body and runs
 `scripts/pr-visual-evidence.py`: include a hosted Markdown image/video, HTML image/video,
 standalone GitHub attachment URL, or a non-empty inline Mermaid diagram. For docs-only,
 formatting, mechanical or other changes with no behavior/contract/relationship delta,
-use `Visual evidence: not applicable - <concrete reason>`. A routine UI edit with no
-useful capture may use that exception; eligible backend changes may not. Exemptions
+use `Visual evidence: not applicable - <concrete reason>`. Authored UI changes require a packaged clip or an explicit owner waiver;
+they cannot use a routine-edit exception. Eligible backend changes still need their diagram. Exemptions
 are reviewable author assertions, not machine-verified scope. The gate checks presence,
 not diagram correctness, accessibility or coverage; author/review still owns those.
 Commit/push-only and genuine blocked/awaiting-decision endpoints retain their stops.
 
-Optional capture/annotation/hosting gaps do not block an otherwise verified change;
-required diagram explanations use inline Mermaid instead.
+Optional annotation/extra-media gaps do not block delivery; required UI clips remain
+blocked until captured or explicitly waived. Required diagrams use inline Mermaid fallback.
 A missing explicitly required check remains a named gap needing the owner's decision,
 not a fabricated PASS or permission to relax repository policy.
 
@@ -259,8 +269,9 @@ pipeline fixture, not a substitute for the changed application's own demo.
 Its panels exercise distinct success and recovery journeys, explicitly labeled as fixture
 paths rather than previous/new product versions. Matched cropping is checked against the
 original recordings; duplicated source takes must not be used to test a comparison.
-The canary also decodes the recorded cursor and active-control outline during typing,
-save, failure, and retry, so DOM-only overlays cannot count as captured evidence.
+The canary also decodes focus-only keyboard typing and the recorded mouse cursor/outline
+during save, failure and retry. Input probes cover touch movement/cancel and return to mouse;
+DOM-only overlays cannot replace the decoded capture checks.
 
 ```bash
 bun install --frozen-lockfile

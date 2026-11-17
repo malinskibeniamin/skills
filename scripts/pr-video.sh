@@ -8,7 +8,8 @@ set -euo pipefail
 #     pausing PR_VIDEO_STEP_MS (default 1500, minimum 1000) per step. The first `# ` line is the
 #     title; `## ` narration is required before each interaction, even without
 #     voiceover. Holds subtitles at least 2s, longer for more words, and writes
-#     <out.webm>.steps.json.
+#     <out.webm>.steps.json. PR_VIDEO_VIEWPORT=WIDTHxHEIGHT selects capture size
+#     (default 1280x720); a phone-sized viewport alone does not emulate touch.
 #     Needs a narrated interaction (including hover for tooltip changes). Run the
 #     same flow file against base and candidate. A failed step fails.
 #
@@ -121,6 +122,11 @@ record() {
     echo "pr-video: PR_VIDEO_STEP_MS must be an integer of at least 1000 milliseconds; keep captions and results readable." >&2
     return 2
   fi
+  local viewport=${PR_VIDEO_VIEWPORT:-1280x720}
+  if ! [[ "$viewport" =~ ^[1-9][0-9]*x[1-9][0-9]*$ ]]; then
+    echo "pr-video: PR_VIDEO_VIEWPORT must be positive WIDTHxHEIGHT dimensions (for example 1920x1080)." >&2
+    return 2
+  fi
   [ -s "$flow" ] || { echo "pr-video: missing flow file: $flow" >&2; exit 1; }
   if [ "$(grep -cE "$INTERACTION_RE" "$flow" || true)" -lt "$MIN_INTERACTIONS" ]; then
     echo "pr-video: $flow needs a narrated interaction (click, type, hover, press, scroll, open); wait alone does not show a flow" >&2
@@ -141,7 +147,7 @@ record() {
   export AGENT_BROWSER_DEFAULT_TIMEOUT=${PR_VIDEO_STEP_TIMEOUT_MS:-15000}
   trap 'agent-browser --session "'"$session"'" close >/dev/null 2>&1 || true' EXIT
   agent-browser --session "$session" open --init-script "$SCRIPT_DIR/pr-video-cursor.js" about:blank >/dev/null
-  agent-browser --session "$session" set viewport 1280 720 >/dev/null
+  agent-browser --session "$session" set viewport "${viewport%x*}" "${viewport#*x}" >/dev/null
   agent-browser --session "$session" record start "$out" "$url" >/dev/null
   local started title="" caption="" steps='[]'
   started=$(now)

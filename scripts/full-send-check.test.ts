@@ -64,7 +64,7 @@ function fixture(dependencyReview = false, gates = false) {
   const head = git("rev-parse", "HEAD");
   const snapshot = {
     pr: {
-      body: "```mermaid\nflowchart LR\n  Client-->API\n```",
+      body: "UI packaging: not applicable - headless fixture; no UI changes.\n\n```mermaid\nflowchart LR\n  Client-->API\n```",
       state: "OPEN",
       isDraft: false,
       isCrossRepository: false,

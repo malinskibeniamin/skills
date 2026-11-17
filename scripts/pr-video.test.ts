@@ -286,7 +286,7 @@ appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n")
   );
   const flow = join(root, "flow.txt");
   writeFileSync(flow, flowText);
-  const run = (step = "") =>
+  const run = (step = "", overrides: Record<string, string> = {}) =>
     Bun.spawnSync(
       [
         "bash",
@@ -302,6 +302,8 @@ appendFileSync(process.env.CALLS, JSON.stringify(process.argv.slice(2)) + "\\n")
           PATH: `${root}:${Bun.env.PATH}`,
           CALLS: join(root, "calls.jsonl"),
           PR_VIDEO_STEP_MS: step,
+          PR_VIDEO_VIEWPORT: "",
+          ...overrides,
         },
       },
     );
@@ -752,4 +754,30 @@ test("record gives a verified result one reading hold, without stacking idle pau
       .filter((args) => args[2] === "wait")
       .map((args) => args.slice(3)),
   ).toEqual([["1500"], ["2000"], ["--text", "Saved"], ["2000"]]);
+});
+
+test.each([
+  { viewport: "", size: ["1280", "720"] },
+  { viewport: "1920x1080", size: ["1920", "1080"] },
+  { viewport: "390x844", size: ["390", "844"] },
+  { viewport: "0x720", size: null },
+  { viewport: "1920:1080", size: null },
+  { viewport: "1920x1080 extra", size: null },
+])("record validates capture dimensions: $viewport", ({ viewport, size }) => {
+  const { run, commands } = recordFixture("# Save\n## Save.\nclick '#save'\n");
+  const result = run("", { PR_VIDEO_VIEWPORT: viewport });
+  if (size === null) {
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr.toString()).toContain("PR_VIDEO_VIEWPORT");
+    expect(commands()).toEqual([]);
+  } else {
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    expect(commands().find((args) => args[2] === "set")).toEqual([
+      expect.any(String),
+      expect.any(String),
+      "set",
+      "viewport",
+      ...size,
+    ]);
+  }
 });

@@ -582,6 +582,17 @@ their historical filenames.
 
 Nine focused skills from [Emil Kowalski](https://github.com/emilkowalski/skills) are adapted locally: `/animate`, `/remove-animations`, `/improve-animations`, `/animation-performance`, `/animation-vocabulary`, `/mobile-native`, `/break-ui`, `/ask-sonner`, and `/gestures`. Use `/remove-animations` -> `/improve-animations` -> `/animation-performance` to subtract unnecessary motion, plan improvements to what remains, then diagnose measured frame problems. `/gestures` adds direct tracking, rubber banding, release velocity, momentum and catch/cancel behavior. `/animate` owns implementation, diff review, opportunity searches and multi-element choreography; existing design/prototype workflows remain owners. Complete upstream sources are pinned offline with a repeatable importer, not fetched at runtime. The fixed library picker and native Swift/Expo skills are not installed. [Selection, pinned sources, compatibility changes, and refresh steps](shared/EMIL-SKILLS-CREDITS.md).
 
+`/package-my-work` automatically packages every authored UI change and requested clips with deliberate resolution, mouse/touch/keyboard
+cues, detail focus and readable pacing. It feeds `/demo` and UI PR recordings through
+the existing capture/rendering stack, reusing verification footage without expanding
+upload/publication permissions. [Per-PR delivery](package-my-work/PACKAGING.md#per-pr-delivery)
+covers every consumer/end-user-facing UI PR across consuming repositories, including mixed
+changes and follow-ups. The completion hook requires an explicit recording/non-UI/owner-waiver
+declaration; screenshots and diagrams alone cannot substitute. Missing required capture
+access needs a blocker or explicit waiver. This is a
+[local adaptation of Emil's posted brief](package-my-work/PROVENANCE.md), not his unpublished
+course skill or an expansion of the pinned public-source snapshot.
+
 [Emil's documentation](https://aiforui.dev/skills) adds before/after demos, example prompts,
 and pairings. Use our [motion triage](animate/SKILL.md#choose-the-motion-lane) for local
 command names and the distinction between waiting, dropped frames and gesture handoffs.

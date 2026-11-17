@@ -111,6 +111,7 @@
 | `/matt-writing-fragments` | Matt Pocock source: writing fragments guidance. |
 | `/matt-writing-shape` | Matt Pocock source: writing shape guidance. |
 | `/mobile-native` | Fix mobile web viewport, touch, and keyboard behavior. |
+| `/package-my-work` | Package UI recordings with clear framing and input cues. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |
 | `/postgresql` | Engineer and operate PostgreSQL from workload evidence. |

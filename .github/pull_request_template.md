@@ -20,6 +20,8 @@ visible here. Routine receipts belong below. Remove unused sections/comments. --
 <summary>Agent-generated description</summary>
 
 - Review: <!-- Beneficiary, scope/focus and owner routing; omit if none. -->
+UI packaging: <!-- Hosted recording URL; or not applicable - non-UI reason; or waived - reason; approval: actual owner reference. -->
+
 - Testing: <!-- Commands/results, failure/recovery evidence and gaps. -->
 - Risk / Rollback: <!-- Consumers, failure modes, rollout/recovery, detection and gaps. -->
 

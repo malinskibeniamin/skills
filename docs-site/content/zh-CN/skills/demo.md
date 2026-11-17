@@ -19,6 +19,7 @@ type: skill
 
 将已完成的工作转化为面向客户的成果证明。阅读 [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/demo/REFERENCE.md)。
 
+
 ## 约定 [#contract]
 
 1. 确定目标范围；默认覆盖当前整个分支或 PR 自 merge-base 以来的内容，包括已提交、已暂存、未暂存及相关的未跟踪工作。

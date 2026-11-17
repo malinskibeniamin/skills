@@ -16,6 +16,10 @@
 
 ## Storyboard
 
+For UI footage, load [package-my-work](../package-my-work/SKILL.md) for capture
+resolution, input-specific cues, detail focus and delivery-size playback checks. Reuse
+the same take and stack below; packaging does not expand publication permission.
+
 - For a short movie, aim for 20-45 seconds, 1920x1080, and 30 fps unless the target channel
   requires another format. For a walkthrough, split by customer outcome instead of imposing
   one total duration. Make either format understandable muted with captions and transcripts.

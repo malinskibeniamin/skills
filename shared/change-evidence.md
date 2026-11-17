@@ -7,7 +7,10 @@ Review collects and evaluates evidence without editing or publishing unless expl
 An author request owns implementation and publication only through its requested endpoint.
 Apply [proportionate verification](verifiability.md#proportionate-verification) before
 selecting owners. The table routes relevant expertise, not a checklist of artifacts:
-reuse current checks; create output only for a concrete risk, explanation or explicit requirement.
+reuse current checks; create output only for a concrete risk, explanation or explicit
+requirement. Every consumer/end-user UI PR in every consuming repository requires
+[per-PR packaging](../package-my-work/PACKAGING.md#per-pr-delivery), including mixed changes
+and follow-up pushes; reuse still-current captures across iterations.
 
 | Changed behavior / needed explanation | Owner and completion evidence |
 |---|---|
@@ -28,12 +31,14 @@ reuse current checks; create output only for a concrete risk, explanation or exp
 | Sonner toast setup, styling or lifecycle | [ask-sonner](../ask-sonner/SKILL.md): installed types and existing Toaster wrapper, one notification per operation, settled outcome and persistent error path; other toast libraries keep their existing owner |
 | Backend/API/Protobuf/frontend-backend contracts, architecture, data flow or workflow changes without explanatory screenshots/video | [excalidraw-diagram](../excalidraw-diagram/SKILL.md) and its [PR comparison](../excalidraw-diagram/PR-WORKFLOW.md): required source-grounded architecture/sequence/flow diagram; Excalidraw preferred, inline Mermaid fallback; captures do not waive unexplained non-UI contracts |
 | Logic, ownership or code shape needs a small explanation | [show-me](../show-me/SKILL.md): smallest useful diff sketch, tree or Mermaid; omit visuals that add no understanding |
+| Every authored UI change; requested polished demo or shareable recording | [package-my-work](../package-my-work/SKILL.md): capture resolution, correct input cues/movement, detail focus and delivery-size playback; reuse real footage and existing renderers; require a current polished clip before author delivery, with missing capture access reported as blocked or explicitly waived; review-only stays read-only |
 | PR creation/update | [pr](../pr/SKILL.md): value, reviewer focus, before/after evidence, risk and rollback; separate core changes from generated/mechanical files |
 
 Prefer a short inline result over an evidence file. For useful visual comparisons,
 capture the actual base/candidate without disturbing the active worktree. Reuse a focused
-screenshot pair; add annotations only when the delta is hard to find. Record video only
-when motion/interaction cannot be explained adequately by stills or it is requested.
+screenshot pair; add annotations only when the delta is hard to find. For authored UI changes,
+package a current real clip through `package-my-work`; for other work, record video only
+when motion/interaction needs it or it is requested.
 Then follow [review-video storytelling](../commit-push-pr/VIDEO.md) and the existing
 capture/hosting procedure. Use real product/terminal output, not synthetic proof.
 
@@ -53,4 +58,5 @@ fabricated proof. Excalidraw rendering failures use the required inline Mermaid 
 they do not waive eligible changes' visual explanation. Apply the [hosted-body evidence gate
 and scoped exceptions](../commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5).
 Other explicitly required project/user evidence keeps its blocker/waiver behavior.
-Optional media tooling gaps do not block an otherwise verified change.
+Optional media tooling gaps do not block non-UI changes. Missing required UI packaging
+uses the blocker/waiver rule above, not an automatic fallback to stills.

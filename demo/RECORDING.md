@@ -6,6 +6,10 @@ and commands; no capture, script, or cloud voice proves customer behavior on its
 
 ## Browser footage
 
+Use [packaging craft](../package-my-work/PACKAGING.md) for viewport versus recorded-pixel
+settings, mouse/touch/keyboard cues and focused crops. `PR_VIDEO_VIEWPORT=1920x1080`
+changes the adapter's capture viewport; phone dimensions alone do not emulate touch.
+
 Use the project's real-app verifier or scripted browser recorder. With this harness:
 
 ```bash

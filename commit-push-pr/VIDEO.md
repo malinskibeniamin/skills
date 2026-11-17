@@ -4,6 +4,11 @@ Use for real CLI, UI, form, button, or hover recordings. The reviewer should see
 what someone does, what changes, and why that result matters. A moving cursor,
 animated caption, or architecture slide alone is not evidence of product behavior.
 
+For every authored UI change or requested polished clip, load [package-my-work](../package-my-work/SKILL.md)
+for resolution, input-specific cues and detail focus. Reuse its real take; this document
+still owns comparison, subtitles, activity gates and PR publication. Reuse current verification footage; refresh it when the UI changes. Missing required
+capture access stays blocked unless explicitly waived; review-only work stays read-only.
+
 ## Choose the story before recording
 
 Write a few beats: starting state -> meaningful action -> visible result. Show an
