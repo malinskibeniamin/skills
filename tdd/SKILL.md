@@ -13,7 +13,7 @@ For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verificat
 Apply [proportionate verification](../shared/verifiability.md#proportionate-verification).
 Reuse coverage; RED -> GREEN -> REFACTOR only for credible uncovered regressions.
 Routine edits: focused checks, not new tests. Coverage is never a target.
-Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
+Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dependencies).
 
 ## Test seams and anti-patterns
 
@@ -31,7 +31,7 @@ Load skills per [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#lo
 - T3/Effect tests: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context) (`tdd`).
 - New/changed tests: smallest failing contract; apply the [authoring gate](../test-audit/SKILL.md#authoring-gate).
 - For inference/assignability/overload/displayed-type contracts, load [test development](../t3code-skills/test-development/SKILL.md).
-- High-cardinality/state-sequence invariants: [PROPERTY-BASED-TESTING.md](PROPERTY-BASED-TESTING.md); require an independent oracle and replay.
+- Invariants: [property](PROPERTY-BASED-TESTING.md); rewrites: [differential](DIFFERENTIAL-TESTING.md). Require an independent oracle and replay.
 - Browser resource lifetimes: repeat round trips per [SOAK-TESTING.md](../e2e-testing/SOAK-TESTING.md); fresh contexts hide accumulation.
 - Load "read-the-damn-docs" for external contracts; [tests.md](tests.md) for unclear shape.
 

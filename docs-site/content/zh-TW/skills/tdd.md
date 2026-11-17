@@ -39,6 +39,8 @@ type: skill
 - **原始文字替代測試：**刪除會掃描實作、CSS、標記或設定，並將權杖或正規表示式視為執行階段行為證明的測試。若行為確實重要，請改為在公開接縫進行測試；若是語法，請使用靜態分析。只有在公開輸出時，才保留內容斷言。
 - **垂直切片：**使用垂直切片：每次完成一個 RED 測試與 GREEN 實作；批次撰寫的測試會編碼想像中的行為。
 
+- 重寫或遷移時，保持行為一致並閱讀 [DIFFERENTIAL-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/DIFFERENTIAL-TESTING.md)；固定舊系統這個比較依據，並明列獲准的差異。
+
 ## 工作流程 [#workflow]
 
 ### 契約 [#contract]

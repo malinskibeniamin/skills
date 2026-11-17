@@ -85,6 +85,14 @@ Zachowaj test, gdy niezależnie egzekwuje kontrakt dotyczący publicznego API, S
 
 Statyczny charakter lub długi czas działania nie są powodem do usunięcia. Test przypominający implementację nadal może stanowić niezależny kontrakt; przed usunięciem udowodnij, że jest inaczej.
 
+## Niestabilne kontrole [#flaky-checks]
+
+Przed naprawą, kwarantanną lub usunięciem niestabilnej kontroli przeczytaj [reguły diagnostyki i usuwania](https://github.com/malinskibeniamin/skills/blob/main/test-audit/REFERENCE.md#flaky-checks).
+
+Ponowne uruchomienie diagnostyczne sprawdza podaną przyczynę; powtarzanie aż do zielonego wyniku nie jest weryfikacją. Zachowaj pierwszy błąd, kontroluj stan, czas i losowość w istniejących punktach styku, zastąp uśpienia obserwowalnymi warunkami i po naprawie odtwórz przebieg z czystego stanu. Nie pomijaj po cichu testów, nie osłabiaj asercji ani nie dodawaj uśpień czy prób, by zadeklarować sukces.
+
+Jeśli przyczyna pozostaje nieznana, zgłoś kontrolę i niepokryty kontrakt zgodnie z [limitem napraw](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#choose-the-evidence-loop). Kwarantanna lub usunięcie wymaga polityki właściciela repozytorium i poniższych dowodów dla kandydata; sama niestabilność nie uzasadnia usunięcia rzeczywistej regresji. Luka pokrycia pozostaje jawna.
+
 ## Dowody dotyczące kandydata [#candidate-evidence]
 
 Przed edycją zapisz wszystkie poniższe informacje. Brak którejkolwiek oznacza, że kandydat nie jest gotowy do usunięcia:

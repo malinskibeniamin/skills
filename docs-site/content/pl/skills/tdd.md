@@ -43,6 +43,8 @@ Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jaki
 - **Przybliżenia oparte na tekście źródłowym:** usuń testy, które przeszukują implementację, CSS, znaczniki lub konfigurację pod kątem tokenów lub wyrażeń regularnych i traktują je jako dowód zachowania w czasie działania. Zastąp je testami publicznego punktu styku, gdy zachowanie ma znaczenie; użyj analizy statycznej dla składni. Zachowaj asercje treści tylko dla publicznych wyników.
 - **Przekroje pionowe:** stosuj przekroje pionowe: za każdym razem jeden test RED i implementacja GREEN; testy tworzone zbiorczo utrwalają wyobrażone zachowanie.
 
+- Przepisanie lub migracja z zachowaniem dotychczasowego działania: [DIFFERENTIAL-TESTING.md](https://github.com/malinskibeniamin/skills/blob/main/tdd/DIFFERENTIAL-TESTING.md); przypnij starą implementację wzorcową i jawnie zatwierdzone różnice.
+
 ## Przebieg pracy [#workflow]
 
 ### Kontrakt [#contract]

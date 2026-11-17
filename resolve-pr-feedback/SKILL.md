@@ -79,6 +79,8 @@ Report dispositions, threads and CI.
 - Human feedback: NO iteration cap; disposition every thread before handoff.
 - Automatic repair: deduplicate unchanged events; new findings do not exhaust a lifetime
   feedback budget. Deduplicate blocked CI without disabling later feedback/base upkeep.
+  Apply the [same-failure repair limit](../shared/verifiability.md#choose-the-evidence-loop);
+  escalating an unresolved check preserves its thread, not a disposition or pass.
   Runner/ownership failures stay visible, not complete.
 - After full review, inspect repair diff + prior findings; expand for changed assumptions.
   Deduplicate root causes; resolve existing threads, not reposts.

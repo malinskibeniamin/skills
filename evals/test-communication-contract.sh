@@ -62,7 +62,7 @@ assert "\n" not in opening and "human-authored line about the change and why" in
 assert "explicitly labeled agent draft" in opening
 assert "../pr/SKILL.md#body-template" in publication
 assert github.index("One line: what changes and why") < github.index("| Before | After |")
-for prompt in (body, github):
+def validate(prompt):
     visible = re.sub(r"<!--.*?-->", "", prompt, flags=re.S)
     assert visible.count("<details>") == visible.count("</details>") == 1
     before, detail = visible.split("<details>", 1)
@@ -72,6 +72,22 @@ for prompt in (body, github):
     assert 1 <= sum(line.startswith("- ") for line in detail.splitlines()) <= 3
     assert not any(line.startswith("- ") for line in before.splitlines())
     assert not any(line.startswith("#") for line in visible.splitlines())
+
+for prompt in (body, github):
+    validate(prompt)
+
+# Known-bad public prompt controls must fail without weakening main's packaging rules.
+for bad in (
+    body.replace("<details>", "<details>\n| Before | After |", 1).replace("| Before | After |", "", 1),
+    body.replace("UI packaging:", "Missing packaging:", 1),
+    body.replace("<details>", "- escaped receipt\n\n<details>", 1),
+    body + "\n<details>duplicate receipt</details>",
+):
+    try:
+        validate(bad)
+    except (AssertionError, ValueError):
+        continue
+    raise AssertionError("PR template guard accepted a known-bad control")
 assert "SUMMARY-VIEWS.md#supporting-description" in canonical
 PY_CHECK
 then

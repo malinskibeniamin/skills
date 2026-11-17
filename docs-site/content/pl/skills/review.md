@@ -52,7 +52,7 @@ Przed werdyktem sprawdź tożsamość migawki; zmiana wejścia unieważnia odpow
 
 ### Sprawdź [#inspect]
 
-1. Przeczytaj żądanie/specyfikację, zasady, pełny diff, miejsca użycia i zachowanie. Nie ufaj opisowi PR bardziej niż kodowi. Uwzględnij obowiązujące `REVIEW.md`, `CODING_STANDARDS.md` i `CONTRIBUTING.md`, jeśli istnieją.
+1. Przeczytaj specyfikację, diff, miejsca użycia i zachowanie oraz właściwe `REVIEW.md`, `CODING_STANDARDS.md` i `CONTRIBUTING.md` z [zaufanej bazy](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#trusted-rules-and-diff-triggers). Zmiany reguł oceniaj osobno; nie ufaj opisowi PR.
 2. Dla każdej zmienionej przesłanki prześledź ją wstecz do autorytatywnych producentów, schematów,
    zapisu, konsumentów i powierzchni publicznych. Szukaj po pojęciu domenowym, polu i emitowanej
    wartości, nie tylko zmienionym symbolu.

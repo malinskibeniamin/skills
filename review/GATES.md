@@ -10,6 +10,12 @@ One owner follows **plan -> review -> record -> check -> publish within the endp
 The CLI prepares prompts and verifies receipts. It does not call models, dispatch agents,
 run tests, grant approval, change repository protection, or merge.
 
+Follow [trusted rules](OPERATING-MODEL.md#trusted-rules-and-diff-triggers) when judging
+policy changes. This CLI fingerprints local guidance and definitions; it does not load an
+immutable base-policy bundle or prevent a candidate from editing its own checks. A current
+receipt proves neither independent approval nor tamper-proof enforcement. Review changed
+checks against trusted base rules and known-bad/valid controls separately.
+
 ## Plan the current candidate
 
 From the consuming checkout, resolve the harness root from the loaded skill path and

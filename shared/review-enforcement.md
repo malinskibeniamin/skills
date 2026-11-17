@@ -48,6 +48,18 @@ credentials require explicit scope. When the owner requests protection setup:
 Reconcile changes only within the requested policy scope. Repeated review failures should
 improve the owning rule, skill or check rather than accumulate repository exceptions.
 
+## Introducing a new gate
+
+Only when gate implementation/setup is explicitly in scope, start in **observe** mode:
+record candidate revision, checks run (including `none` and its reason), would-block reason
+and owner disposition without blocking. Distinguish `off`, `observe` and `enforce` in the
+owning configuration; guidance alone implements none of them. Examine false positives
+against valid work and known-bad cases before an owner-authorized switch to enforcement.
+Keep the judging rules/check implementation on a trusted revision the candidate cannot
+replace. Any owner-approved bypass must be explicit and auditable, never a passing check;
+repeated attempts must not silently bypass an existing security or hosted requirement.
+This policy installs no gate, commit stamp, bypass or recurring collection.
+
 ## Readiness contract
 
 This read-only, conservative checkpoint diagnoses protected-consumer readiness, not delivery

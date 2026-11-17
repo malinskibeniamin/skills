@@ -5,21 +5,24 @@ description: Audit a project-local verifier and feature map against source and l
 
 For behavior/verifier checks, read [Poteto](../shared/POTETO-NATIVE.md#verification).
 
-Cover each mapped feature in source and live behavior. Return **clean**, **changed** or **blocked**.
+Cover every feature in source/live behavior. Return **clean**, **changed** or **blocked**.
 
 ## Fence
 
-Edit only the verification skill directory: its `SKILL.md`, feature map, and owned helpers. Never edit product code. A behavior the app no longer provides is documentation drift or a product regression; repair the former and report the latter.
+Edit only the verification skill directory: its `SKILL.md`, feature map, and owned helpers. Never edit product code. Repair doc drift; report product regressions.
 
 ## Pass
 
-1. **Locate.** Resolve the project-local verifier by capability, not a `verify-*` prefix. T3 Code's app/mobile skills follow [native verification](../shared/T3CODE-SKILLS.md#native-verification). Use actual launch, readiness, drive, evidence and cleanup instructions. Uncovered flows route to `/create-verification-skill`. Map each affected surface to its owner; ask only when ownership remains ambiguous.
+1. **Locate.** Resolve the project-local verifier by capability, not a `verify-*` prefix. T3 Code's app/mobile skills follow [native verification](../shared/T3CODE-SKILLS.md#native-verification). Use its launch, readiness, drive, evidence and cleanup. Uncovered flows route to `/create-verification-skill`. Map surfaces to owners; ask if ambiguous.
 2. **Reconcile the index.** Compare `features/README.md` with sibling feature files. Remove dead entries and add missing concrete user surfaces found in routes, commands, menus, or public docs.
-3. **Source coverage.** For every feature, trace current entrypoints, stable handles, prerequisites, and observable outcomes. Record likely drift with source pointers and one live recipe. Inspect sequentially unless the user explicitly authorizes delegation.
+3. **Source coverage.** For every feature, trace current entrypoints, stable handles, prerequisites, and observable outcomes. Record drift with source and live recipes. Inspect sequentially unless delegation is authorized.
 4. **Live coverage.** Run the verifier's doctor, then drive every feature at least once. Use one isolated long-lived instance for UI/services or a fresh isolated session per short-lived CLI, as the verifier specifies. Capture evidence before cleanup.
 5. **Recover safely.** Check [replay packets](../shared/verification-replay.md) for fixture/schema drift and feature fidelity. After a surprising drive, doctor again; when doctor cannot see a wedged state, reset or relaunch. Clean failed-iteration residue without deleting evidence. Re-run every harness repair live.
 6. **Triage.** Wrong user description is doc drift. Working behavior the harness cannot drive is a harness gap. Broken product behavior is a product gap: report it and leave product code unchanged.
-7. **Finish.** Tear down what the run created and confirm evidence remains. Re-read changed verifier files. Deliver through the caller's requested endpoint.
+7. **Finish.** Tear down what the run created and keep evidence. Re-read verifier changes. Deliver through the caller's requested endpoint.
+
+Compare cold-start/journey duration and repeatability against baseline. Diagnose flakes through [test audit](../test-audit/SKILL.md#flaky-checks);
+prune obsolete/duplicate recipes only after identifying remaining contract ownership.
 
 ## Receipt
 

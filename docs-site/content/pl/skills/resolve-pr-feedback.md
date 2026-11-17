@@ -93,6 +93,8 @@ Podaj rozstrzygnięcia, stan wątków i CI.
 
 ## Polityka iteracji [#iteration-policy]
 
+Stosuj [limit napraw tego samego błędu](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#choose-the-evidence-loop); eskalacja nierozwiązanej kontroli zachowuje jej wątek, nie jest rozstrzygnięciem ani wynikiem pozytywnym.
+
 - Samoprzegląd AI: zakończ po czystym wyniku; po dwóch nieudanych przebiegach
   [ponownie oceń podejście i kontekst](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md#make-review-converge).
 - Uwagi człowieka: BEZ limitu iteracji; rozstrzygnij każdy wątek przed przekazaniem.
