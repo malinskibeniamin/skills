@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser WebMCP Gen"
+  short_description: "Validate browser WebMCP tools through the existing owner"

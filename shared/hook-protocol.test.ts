@@ -115,6 +115,8 @@ describe("emit: stream/exit contract per tier", () => {
         "--noEmit",
         "--ignoreConfig",
         "--strict",
+        // Match tsconfig: validate our fixture, not dependency declarations.
+        "--skipLibCheck",
         "--module",
         "Preserve",
         "--moduleDetection",

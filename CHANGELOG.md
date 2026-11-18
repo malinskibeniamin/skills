@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Vendor the complete agent-browser skill suite with pinned Apache-2.0 sources,
+  local Claude/Codex adapters and reproducible refresh checks. Interweave
+  `/modern-web-guidance` with UI implementation, accessibility, motion, themes
+  and UX performance; require per-rule real-browser evidence while preserving
+  existing owners and opt-in browser/cloud setup.
+
 - Vendor Matt Pocock's draft `/constrain` at `f4413d9e` without replacing the
   animatic snapshot. Register explicit-only Claude/Codex entrypoints and route
   discovery, retro and harness improvements through a host-safe owner. Preserve

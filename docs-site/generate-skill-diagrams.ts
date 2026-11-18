@@ -61,6 +61,24 @@ const PALETTES: Palette[] = [
   { fill: "#6b3232", stroke: "#ff8787" },
 ];
 const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
+  "agent-browser": {
+    kind: "pipeline",
+    nodes: [
+      "Check host + installed CLI guidance",
+      "Open an isolated task session",
+      "Snapshot, act, verify observed state",
+      "Close only task-owned resources",
+    ],
+  },
+  "modern-web-guidance": {
+    kind: "feedback-loop",
+    nodes: [
+      "Retrieve relevant Chrome guide IDs",
+      "Baseline affected browser behavior",
+      "Apply rules within project constraints",
+      "Replay each rule; report evidence + gaps",
+    ],
+  },
   constrain: {
     kind: "pipeline",
     nodes: [

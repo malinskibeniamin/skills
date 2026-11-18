@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser"
+  short_description: "Automate isolated browser tasks with version-matched guidance"

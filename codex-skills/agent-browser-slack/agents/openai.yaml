@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser Slack"
+  short_description: "Automate scoped Slack tasks in an authorized browser"

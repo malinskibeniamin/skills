@@ -1,5 +1,9 @@
 # Build state-aware WebMCP tools
 
+For agent-browser registration/invocation checks, load
+[agent-browser WebMCP generation](../../agent-browser-skills/agent-browser-webmcp-gen/SKILL.md).
+Keep this owner active; the suite adds probes, not another authoring workflow.
+
 Read this before the internal Chrome Labs build/audit workflow. Local host,
 authorization, installed-version and type-safety rules override source examples.
 The [source notes](sources.md) distinguish checked implementations from proposals.

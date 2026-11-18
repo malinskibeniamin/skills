@@ -26,6 +26,15 @@ Aby celowo zawęzić dostępne API lub graf importów, poleć `/constrain`; uruc
 | Umiejętność | Zastosowanie |
 |---|---|
 | `/accessibility` | Tworzenie dostępnych interakcji i komponentów React. |
+| `/agent-browser` | Automatyzuj izolowane zadania przeglądarki zgodnie z wersją CLI. |
+| `/agent-browser-agentcore` | Używaj jawnie wskazanych sesji przeglądarki AWS AgentCore. |
+| `/agent-browser-derive-client` | Twórz klientów API z autoryzowanego ruchu przeglądarki. |
+| `/agent-browser-dogfood` | Eksploruj aplikacje WWW przez obecnego właściciela dogfood. |
+| `/agent-browser-electron` | Automatyzuj jawnie autoryzowane, izolowane aplikacje Electron. |
+| `/agent-browser-slack` | Automatyzuj zadania Slack w autoryzowanej przeglądarce. |
+| `/agent-browser-vercel` | Sprawdzaj chronione podglądy Vercel z ograniczonymi poświadczeniami. |
+| `/agent-browser-vercel-sandbox` | Używaj jawnie wskazanych środowisk Vercel Sandbox. |
+| `/agent-browser-webmcp-gen` | Weryfikuj narzędzia WebMCP przez obecnego właściciela. |
 | `/agent-watchdog` | Audytowanie i poprawianie pracy innego agenta programistycznego. |
 | `/aip` | Projektowanie interfejsów API zasobów protobuf w stylu Google AIP. |
 | `/animate` | Tworzenie i ocena celowego ruchu w interfejsie WWW. |
@@ -87,6 +96,7 @@ Aby celowo zawęzić dostępne API lub graf importów, poleć `/constrain`; uruc
 | `/build-design` | Wdrażanie dostarczonego projektu z istniejącymi komponentami. |
 | `/explain-interface` | Objaśnianie interfejsu lub efektu na podstawie obserwacji. |
 | `/interface-review` | Przegląd regresji interfejsu w podanej zmianie. |
+| `/modern-web-guidance` | Stosuj wytyczne Chrome i sprawdzaj zachowanie w przeglądarce. |
 | `/state-machine` | Budowanie wyraźnie zamówionego warsztatu stanów komponentu. |
 | `/teardown` | Tworzenie ilustracji technicznych opartych na dowodach. |
 | `/variant` | Eksplorowanie wyraźnie zamówionych wariantów projektu komponentu. |

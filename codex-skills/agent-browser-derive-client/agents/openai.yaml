@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser Derive Client"
+  short_description: "Derive scoped API clients from authorized browser traffic"

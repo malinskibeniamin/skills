@@ -116,6 +116,12 @@ for path in markdown_paths:
             # Pinned upstream example describes a consumer's layout, not a bundled resource.
             if path == repo / "vendor/mattpocock/upstream/skills/in-progress/setup-ts-deep-modules/SKILL.md" and clean == "./src/packages/README.md":
                 continue
+            # These four upstream report-template paths are future consumer captures.
+            if path == repo / "vendor/agent-browser/skill-data/dogfood/templates/dogfood-report-template.md" and clean in {
+                "screenshots/issue-001-step-1.png", "screenshots/issue-001-step-2.png",
+                "screenshots/issue-001-step-3.png", "screenshots/issue-001-result.png",
+            }:
+                continue
             if (path.parent / clean).exists() or (repo / clean).exists():
                 continue
             if path.is_relative_to(repo / "docs-site/content") and clean.startswith("/"):

@@ -147,7 +147,14 @@ SHORT_DESCRIPTIONS = {
     "writing-shape": "Shape raw Markdown into a coherent article draft",
 }
 
-# Full Poteto inventory feeds both registration adapters and Codex metadata.
+# Vendored inventories feed registration adapters and Codex metadata.
+browser_lock = repo / "vendor/agent-browser.lock.json"
+if browser_lock.exists():
+    SHORT_DESCRIPTIONS.update({
+        skill["name"]: skill["short_description"]
+        for skill in json.loads(browser_lock.read_text())["skills"]
+    })
+
 poteto_lock = repo / "vendor/pstack.lock.json"
 if poteto_lock.exists():
     SHORT_DESCRIPTIONS.update({
