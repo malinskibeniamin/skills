@@ -7,6 +7,7 @@ import { join, resolve } from "node:path";
 import { chromium, expect, type Locator, type Page } from "@playwright/test";
 import { z } from "zod";
 import { verifyCursorInput } from "./pr-video-cursor-canary";
+import { recordedCheckpoint, recordedClick } from "./pr-video-checkpoint";
 import { verifyDemoMedia } from "./demo-media-canary";
 
 const root = resolve(import.meta.dir, "..");
@@ -50,7 +51,18 @@ const server = Bun.serve({
 });
 
 type Box = { x: number; y: number; width: number; height: number };
-type Sample = { state: string; at: number; target: Box; pulse?: boolean };
+type Checkpoint = {
+  state: string;
+  target: Box;
+  reference: string;
+  pulse?: boolean;
+  caption?: string;
+};
+type Sample = Checkpoint & {
+  at: number;
+  similarity?: number;
+  pulsePixels?: number;
+};
 const focus = { x: 184, y: 128, width: 912, height: 392 };
 const samples: Record<string, Sample[]> = {};
 const browser = await chromium.launch().catch((cause: unknown) => {
@@ -59,6 +71,7 @@ const browser = await chromium.launch().catch((cause: unknown) => {
 });
 try {
   await verifyCursorInput(browser, root);
+  await verifyCheckpointSelection();
   await verifyIdleRejection();
   await verifyDemoMedia(root, out, browser);
   const shortTakePacing = await verifyShortTakePacing();
@@ -72,21 +85,20 @@ try {
         path: join(root, "scripts/pr-video-cursor.js"),
       });
       const page = await context.newPage();
-      const started = performance.now();
-      const steps = [{ at: 0, caption: "We enter a task name." }];
-      const states: Sample[] = [];
-      const mark = (caption: string) =>
-        steps.push({ at: (performance.now() - started) / 1000, caption });
-      const clickSample = async (state: string) => {
+      const states: Checkpoint[] = [];
+      const clickSample = async (state: string, caption: string) => {
         const target = await page
           .getByRole("button", { name: "Save task" })
           .boundingBox();
         assert(target, `${state}: clicked control missing`);
+        const reference = join(out, `${side}-${state}-click-ui.png`);
+        await page.screenshot({ path: reference });
         states.push({
           state: `${state}-click`,
-          at: (performance.now() - started) / 1000 + 0.2,
           target,
           pulse: true,
+          reference,
+          caption,
         });
       };
       const capture = async (
@@ -97,12 +109,9 @@ try {
         await Bun.sleep(3000);
         const target = await control.boundingBox();
         assert(target, `${state}: action target missing`);
-        states.push({
-          state,
-          at: (performance.now() - started) / 1000 - 0.3,
-          target,
-        });
-        await page.screenshot({ path: join(out, `${side}-${state}-ui.png`) });
+        const reference = join(out, `${side}-${state}-ui.png`);
+        await page.screenshot({ path: reference });
+        states.push({ state, target, reference });
       };
       await page.goto(server.url.href);
       await page
@@ -110,25 +119,22 @@ try {
         .pressSequentially("Review demo", { delay: 90 });
       await capture("typing", page.getByLabel("Task name"));
       if (side === "before") {
-        mark("Save confirms the task.");
         await page.getByRole("button", { name: "Save task" }).click();
-        await clickSample("success");
+        await clickSample("success", "Save confirms the task.");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("success");
       } else {
-        mark("Save fails; the draft stays intact.");
         await page.getByLabel("Simulate unavailable service").check();
         await page.getByRole("button", { name: "Save task" }).click();
-        await clickSample("error");
+        await clickSample("error", "Save fails; the draft stays intact.");
         await expect(page.getByRole("alert")).toHaveText(
           "Service unavailable. Try again.",
         );
         await expect(page.getByLabel("Task name")).toHaveValue("Review demo");
         await capture("error");
-        mark("Retry saves the task.");
         await page.getByLabel("Simulate unavailable service").uncheck();
         await page.getByRole("button", { name: "Save task" }).click();
-        await clickSample("recovery");
+        await clickSample("recovery", "Retry saves the task.");
         await expect(page.getByRole("status")).toHaveText("Saved: Review demo");
         await capture("recovery");
       }
@@ -137,11 +143,49 @@ try {
       await context.close();
       await video.saveAs(join(out, `${side}.webm`));
       await video.delete();
+      const resolved: Sample[] = [];
+      const steps = [{ at: 0, caption: "We enter a task name." }];
+      const stable = new Map<Checkpoint, { at: number; similarity: number }>();
+      for (const checkpoint of states) {
+        if (!checkpoint.pulse)
+          stable.set(
+            checkpoint,
+            await recordedCheckpoint(
+              join(out, `${side}.webm`),
+              checkpoint.reference,
+            ),
+          );
+      }
+      for (const [index, checkpoint] of states.entries()) {
+        const next = states[index + 1];
+        // Locate the real pulse between stable states. A transient "Saving"
+        // screenshot need not exist in video, and host time cannot identify it.
+        const frame =
+          stable.get(checkpoint) ??
+          (await recordedClick(
+            join(out, `${side}.webm`),
+            checkpoint.target,
+            resolved.at(-1)?.at ?? -1,
+            (next ? stable.get(next)?.at : undefined) ?? Infinity,
+          ));
+        assert(
+          frame.at > (resolved.at(-1)?.at ?? -1),
+          `${side}/${checkpoint.state}: recorded states out of order`,
+        );
+        resolved.push({ ...checkpoint, ...frame });
+        if (checkpoint.caption)
+          // The comparison template fades captions in over 0.25s. Start the
+          // narration before the sampled click, not exactly on its zero-opacity frame.
+          steps.push({
+            at: Math.max(0, frame.at - 0.3),
+            caption: checkpoint.caption,
+          });
+      }
       await Bun.write(
         join(out, `${side}.webm.steps.json`),
         JSON.stringify({ title: "Save, fail, and recover", steps }),
       );
-      samples[side] = states;
+      samples[side] = resolved;
     } finally {
       await context.close();
     }
@@ -262,7 +306,14 @@ try {
   for (const [side, states] of Object.entries(samples)) {
     const duration = durations[side === "before" ? 0 : 1];
     assert(duration && duration > 0, `${side}: recording duration missing`);
-    for (const { state, at, target, pulse } of states) {
+    for (const {
+      state,
+      at,
+      target,
+      pulse,
+      similarity,
+      pulsePixels,
+    } of states) {
       const renderedAt = at * Math.max(1, 5 / duration);
       const frame = join(out, `${side}-${state}-frame.png`);
       const source = join(out, `${side}-${state}-source.png`);
@@ -302,7 +353,15 @@ try {
           metric.clickRing > 15,
           `${side}/${state}: readable click ring missing (${metric.clickRing})`,
         );
-      metrics.push({ side, state, at, renderedAt, ...metric });
+      metrics.push({
+        side,
+        state,
+        at,
+        renderedAt,
+        sourceSimilarity: similarity,
+        sourcePulsePixels: pulsePixels,
+        ...metric,
+      });
     }
   }
   await page.close();
@@ -331,6 +390,67 @@ try {
   } finally {
     server.stop(true);
   }
+}
+
+async function verifyCheckpointSelection() {
+  const video = join(out, "checkpoint-clock.mp4");
+  const reference = join(out, "checkpoint-red.png");
+  await command([
+    "ffmpeg",
+    "-v",
+    "error",
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    "color=blue:size=160x90:rate=25:duration=4,drawbox=color=red:t=fill:enable='between(t,1,1.96)+gte(t,3)'",
+    video,
+  ]);
+  await command([
+    "ffmpeg",
+    "-v",
+    "error",
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    "color=red:size=160x90",
+    "-frames:v",
+    "1",
+    reference,
+  ]);
+  const first = await recordedCheckpoint(video, reference);
+  assert(
+    first.at >= 1 && first.at < 2,
+    "Match the recorded state, not host time zero",
+  );
+  const target = { x: 60, y: 20, width: 80, height: 40 };
+  const later = await recordedClick(video, target, 2, 4);
+  assert(
+    later.at >= 3 && later.at < 4,
+    "Do not reuse an earlier identical control/state",
+  );
+  await assert.rejects(
+    recordedClick(video, target, 0, 1),
+    /click pulse not found/,
+  );
+  await command([
+    "ffmpeg",
+    "-v",
+    "error",
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    "color=black:size=160x90",
+    "-frames:v",
+    "1",
+    reference,
+  ]);
+  await assert.rejects(
+    recordedCheckpoint(video, reference),
+    /UI checkpoint not found/,
+  );
 }
 
 async function verifyIdleRejection() {
