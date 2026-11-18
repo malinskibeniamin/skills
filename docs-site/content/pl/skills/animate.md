@@ -49,6 +49,8 @@ zanim zalecisz usunięcie ruchu, skrócenie czasu lub poprawkę wydajności.
 | „Co powinno się tu animować, a co nie?” / „oceń ten popover” | Poniższy tryb przeglądu/okazji tego skilla; ustalenia, nie wdrożenie |
 | „Jak nazywa się efekt, gdy popover rozwija się od przycisku?” | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/main/animation-vocabulary/SKILL.md); samo nazwanie nie upoważnia do implementacji |
 
+Przy ograniczaniu ruchu lub pracy z warstwą najwyższą wczytaj [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md) przed wyborem API. Zachowaj tokeny projektu i reguły celu oraz przerywania animacji tego właściciela; sprawdź obie preferencje.
+
 ## Kolejność decyzji [#decision-sequence]
 
 1. Sprawdź komponent, istniejące tokeny ruchu, zainstalowaną bibliotekę i wersję, sposoby obsługi wejścia

@@ -32,6 +32,8 @@ navigation/actions, visible assertions and console/network inspection after the 
 
 Honor user/host browser requirements and the project verifier. Use agent-browser by default
 for interactive automation instead of playwright-cli or browser MCP when choice is permitted.
+When agent-browser is selected, load the [browser skill](../agent-browser/SKILL.md)
+for isolated sessions, version-matched commands and task-specific suite routing.
 Use another tool only for an explicit user/host requirement or a demonstrated missing
 capability; record the fallback tool and reason in verification evidence. Missing setup is
 a visible blocker, not permission to silently switch tools.

@@ -30,6 +30,10 @@ before prescribing removal, shorter durations or a performance fix.
 | "What should and shouldn't animate here?" / "review this popover" | This skill's review/opportunity mode below; findings, not implementation |
 | "What's it called when a popover grows from its button?" | [animation-vocabulary](../animation-vocabulary/SKILL.md); naming alone authorizes no build |
 
+For reduced-motion or top-layer web-platform work, load
+[modern web guidance](../modern-web-guidance/SKILL.md) before choosing APIs.
+Keep project tokens and this owner's purpose/interruption rules; verify both preferences.
+
 ## Decision sequence
 
 1. Inspect the component, existing motion tokens, installed library/version, input paths,

@@ -88,6 +88,10 @@ that shrinks its visual target. Preserve user zoom.
 
 ## better-colors
 
+For dark/light scheme implementation or verification, load
+[modern web guidance](../modern-web-guidance/SKILL.md); keep this branch's token
+and contrast ownership and verify explicit user overrides as well as OS preference.
+
 Read token roles and both themes; compute contrast against the rendered pair,
 including compositing. `accessibility` determines the required ratio; do not claim
 WCAG conformance from a computed pair alone. Preserve established token names,

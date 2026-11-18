@@ -1,6 +1,15 @@
 | Skill | Use for |
 |---|---|
 | `/accessibility` | Build accessible React interactions and components. |
+| `/agent-browser-agentcore` | Use explicitly requested AWS AgentCore browser sessions. |
+| `/agent-browser-derive-client` | Derive scoped API clients from authorized browser traffic. |
+| `/agent-browser-dogfood` | Explore web apps through the existing dogfood owner. |
+| `/agent-browser-electron` | Automate explicitly authorized isolated Electron apps. |
+| `/agent-browser-slack` | Automate scoped Slack tasks in an authorized browser. |
+| `/agent-browser-vercel-sandbox` | Use explicitly requested Vercel Sandbox browser runtimes. |
+| `/agent-browser-vercel` | Inspect protected Vercel previews with scoped credentials. |
+| `/agent-browser-webmcp-gen` | Validate browser WebMCP tools through the existing owner. |
+| `/agent-browser` | Automate isolated browser tasks with version-matched guidance. |
 | `/agent-watchdog` | Audit and repair work from another coding agent. |
 | `/aip` | Design Google AIP-style protobuf resource APIs. |
 | `/animate` | Build and assess purposeful web UI motion. |
@@ -113,6 +122,7 @@
 | `/matt-writing-fragments` | Matt Pocock source: writing fragments guidance. |
 | `/matt-writing-shape` | Matt Pocock source: writing shape guidance. |
 | `/mobile-native` | Fix mobile web viewport, touch, and keyboard behavior. |
+| `/modern-web-guidance` | Apply Chrome guidance and verify real browser behavior. |
 | `/package-my-work` | Package UI recordings with clear framing and input cues. |
 | `/plan-arbiter` | Compare competing plans and choose a grounded direction. |
 | `/plow-ahead` | Continue autonomously through routine ambiguity. |

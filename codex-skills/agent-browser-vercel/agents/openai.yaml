@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser Vercel"
+  short_description: "Inspect protected Vercel previews with scoped credentials"

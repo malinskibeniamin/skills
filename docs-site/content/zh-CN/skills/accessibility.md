@@ -28,6 +28,8 @@ sidebar:
 - 表单控件具有持久标签。用 `aria-invalid` 和当前的 `aria-describedby` 关联可见错误；验证通过后移除陈旧错误 ID。
 - 命名不明确时检查计算后的无障碍树，并遵循 [WAI-ARIA 命名指南](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/)。
 
+修改对话框焦点、背景不可交互状态或减少动态效果时，加载 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。在真实浏览器中验证受影响的键盘和偏好设置路径；保留现有无障碍基础组件。
+
 ## 视觉与焦点检查
 
 - 保留对比明显的 2px 焦点指示器；悬停操作也必须可由键盘和触摸完成。

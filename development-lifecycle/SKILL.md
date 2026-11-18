@@ -31,6 +31,10 @@ T3/Effect work: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-cont
 Load [change evidence](../shared/change-evidence.md) and owners; assess risk.
 Capture needed baselines; reuse checks.
 
+For web-platform UI work (layout shift, reduced motion, themes, dialogs or
+Baseline compatibility), load [modern web guidance](../modern-web-guidance/SKILL.md)
+before edits; carry its guide/rule assertions through this same verification loop.
+
 Fixed evals: [hill-climb](../hill-climb/SKILL.md).
 
 [Figma/image](../jakubkrehel-skills/build-design/SKILL.md).

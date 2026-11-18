@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser Agentcore"
+  short_description: "Use explicitly requested AWS AgentCore browser sessions"

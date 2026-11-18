@@ -19,6 +19,8 @@ type: skill
 
 全面审查网页界面时，加载 [better-interface](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-interface/SKILL.md) 以覆盖六个设计领域。其兼容契约保留本技能的范围、证据与报告职责；复用现有截图并按根因去重。
 
+涉及 Modern Web Guidance、布局偏移、动态效果偏好、深浅主题或对话框行为时，加载 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)；审查每条规则的浏览器证据，不把只读审查变成迁移。
+
 
 基于浏览器的前端审查：采用产品、设计、工程和 QA 四种视角。[REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) 负责定义**设计调整抓手**和详细规范。模式：`plan`、`implemented`、`regression`、`release`。可单独触发。
 

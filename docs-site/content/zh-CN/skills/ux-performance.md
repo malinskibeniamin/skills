@@ -64,6 +64,8 @@ type: skill
 当性能主张涉及规模、突发负载、资源争用或长会话时，使用
 [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md) 找到容量拐点，并验证压力下的正确性。
 
+修复布局偏移、加载空间预留或其他 Web 平台问题前，加载 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。将检索到的规则视为假设；可比测量及真实用户数据与实验室数据的限制仍由本技能负责。
+
 ## 输出 [#output]
 
 首先给出用户结果和最慢区段：

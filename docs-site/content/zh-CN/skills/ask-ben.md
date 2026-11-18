@@ -26,6 +26,15 @@ type: skill
 | 技能 | 用途 |
 |---|---|
 | `/accessibility` | 构建无障碍的 React 交互和组件。 |
+| `/agent-browser` | 根据匹配版本的指导执行隔离浏览器任务. |
+| `/agent-browser-agentcore` | 使用明确请求的 AWS AgentCore 浏览器会话. |
+| `/agent-browser-derive-client` | 从授权浏览器流量生成限定范围的 API 客户端. |
+| `/agent-browser-dogfood` | 通过现有 dogfood 负责技能探索 Web 应用. |
+| `/agent-browser-electron` | 自动操作明确授权的隔离 Electron 应用. |
+| `/agent-browser-slack` | 在授权浏览器中自动执行限定范围的 Slack 任务. |
+| `/agent-browser-vercel` | 以限定凭据检查受保护的 Vercel 预览. |
+| `/agent-browser-vercel-sandbox` | 使用明确请求的 Vercel Sandbox 浏览器运行环境. |
+| `/agent-browser-webmcp-gen` | 通过现有负责技能验证浏览器 WebMCP 工具. |
 | `/agent-watchdog` | 审计并修复其他编码智能体的工作。 |
 | `/aip` | 设计 Google AIP 风格的 protobuf 资源 API。 |
 | `/animate` | 构建和评估有明确目的的网页 UI 动效。 |
@@ -87,6 +96,7 @@ type: skill
 | `/build-design` | 使用现有组件实现提供的设计。 |
 | `/explain-interface` | 根据观察证据解释界面或效果。 |
 | `/interface-review` | 审查指定变更中的界面回归。 |
+| `/modern-web-guidance` | 应用 Chrome 指导并验证真实浏览器行为. |
 | `/state-machine` | 按明确要求构建组件状态工作台。 |
 | `/teardown` | 创建有证据支撑的技术插图。 |
 | `/variant` | 按明确要求探索组件设计备选方案。 |

@@ -33,6 +33,10 @@ Do not duplicate checks. Escape hatch: `// allow: a11y-skip [reason]`.
 - Unclear names: inspect the accessibility tree; follow
   [WAI-ARIA naming guidance](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
 
+For dialog focus/inertness or reduced-motion web-platform changes, load
+[modern web guidance](../modern-web-guidance/SKILL.md). Verify the affected keyboard
+and preference paths in a real browser; retain existing accessible primitives.
+
 ## Visual and focus checks
 
 - Keep a contrasting 2px focus indicator; expose hover actions to keyboard and touch users.

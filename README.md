@@ -599,6 +599,24 @@ course skill or an expansion of the pinned public-source snapshot.
 and pairings. Use our [motion triage](animate/SKILL.md#choose-the-motion-lane) for local
 command names and the distinction between waiting, dropped frames and gesture handoffs.
 
+### Modern Web Guidance and agent-browser
+
+`/modern-web-guidance` retrieves [Chrome's Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance),
+applies relevant rules within the requested scope, and verifies each rule in a real
+browser. Existing implementation, performance, accessibility, motion and visual-review
+owners route layout shift, reduced motion, themes and dialog work through it.
+Static scans and source conformance do not count as browser verification.
+
+The full [agent-browser skill suite](vendor/agent-browser-NOTICE.md) is pinned with
+its Apache-2.0 license, references and templates. `/agent-browser` covers the core
+loop; the eight `/agent-browser-*` specialized adapters cover dogfood, Electron,
+Slack, derived API clients, WebMCP generation, protected Vercel previews, Vercel
+Sandbox and AWS AgentCore. The [compatibility contract](shared/AGENT-BROWSER.md)
+preserves existing owners, host-required browsers, isolated sessions and secrets.
+Browser/cloud installation and account actions remain opt-in; no extra `skills add`
+is required for harness consumers. Refresh with `scripts/vendor-agent-browser.py`,
+then regenerate catalog/hook metadata using the notice's verification commands.
+
 Several workflow skills are vendored from [Builder.io](https://www.builder.io) Agent-Native patterns (`/visual-plan`, `/visual-recap`, `/agent-watchdog`, `/plan-arbiter`, `/plow-ahead`, `/read-the-damn-docs`, `/efficient-frontier`) and from the Cursor Team Kit (`/what-did-i-get-done`). [Builder source selection and compatibility](shared/BUILDER-SKILLS-CREDITS.md) preserve local owners, model routing, permissions, and publication boundaries.
 
 `/webmcp <url-or-app> [request]` opens a web app in the built-in browser and uses

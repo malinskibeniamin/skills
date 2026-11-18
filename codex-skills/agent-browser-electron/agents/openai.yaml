@@ -1,0 +1,3 @@
+interface:
+  display_name: "Agent Browser Electron"
+  short_description: "Automate explicitly authorized isolated Electron apps"

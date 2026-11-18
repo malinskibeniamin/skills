@@ -30,6 +30,10 @@ For optimization, read the [experiment loop](../quantify-impact/REFERENCE.md#opt
 
 For scale/burst/contention/soak claims, use [STRESS.md](STRESS.md): capacity knee and correctness under pressure.
 
+For layout-shift, loading-space or other web-platform fixes, load
+[modern web guidance](../modern-web-guidance/SKILL.md) before edits. Use retrieved
+rules as hypotheses; this owner retains comparable measurement and field/lab limits.
+
 For bundles, load [bundle analysis](../t3code-skills/bundle-analysis/SKILL.md).
 
 ## Output

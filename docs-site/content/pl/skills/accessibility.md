@@ -28,6 +28,8 @@ Nie powielaj kontroli. Wyłączenie: `// allow: a11y-skip [reason]`.
 - Kontrolki formularzy mają trwałe etykiety. Łącz błędy przez `aria-invalid` i aktualne `aria-describedby`; usuwaj nieaktualne identyfikatory błędów po poprawnej walidacji.
 - Gdy nazewnictwo jest niejasne, sprawdź drzewo dostępności. Stosuj [wytyczne WAI-ARIA dotyczące nazw](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/).
 
+Przy zmianach fokusu lub nieaktywnego tła dialogu albo ograniczania ruchu wczytaj [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md). Sprawdź odpowiednie ścieżki klawiatury i preferencji w prawdziwej przeglądarce; zachowaj istniejące dostępne komponenty.
+
 ## Kontrole wizualne i fokusu
 
 - Zachowaj kontrastowy wskaźnik fokusu o grubości 2 px; udostępnij działania hover klawiaturze i urządzeniom dotykowym.

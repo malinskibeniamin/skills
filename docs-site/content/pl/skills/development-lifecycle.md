@@ -51,6 +51,8 @@ Przy powtarzalnej optymalizacji według stałej ewaluacji załaduj [hill-climb](
 
 [Figma/obraz](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md).
 
+Przy pracy nad platformą WWW (przesunięcia układu, ograniczony ruch, motywy, dialogi lub zgodność Baseline) wczytaj [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md) przed zmianami. Zachowaj asercje przewodników i reguł w tej samej pętli weryfikacji.
+
 ### Działaj [#act]
 
 Repozytorium należy do użytkownika; odpowiadasz za tę zmianę, nie za niepowiązane przeprojektowanie. Diagnozuj zwykłe błędy narzędzi i ponawiaj bezpieczne kontrole; przed powtórzeniem zapisu o nieznanym wyniku odczytaj stan. Kontynuuj niezależne prace, czekając na odpowiedź na otwarte pytanie; respektuj celowo ograniczony dostęp.

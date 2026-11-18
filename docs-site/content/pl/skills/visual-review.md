@@ -23,6 +23,8 @@ type: skill
 
 Dla całościowego przeglądu interfejsu WWW wczytaj [better-interface](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/better-interface/SKILL.md) z sześcioma dziedzinami oceny. Kontrakt zgodności zachowuje zakres, dowody i właściciela raportu tej umiejętności. Wykorzystuj aktualne materiały i łącz powtarzające się przyczyny.
 
+Dla Modern Web Guidance, przesunięć układu, preferencji ruchu, jasnych/ciemnych motywów lub dialogów wczytaj [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md). Oceniaj dowody przeglądarkowe dla każdej reguły, nie zmieniając przeglądu tylko do odczytu w migrację.
+
 
 Przegląd frontendu w przeglądarce z perspektywy produktu, projektowania, inżynierii i QA. Dokument [REFERENCE.md](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md) definiuje **uchwyty języka projektowego** i szczegóły. Tryby: `plan`, `implemented`, `regression`, `release`. Można uruchamiać samodzielnie.
 

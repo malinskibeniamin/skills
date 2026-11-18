@@ -46,6 +46,8 @@ type: skill
 | “这里什么该动、什么不该动？” / “审查这个弹出层” | 本技能下方的审查/机会探索模式；输出发现，不实施修改 |
 | “弹出层从按钮展开的效果叫什么？” | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/main/animation-vocabulary/SKILL.md)；仅询问名称不授权实现 |
 
+处理减少动态效果或顶层界面时，在选择 API 前加载 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。保留项目令牌及本负责技能对动效目的和中断的规则；验证两种偏好设置。
+
 ## 决策顺序 [#decision-sequence]
 
 1. 检查组件、现有动效令牌、已安装的库及版本、输入方式和产品背景。

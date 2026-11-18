@@ -1,0 +1,204 @@
+{
+  "repository": "https://github.com/vercel-labs/agent-browser",
+  "revision": "f85ed4d620c53ace7733a3b7eeef51e5f2532c83",
+  "skills": [
+    {
+      "name": "agent-browser-agentcore",
+      "upstream_name": "agentcore",
+      "source": "skill-data/agentcore/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-agentcore/",
+      "short_description": "Use explicitly requested AWS AgentCore browser sessions",
+      "description": "Use when explicitly asked for AWS Bedrock AgentCore cloud browser automation. No implicit cloud setup or credential changes."
+    },
+    {
+      "name": "agent-browser",
+      "upstream_name": "core",
+      "source": "skill-data/core/SKILL.md",
+      "registration": "./agent-browser/",
+      "short_description": "Automate isolated browser tasks with version-matched guidance",
+      "description": "Use for browser automation with agent-browser when host browser policy permits. Covers isolated sessions, snapshots, refs, waiting and cleanup."
+    },
+    {
+      "name": "agent-browser-derive-client",
+      "upstream_name": "derive-client",
+      "source": "skill-data/derive-client/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-derive-client/",
+      "short_description": "Derive scoped API clients from authorized browser traffic",
+      "description": "Use when asked to derive a standalone API client from authorized browser traffic. Treat HAR files and session credentials as secrets."
+    },
+    {
+      "name": "agent-browser-dogfood",
+      "upstream_name": "dogfood",
+      "source": "skill-data/dogfood/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-dogfood/",
+      "short_description": "Explore web apps through the existing dogfood owner",
+      "description": "Use for browser-specific exploratory QA with agent-browser. The existing dogfood skill retains verification and reporting ownership."
+    },
+    {
+      "name": "agent-browser-electron",
+      "upstream_name": "electron",
+      "source": "skill-data/electron/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-electron/",
+      "short_description": "Automate explicitly authorized isolated Electron apps",
+      "description": "Use for explicitly authorized Electron app automation through agent-browser. Never attach to or restart a human-owned app by default."
+    },
+    {
+      "name": "modern-web-guidance",
+      "upstream_name": "modern-web-guidance",
+      "source": "skill-data/modern-web-guidance/SKILL.md",
+      "registration": "./modern-web-guidance/",
+      "short_description": "Apply Chrome guidance and verify real browser behavior",
+      "description": "Use for Chrome Modern Web Guidance or Baseline-aware UI: layout shift, reduced motion, dark mode and dialogs. Retrieve relevant guides, apply within scope and verify in a real browser."
+    },
+    {
+      "name": "agent-browser-slack",
+      "upstream_name": "slack",
+      "source": "skill-data/slack/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-slack/",
+      "short_description": "Automate scoped Slack tasks in an authorized browser",
+      "description": "Use for explicitly requested Slack browser tasks when no suitable connected tool is available and host browser policy permits. Sending needs explicit scope."
+    },
+    {
+      "name": "agent-browser-vercel",
+      "upstream_name": "vercel",
+      "source": "skill-data/vercel/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-vercel/",
+      "short_description": "Inspect protected Vercel previews with scoped credentials",
+      "description": "Use for authorized protected Vercel preview access or browser-local flag variants. Preserve Deployment Protection and project settings."
+    },
+    {
+      "name": "agent-browser-vercel-sandbox",
+      "upstream_name": "vercel-sandbox",
+      "source": "skill-data/vercel-sandbox/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-vercel-sandbox/",
+      "short_description": "Use explicitly requested Vercel Sandbox browser runtimes",
+      "description": "Use when explicitly asked to run agent-browser in Vercel Sandbox. Importing this skill grants no cloud provisioning, dependency installation or scheduling authority."
+    },
+    {
+      "name": "agent-browser-webmcp-gen",
+      "upstream_name": "webmcp-gen",
+      "source": "skill-data/webmcp-gen/SKILL.md",
+      "registration": "./agent-browser-skills/agent-browser-webmcp-gen/",
+      "short_description": "Validate browser WebMCP tools through the existing owner",
+      "description": "Use when building or validating page WebMCP tools with agent-browser. The existing webmcp skill retains authoring, trust-boundary and verification ownership."
+    }
+  ],
+  "files": {
+    "LICENSE": {
+      "sha256": "014bb31e83d5c2e76aea1cc6e82217346ab41362f32cb355ad0f5c10aa0aeaff",
+      "mode": 420
+    },
+    "skill-data/agentcore/SKILL.md": {
+      "sha256": "f616b6dbce7cce388eb62701f254d87a78a3650a9c365db653fee1da3d7388a0",
+      "mode": 420
+    },
+    "skill-data/core/SKILL.md": {
+      "sha256": "5c1ab70d399230750b746cfc4446d6dc1f1c5d5eba83769c8d2c076704e58fe8",
+      "mode": 420
+    },
+    "skill-data/core/references/authentication.md": {
+      "sha256": "590d5b4b53e3088243cceca79ada5c4bebb36633d1e7b2f8baa3076269641a9f",
+      "mode": 420
+    },
+    "skill-data/core/references/commands.md": {
+      "sha256": "122b43b574013f2a1305604230af2269a4f87e24f551a54b3c4539abd6b813b9",
+      "mode": 420
+    },
+    "skill-data/core/references/profiling.md": {
+      "sha256": "bfdbe03f0f1da1a20f79d6fcb1ce889bdb43836756934cbf59af4b94e7a80dee",
+      "mode": 420
+    },
+    "skill-data/core/references/proxy-support.md": {
+      "sha256": "df8bf62b429debd5c05c37862af941226ecc37070946896b33549414fe4b5ca2",
+      "mode": 420
+    },
+    "skill-data/core/references/session-management.md": {
+      "sha256": "578cb84eb3ca10566b1c82d12c5b8d3cadf3b15bf63d1ccbabd47466283553ae",
+      "mode": 420
+    },
+    "skill-data/core/references/snapshot-refs.md": {
+      "sha256": "f3e06f679ebab377c091f0509d0dd52958376b9c06cee3a55ac0be96be12ec65",
+      "mode": 420
+    },
+    "skill-data/core/references/streaming.md": {
+      "sha256": "92d10ccffb1d15f2d00179b3f8ae28797e483d7efb9e980633d50cca54793efc",
+      "mode": 420
+    },
+    "skill-data/core/references/trust-boundaries.md": {
+      "sha256": "99046d95b7286c7eb27e7626272945eb7f1b04ee7d0f2f9d471e1ed22f235679",
+      "mode": 420
+    },
+    "skill-data/core/references/video-recording.md": {
+      "sha256": "ac9860e1bad6d9f96b4108c07ee03db75eb1ad179a9562016f39a8dfb8ed9429",
+      "mode": 420
+    },
+    "skill-data/core/references/webgpu.md": {
+      "sha256": "a712891500530fc852b902cb453177c34ead1a225715f6ed8261251d52706f3d",
+      "mode": 420
+    },
+    "skill-data/core/templates/authenticated-session.sh": {
+      "sha256": "3a44ce1ca1d6b8ff7b049e8456fb9cd383afa3e76f48532cc6dc836dc0f449e7",
+      "mode": 493
+    },
+    "skill-data/core/templates/capture-workflow.sh": {
+      "sha256": "caa5fa01b654cab0849d77c7fcb2e07a64b2ba3b7bff4718e9a19d3c8d793177",
+      "mode": 493
+    },
+    "skill-data/core/templates/form-automation.sh": {
+      "sha256": "f1b2ef8220d214287d68336512938adfe9bf6e9c2b85e2d66f3239bafc666a6a",
+      "mode": 493
+    },
+    "skill-data/derive-client/SKILL.md": {
+      "sha256": "f0d6bff1ed4d849e7852128aee3e57bbf5877c737c79e29dd80e7a8372caa51d",
+      "mode": 420
+    },
+    "skill-data/dogfood/SKILL.md": {
+      "sha256": "83afc0f6ce5598ae56ab06c7e18090d6769ec0a9a2abb3a12df240a81c77ed02",
+      "mode": 420
+    },
+    "skill-data/dogfood/references/issue-taxonomy.md": {
+      "sha256": "dee7e925f7fe001903de6cc14f9656bcda90d069bbf65a2273f22202efebba09",
+      "mode": 420
+    },
+    "skill-data/dogfood/templates/dogfood-report-template.md": {
+      "sha256": "55eef9286e32e595dcfca30db76352e9f1d149a78b60b54644eb701072364f35",
+      "mode": 420
+    },
+    "skill-data/electron/SKILL.md": {
+      "sha256": "d97a2bc221b5044184ad0af51376b07bcb94f259622f2af254fb3701e6f01861",
+      "mode": 420
+    },
+    "skill-data/modern-web-guidance/SKILL.md": {
+      "sha256": "93234d8103db74fa91c7a532eb1f0f6b2b7fdb5b6b3c45f5cfe99b12a5ec7cb2",
+      "mode": 420
+    },
+    "skill-data/slack/SKILL.md": {
+      "sha256": "a0bc65db2788224f185fcbd42cf99a43b368fb569b48defdf88233013ecad47d",
+      "mode": 420
+    },
+    "skill-data/slack/references/slack-tasks.md": {
+      "sha256": "3ceb49a88b59c6785b8a44753e497042550f0d87e255699c23975c56f62535c2",
+      "mode": 420
+    },
+    "skill-data/slack/templates/slack-report-template.md": {
+      "sha256": "9304f1570566e9650b3da3d4a68ee81eaa0eac6df0a4acf7ba99dc48884b7ac2",
+      "mode": 420
+    },
+    "skill-data/vercel/SKILL.md": {
+      "sha256": "43320c97b3817f2253990ef92576f65cf6f8208d4ec6b9b62b3402deda7d9bd9",
+      "mode": 420
+    },
+    "skill-data/vercel-sandbox/SKILL.md": {
+      "sha256": "60efbb6cf778f4fe4929788e9cc3780a9161c9a77c293b9ebbf735050d0650cd",
+      "mode": 420
+    },
+    "skill-data/webmcp-gen/SKILL.md": {
+      "sha256": "aca7fc9e74463aaa06e3a3ecb42d6780ecb0e4fd7bb10d190a05b09bae00829f",
+      "mode": 420
+    },
+    "skills/agent-browser/SKILL.md": {
+      "sha256": "7d46deeb0101e84f8d70fd2e5cd18e3b6017edfb973607ff23e95e22c92ce73e",
+      "mode": 420
+    }
+  }
+}

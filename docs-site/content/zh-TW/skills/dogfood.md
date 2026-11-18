@@ -97,6 +97,8 @@ React：[執行階段檢查](https://github.com/malinskibeniamin/skills/blob/mai
 
 請閱讀[瀏覽器預設設定](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
 
+進行瀏覽器專項探索式 QA 時，載入 [agent-browser dogfood](https://github.com/malinskibeniamin/skills/blob/main/agent-browser-skills/agent-browser-dogfood/SKILL.md)；重用目前負責技能的回執與適度證據要求，不另建測試迴圈。
+
 ## 回執 [#receipt]
 
 `Verdict: PASS | FAIL | BLOCKED`；入口／操作／觀察：

@@ -99,6 +99,8 @@ React：[运行时检查](https://github.com/malinskibeniamin/skills/blob/main/s
 
 阅读[浏览器默认设置](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks)。
 
+进行浏览器专项探索式 QA 时，加载 [agent-browser dogfood](https://github.com/malinskibeniamin/skills/blob/main/agent-browser-skills/agent-browser-dogfood/SKILL.md)；复用当前负责技能的回执和适度证据要求，不另建测试循环。
+
 ## 回执 [#receipt]
 
 `Verdict: PASS | FAIL | BLOCKED`；入口/操作/观察：

@@ -81,6 +81,9 @@ React: [runtime probes](../shared/react-devtools.md).
 ## Browser and data tasks
 
 Read [browser defaults](../shared/verification-replay.md#browser-and-data-tasks).
+For browser-specific exploratory QA, load
+[agent-browser dogfood](../agent-browser-skills/agent-browser-dogfood/SKILL.md);
+reuse this owner's receipt and proportional evidence, not a second testing loop.
 
 ## Receipt
 

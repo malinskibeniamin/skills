@@ -26,6 +26,15 @@ type: skill
 | 技能 | 用途 |
 |---|---|
 | `/accessibility` | 建置無障礙的 React 互動與元件。 |
+| `/agent-browser` | 依據相符版本的指引執行隔離瀏覽器任務. |
+| `/agent-browser-agentcore` | 使用明確要求的 AWS AgentCore 瀏覽器工作階段. |
+| `/agent-browser-derive-client` | 從授權瀏覽器流量產生限定範圍的 API 用戶端. |
+| `/agent-browser-dogfood` | 透過現有 dogfood 負責技能探索 Web 應用程式. |
+| `/agent-browser-electron` | 自動操作明確授權的隔離 Electron 應用程式. |
+| `/agent-browser-slack` | 在授權瀏覽器中自動執行限定範圍的 Slack 任務. |
+| `/agent-browser-vercel` | 以限定憑證檢查受保護的 Vercel 預覽. |
+| `/agent-browser-vercel-sandbox` | 使用明確要求的 Vercel Sandbox 瀏覽器執行環境. |
+| `/agent-browser-webmcp-gen` | 透過現有負責技能驗證瀏覽器 WebMCP 工具. |
 | `/agent-watchdog` | 稽核並修復另一個程式設計代理程式完成的工作。 |
 | `/aip` | 設計採用 Google AIP 風格的 protobuf 資源 API。 |
 | `/animate` | 建置並評估有明確目的的網頁 UI 動效。 |
@@ -87,6 +96,7 @@ type: skill
 | `/build-design` | 使用現有元件實作提供的設計。 |
 | `/explain-interface` | 依觀察證據說明介面或效果。 |
 | `/interface-review` | 審查指定變更中的介面回歸。 |
+| `/modern-web-guidance` | 套用 Chrome 指引並驗證真實瀏覽器行為. |
 | `/state-machine` | 依明確要求建立元件狀態工作台。 |
 | `/teardown` | 建立以證據為依據的技術插圖。 |
 | `/variant` | 依明確要求探索元件設計方案。 |

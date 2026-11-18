@@ -48,6 +48,8 @@ type: skill
 | 「這裡什麼該動、什麼不該動？」 / 「審查這個彈出層」 | 本技能下方的審查/機會探索模式；輸出發現，不實作修改 |
 | 「彈出層從按鈕展開的效果叫什麼？」 | [animation-vocabulary](https://github.com/malinskibeniamin/skills/blob/main/animation-vocabulary/SKILL.md)；僅詢問名稱不授權實作 |
 
+處理減少動態效果或頂層介面時，在選擇 API 前載入 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。保留專案設計權杖及本負責技能對動效目的與中斷的規則；驗證兩種偏好設定。
+
 ## 決策順序 [#decision-sequence]
 
 1. 檢查元件、現有動效token、已安裝的函式庫及版本、輸入方式和產品背景。

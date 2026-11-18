@@ -16,14 +16,19 @@
       "zh-TW": "8185f820f83a1b8d"
     },
     "content/index.mdx": {
-      "pl": "d64063a9a147c315",
-      "zh-CN": "d64063a9a147c315",
-      "zh-TW": "d64063a9a147c315"
+      "pl": "00a2752d5dc8e9b4",
+      "zh-CN": "00a2752d5dc8e9b4",
+      "zh-TW": "00a2752d5dc8e9b4"
     },
     "content/skills/accessibility.md": {
-      "pl": "834a3f0bad573f6a",
-      "zh-CN": "834a3f0bad573f6a",
-      "zh-TW": "834a3f0bad573f6a"
+      "pl": "7e46be74ed24121e",
+      "zh-CN": "7e46be74ed24121e",
+      "zh-TW": "7e46be74ed24121e"
+    },
+    "content/skills/agent-browser.md": {
+      "pl": "c969fcfbaa46fc14",
+      "zh-CN": "c969fcfbaa46fc14",
+      "zh-TW": "c969fcfbaa46fc14"
     },
     "content/skills/agent-watchdog.md": {
       "pl": "6a70058e64472155",
@@ -36,9 +41,9 @@
       "zh-TW": "5e5505d3572147b3"
     },
     "content/skills/animate.md": {
-      "pl": "6de228c1fb66e606",
-      "zh-CN": "6de228c1fb66e606",
-      "zh-TW": "6de228c1fb66e606"
+      "pl": "5c6297bf615c6b68",
+      "zh-CN": "5c6297bf615c6b68",
+      "zh-TW": "5c6297bf615c6b68"
     },
     "content/skills/animatic.md": {
       "pl": "b51e985a4f82eb1a",
@@ -56,9 +61,9 @@
       "zh-TW": "a0a86f307c61715f"
     },
     "content/skills/ask-ben.md": {
-      "pl": "ebbeccc2fe5e0895",
-      "zh-CN": "ebbeccc2fe5e0895",
-      "zh-TW": "ebbeccc2fe5e0895"
+      "pl": "3b7c32fa3c381838",
+      "zh-CN": "3b7c32fa3c381838",
+      "zh-TW": "3b7c32fa3c381838"
     },
     "content/skills/ask-sonner.md": {
       "pl": "9241334c08338154",
@@ -136,9 +141,9 @@
       "zh-TW": "32ba5501fe89d78c"
     },
     "content/skills/development-lifecycle.md": {
-      "pl": "1224f0b2b2aa4321",
-      "zh-CN": "1224f0b2b2aa4321",
-      "zh-TW": "1224f0b2b2aa4321"
+      "pl": "b31f1af76d89aeda",
+      "zh-CN": "b31f1af76d89aeda",
+      "zh-TW": "b31f1af76d89aeda"
     },
     "content/skills/diagnosing-bugs.md": {
       "pl": "9d1e0d1e1de5289d",
@@ -151,9 +156,9 @@
       "zh-TW": "47fa9a4e63666333"
     },
     "content/skills/dogfood.md": {
-      "pl": "bfa3fd5b870f4849",
-      "zh-CN": "bfa3fd5b870f4849",
-      "zh-TW": "bfa3fd5b870f4849"
+      "pl": "481c0c0388ca4cd8",
+      "zh-CN": "481c0c0388ca4cd8",
+      "zh-TW": "481c0c0388ca4cd8"
     },
     "content/skills/domain-modeling.md": {
       "pl": "54e8b5926eddf41b",
@@ -309,6 +314,11 @@
       "pl": "a54eed56ec477c59",
       "zh-CN": "a54eed56ec477c59",
       "zh-TW": "a54eed56ec477c59"
+    },
+    "content/skills/modern-web-guidance.md": {
+      "pl": "3a0a52402d3c3d05",
+      "zh-CN": "3a0a52402d3c3d05",
+      "zh-TW": "3a0a52402d3c3d05"
     },
     "content/skills/package-my-work.md": {
       "pl": "eb9a1e8e3535bb0b",
@@ -561,9 +571,9 @@
       "zh-TW": "e4c8cb223d48fba9"
     },
     "content/skills/ux-performance.md": {
-      "pl": "17b1ace7323cf926",
-      "zh-CN": "17b1ace7323cf926",
-      "zh-TW": "17b1ace7323cf926"
+      "pl": "1af5f3e86c827f71",
+      "zh-CN": "1af5f3e86c827f71",
+      "zh-TW": "1af5f3e86c827f71"
     },
     "content/skills/video-research.md": {
       "pl": "281675873b0df4ae",
@@ -581,9 +591,9 @@
       "zh-TW": "716a3064b6e072da"
     },
     "content/skills/visual-review.md": {
-      "pl": "d92e3266be006c9c",
-      "zh-CN": "d92e3266be006c9c",
-      "zh-TW": "d92e3266be006c9c"
+      "pl": "392a507ba21a90dd",
+      "zh-CN": "392a507ba21a90dd",
+      "zh-TW": "392a507ba21a90dd"
     },
     "content/skills/wait-what.md": {
       "pl": "d3b792d1f3a48c9d",

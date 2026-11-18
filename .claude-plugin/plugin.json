@@ -287,7 +287,17 @@
     "./t3code-skills/performance-analysis/",
     "./t3code-skills/pull-requests/",
     "./t3code-skills/test-development/",
-    "./t3code-skills/vendored-assets/"
+    "./t3code-skills/vendored-assets/",
+    "./agent-browser-skills/agent-browser-agentcore/",
+    "./agent-browser/",
+    "./agent-browser-skills/agent-browser-derive-client/",
+    "./agent-browser-skills/agent-browser-dogfood/",
+    "./agent-browser-skills/agent-browser-electron/",
+    "./modern-web-guidance/",
+    "./agent-browser-skills/agent-browser-slack/",
+    "./agent-browser-skills/agent-browser-vercel/",
+    "./agent-browser-skills/agent-browser-vercel-sandbox/",
+    "./agent-browser-skills/agent-browser-webmcp-gen/"
   ],
   "agents": [
     "./agents/adversarial-reviewer.md",
