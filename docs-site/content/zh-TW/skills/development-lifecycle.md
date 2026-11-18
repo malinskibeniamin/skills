@@ -49,8 +49,6 @@ type: skill
 
 [Figma/圖片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
-進行 Web 平台介面工作（版面位移、減少動態效果、主題、對話框或 Baseline 相容性）時，在修改前載入 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)；在同一驗證迴圈中保留各指南與規則的斷言。
-
 ### 行動 [#act]
 
 程式碼庫屬於使用者；對本次變更負責，而非進行無關的重新設計。診斷一般工具故障並重試安全的檢查；對結果不確定的寫入，先讀取狀態再決定是否重試。等待開放問題的答覆時，繼續不依賴該答覆的工作；尊重刻意設定的存取邊界。

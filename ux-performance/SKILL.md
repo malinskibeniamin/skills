@@ -3,7 +3,7 @@ name: ux-performance
 description: Audit and optimize real web UX performance. Use for slow SPA pages, routes, interactions, huge tables, loading, caching, memory, Web Vitals, Lighthouse, budgets, or CI regressions.
 ---
 
-Optimize measured intent-to-useful-state, not suspicious code. Default to client web; follow delayed journeys to backend/delivery.
+Measure intent-to-useful-state. Default to client web; trace delayed journeys to backend/delivery.
 
 ## Contract
 
@@ -28,11 +28,9 @@ For optimization, read the [experiment loop](../quantify-impact/REFERENCE.md#opt
 7. Keep worthwhile, guardrail-safe gains; revert losing/inconclusive owned edits. Report `Value not proven - inconclusive` for noise, regression for losses. Refresh leads/fidelity before cumulative results; never metric-shop.
 8. CI only when requested: [CI.md](CI.md), stable cheap PR checks, noisy/deep nightly checks, real-user monitoring after deploy. Hooks are advisory until calibrated.
 
-For scale/burst/contention/soak claims, use [STRESS.md](STRESS.md): capacity knee and correctness under pressure.
+Scale/burst/contention/soak: [STRESS.md](STRESS.md) covers capacity and correctness.
 
-For layout-shift, loading-space or other web-platform fixes, load
-[modern web guidance](../modern-web-guidance/SKILL.md) before edits. Use retrieved
-rules as hypotheses; this owner retains comparable measurement and field/lab limits.
+Platform fixes: load [guidance](../modern-web-guidance/SKILL.md).
 
 For bundles, load [bundle analysis](../t3code-skills/bundle-analysis/SKILL.md).
 

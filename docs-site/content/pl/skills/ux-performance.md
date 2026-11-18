@@ -78,7 +78,7 @@ Dla optymalizacji przed edycją przeczytaj wspólną [pętlę eksperymentów](ht
 Gdy twierdzenie dotyczy skali, skoku obciążenia, rywalizacji o zasoby lub długiej sesji,
 użyj [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md), aby znaleźć punkt załamania pojemności i zweryfikować poprawność pod presją.
 
-Przy naprawach przesunięć układu, rezerwowania miejsca podczas ładowania lub innych zachowań platformy WWW wczytaj [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md) przed zmianami. Traktuj pobrane reguły jako hipotezy; ten właściciel nadal odpowiada za porównywalne pomiary i ograniczenia danych laboratoryjnych oraz terenowych.
+Naprawy platformy WWW: wczytaj [wytyczne](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md).
 
 ## Wynik [#output]
 

@@ -34,6 +34,9 @@ Honor user/host browser requirements and the project verifier. Use agent-browser
 for interactive automation instead of playwright-cli or browser MCP when choice is permitted.
 When agent-browser is selected, load the [browser skill](../agent-browser/SKILL.md)
 for isolated sessions, version-matched commands and task-specific suite routing.
+For browser exploratory QA, load
+[agent-browser dogfood](../agent-browser-skills/agent-browser-dogfood/SKILL.md);
+reuse the existing dogfood owner's receipt and proportional evidence.
 Use another tool only for an explicit user/host requirement or a demonstrated missing
 capability; record the fallback tool and reason in verification evidence. Missing setup is
 a visible blocker, not permission to silently switch tools.

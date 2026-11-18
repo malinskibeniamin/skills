@@ -99,8 +99,6 @@ React: [inspekcja w czasie działania](https://github.com/malinskibeniamin/skill
 
 Przeczytaj [domyślne ustawienia przeglądarki](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md#browser-and-data-tasks).
 
-Przy eksploracyjnym QA przeglądarki wczytaj [agent-browser dogfood](https://github.com/malinskibeniamin/skills/blob/main/agent-browser-skills/agent-browser-dogfood/SKILL.md). Użyj potwierdzenia i proporcjonalnych dowodów obecnego właściciela, zamiast tworzyć drugą pętlę testowania.
-
 ## Potwierdzenie [#receipt]
 
 `Verdict: PASS | FAIL | BLOCKED`; punkt wejścia/działania/obserwacje:

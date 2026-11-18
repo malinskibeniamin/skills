@@ -63,6 +63,10 @@ workflow. This contract overrides conflicting snapshot instructions.
 
 ## better-interface
 
+For platform rules involving layout shift, motion preferences, themes or dialogs,
+load [modern web guidance](../modern-web-guidance/SKILL.md); preserve read-only
+review and require per-rule browser evidence, not source-only conformance.
+
 Load `visual-review` unless already active. For holistic web-interface reviews,
 read all six domain entrypoints through the adapters above, foundational checks
 before polish; give one report, not six. The host owns change scope and shared
@@ -100,6 +104,10 @@ library or palette replacement. A requested contrast fix may change the in-scope
 token, with shared consumers and both themes rechecked.
 
 ## better-accessibility
+
+For dialog focus/inertness or reduced-motion platform changes, load
+[modern web guidance](../modern-web-guidance/SKILL.md); verify affected keyboard
+and preference paths in a real browser while retaining accessible primitives.
 
 Load `accessibility` first. Add the source's criterion references, keyboard and
 screen-reader walks; keep Biome, React Doctor and local-hook ownership unchanged.

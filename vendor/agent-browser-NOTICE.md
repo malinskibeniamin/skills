@@ -10,6 +10,8 @@ These third-party files are Apache-2.0, not this repository's MIT-authored guida
 
 [`agent-browser.lock.json`](agent-browser.lock.json) records the full commit,
 SHA-256 digest and executable mode of every file, plus local discovery metadata.
+The report template's four screenshot links name future consumer captures, not
+bundled resources; the packaging checker exempts only those exact placeholders.
 The browser CLI, Chrome, cloud SDKs and Google's guide corpus are not bundled.
 Importing skills installs none of them and changes no runtime hook or account.
 The [host contract](../shared/AGENT-BROWSER.md) records adaptations outside upstream

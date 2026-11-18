@@ -49,8 +49,6 @@ type: skill
 
 [Figma/图片](https://github.com/malinskibeniamin/skills/blob/main/jakubkrehel-skills/build-design/SKILL.md)。
 
-进行 Web 平台界面工作（布局偏移、减少动态效果、主题、对话框或 Baseline 兼容性）时，在修改前加载 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)；在同一验证循环中保留各指南及规则的断言。
-
 ### 操作 [#act]
 
 代码库属于用户；对本次变更负责，而不是进行无关的重新设计。诊断常规工具故障并重试安全的检查；对结果不确定的写入，先读取状态再决定是否重试。等待开放问题的答复时，继续不依赖该答复的工作；尊重有意设置的访问边界。

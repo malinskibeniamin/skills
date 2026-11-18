@@ -12,9 +12,6 @@ Routine copy/style edits need focused rendering, not a full device/state matrix 
 reuse dogfood evidence. Expand only for changed assumptions.
 
 Web UI: load [better-interface](../jakubkrehel-skills/better-interface/SKILL.md).
-For Modern Web Guidance, layout shift, motion preferences, dark/light themes or
-dialog behavior, load [modern web guidance](../modern-web-guidance/SKILL.md);
-review per-rule browser evidence without turning read-only review into migration.
 
 1. Find: resolve PR base (stack parent) and inspect merge-base...HEAD, staged, unstaged, and relevant untracked changes; `git diff --name-only HEAD` misses commits. Map routes/components to URLs, CLI/reports to commands. Include shadcn/ui or `@/components/ui`, shared consumers, copy, styles, assets, indirect data/config effects. Cover every visible change.
 2. Context: read tokens/theme and one surface; classify brand/product.

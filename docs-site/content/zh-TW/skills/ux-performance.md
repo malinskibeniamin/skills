@@ -64,7 +64,7 @@ type: skill
 當效能主張涉及規模、突發負載、資源競爭或長時間工作階段時，請使用
 [STRESS.md](https://github.com/malinskibeniamin/skills/blob/main/ux-performance/STRESS.md) 找出容量轉折點，並驗證壓力下的正確性。
 
-修復版面位移、載入空間預留或其他 Web 平台問題前，載入 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。將檢索到的規則視為假設；可比較的量測及真實使用者資料與實驗室資料的限制仍由本技能負責。
+修復 Web 平台問題時，載入[指引](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。
 
 ## 輸出 [#output]
 

@@ -28,8 +28,6 @@ sidebar:
 - 表單控制元件具有持久標籤。用 `aria-invalid` 和當前的 `aria-describedby` 關聯可見錯誤；驗證透過後移除陳舊錯誤 ID。
 - 命名不明確時檢查計算後的無障礙樹，並遵循 [WAI-ARIA 命名指南](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/)。
 
-變更對話框焦點、背景不可互動狀態或減少動態效果時，載入 [modern web guidance](https://github.com/malinskibeniamin/skills/blob/main/modern-web-guidance/SKILL.md)。在真實瀏覽器中驗證受影響的鍵盤和偏好設定路徑；保留現有無障礙基礎元件。
-
 ## 視覺與焦點檢查
 
 - 保留對比明顯的 2px 焦點指示器；懸停操作也必須可由鍵盤和觸控完成。
