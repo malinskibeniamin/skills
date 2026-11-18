@@ -76,3 +76,5 @@ Saved flows do not replace UI assertions; retain browser, accessibility and cros
 | Selector or AI inspection | `agent-browser snapshot` |
 | Visual smoke evidence | `agent-browser screenshot --annotate` |
 | Interactive debugging | Playwright UI mode |
+
+Opt-in Browser Use: [guide](BROWSER-USE.md).

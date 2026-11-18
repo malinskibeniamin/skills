@@ -85,3 +85,5 @@ Zapisane przepływy nie zastępują asercji UI; zachowaj pokrycie testami przegl
 | Selektor lub inspekcja AI | `agent-browser snapshot` |
 | Dowody z wizualnego smoke testu | `agent-browser screenshot --annotate` |
 | Interaktywne debugowanie | Tryb UI Playwright |
+
+Browser Use (opcjonalnie): [przewodnik](https://github.com/malinskibeniamin/skills/blob/main/e2e-testing/BROWSER-USE.md).
