@@ -1,5 +1,5 @@
 ---
-description: 為尚未釐清的邏輯、互動或視覺問題建立可拋棄的證據。當可執行的證據能在做出承諾前消除行為或 UI 的不確定性時使用。
+description: 為尚未釐清的邏輯、互動、視覺或實作問題建立可拋棄的證據。當可執行的證據能在做出決定前消除不確定性時使用。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -28,9 +28,9 @@ type: skill
 - 邏輯／狀態的不確定性 -> 小型可執行狀態模型；請參閱 [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md)。
 - UI 與互動 -> 應用程式內探索或[可分享的審查網站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；設計尚未確定時提供具有實質差異的變體。
 - API／工具的不確定性 -> 對沙箱或測試資料進行最小化呼叫。
+- [比較實作](https://github.com/malinskibeniamin/skills/blob/main/prototype/COMPARISON.md).
 
-可行時，將可運作的成品放在 `.context/prototypes/<question>/` 下；只有當實際執行環境必須載入時，才放在
-目標旁。請清楚標示任何位於程式碼樹內的成品。
+只有實際執行環境必須載入原型時，才將它放在目標程式碼旁。標示程式碼樹內的成品。
 
 ## 保留方式 [#retention]
 
@@ -47,14 +47,12 @@ type: skill
 
 ## 限制條件 [#constraints]
 
-1. 優先使用標準函式庫與現有相依套件；不得建立與
-   問題無關的專案骨架。
+1. 預設使用標準函式庫和現有相依套件，不要建立無關的專案骨架。
 2. 僅需一個指令即可執行。
 3. 僅使用記憶體內或暫存式持久化。
 4. 顯示相關狀態與觀察結果。
 5. 在採信結論前，請針對關鍵路徑與可能的
    邊界執行一次 `/dogfood`；不要對每次中間編輯都進行實際試用。
-6. 關鍵路徑回答問題後，請套用上述保留政策。
 
 如果原型與計畫相矛盾，請在正式環境
 實作前重新檢視受影響的決策。

@@ -1,15 +1,15 @@
 ---
 name: prototype
-description: Build disposable evidence for unresolved logic, interaction, or visual questions. Use when runnable evidence would resolve behavior or UI uncertainty before commitment.
+description: Build disposable evidence for unresolved logic, interaction, visual, or implementation questions. Use when runnable evidence would resolve uncertainty before commitment.
 ---
 
 For product/design forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-planning).
 
 Prove one named question, not an early production branch.
 
-Choose cheapest faithful shape: [logic/state model](LOGIC.md); UI in-app or a [shareable review website](UI.md#shareable-review-prototype), variants for open designs; API/tool sandbox/fixture.
+Choose cheapest faithful shape: [logic/state model](LOGIC.md); UI in-app or a [shareable review website](UI.md#shareable-review-prototype), variants for open designs; API/tool sandbox/fixture; [implementation comparison](COMPARISON.md).
 
-Use `.context/prototypes/<question>/`, or target-adjacent only when real runtime must load it; mark in-tree artifacts.
+Go target-adjacent only if the runtime must load it; mark in-tree artifacts.
 
 ## Retention
 
@@ -24,10 +24,9 @@ Record question, evidence and verdict in an issue, ADR, notes or commit. Main: o
 
 Explicit interface workbenches: recommend `variant` (designs), `state-machine` (reachable states), or `break` (stress). Apply [retention](../shared/INTERFACES.md#workbench-retention); user-only, never automatic dependencies.
 
-1. Standard library/existing deps; no unrelated scaffolding.
+1. Standard library/existing deps by default; no unrelated scaffolding.
 2. One run command; scratch/in-memory persistence.
 3. Show relevant state/observations.
 4. Before trusting verdict, `/dogfood` once through decisive path and likely boundary, not every edit.
-5. Apply retention after the answer.
 
 If evidence contradicts the plan, revisit that decision before production.

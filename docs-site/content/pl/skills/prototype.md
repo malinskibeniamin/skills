@@ -1,9 +1,5 @@
 ---
-description: >-
-  Twórz tymczasowe dowody rozstrzygające nierozwiązane kwestie dotyczące logiki,
-  interakcji lub warstwy wizualnej. Użyj, gdy działający przykład pozwoli
-  wyjaśnić zachowanie lub niepewność dotyczącą interfejsu przed podjęciem
-  decyzji.
+description: Twórz tymczasowe dowody dla otwartych pytań dotyczących logiki, interakcji, warstwy wizualnej lub implementacji. Użyj tej umiejętności, gdy działający przykład pozwoli rozwiać wątpliwości przed podjęciem decyzji.
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -32,9 +28,9 @@ Wybierz najprostszy wariant, który wiernie odwzorowuje problem:
 - Niepewność dotycząca logiki lub stanu -> mały wykonywalny model stanu; zobacz [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md).
 - UI i interakcje -> eksploracja w aplikacji lub [witryna do udostępnienia recenzentom](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype), z istotnie różnymi wariantami, gdy projekt jest otwarty.
 - Niepewność dotycząca API lub narzędzia -> minimalne wywołanie w środowisku testowym lub z użyciem fixtury.
+- [Porównaj implementacje](https://github.com/malinskibeniamin/skills/blob/main/prototype/COMPARISON.md).
 
-Jeśli to możliwe, umieść działające artefakty w `.context/prototypes/<question>/`, a obok
-docelowego kodu tylko wtedy, gdy muszą zostać załadowane przez rzeczywiste środowisko uruchomieniowe. Wyraźnie oznacz każdy artefakt znajdujący się w drzewie projektu.
+Umieść prototyp obok docelowego kodu tylko wtedy, gdy środowisko uruchomieniowe musi go załadować. Oznacz artefakty w drzewie projektu.
 
 ## Przechowywanie [#retention]
 
@@ -51,14 +47,12 @@ zatwierdzeniu implementującym zmianę. W głównej gałęzi pozostaje wyłączn
 
 ## Ograniczenia [#constraints]
 
-1. Najpierw używaj biblioteki standardowej i istniejących zależności; bez tworzenia szkieletu niezwiązanego z
-   pytaniem.
+1. Domyślnie używaj biblioteki standardowej i istniejących zależności. Nie twórz szkieletu niezwiązanego z pytaniem.
 2. Jedno polecenie do uruchomienia.
 3. Wyłącznie trwałość w pamięci lub w danych tymczasowych.
 4. Pokaż istotny stan i obserwacje.
 5. Zanim oprzesz się na werdykcie, uruchom `/dogfood` jeden raz dla ścieżki rozstrzygającej i prawdopodobnego
    przypadku brzegowego; nie testuj w ten sposób każdej pośredniej zmiany.
-6. Gdy ścieżka rozstrzygająca odpowie na pytanie, zastosuj powyższe zasady przechowywania.
 
 Jeśli prototyp przeczy planowi, ponownie przeanalizuj odpowiednią decyzję przed rozpoczęciem
 implementacji produkcyjnej.
