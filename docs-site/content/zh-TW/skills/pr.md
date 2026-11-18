@@ -27,18 +27,26 @@ type: skill
 在工作階段開始或恢復時、範圍、實作或證據發生實質變更後，以及交接前：
 
 1. 尋找與此對話、工作階段或聊天明確關聯的已開啟 PR；否則透過 `gh pr view` 檢查目前分支。確認開啟狀態、儲存庫、來源分支、基底分支及歸屬；不可選擇無關的近期 PR。沒有已開啟的 PR 就無須維護，也不代表可以建立 PR。
-2. 將已發布的說明與**完整 PR 差異**、原始目標及目前的驗證結果比對，而非只看最近一輪對話或提交。對堆疊 PR，逐一對照父分支評估受影響的層級。 依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)檢查擷取畫面、標記及圖例是否過時。
+2. 將已發布的說明與**完整 PR 差異**、原始目標及目前的驗證結果比對，而非只看最近一輪對話或提交。對堆疊 PR，逐一對照父分支評估受影響的層級。檢查目前 PR 最新提交的[部署預覽](#deploy-previews)。依照[視覺標註](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#visual-annotations)檢查擷取畫面、標記及圖例是否過時。
 3. 個別載入 [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/SKILL.md)。重新評估商業價值及產品或程式碼庫影響；重用仍有效的證據、重跑已失效的比較，並移除缺乏依據的主張。價值未知時，明確寫出 `not established`。
 4. 對已獲授權的修改或交付，一併更新受影響的擷取畫面、標記及圖例；保留人工開頭（意圖過時時提醒作者編輯），更新代理草擬的開頭，原地替換過時的代理項目，精簡說明受益對象、價值、證據及實質風險。更新[人工審查交接](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md#human-review-handoff)，包括審查人員指派、復原及偵測缺口。保留人工意圖與必要證據；連結詳細資料、略過準確說明、省略工作階段紀錄。
 5. 編輯後重新讀取託管平台上的內文，確認其描述的是已發布的來源分支狀態。唯讀要求僅回報偏差，不進行編輯。明確要求僅本機修改或禁止推送時，延後發布；不可將尚未發布的工作描述為已交付。
 
+## 部署預覽 [#deploy-previews]
+
+建立、更新或交接 PR 時，查看目前最新提交的部署、檢查、狀態結果或供應商的機器人留言。將 `**Deploy preview (<app/provider>):** <full URL>` 放在 PR 內文與交接資訊的首行。填寫實際應用程式網址，而非部署記錄、儀表板或 localhost 網址。若有多個預覽，依應用程式和供應商標註。
+
+若預期的預覽仍在等待、部署失敗或無法使用，首行改為說明狀態和原因；在目前最新提交部署完成前，將較舊提交的網址標為過時。推送後、部署完成後及交接前重新檢查，取代既有項目而非重複新增。在 URL 旁註明存取需求；找到 URL 並不代表應用程式可以正常運作。僅在沒有且不預期有預覽時省略此行。
+
 ## 內文範本 [#body-template]
 
-使用精簡易懂、描述成果且符合儲存庫慣例的標題。標題與開頭一句屬於人類作者：保留其提供的措辭。代擬時，明確標示標題及開頭為等待人工編輯的代理草稿；不得聲稱由人類撰寫或已獲認可。已獲授權的草稿 PR 可繼續發布。維護時保留人工文字；意圖改變時指出問題，不要悄悄改寫。
+使用精簡易懂、描述成果且符合儲存庫慣例的標題。標題與說明變更及原因的那一行屬於人類作者：保留其提供的措辭。代擬時，明確標示標題及開頭為等待人工編輯的代理草稿；不得聲稱由人類撰寫或已獲認可。已獲授權的草稿 PR 可繼續發布。維護時保留人工文字；意圖改變時指出問題，不要悄悄改寫。
 
-順序為：一句話說明變更及原因 -> UI 變更前後擷取畫面表格 -> 有幫助時附可點選原型 -> 一個預設摺疊的 `<details>` 中的代理說明。原型連結也可緊接表格之前。不適用的視覺或原型部分應省略，不要發布佔位內容。使用以下結構：
+順序為：部署預覽（如適用） -> 一句話說明變更及原因 -> UI 變更前後擷取畫面表格 -> 有幫助時附可點選原型 -> 一個預設摺疊的 `<details>` 中的代理說明。原型連結也可緊接表格之前。不適用的視覺或原型部分應省略，不要發布佔位內容。使用以下結構：
 
 ```markdown
+**Deploy preview (<app/provider>):** <full URL or explicit state/reason; omit when inapplicable>
+
 <one human-authored line about the change and why, or an explicitly labeled agent draft>
 
 | Before | After |
