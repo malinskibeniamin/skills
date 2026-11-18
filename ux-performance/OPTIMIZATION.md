@@ -162,6 +162,12 @@ downstream, serialization, payload, and download.
 - **Framework/library upgrade**: identify a specific bottleneck the release claims to fix,
   read its current migration/performance docs, benchmark a prototype, and count bundle,
   compatibility, build, and operational cost.
+- **Runtime/language change**: if runtime-owned work materially limits the journey,
+  [prototype one workload](../prototype/SKILL.md#compare-implementations) against the
+  best plausible in-stack fix. Measure from intent to useful state, including startup,
+  serialization, and any new process or network hop. If downstream waits dominate the
+  target percentile, investigate those first. Recommend adopting only if the measured
+  gain clears the declared bar and justifies deployment, rollback, and on-call costs.
 - **SSR, streaming, or prerendering**: default remains the existing SPA. Prototype server
   rendering only when initial useful content, discovery, SEO, or weak-device execution is a
   measured constraint. Guard TTFB, hydration work, server cost, caching, and soft-navigation
