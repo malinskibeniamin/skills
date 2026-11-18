@@ -24,12 +24,15 @@ WebView, bfcache, smooth scrolling, scroll snapping, `scrollIntoView`, interacti
 blocking, native-control behaviour, feature detection, responsive images/video, stable
 aspect ratio, LCP/CLS/INP, font loading, and third-party embeds.
 
-Minimum evidence names the Chromium mobile viewport and keyboard path: Tab, Shift+Tab, Enter, Space, Escape.
-Exercise the notification/toast path. Confirm captions/headers still explain tables.
-Require no surprise autofocus, and ensure buttons/links do not nest. Critical actions keep
-information persistent; toasts are not sole carrier for critical actions. Stress
-strikethrough, emoji, generated content; responsive video/media; stable aspect ratio; and
-third-party embeds/scripts.
+Treat the checklist as a risk catalogue, not a mandatory matrix. Minimum evidence names
+the actual surface/state, actions, observed results, reviewed revision and skipped paths.
+For affected keyboard interactions, record the path (Tab, Shift+Tab, Enter, Space, Escape);
+name a Chromium mobile viewport when mobile behavior is affected or project-required.
+Exercise changed notification/toast paths; critical information stays persistent. Expand
+media, themes, browsers and device checks for changed risks or stronger project rules.
+For PR publication, follow the [before/after comparison contract](../pr/SKILL.md#body-template);
+reuse evidence from dogfood and existing visual tests. Screenshots alone do not establish
+lifecycle, keyboard or integration correctness.
 
 Use when `/visual-review` runs standalone, or via `/development-lifecycle`, `/go`, `/commit-push-pr`, `/prototype`, `/triage`, `self-reviewer`, `code-reviewer`.
 
