@@ -7,19 +7,9 @@ For product/design forks, read [Poteto](../shared/POTETO-NATIVE.md#product-and-p
 
 Prove one named question, not an early production branch.
 
-Choose cheapest faithful shape: [logic/state model](LOGIC.md); UI in-app or a [shareable review website](UI.md#shareable-review-prototype), variants for open designs; API/tool sandbox/fixture; [implementation comparison](#compare-implementations).
+Choose cheapest faithful shape: [logic/state model](LOGIC.md); UI in-app or a [shareable review website](UI.md#shareable-review-prototype), variants for open designs; API/tool sandbox/fixture; [implementation comparison](COMPARISON.md).
 
-Use `.context/prototypes/<question>/`, or target-adjacent only when real runtime must load it; mark in-tree artifacts.
-
-## Compare implementations
-
-Use one representative workload at the same public entrypoint. Pin the incumbent,
-candidate, and fixture, and keep the evaluator outside both implementations. Use
-[differential testing](../tdd/DIFFERENTIAL-TESTING.md) for observable behavior, errors,
-and durable effects, and [quantify-impact](../quantify-impact/REFERENCE.md#optimization-experiments)
-for paired measurements, worthwhile delta, and stop rule. If the decisive behavior
-cannot be exercised in isolation, report the gap rather than treating a microbenchmark
-as an adoption verdict.
+Go target-adjacent only if the runtime must load it; mark in-tree artifacts.
 
 ## Retention
 
@@ -34,11 +24,9 @@ Record question, evidence and verdict in an issue, ADR, notes or commit. Main: o
 
 Explicit interface workbenches: recommend `variant` (designs), `state-machine` (reachable states), or `break` (stress). Apply [retention](../shared/INTERFACES.md#workbench-retention); user-only, never automatic dependencies.
 
-1. Standard library/existing deps by default. An authorized comparison may use the
-   candidate runtime or library in isolation; leave project dependencies unchanged.
+1. Standard library/existing deps by default; no unrelated scaffolding.
 2. One run command; scratch/in-memory persistence.
 3. Show relevant state/observations.
 4. Before trusting verdict, `/dogfood` once through decisive path and likely boundary, not every edit.
-5. Apply retention after the answer.
 
 If evidence contradicts the plan, revisit that decision before production.

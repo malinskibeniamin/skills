@@ -163,7 +163,7 @@ downstream, serialization, payload, and download.
   read its current migration/performance docs, benchmark a prototype, and count bundle,
   compatibility, build, and operational cost.
 - **Runtime/language change**: if runtime-owned work materially limits the journey,
-  [prototype one workload](../prototype/SKILL.md#compare-implementations) against the
+  [prototype one workload](../prototype/COMPARISON.md) against the
   best plausible in-stack fix. Measure from intent to useful state, including startup,
   serialization, and any new process or network hop. If downstream waits dominate the
   target percentile, investigate those first. Recommend adopting only if the measured

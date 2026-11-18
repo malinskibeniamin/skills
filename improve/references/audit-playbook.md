@@ -72,7 +72,7 @@ suspicion is a hypothesis, not a speedup. Report mode proposes; explicit impleme
 exits to the lifecycle.
 
 When traces show that the current implementation accounts for a material share of the
-cost, recommend one bounded [comparison prototype](../../prototype/SKILL.md#compare-implementations)
+cost, recommend one bounded [comparison prototype](../../prototype/COMPARISON.md)
 against the strongest plausible in-stack fix. Name the measured bottleneck, the result
 that would justify switching, and what would rule it out. Familiarity alone does not
 rule out the experiment. Report and Plan propose it; they do not build it.

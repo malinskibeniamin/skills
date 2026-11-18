@@ -28,14 +28,9 @@ Wybierz najprostszy wariant, który wiernie odwzorowuje problem:
 - Niepewność dotycząca logiki lub stanu -> mały wykonywalny model stanu; zobacz [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md).
 - UI i interakcje -> eksploracja w aplikacji lub [witryna do udostępnienia recenzentom](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype), z istotnie różnymi wariantami, gdy projekt jest otwarty.
 - Niepewność dotycząca API lub narzędzia -> minimalne wywołanie w środowisku testowym lub z użyciem fixtury.
-- [Porównaj implementacje](#compare-implementations).
+- [Porównaj implementacje](https://github.com/malinskibeniamin/skills/blob/main/prototype/COMPARISON.md).
 
-Jeśli to możliwe, umieść działające artefakty w `.context/prototypes/<question>/`, a obok
-docelowego kodu tylko wtedy, gdy muszą zostać załadowane przez rzeczywiste środowisko uruchomieniowe. Wyraźnie oznacz każdy artefakt znajdujący się w drzewie projektu.
-
-## Porównaj implementacje [#compare-implementations]
-
-Wybierz jedno reprezentatywne obciążenie i użyj tego samego publicznego punktu wejścia. Ustal wersje obecnej i proponowanej implementacji oraz dane testowe. Narzędzie oceniające trzymaj poza obiema implementacjami. Zastosuj [testy różnicowe](https://github.com/malinskibeniamin/skills/blob/main/tdd/DIFFERENTIAL-TESTING.md), aby porównać obserwowalne zachowanie, błędy i trwałe skutki uboczne, oraz [quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments), aby zaplanować pomiary parami, minimalną opłacalną poprawę i warunek zakończenia. Jeśli rozstrzygającego zachowania nie da się sprawdzić w izolacji, zgłoś tę lukę zamiast opierać decyzję o wdrożeniu na mikrobenchmarku.
+Umieść prototyp obok docelowego kodu tylko wtedy, gdy środowisko uruchomieniowe musi go załadować. Oznacz artefakty w drzewie projektu.
 
 ## Przechowywanie [#retention]
 
@@ -52,13 +47,12 @@ zatwierdzeniu implementującym zmianę. W głównej gałęzi pozostaje wyłączn
 
 ## Ograniczenia [#constraints]
 
-1. Domyślnie używaj biblioteki standardowej i istniejących zależności. Zatwierdzone porównanie może wykorzystywać proponowane środowisko uruchomieniowe lub bibliotekę w izolacji; nie zmieniaj zależności projektu.
+1. Domyślnie używaj biblioteki standardowej i istniejących zależności. Nie twórz szkieletu niezwiązanego z pytaniem.
 2. Jedno polecenie do uruchomienia.
 3. Wyłącznie trwałość w pamięci lub w danych tymczasowych.
 4. Pokaż istotny stan i obserwacje.
 5. Zanim oprzesz się na werdykcie, uruchom `/dogfood` jeden raz dla ścieżki rozstrzygającej i prawdopodobnego
    przypadku brzegowego; nie testuj w ten sposób każdej pośredniej zmiany.
-6. Gdy ścieżka rozstrzygająca odpowie na pytanie, zastosuj powyższe zasady przechowywania.
 
 Jeśli prototyp przeczy planowi, ponownie przeanalizuj odpowiednią decyzję przed rozpoczęciem
 implementacji produkcyjnej.
