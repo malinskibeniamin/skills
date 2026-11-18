@@ -1,0 +1,17 @@
+{
+  "name": "@frontend-skills/bao",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "bao": "./dist/bao.js"
+  },
+  "files": [
+    "dist/bao.js",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "bun build src/cli.ts --target=bun --outfile=dist/bao.js",
+    "prepack": "bun run build"
+  }
+}

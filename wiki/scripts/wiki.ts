@@ -10,7 +10,7 @@ import {
 import { isAbsolute, join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 
-const prefix = "bun run wiki --home /path/to/skills/.context/wiki-home";
+const exampleHome = "/path/to/skills/.context/wiki-home";
 const commands: Record<
   string,
   { usage: string; detail: string; flags: string[]; count: number }
@@ -73,7 +73,7 @@ const commands: Record<
   },
 };
 
-function help(command?: string) {
+function help(prefix: string, command?: string) {
   if (command === "repo")
     return `Usage: ${prefix} repo <add|list>\n\nRegister or list repo pointers without accessing their targets.\nUse repo add --help or repo list --help for details.\nExamples:\n  ${prefix} repo list\n`;
   const spec = command ? commands[command] : undefined;
@@ -438,9 +438,10 @@ function lint(home: string) {
   return { issues };
 }
 
-async function main() {
+async function main(args: string[], invocation: string) {
+  const prefix = `${invocation} --home ${exampleHome}`;
   const { values, positionals, tokens } = parseArgs({
-    args: Bun.argv.slice(2),
+    args,
     allowPositionals: true,
     strict: true,
     tokens: true,
@@ -465,23 +466,24 @@ async function main() {
       seen.add(token.name);
     }
   if (!positionals.length) {
-    console.log(help());
+    console.log(help(prefix));
     return;
   }
   const helpMode = positionals[0] === "help";
-  const args = helpMode ? positionals.slice(1) : positionals;
-  const command = args[0] === "repo" ? args.slice(0, 2).join(" ") : args[0];
+  const operands = helpMode ? positionals.slice(1) : positionals;
+  const command =
+    operands[0] === "repo" ? operands.slice(0, 2).join(" ") : operands[0];
   if (helpMode || values.help) {
-    console.log(help(command));
+    console.log(help(prefix, command));
     return;
   }
   const spec = command ? commands[command] : undefined;
   if (!spec)
-    throw new Error(`Unknown command: ${command}. Run bun run wiki --help.`);
+    throw new Error(`Unknown command: ${command}. Run ${invocation} --help.`);
   for (const key of seen)
     if (!["home", "help", ...spec.flags].includes(key))
       throw new Error(`Unsupported option for ${command}: --${key}`);
-  if (args.length !== spec.count)
+  if (operands.length !== spec.count)
     throw new Error(`Usage: ${prefix} ${spec.usage}`);
   const home = resolve(singleLine(values.home, "--home"));
   if (command === "init") return initialize(home);
@@ -490,9 +492,9 @@ async function main() {
     case "list":
       return pages(home).map(metadata);
     case "read":
-      return page(home, slug(args[1]));
+      return page(home, slug(operands[1]));
     case "search": {
-      const query = singleLine(args[1], "query");
+      const query = singleLine(operands[1], "query");
       const limit = Number(values.limit ?? 20);
       if (!Number.isSafeInteger(limit) || limit < 1 || limit > 1000)
         throw new Error("--limit must be an integer from 1 to 1000.");
@@ -507,7 +509,7 @@ async function main() {
       return repoList(home);
     case "repo add": {
       const pointer: Repo = {
-        name: slug(args[2]),
+        name: slug(operands[2]),
         path: singleLine(values.path, "--path"),
         summary: singleLine(values.summary, "--summary"),
       };
@@ -520,7 +522,7 @@ async function main() {
       return addRepo(home, pointer);
     }
     case "ingest": {
-      const name = slug(args[1]);
+      const name = slug(operands[1]);
       const title = singleLine(values.title, "--title");
       const source = singleLine(values.source, "--source");
       if (Boolean(values.stdin) === (values.file !== undefined))
@@ -539,12 +541,16 @@ async function main() {
     }
   }
 }
-try {
-  const result = await main();
-  if (result !== undefined) console.log(JSON.stringify(result, null, 2));
-} catch (error) {
-  console.error(
-    `wiki: ${(error as Error).message}\nRun bun run wiki <command> --help for examples.`,
-  );
-  process.exitCode = 1;
+export async function runWikiCli(args: string[], invocation = "bun run wiki") {
+  try {
+    const result = await main(args, invocation);
+    if (result !== undefined) console.log(JSON.stringify(result, null, 2));
+  } catch (error) {
+    console.error(
+      `wiki: ${(error as Error).message}\nRun ${invocation} <command> --help for examples.`,
+    );
+    process.exitCode = 1;
+  }
 }
+
+if (import.meta.main) await runWikiCli(Bun.argv.slice(2));
