@@ -75,10 +75,7 @@ UI 變更依照[視覺證據契約](https://github.com/malinskibeniamin/skills/b
 
 ### 可點選的審查原型 [#clickable-review-prototypes]
 
-當互動、難以到達的應用程式狀態或替代方案適合動手審查時，連結至 [UI 原型](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)。在輕量網站直接使用真實應用程式元件、字型、設計權杖及佈景主題提供者；透過明確標示的測試資料隔離 Electron、原生程式碼及後端邊界。審查者無須簽出分支或設定完整應用程式環境即可進入相關狀態。設計問題尚未確定時，提供具有實質差異的方案，以及可分享的變體與狀態 URL；已確定的小改動不需要變體或新原型。
-
-僅使用目標儲存庫已有文件、獲核准且受 SSO 保護的 Quick Site 或同等私人預覽流程部署。查找該流程的指令與設定；[Shopify Quick](https://shopify.engineering/quick) 僅是靈感，並不提供基礎設施存取權或通用部署指令。託管或 SSO 無法使用時，保留可執行產物、說明缺口並使用擷取畫面；不得默默改為公開發布或新增託管、驗證基礎設施。確認審查者存取權、連結目標狀態及資源載入；聲稱受 SSO 保護前，確認登出後無法存取。明確標示模擬行為及未經驗證的存取權。將 URL 與產物綁定至審查版本；相關變更後更新或標示過時。遵循[原型保留政策](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention)。
-
+當互動、難以到達的狀態或替代方案適合動手審查時，遵循[原型託管與驗證指南](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#prototype-hosting-and-verification)。
 
 ## 描述與風險 [#description-and-risk]
 

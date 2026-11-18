@@ -77,10 +77,7 @@ Dla zmian UI używaj porównywalnych rzeczywistych zrzutów bazy i kandydata zgo
 
 ### Klikalne prototypy do przeglądu [#clickable-review-prototypes]
 
-Gdy interakcje, trudno dostępne stany lub alternatywne podejścia warto wypróbować, podlinkuj [prototyp UI](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype). Użyj rzeczywistych komponentów, fontów, tokenów i dostawców motywu aplikacji w lekkiej witrynie; granice Electron, kodu natywnego i backendu izoluj oznaczonymi fixturami. Recenzent powinien trafić do właściwego stanu bez pobierania gałęzi i konfiguracji pełnego środowiska. Dla otwartego pytania projektowego udostępnij istotnie różne podejścia z bezpośrednimi URL-ami wariantów i stanów. Ustalona mała zmiana nie wymaga wariantów ani nowego prototypu.
-
-Wdrażaj wyłącznie przez udokumentowany, zatwierdzony proces Quick Site z SSO lub równoważny prywatny podgląd w docelowym repozytorium. Odszukaj jego polecenie i konfigurację. [Quick Shopify](https://shopify.engineering/quick) jest inspiracją, nie dostępem do infrastruktury ani przenośnym poleceniem wdrożenia. Gdy hosting lub SSO są niedostępne, zachowaj działający artefakt, zgłoś lukę i użyj zrzutów; nie publikuj po cichu publicznie ani nie dodawaj infrastruktury hostingu lub uwierzytelniania. Sprawdź dostęp recenzenta, docelowy stan linku i ładowanie zasobów; zanim nazwiesz witrynę chronioną SSO, potwierdź odmowę dostępu po wylogowaniu. Oznacz symulacje i niezweryfikowany dostęp. Powiąż URL i artefakt z przeglądaną rewizją; po istotnej zmianie odśwież je lub oznacz jako nieaktualne. Stosuj [zasady przechowywania prototypów](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention).
-
+Jeśli interakcje, trudno dostępne stany lub alternatywy warto wypróbować, postępuj zgodnie z [zasadami hostingu i weryfikacji prototypów](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#prototype-hosting-and-verification).
 
 ## Opis i ryzyko [#description-and-risk]
 

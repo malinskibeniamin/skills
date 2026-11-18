@@ -75,10 +75,7 @@ UI 变更按照[视觉证据契约](https://github.com/malinskibeniamin/skills/b
 
 ### 可点击的审查原型 [#clickable-review-prototypes]
 
-当交互、难以到达的应用状态或备选方案适合动手审查时，链接到 [UI 原型](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)。在轻量网站直接使用真实应用组件、字体、设计令牌及主题提供器；通过明确标注的测试数据隔离 Electron、原生代码和后端边界。审查者无需检出分支或配置完整应用环境即可进入相关状态。设计问题尚未确定时，提供具有实质差异的方案，以及可分享的变体和状态 URL；已确定的小改动无需变体或新原型。
-
-仅使用目标仓库已记录、获批准且受 SSO 保护的 Quick Site 或等效私有预览流程部署。查找该流程的命令和配置；[Shopify Quick](https://shopify.engineering/quick) 仅是灵感，并不提供基础设施访问权或通用部署命令。托管或 SSO 不可用时，保留可运行产物、说明缺口并使用截图；不得默默转为公开发布或新增托管、认证基础设施。核实审查者访问权限、链接目标状态和资源加载；声称受 SSO 保护前，确认退出登录后无法访问。明确标识模拟行为和未经验证的访问权限。将 URL 和产物绑定到审查版本；相关变更后刷新或标记过时。遵守[原型保留策略](https://github.com/malinskibeniamin/skills/blob/main/prototype/SKILL.md#retention)。
-
+当交互、难以到达的状态或备选方案适合动手审查时，遵循[原型托管和验证指南](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#prototype-hosting-and-verification)。
 
 ## 描述与风险 [#description-and-risk]
 

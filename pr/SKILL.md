@@ -87,23 +87,8 @@ applicable diagram evidence. A prototype complements, not replaces, screenshots 
 
 ### Clickable review prototypes
 
-When interaction, hard-to-reach app states or alternative approaches benefit from hands-on
-review, link a [UI prototype](../prototype/UI.md#shareable-review-prototype).
-Use real app components/fonts/tokens/theme providers in a lightweight website; isolate
-Electron/native/backend boundaries with labeled fixtures. Reviewers should reach the
-relevant state without checking out a branch or arranging the full app environment.
-For an open design question, expose meaningfully different approaches with shareable
-variant/state URLs; a settled small edit needs neither variants nor a new prototype.
-
-Deploy only through the target repository's documented, approved SSO-gated Quick Site
-(or equivalent private preview) workflow. Discover its command/config; Shopify's
-[Quick](https://shopify.engineering/quick) is inspiration, not access to infrastructure
-or a portable deployment command. If hosting/SSO is unavailable, retain the runnable
-artifact, report the gap and use screenshots; do not silently publish publicly or add
-hosting/auth infrastructure. Verify reviewer access, link target state and asset loading;
-check logged-out access is denied before calling it SSO-gated. Identify simulated behavior
-and unverified access. Keep the URL/artifact tied to the reviewed revision; refresh it or
-mark it stale after relevant changes. Follow [prototype retention](../prototype/SKILL.md#retention).
+When interaction, hard-to-reach states or alternatives benefit from hands-on review,
+follow [prototype hosting and verification](SUMMARY-VIEWS.md#prototype-hosting-and-verification).
 
 ## Description and risk
 
