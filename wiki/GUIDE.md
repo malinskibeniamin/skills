@@ -72,7 +72,7 @@ limited to 1 MiB. Slugs use lowercase kebab-case, up to 100 characters; `index` 
 Results are JSON on stdout. Help is plain text. Diagnostics go to stderr, with nonzero
 exit status; `lint` instead returns JSON issues and exits 1 when issues exist. Search
 is literal, case-insensitive, and capped at 20 matching lines by default (`--limit`:
-1–1000). Body line numbers start at 1; title/source matches use line 0. An empty result
+1-1000). Body line numbers start at 1; title/source matches use line 0. An empty result
 is a successful `[]`, not an error. No prompts or stdin reads occur without `--stdin`.
 
 Each page has `title`, `source`, and UTC `date` frontmatter as JSON-quoted strings.

@@ -231,7 +231,7 @@ test("repairs index drift on an identical file ingest, and honors another writer
   );
 });
 
-test("ignores link examples in Markdown code while detecting real missing page links", () => {
+test("ignores link examples in Markdown code and comments without joining separate link fragments", () => {
   const home = join(scratch, "code-links");
   json(run(home, ["init"]));
   json(
@@ -246,7 +246,7 @@ test("ignores link examples in Markdown code while detecting real missing page l
         "owner",
         "--stdin",
       ],
-      "Inline `[[not-a-page]]`.\n\n```md\n[example](not-real.md)\n```\n\n[actual](missing.md)",
+      "Inline `[[not-a-page]]`.\n\n```md\n[example](not-real.md)\n```\n\n<!-- [hidden](hidden.md) -->\n[not joined]<!-- separator -->(synthetic.md)\n[actual](missing.md)",
     ),
   );
   const result = run(home, ["lint"]);

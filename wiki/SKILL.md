@@ -1,6 +1,6 @@
 ---
 name: wiki
-description: "Maintain a local home-repo wiki: ingest source-cited Markdown, search/read knowledge, lint links, and register pointers to other repositories. Use for durable cross-repo knowledge, not live code discovery or account integrations."
+description: "Maintain source-cited Markdown across repositories. Ingest, search, and lint wiki pages, or register local repo pointers. Not for live code or account integrations."
 ---
 
 Use `bun <absolute-skill-dir>/scripts/wiki.ts` (Bun required). In this checkout,

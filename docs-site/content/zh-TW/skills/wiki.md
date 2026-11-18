@@ -1,7 +1,5 @@
 ---
-description: >-
-  維護本地主儲存庫 wiki：儲存附有來源的
-  Markdown、搜尋和讀取知識、檢查連結，並登記其他儲存庫的路徑。適用於持久的跨儲存庫知識，不用於探索即時程式碼或連接外部帳號。
+description: 維護跨儲存庫、附有來源的 Markdown。匯入、搜尋和檢查 wiki 頁面，或登記本機儲存庫路徑。不用於查看即時程式碼或整合外部帳號。
 related:
   - /skills/development-lifecycle
   - /skills/tdd

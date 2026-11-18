@@ -1,8 +1,7 @@
 ---
 description: >-
-  Prowadź lokalną wiki repozytorium domowego: zapisuj Markdown ze źródłami,
-  wyszukuj i czytaj wiedzę, sprawdzaj linki oraz rejestruj ścieżki innych
-  repozytoriów. Do trwałej wiedzy między repozytoriami, nie do przeglądania
+  Porządkuj Markdown ze źródłami w wielu repozytoriach. Zapisuj, wyszukuj i
+  sprawdzaj strony wiki lub rejestruj lokalne ścieżki. Nie służy do przeglądania
   bieżącego kodu ani integracji z kontami.
 related:
   - /skills/development-lifecycle

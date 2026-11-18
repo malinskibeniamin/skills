@@ -363,7 +363,7 @@ function search(home: string, query: string, limit: number) {
   return matches;
 }
 // Ignore examples rather than reporting their illustrative links as broken pages.
-function prose(content: string) {
+function withoutFencedCode(content: string) {
   let fence: string | undefined;
   return content
     .split("\n")
@@ -384,9 +384,7 @@ function prose(content: string) {
       }
       return line;
     })
-    .join("\n")
-    .replace(/(`+)[\s\S]*?\1(?!`)/g, "")
-    .replace(/<!--[\s\S]*?-->/g, "");
+    .join("\n");
 }
 function lint(home: string) {
   const issues: { page: string; target?: string; message: string }[] = [];
@@ -400,18 +398,14 @@ function lint(home: string) {
   }
   const names = new Set(entries.map((p) => p.slug));
   for (const p of entries) {
-    const content = prose(p.content);
-    const targets = [
-      ...Array.from(
-        content.matchAll(/\]\(<?([^\s)>]+)>?(?:\s+"[^"]*")?\)/g),
-        (m) => m[1] ?? "",
-      ),
-      ...Array.from(
-        content.matchAll(/\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g),
-        (m) => m[1] ?? "",
-      ),
-    ];
-    for (const target of targets) {
+    // Scan rather than delete comments/inline code: deletion can create a link
+    // that did not exist in the original Markdown.
+    const tokens = withoutFencedCode(p.content).matchAll(
+      /<!--[\s\S]*?-->|(`+)[\s\S]*?\1(?!`)|\]\(<?([^\s)>]+)>?(?:\s+"[^"]*")?\)|\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g,
+    );
+    for (const token of tokens) {
+      const target = token[2] ?? token[3];
+      if (!target) continue;
       if (target.startsWith("#") || /^[a-z][a-z0-9+.-]*:/i.test(target))
         continue;
       const name = target.split("#")[0]?.replace(/\.md$/, "");

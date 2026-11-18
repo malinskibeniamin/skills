@@ -1,7 +1,5 @@
 ---
-description: >-
-  维护本地主仓库 wiki：存储附有来源的
-  Markdown、搜索和读取知识、检查链接，并登记其他仓库的路径。适用于持久的跨仓库知识，不用于探索实时代码或连接外部账户。
+description: 维护跨仓库、附有来源的 Markdown。录入、搜索和检查 wiki 页面，或登记本地仓库路径。不用于查看实时代码或集成外部账户。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
