@@ -1,5 +1,5 @@
 ---
-description: 为尚未解决的逻辑、交互或视觉问题构建一次性证据。适用于在正式投入前，通过可运行的证据消除对行为或 UI 的不确定性。
+description: 为尚未解决的逻辑、交互、视觉或实现问题构建一次性证据。适用于在做出决定前，用可运行的证据消除不确定性。
 related:
   - /skills/development-lifecycle
   - /skills/tdd
@@ -28,8 +28,13 @@ type: skill
 - 逻辑/状态不确定性 -> 一个小型可执行状态模型；参见 [LOGIC.md](https://github.com/malinskibeniamin/skills/blob/main/prototype/LOGIC.md)。
 - UI 与交互 -> 应用内探索或[可分享的审查网站](https://github.com/malinskibeniamin/skills/blob/main/prototype/UI.md#shareable-review-prototype)；设计尚未确定时提供有实质差异的变体。
 - API/工具不确定性 -> 针对沙箱或固定测试数据执行一次最小调用。
+- [对比实现](#compare-implementations).
 
 尽可能将可运行的产物放在 `.context/prototypes/<question>/` 下；只有实际运行时必须加载它们时，才放在目标旁边。清楚标记所有放入代码树的产物。
+
+## 对比实现 [#compare-implementations]
+
+选取一个有代表性的工作负载，并通过同一个公开入口运行。固定现有实现、候选实现和测试数据的版本，将评估工具独立于两种实现。使用[差分测试](https://github.com/malinskibeniamin/skills/blob/main/tdd/DIFFERENTIAL-TESTING.md)核对可观察的行为、错误和持久化副作用，使用[quantify-impact](https://github.com/malinskibeniamin/skills/blob/main/quantify-impact/REFERENCE.md#optimization-experiments)进行成对测量，并设定最低有意义的改进幅度和停止条件。如果无法在隔离环境中验证决定性的行为，应报告这一缺口，不要仅凭微基准测试决定是否采用候选方案。
 
 ## 保留策略 [#retention]
 
@@ -43,8 +48,7 @@ type: skill
 
 ## 约束 [#constraints]
 
-1. 优先使用标准库和现有依赖项；不要搭建与
-   问题无关的脚手架。
+1. 默认使用标准库和现有依赖项。经授权的对比可以在隔离环境中使用候选运行时或库；保持项目依赖项不变。
 2. 使用一条命令即可运行。
 3. 仅使用内存或临时存储。
 4. 展示相关状态和观察结果。
