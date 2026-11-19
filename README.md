@@ -215,6 +215,16 @@ checks. It preserves human ownership and existing approval/delegation boundaries
 Run `bun run review:gates --help` in this checkout, or the installed
 `scripts/review-gates.ts` from a consuming repository. No extra runtime dependencies.
 
+## Local home-repo wiki
+
+Use `/wiki` for source-cited Markdown knowledge and pointers to other repositories.
+The CLI ships here; knowledge lives in gitignored `.context/wiki-home/`. Start with
+`bun run wiki --help`. [Setup, commands, and video context](wiki/GUIDE.md).
+This local-first version does not connect accounts, clone repos, or migrate existing material.
+
+The [standalone Bao CLI](packages/bao/README.md) also exposes the same wiki and repo
+commands, plus a read-only Codex sign-in check. Bao's coding loop is not yet available.
+
 ## Factual technical writing
 
 Use `/docs` to write or review READMEs, design specs, research notes, and runbooks with

@@ -15,3 +15,6 @@ redpanda-evals/**/*.sh
 
 # Claude Code emits version-specific mod SDK declarations on load.
 plugins/*/.claude-plugin/types/
+
+# Per-checkout wiki knowledge is local, not plugin content.
+.context/wiki-home/

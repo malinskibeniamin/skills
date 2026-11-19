@@ -1042,6 +1042,15 @@ const SKILL_DIAGRAMS: Record<string, DiagramSpec> = {
       "Paired verification",
     ],
   },
+  wiki: {
+    kind: "feedback-loop",
+    nodes: [
+      "Discover local knowledge",
+      "Read cited pages",
+      "Ingest dated evidence",
+      "Lint links + index",
+    ],
+  },
   "video-research": {
     kind: "pipeline",
     nodes: [
