@@ -44,8 +44,9 @@ If required evidence cannot fit, name the conflict rather than silently dropping
 - **RFC / plan:** problem and stakes -> proposed decision -> alternatives and trade-off ->
   open questions -> verification and rollout. Distinguish proposed from shipped work;
   a retrospective implementation summary is not evidence of prior agreement.
-- **PR:** open with one sentence capturing the entire change and why it matters, before
-  headings or metadata. Budget at most **10 seconds** for this first read. Preserve the
+- **PR:** lead with the [deploy preview URL or state](../pr/SKILL.md#deploy-previews) when
+  applicable, followed by one sentence capturing the entire change and why it matters,
+  before headings or other metadata. Budget at most **10 seconds** for this first read. Preserve the
   human's title/line; mark agent drafts for human editing without claiming endorsement.
   Follow the [PR body owner](../pr/SKILL.md#body-template): UI before/after table and useful
   clickable prototype outside one collapsed agent-generated description. Keep failed/blocked

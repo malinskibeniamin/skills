@@ -40,7 +40,7 @@ run_content_eval "$CONTRACT" 'schema|safety' \
 # The PR prompt is the public artifact here, not proof of model compliance.
 PR_CONTRACT="$REPO_ROOT/pr/SKILL.md"
 run_content_eval "$CONTRACT" 'one sentence.*entire change.*why it matters' \
-  "every PR opens with the whole change and its purpose in one sentence"
+  "every PR gives the whole change and its purpose in one sentence"
 run_content_eval "$CONTRACT" '10 seconds' \
   "the PR opening has a ten-second first-read budget"
 run_content_eval "$CONTRACT" 'routine review/testing/risk detail stays inside' \
@@ -57,9 +57,31 @@ from pathlib import Path
 
 canonical, publication, github = [Path(path).read_text() for path in sys.argv[1:]]
 body = canonical.split("```markdown\n", 1)[1].split("\n```", 1)[0].strip()
-opening = body.split("\n\n", 1)[0]
-assert "\n" not in opening and "human-authored line about the change and why" in opening
-assert "explicitly labeled agent draft" in opening
+preview, summary_and_detail = body.split("\n\n", 1)
+assert preview.startswith("**Deploy preview (<app/provider>):** ")
+assert "full URL" in preview and "state/reason" in preview and "omit when inapplicable" in preview
+
+def validate_opening(prompt, preview_applies):
+    sections = prompt.split("\n\n")
+    if preview_applies:
+        assert sections.pop(0) == preview
+    opening = sections[0]
+    assert "\n" not in opening and "human-authored line about the change and why" in opening
+    assert "explicitly labeled agent draft" in opening
+    assert not any(section.startswith("**Deploy preview") for section in sections)
+
+validate_opening(body, preview_applies=True)
+validate_opening(summary_and_detail, preview_applies=False)
+for bad, preview_applies in (
+    (summary_and_detail, True),  # Missing an applicable preview.
+    (body, False),  # Empty preview slot when no preview applies.
+    (summary_and_detail.replace("\n\n", "\n\n" + preview + "\n\n", 1), True),
+):
+    try:
+        validate_opening(bad, preview_applies)
+    except AssertionError:
+        continue
+    raise AssertionError("PR opening guard accepted a known-bad control")
 assert "../pr/SKILL.md#body-template" in publication
 assert github.index("One line: what changes and why") < github.index("| Before | After |")
 def validate(prompt):
@@ -91,7 +113,7 @@ for bad in (
 assert "SUMMARY-VIEWS.md#supporting-description" in canonical
 PY_CHECK
 then
-  echo '  PASS  PR templates preserve human intent, UI comparisons and packaging, and collapsed agent detail'
+  echo '  PASS  PR templates keep applicable previews first, then human intent, UI evidence and collapsed agent detail'
   PASS=$((PASS + 1))
 else
   echo '  FAIL  a PR template buries the opening or expands into a wall of text'

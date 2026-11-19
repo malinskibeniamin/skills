@@ -127,7 +127,7 @@ function expandSkill(command: string): string {
 
 ## Supporting description
 
-The opening sentence is the required first read, not a preamble; follow the
+After the deploy preview when applicable, lead with the change and why; follow the
 [PR attention budget](../shared/communication.md#match-the-artifact). Keep only supporting
 detail below it. The topics below are author guidance, not required PR headings.
 Keep agent detail collapsed per the body template; retain required visual media inline after the
@@ -187,3 +187,23 @@ Name the rollback path and classify the change as a one-way or two-way door. Two
 Name affected users, callers, contracts, and credible failure modes, including shared consumers.
 Apply the handoff rubric's error-detection assessment alongside recovery; keep material
 visibility gaps explicit rather than treating passing tests or a rollback plan as detection.
+
+## Prototype hosting and verification
+
+When interaction, hard-to-reach app states or alternative approaches benefit from hands-on
+review, link a [UI prototype](../prototype/UI.md#shareable-review-prototype).
+Use real app components/fonts/tokens/theme providers in a lightweight website; isolate
+Electron/native/backend boundaries with labeled fixtures. Reviewers should reach the
+relevant state without checking out a branch or arranging the full app environment.
+For an open design question, expose meaningfully different approaches with shareable
+variant/state URLs; a settled small edit needs neither variants nor a new prototype.
+
+Deploy only through the target repository's documented, approved SSO-gated Quick Site
+(or equivalent private preview) workflow. Discover its command/config; Shopify's
+[Quick](https://shopify.engineering/quick) is inspiration, not access to infrastructure
+or a portable deployment command. If hosting/SSO is unavailable, retain the runnable
+artifact, report the gap and use screenshots; do not silently publish publicly or add
+hosting/auth infrastructure. Verify reviewer access, link target state and asset loading;
+check logged-out access is denied before calling it SSO-gated. Identify simulated behavior
+and unverified access. Keep the URL/artifact tied to the reviewed revision; refresh it or
+mark it stale after relevant changes. Follow [prototype retention](../prototype/SKILL.md#retention).
