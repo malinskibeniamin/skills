@@ -10,7 +10,7 @@ Claude mods: [MODS.md](MODS.md). Cross-runtime enforcement stays in settings hoo
 
 ## Evidence bar
 
-Compose existing skills before adding. Justify rules with a real failure or unmet contract; prove clean -> violation -> clean.
+Use the [correction tree](../shared/POTETO-NATIVE.md#harness-improvement): remove the invalid choice first. Reuse skills; prove a real failure/contract gap with clean -> violation -> clean.
 
 ## Add rule
 

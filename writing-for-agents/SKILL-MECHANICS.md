@@ -25,6 +25,13 @@ Split a model-invoked skill when it has a distinct leading word that should trig
 
 When user-invoked skills exceed what a human can remember, add one user-invoked router that names them and explains when to use each. The router can recommend but cannot autonomously invoke another user-invoked skill.
 
+## Verify instruction edits
+
+For instruction edits in this harness, run `bash evals/run.sh token-budget` (file-byte
+caps and ASCII punctuation) and `bash evals/run.sh frontier-harness` (ambient context
+and workflow contracts). `skill-writing-quality` checks description/line budgets; it
+does not replace those checks. Reuse the target repository's commands elsewhere.
+
 ## Bundled helpers
 
 Invoke bundled helpers with their declared interpreter (`bash scripts/check.sh`,

@@ -77,7 +77,7 @@ One outcome contract: **Objective** (end state), **Guardrails** (bounds),
 inspect -> act -> verify -> repeat. Use scripts for repeatable work, judgment for uncertainty.
 Improve feedback loops before opt-in concurrency. Continue reversible decisions;
 pair status with the next action, not recaps/offers/non-blocking options.
-No extra gates/ceremonies. Add failing public-contract tests only for uncovered risks;
+No extra gates/ceremonies. Correct via [tree](shared/POTETO-NATIVE.md#harness-improvement);
 reuse local notes for long-run checkpoints, not routine evidence/checklist files.
 
 Quality-first: `config/model-routing.json`, `/efficient-frontier`; xhigh only.

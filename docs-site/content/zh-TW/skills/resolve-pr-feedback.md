@@ -53,6 +53,8 @@ type: skill
 
 依根因分組：已修復（迴歸證據）、已拒絕（反證）或受阻（缺少證據／決策）。
 在所屬分支依序完成：先讓迴歸測試失敗 -> 修復 -> 重播反例 -> 重新審查。
+代理程式第一次犯錯時就套用[修正決策樹](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)：在只新增測試或指令之前，先檢查負責該契約的 API 或檢查機制。在現有回覆中說明所選層級及證據；唯讀處置仍維持唯讀。
+
 提交 `fix(review): <cluster summary>`。
 
 ### 4. 回覆並解決 [#4-reply-and-resolve]

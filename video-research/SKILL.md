@@ -19,6 +19,11 @@ bash <skill-dir>/scripts/analyze-video.sh \
 
 It prefers captions, then local Whisper, samples frames, OCRs text, and writes `analysis.json`, `transcript.txt`, `research.md`. One-shot tools are pinned; first run may download a local model. Report progress; never add runtimes to target dependencies.
 
+A transcript is required by default: OCR cannot satisfy a transcription request.
+For genuinely silent media, use `--visual-only`; that mode requires OCR or frame files
+and labels the result as visual evidence, not a transcription. Keep failure artifacts
+for diagnosis; do not switch modes to hide failed speech recognition.
+
 Optional: `--language <code>`, difficult audio `--model medium`, non-English visuals `--ocr-language <codes>`. Transcription is local by default. Cloud transcription uploads audio and may cost money, so requires explicit approval.
 
 ## Research

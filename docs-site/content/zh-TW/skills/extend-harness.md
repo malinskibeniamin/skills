@@ -23,6 +23,8 @@ type: skill
 
 Claude mods：[MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md)。跨執行環境的規則強制執行仍由設定 hook 負責。
 
+新增規則前先套用[修正決策樹](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。優先在負責該契約的 API、型別或模組中消除錯誤選擇，而不是再新增檢查或 hook。
+
 新增技能前，先組合現有技能。以實際故障或未滿足的契約證明規則有必要；驗證乾淨 -> 違規 -> 乾淨的過程。
 
 ## 新增規則 [#add-rule]

@@ -10,6 +10,7 @@ Options:
   --language <code>      Force transcript language, for example en or pl
   --model <name>         Whisper model (default: small)
   --ocr-language <codes> Tesseract languages (default: eng)
+  --visual-only         Accept visual evidence without a transcript (silent media)
   -h, --help             Show this help
 EOF
 }
@@ -23,6 +24,7 @@ output_dir=""
 language=""
 model="${VIDEO_RESEARCH_MODEL:-small}"
 ocr_language="${VIDEO_RESEARCH_OCR_LANGUAGE:-eng}"
+visual_only=0
 source_value=""
 
 while [ "$#" -gt 0 ]; do
@@ -46,6 +48,10 @@ while [ "$#" -gt 0 ]; do
       [ "$#" -ge 2 ] || die "--ocr-language requires a value"
       ocr_language="$2"
       shift 2
+      ;;
+    --visual-only)
+      visual_only=1
+      shift
       ;;
     -h|--help)
       usage
@@ -145,12 +151,16 @@ if [ -z "$whisper_bin" ] && ! command -v whisper >/dev/null 2>&1 && \
   fi
 fi
 
+fields="metadata,transcript,frames,chapters,ocrResults,timeline"
+if [ "$visual_only" -eq 1 ]; then
+  fields="metadata,frames,chapters,ocrResults,timeline"
+fi
 analyzer_args=(
   "mcp-video-analyzer@0.7.1"
   analyze
   "$source"
   --fields
-  "metadata,transcript,frames,chapters,ocrResults,timeline"
+  "$fields"
   --out
   "$frames_dir"
   --model
@@ -176,12 +186,13 @@ fi
 mv "$analysis_tmp" "$analysis_path"
 
 render_exit=0
-python3 - "$analysis_path" "$transcript_path" "$research_path" "$source" <<'PY' || render_exit=$?
+python3 - "$analysis_path" "$transcript_path" "$research_path" "$source" "$visual_only" <<'PY' || render_exit=$?
 import json
 import pathlib
 import sys
 
-analysis_path, transcript_path, research_path, source = sys.argv[1:]
+analysis_path, transcript_path, research_path, source, visual_only_arg = sys.argv[1:]
+visual_only = visual_only_arg == "1"
 
 try:
     data = json.loads(pathlib.Path(analysis_path).read_text(encoding="utf-8"))
@@ -207,7 +218,8 @@ def evidence_lines(entries: list[object]) -> list[str]:
     for entry in entries:
         if not isinstance(entry, dict):
             continue
-        text = clean(entry.get("text"))
+        raw_text = entry.get("text")
+        text = clean(raw_text) if isinstance(raw_text, str) else ""
         if not text:
             continue
         time = clean(entry.get("time")) or "0:00"
@@ -230,6 +242,7 @@ markdown = [
     f"- **Title:** {title}",
     f"- **Source:** {source}",
     f"- **Duration:** {duration}",
+    f"- **Evidence mode:** {'visual-only; not a transcription' if visual_only else 'transcript required'}",
     "",
     "## Transcript",
     "",
@@ -258,13 +271,20 @@ for warning in warnings:
     print(f"video-research warning: {warning}", file=sys.stderr)
 
 missing_backend = any("No speech-to-text backend available" in warning for warning in warnings)
-if missing_backend:
+if missing_backend and not visual_only:
     raise SystemExit(3)
-if not transcript_lines and not ocr_lines:
+if not visual_only and not transcript_lines:
     print(
-        "video-research warning: no speech or OCR text found; inspect the extracted frames",
+        "video-research: transcript required but none produced; OCR is not speech evidence",
         file=sys.stderr,
     )
+    raise SystemExit(3)
+if visual_only and not ocr_lines and not any(
+    isinstance(frame, dict) and pathlib.Path(str(frame.get("filePath", ""))).is_file()
+    for frame in frames
+):
+    print("video-research: visual evidence required but no OCR or frame files produced", file=sys.stderr)
+    raise SystemExit(3)
 PY
 
 printf 'analysis: %s\ntranscript: %s\nresearch: %s\n' \
@@ -272,7 +292,7 @@ printf 'analysis: %s\ntranscript: %s\nresearch: %s\n' \
 
 if [ "$render_exit" -ne 0 ]; then
   if [ "$render_exit" -eq 3 ]; then
-    printf 'video-research: install a local Whisper backend or uv, then rerun; artifacts remain in %s\n' \
+    printf 'video-research: required evidence is missing; inspect warnings and repair ingestion. Use --visual-only only for genuinely silent media, not as a transcription fallback. Artifacts remain in %s\n' \
       "$output_dir" >&2
   fi
   exit "$render_exit"

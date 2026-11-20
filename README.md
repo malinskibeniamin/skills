@@ -647,6 +647,12 @@ The packaged stack includes `/poteto-statechart` and `/poteto-ketchup-video`, in
 
 Existing lifecycle, design, domain, planning, testing, verification, review, diagnosis, impact, research, writing and setup skills now load scoped [native Poteto adaptations](shared/POTETO-NATIVE.md). All 61 source skills have an owner path; no extra `/poteto-*` invocation is needed for the adapted guidance. Complete upstream workflows retain their explicit invocation policy, and delegation/setup remains opt-in. The routing check proves links and coverage, not agent adherence.
 
+The [first-correction tree](shared/POTETO-NATIVE.md#harness-improvement) routes mistakes
+to design, deterministic checks, runtime verification or scoped judgment before adding
+more instructions. [Lauren Tan talk notes and the adoption map](docs/lauren-tan-correction-method-2026-11-16.md)
+record the source, existing owner coverage and a tested correction: video research now
+requires speech evidence by default; silent-media analysis uses explicit `--visual-only`.
+
 Use `/poteto-mode`, `/poteto-how`, `/poteto-architect`, `/poteto-interrogate`, or any `/poteto-<upstream-folder>` skill through Claude or Codex. Every upstream `SKILL.md`, including the Benny automation pack, has a registered adapter in `poteto-skills/`; none are excluded. The complete inventory is linked above; authored-skill docs stay separate from imported source. The prefix avoids replacing this harness's `/tdd`, `/swarm`, `/teach`, `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Upstream invocation policies are preserved. [Compatibility rules](shared/POTETO-COMPATIBILITY.md) keep the requested endpoint, selected model, host tools, and explicit delegation/automation authorization intact. Installation activates no automation or upstream agent. `/poteto-help` guides setup and skill selection; `/poteto-ketchup` summarizes this chat and pending decisions. Active roles use only Opus 5.5 and GPT-6.1 Sol at `xhigh`; upstream Grok defaults are inert source material, not permitted routes.
 
 Verify bytes and registrations with `python3 scripts/vendor-poteto.py --check`; include native owner/source wiring with `python3 scripts/vendor-poteto.py --check-routing`. Refresh from a separate checkout of `cursor/plugins` at a reviewed full SHA:

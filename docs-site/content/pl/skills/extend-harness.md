@@ -25,6 +25,8 @@ sposoby debugowania.
 
 Mody Claude Code: [MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md). Reguły egzekwowane we wszystkich środowiskach pozostają w hookach ustawień.
 
+Zanim dodasz regułę, zastosuj [drzewo korekt](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement). W pierwszej kolejności usuń możliwość błędnego wyboru u właściciela kontraktu, zamiast dodawać kolejną kontrolę lub hook.
+
 Najpierw łącz istniejące umiejętności, zanim dodasz nową. Uzasadnij reguły rzeczywistym błędem lub niespełnionym kontraktem; potwierdź przejście czysto -> naruszenie -> czysto.
 
 ## Dodawanie reguły [#add-rule]

@@ -17,7 +17,8 @@ not whether a model followed it. Reuse guidance already loaded; skip unrelated s
 Owners: [lifecycle](../development-lifecycle/SKILL.md), [publication](../commit-push-pr/SKILL.md).
 
 For multi-step implementation, name the outcome and smallest independently verifiable
-unit. Delete superseded work before adding scaffolding; use a repeatable tool when it
+unit. On an agent mistake, use the [correction tree](#harness-improvement) before repairing.
+Delete superseded work before adding scaffolding; use a repeatable tool when it
 does or proves the work more reliably than manual edits. Verify each unit before the
 next. For migrations, converge on the target without throwaway internal compatibility;
 preserve public contracts and a usable delivery sequence. Continue reversible choices
@@ -50,6 +51,7 @@ liveness nor completion. Verify reconciliation preserves completed effects witho
 Use the [curated structural probe](POTETO-ENGINEERING.md#probe-the-shortest-wrong-edit)
 on the relevant invariant. Preserve useful rationale and external constraints in comments;
 encode recurring enforceable rules instead of blindly deleting their explanation.
+For a correction, choose its owning layer with the [correction tree](#harness-improvement).
 
 Sources: [architect](../vendor/pstack/skills/architect/SKILL.md),
 [comments and constraints](../vendor/pstack/skills/no-comments/SKILL.md),
@@ -92,6 +94,8 @@ When added, it must fail for the intended reason and survive internal refactorin
 Prove the result at the relevant entrypoint with the smallest decisive check; keep output
 temporary unless it has a concrete maintenance purpose. Missing runtime prerequisites are
 coverage gaps, not passing evidence. Prefer the existing project verifier.
+When verification exposes an agent mistake, apply the [correction tree](#harness-improvement)
+before adding another test, warning or instruction.
 
 When the task explicitly asks for formal verification or a checked statechart, select the
 tool for the property and stated bounds, then replay model counterexamples against real
@@ -124,6 +128,8 @@ would differ if it were false. Run that probe before another repair; compare whi
 fail, not only failure size. Follow the result back to the cause rather than adding cleanup
 that repeatedly compensates for it. Adversarial axes run inline unless delegation was
 explicitly requested; do not import upstream's automatic worktrees, reviewer panel or agents.
+For authorized repairs, use the [correction tree](#harness-improvement); a passing
+regression is not permission to keep the same mistake available in an unchecked caller.
 
 Sources: [interrogate](../vendor/pstack/skills/interrogate/SKILL.md),
 [root causes](../vendor/pstack/skills/principle-fix-root-causes/SKILL.md),
@@ -182,14 +188,48 @@ Sources: [plain language](../vendor/pstack/skills/bro/SKILL.md),
 
 ## Harness improvement
 
-Owners: [agent writing](../writing-for-agents/SKILL.md), [hook audit](../hook-audit/SKILL.md).
+Owners: [agent writing](../writing-for-agents/SKILL.md), [hook audit](../hook-audit/SKILL.md),
+[harness extension](../extend-harness/SKILL.md), [feedback repair](../resolve-pr-feedback/SKILL.md),
+[retrospectives](../retro/SKILL.md), [factory planning](../software-factory/SKILL.md).
 
-When a correction repeats, find the mistake class and encode it at the strongest existing
-owner: architecture, types, lint/runtime checks, tests, then prose for irreducible judgment.
-Prove a new check catches a real past mistake and accepts valid work. Transcript reflection
-is inline and recommend-only unless edits were requested; telemetry gaps stay unknown.
-Update the existing skill instead of adding a competing mode. Personal mode creation,
-automation and configuration changes require their own requested scope.
+### Correction tree
+
+Use on the **first agent correction**, not only after repetition. Name the mistaken
+behavior, intended invariant, affected callers and a concrete counterexample. Improve the
+environment that produced the mistake, not just the current output. Reuse an existing
+enforcement owner; a check that already caught the error needs a repair, not a duplicate.
+
+Choose the earliest effective layer within scope; explain why a stronger layer is unsuitable:
+
+| Layer | Action and proof |
+| --- | --- |
+| **Design it out** | Remove the invalid choice through the owning API, data shape, state owner or directory seam. Migrate affected callers and old examples; show the shortest wrong use is rejected while valid use works. Avoid an unrelated rewrite. |
+| **Check it statically** | Encode a mechanical invariant in existing types, schema, lint, compiler or CI. Give an actionable diagnostic and supported alternative. Replay the known-bad case and valid control through the actual check. |
+| **Verify behavior** | For runtime intent, drive the real entrypoint with a representative failure/recovery case. Use existing tests and project verifiers; add coverage only for an uncovered risk. Name what the evidence cannot prove. |
+| **Write scoped guidance** | For judgment no check can express, keep one short instruction at its loaded owner, with scope, reason and exceptions. Retire only the prose the new mechanism actually supersedes; preserve rationale, domain constraints and useful documentation. |
+| **Human judgment** | Surface unresolved intent, inaccessible evidence or a reserved decision with a precise question. Mandatory review and approval policy still apply at every layer. |
+
+Close the correction in the existing PR, review reply or checkpoint: mistake class,
+chosen owner, counterexample, valid result and residual gap. No new mandatory ledger.
+Do not lower thresholds, suppress failures or substitute screenshots for speech, side
+effects or algorithmic proof. Clear stale in-scope examples so the next agent copies the
+supported path rather than a justified workaround. One passing case is not a universal ban.
+
+For runtime verification, use the feature map and driver owned by the existing verifier;
+an artifact must demonstrate the requested outcome, not merely show that the app ran.
+Formal models and property-based checks are additional tools for suitable invariants.
+Name the properties and implementation paths actually linked; a checked model alone
+does not establish that the shipped code implements it.
+
+Strengthen this inner loop before recommending more agents, recurring release fuzzing
+or a software factory. Human review cost, accepted outcomes and rework matter; token
+budgets and merge counts alone establish no trust. Retain explicit merge, deployment,
+delegation, spending and persistent-setup permissions. Read-only reflection proposes
+corrections; it does not apply them. Missing telemetry stays unknown.
+
+This operationalizes [Lauren Tan's trust pyramid](https://www.youtube.com/watch?v=O_zcc6Xl12g&t=123s)
+and [correction principle](https://www.youtube.com/watch?v=O_zcc6Xl12g&t=551s),
+without importing team-specific bans or automatic-merge authority.
 
 When the selected improvement deliberately narrows a tool's allowed API or import
 edges, recommend the explicit-only [constrain](../constrain/SKILL.md) owner. It

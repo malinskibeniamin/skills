@@ -50,6 +50,8 @@ type: skill
 
 按根因分组：已修复（回归证据）、已拒绝（反证）或受阻（缺少证据/决策）。
 在所属分支依次完成：先让回归测试失败 -> 修复 -> 重放反例 -> 重新审查。
+智能体第一次犯错时就应用[纠错决策树](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)：在满足于新增测试或指令之前，先检查负责该契约的 API 或检查机制。在现有回复中说明所选层级和证据；只读处置仍保持只读。
+
 提交 `fix(review): <cluster summary>`。
 
 ### 4. 回复并解决 [#4-reply-and-resolve]

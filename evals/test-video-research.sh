@@ -48,6 +48,24 @@ if [ "${FAKE_ANALYZER_MODE:-success}" = "missing-backend" ]; then
 JSON
   exit 0
 fi
+if [ "${FAKE_ANALYZER_MODE:-success}" = "empty-transcript" ]; then
+  cat <<'JSON'
+{"warnings":["Speech recognition failed for the audio"],"metadata":{"title":"Speech fixture","duration":3},"transcript":[{"time":"0:00","text":"   "},{"time":"0:01","text":{"error":"ASR failed"}}],"ocrResults":[{"time":"0:01","text":"Slide heading"}],"frames":[]}
+JSON
+  exit 0
+fi
+if [ "${FAKE_ANALYZER_MODE:-success}" = "no-evidence" ]; then
+  echo '{"warnings":[],"metadata":{"title":"Empty fixture"},"transcript":[],"ocrResults":[],"frames":[{"filePath":"/missing-video-research-frame.png"}]}'
+  exit 0
+fi
+if [ "${FAKE_ANALYZER_MODE:-success}" = "frames-only" ]; then
+  python3 - <<'PY'
+import json, os
+print(json.dumps({"warnings": [], "metadata": {"title": "Silent fixture"}, "transcript": [],
+                  "ocrResults": [], "frames": [{"filePath": os.environ["FAKE_FRAME"]}]}))
+PY
+  exit 0
+fi
 cat <<'JSON'
 {"warnings":[],"metadata":{"title":"Fixture video","duration":3,"url":"fixture.mp4"},"transcript":[{"time":"0:00","text":"First line"},{"time":"0:02","text":"Second line"}],"ocrResults":[{"time":"0:01","text":"Slide heading"}],"timeline":[],"frames":[]}
 JSON
@@ -124,6 +142,47 @@ else
   echo "  FAIL  missing speech backend was treated as successful empty content"
   FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: missing backend visibility"
 fi
+
+_empty_exit=0
+PATH="$_video_path" \
+  FAKE_ANALYZER_ARGS="$_video_args" \
+  FAKE_OPENAI_KEY="$_video_key" \
+  FAKE_TWELVELABS_KEY="$_video_twelvelabs_key" \
+  FAKE_ANALYZER_MODE=empty-transcript \
+  "$ANALYZE" --output-dir "$_video_tmp/empty" "$_video_source" \
+  > "$_video_tmp/empty-stdout" 2> "$_video_tmp/empty-stderr" || _empty_exit=$?
+if [ "$_empty_exit" -eq 3 ] && [ ! -s "$_video_tmp/empty/transcript.txt" ] && \
+  grep -qF "transcript required" "$_video_tmp/empty-stderr" && \
+  grep -qF "Slide heading" "$_video_tmp/empty/research.md"; then
+  echo "  PASS  OCR cannot substitute for a missing required transcript; failure preserves evidence"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL  missing required transcript was accepted (exit=$_empty_exit)"
+  FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: missing required transcript"
+fi
+
+printf 'fixture frame' > "$_video_tmp/frame.png"
+for _mode in empty-transcript frames-only no-evidence; do
+  _visual_exit=0
+  PATH="$_video_path" \
+    FAKE_ANALYZER_ARGS="$_video_args" \
+    FAKE_OPENAI_KEY="$_video_key" \
+    FAKE_TWELVELABS_KEY="$_video_twelvelabs_key" \
+    FAKE_ANALYZER_MODE="$_mode" \
+    FAKE_FRAME="$_video_tmp/frame.png" \
+    "$ANALYZE" --visual-only --output-dir "$_video_tmp/visual-$_mode" "$_video_source" \
+    > "$_video_tmp/visual-$_mode-stdout" 2> "$_video_tmp/visual-$_mode-stderr" || _visual_exit=$?
+  if { [ "$_mode" != no-evidence ] && [ "$_visual_exit" -eq 0 ] && \
+       grep -qF "visual-only; not a transcription" "$_video_tmp/visual-$_mode/research.md"; } || \
+     { [ "$_mode" = no-evidence ] && [ "$_visual_exit" -eq 3 ] && \
+       grep -qF "visual evidence required" "$_video_tmp/visual-$_mode-stderr"; }; then
+    echo "  PASS  explicit visual-only evidence contract: $_mode"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  visual-only evidence contract: $_mode (exit=$_visual_exit)"
+    FAIL=$((FAIL + 1)); ERRORS="$ERRORS\n  FAIL: visual-only evidence contract: $_mode"
+  fi
+done
 
 _adapter_bin="$_video_tmp/adapter-bin"
 mkdir -p "$_adapter_bin"
