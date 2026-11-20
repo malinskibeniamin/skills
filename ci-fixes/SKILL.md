@@ -73,9 +73,10 @@ and documentation use executable validation, not tests that grep instructions.
 - For selection, compare with full-suite results, force full execution on lockfile/CI-config
   changes or uncertain inputs, and deliberately omit a relevant change in a disposable
   selector experiment: the full pre-merge gate must catch it. Restore and verify green.
-- Compare before/after on matched workload, runner, versions, workers, and cache conditions
-  except the variable under test. Repeat real runs; report raw samples, median, supported
-  tails, queue time, and runner-minutes separately. Local timing is not hosted CI proof.
+- Compare before/after on matched workload, runner, versions, worker settings, and cache
+  conditions except the factor under test. For sizing, keep worker settings matched and
+  report any change in effective concurrency. Repeat real runs; report raw samples, median,
+  supported tails, queue time, and runner-minutes separately. Local timing is not hosted CI proof.
 - For workers/isolation/distribution, exercise repeated and reordered runs at the proposed
   concurrency; inspect memory, CPU, shared-state races, and first-attempt failures.
 - For pruning, preserve unique failure detection and critical journeys with negative controls;
