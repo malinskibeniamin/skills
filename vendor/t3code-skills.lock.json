@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/pingdotgg/t3code",
-  "revision": "d899bddfa2a6f824411eaae10fb7a8fa0a37bbb7",
+  "revision": "ccc1feb15572c422fbdce26ba6077b91459cfd47",
   "skills": [
     {
       "name": "contribution-triage",
@@ -117,7 +117,7 @@
   ],
   "files": {
     ".agents/skills/contribution-triage/SKILL.md": {
-      "sha256": "5ded101ea2aa6a32da0a73387e3c3ff117828508638f4a5c916d62419add526e",
+      "sha256": "7225e38f42bbad51ec91cbdffe2d0e53da2dea0717e11f9eb13528945d4db780",
       "mode": 420
     },
     ".agents/skills/test-t3-app/SKILL.md": {
@@ -148,12 +148,16 @@
       "sha256": "9de7044cba1b2323ca27dbc1ab1d6cceca492efcdc6860a9a412b6b3f337545f",
       "mode": 420
     },
+    ".github/VOUCHED.td": {
+      "sha256": "310e268aa1a29df738949c1783df9732c9573071962c045aaa5e2febb08a2b04",
+      "mode": 420
+    },
     ".github/triage/PLAYBOOK.md": {
-      "sha256": "c4ccf863d4a5edeec2cf57b7c3470af0155cac2657f9a78d83cccb969c35b89a",
+      "sha256": "b9a359ced9b3a8de444af77e389ad9586b7cd859bda07ed560141495b2ab8dfd",
       "mode": 420
     },
     ".github/triage/PLAYBOOK.md.upstream": {
-      "sha256": "abb8d314e8e7ea67b8c619bb045ecd3095b6114601f21cbb4625e1807f626ccf",
+      "sha256": "9c9d0b2fe98f392708fbf9ceffb9d691e2a6333540b790983397fbc7cd01a805",
       "mode": 420
     },
     ".github/workflows/pr-limits.yml": {
@@ -297,11 +301,11 @@
       "mode": 420
     },
     "CONTRIBUTING.md": {
-      "sha256": "40dec54f0625803c0423d4dad97fd218c6c8fd8b1b7d003a0c5e5a70588ce32d",
+      "sha256": "5c6dc48c97c9533671d7415e67042355c2f0aa7d198dea5ef00b521cd925d475",
       "mode": 420
     },
     "CONTRIBUTING.md.upstream": {
-      "sha256": "4ee337571cb67cc5b3cdf052ecabbec8826a5e1e5f72f366e19b662e38ccb835",
+      "sha256": "e413bc7cc2597c48d31c5f08e067f1d3ff28c6ce35e7de6b3d0791bf63cc8a68",
       "mode": 420
     },
     "LICENSE": {
