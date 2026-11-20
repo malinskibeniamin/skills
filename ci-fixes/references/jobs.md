@@ -239,13 +239,13 @@ Use these approximate signals to choose an experiment, not as automatic pass/fai
 | Observed signal | Next comparison |
 | --- | --- |
 | Average CPU around 10% or lower, with ample RAM | Inspect bursts, then try the next smaller size; verify worker-count effects. |
-| CPU sustained around 80–90% or higher in a long step | Check usable tool parallelism; try a larger size if the step delays required feedback. |
+| CPU sustained around 80-90% or higher in a long step | Check usable tool parallelism; try a larger size if the step delays required feedback. |
 | Brief CPU spike even at 100% in a short step | Keep the size unless those seconds materially affect feedback. |
 | Repeated peak RAM above roughly 80% | Inspect representative peaks and growth; be cautious about downsizing. |
-| RAM near 90–100%, or a runner-memory OOM | Trial the next larger size and investigate memory growth; distinguish a process/container limit from runner exhaustion. |
+| RAM near 90-100%, or a runner-memory OOM | Trial the next larger size and investigate memory growth; distinguish a process/container limit from runner exhaustion. |
 
 **Experiment:** for one job, pick a neighboring authorized size and declare an acceptable
-slowdown before testing. For near-equal speed, start around 5–10% and compare that tolerance
+slowdown before testing. For near-equal speed, start around 5-10% and compare that tolerance
 with normal variation. A larger slowdown can be acceptable if it fits measured
 [workflow slack](measurement.md#locate-the-critical-path), including queueing and downstream
 dependencies, without making the job the new bottleneck.
@@ -297,7 +297,7 @@ runner labels for other projects:
   (48 to 51 s); going from 8 to 4 added another 18 s. CPU-derived file workers changed
   with the label. Try 8 for near-equal timing; consider 4 only if measured slack permits.
 - **API verification:** 2 to 8 CPUs cut the job from 221 to 99 s, mainly in Compose
-  setup; scenarios plus cleanup stayed at about 13–14 s. The 16-CPU runner hit an 83%
+  setup; scenarios plus cleanup stayed at about 13-14 s. The 16-CPU runner hit an 83%
   peak, but 32 CPUs only saved about 4 s. Check whether those seconds matter before upsizing.
 - **Schema check:** 2 CPUs/8 GB passed at about 98% peak RAM; 4 CPUs/16 GB brought peak
   usage to 51%. An 8-CPU runner saved another 12 s but would not shorten that workflow.
