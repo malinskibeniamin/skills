@@ -122,6 +122,8 @@ processes per worker, nested compiler/mutation pools, and external service capac
 Record actual CPU quotas and memory headroom, not just logical processors. Each shard
 usually has its own runner: `shards * workers` describes total demand, not one machine's
 safe local worker count. Memory exhaustion can manifest as timeouts or browser crashes.
+For runner-size changes, also use [runner fit](#9-runner-fit): CPU-derived worker defaults
+can change effective concurrency even when the command and configuration stay unchanged.
 
 **Experiment:** sweep a small justified grid, such as 1/2/4 workers within the machine's
 limits; test shard count separately before combining winners. Track wall time, setup
@@ -224,24 +226,68 @@ keyed only by branch name.
 and service/container overhead inside the job. Public/private runner specifications can
 differ; hardware behind labels changes. Read actual logs and the current
 [runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
-Classify CPU saturation, swapping/OOM, disk contention, network wait, and scarce-capacity
-queueing separately before proposing a larger machine.
+Collect full-job and slow-step durations with CPU and memory time series, including sampling
+interval and whether utilization covers the whole runner or only a process/container.
+Use existing provider telemetry; when absent, collect scoped measurements through the
+target's permitted tooling and label gaps. Inspect averages, sustained load, and bursts;
+classify CPU saturation, swapping/OOM, disk contention, network wait, and scarce-capacity
+queueing separately. Record worker/thread limits and effective concurrency, especially
+defaults derived from available CPUs. Low average CPU alone does not prove safe downsizing.
 
-**Experiment:** compare authorized runner sizes with appropriately retuned workers. Hold
-architecture constant first; architecture changes can affect native modules, emulation,
-binary availability, and correctness. Measure useful throughput and cost for the full job,
-including provisioning and downloads. StarSling, Blacksmith, and other runner providers
-are optional candidates when measured queue/provisioning time is the bottleneck, not
-required migrations. Verify current availability, security, pricing, and account needs
-before any authorized trial; use existing capacity first. CPU capacity unused during network
-waits will not become a speedup merely by doubling cores; low RAM may matter more than vCPU count.
+Use these approximate signals to choose an experiment, not as automatic pass/fail limits:
 
-**Accept only if:** the chosen machine reduces the relevant latency or compute cost without
-new compatibility or isolation risk. Keep OS-specific proof where the product needs it;
-do not replace macOS/Windows coverage with Linux solely for cheaper minutes. Paid capacity,
-self-hosted runners, credentials, persistent disks, and untrusted PR execution need their
-existing owner/trust controls. Self-hosting is not a free default optimization. Record
-the measured size/worker pairing and its fallback when capacity is unavailable.
+| Observed signal | Next comparison |
+| --- | --- |
+| Average CPU around 10% or lower, with ample RAM | Inspect bursts, then try the next smaller size; verify worker-count effects. |
+| CPU sustained around 80–90% or higher in a long step | Check usable tool parallelism; try a larger size if the step delays required feedback. |
+| Brief CPU saturation in a short step | Keep the size unless those seconds materially affect feedback. |
+| Repeated peak RAM above roughly 80% | Inspect representative peaks and growth; be cautious about downsizing. |
+| RAM near 90–100%, or a runner-memory OOM | Trial the next larger size and investigate memory growth; distinguish a process/container limit from runner exhaustion. |
+
+**Experiment:** start with one job and a neighboring authorized size. Keep the revision,
+commands, inputs, tool versions, and cache conditions comparable under the
+[measurement protocol](measurement.md#run-a-fair-experiment). Hold OS/image and architecture
+constant first; architecture changes can affect native modules, emulation, binary
+availability, and correctness. Record effective workers on each size; compare fixed-worker
+behavior separately from a retuned [worker-capacity](#5-worker-capacity) experiment when
+needed to explain scaling. If the label changes CPU and RAM together, treat it as a bundled
+resource experiment, not proof that either resource alone caused the speedup.
+
+Separate setup/build/service readiness from test/scenario execution and cleanup. More CPU
+may accelerate stack preparation while leaving serial scenarios or network waits unchanged;
+check diminishing returns in the whole job rather than upsizing for one CPU peak. Include
+queue/provisioning and downloads in feedback latency. Compare cost using observed provider
+billing and run frequency, not duration or core count alone. StarSling, Blacksmith, and other
+runner providers are optional candidates for measured queue/provisioning bottlenecks, not
+required migrations. Use existing capacity first; verify current availability, security,
+pricing, and account needs before an authorized provider trial.
+
+Declare an acceptable slowdown before the comparison. For near-equal speed, start around
+5–10% and compare that tolerance with normal run variation; larger regressions can be
+acceptable when measured [workflow slack](measurement.md#locate-the-critical-path) absorbs
+them. Faster noncritical jobs may save compute without reducing required-result latency.
+
+**Accept only if:** before a permanent size change, validate duration, CPU, and peak RAM
+across at least five representative runs per compared size, including the largest usual
+inputs. A single passing run near the memory limit is not adequate headroom. If timings
+overlap normal variation, gather more evidence or retain the baseline; five runs do not
+establish a stable p95. Missing hosted runs leave a proposal, not a validated change.
+Choose the smallest measured size that preserves peak-memory headroom and the workflow's
+feedback budget without new compatibility, isolation, or first-attempt failure risk.
+Keep the current size when no worthwhile latency, cost, or reliability benefit is shown.
+
+Keep OS-specific proof where the product needs it; do not replace macOS/Windows coverage
+with Linux solely for cheaper minutes. Paid capacity, self-hosted runners, credentials,
+persistent disks, and untrusted PR execution need their existing owner/trust controls.
+Self-hosting is not a free default optimization. Record the size/worker pairing, memory
+peak and headroom, slowdown tolerance, workflow slack, cost evidence, capacity fallback,
+and rollback in the existing decision record. Revisit when inputs, memory usage, tool
+concurrency, or the critical path change.
+
+Adapted from Depot's [How to choose the right CI runner size](https://depot.dev/blog/how-to-choose-the-right-ci-runner-size)
+(2026-11-19), shared in the [user-supplied post](https://x.com/depotdev/status/2123476590550278629).
+Its workload-specific examples motivate experiments, not universal runner labels or measured
+gains for the target repository.
 
 ## 10. Prerequisites and tail latency
 

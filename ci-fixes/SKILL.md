@@ -49,6 +49,8 @@ to provision services, expose data, or change security/delivery policy.
 
 Load supporting guidance only for the work being performed:
 
+- Runner sizing: [runner fit](references/jobs.md#9-runner-fit). Compare neighboring sizes
+  against peak-memory headroom, workflow slack, and observed worker/thread settings.
 - Workflow edits: [CI maintenance](../t3code-skills/ci-maintenance/SKILL.md), including its
   canonical source and trust-boundary rules. Keep credentials, caches, artifacts, and forks safe.
 - Test pruning: [test audit](../test-audit/SKILL.md). Name each retained contract and primary
