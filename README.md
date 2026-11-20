@@ -97,6 +97,8 @@ Track `main` instead of the pin with `--ref main`. Restart Codex after adding or
 Optional: [review/fix presets](docs/CODEX-PRESETS.md) for Codex CLI 0.164.0.
 Export reusable prompts and a review-model shortcut from this checkout without changing personal configuration or permissions.
 
+**Gemini 4 in T3 Code (Antigravity ACP)** — build the opt-in [Antigravity workspace plugin](docs/ANTIGRAVITY.md) for Neon, Carbon, or Hydrogen. See the guide for setup, coverage, and the live verification checklist.
+
 ### React DevTools runtime inspection
 
 Optional [React runtime inspection](shared/react-devtools.md) connects component

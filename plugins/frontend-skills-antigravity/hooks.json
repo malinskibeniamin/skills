@@ -1,0 +1,44 @@
+{
+  "frontend-skills": {
+    "SessionStart": [
+      {
+        "command": "python3 ./scripts/hook.py SessionStart",
+        "timeout": 10
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(run_command|write_to_file|replace_file_content|multi_replace_file_content)$",
+        "hooks": [
+          {
+            "command": "python3 ./scripts/hook.py PreToolUse",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(write_to_file|replace_file_content|multi_replace_file_content)$",
+        "hooks": [
+          {
+            "command": "python3 ./scripts/hook.py PostToolUse",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostInvocation": [
+      {
+        "command": "python3 ./scripts/hook.py PostInvocation",
+        "timeout": 10
+      }
+    ],
+    "Stop": [
+      {
+        "command": "python3 ./scripts/hook.py Stop",
+        "timeout": 120
+      }
+    ]
+  }
+}
