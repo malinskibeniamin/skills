@@ -17,7 +17,7 @@ type: skill
 
 [開啟可編輯的 Excalidraw 原始檔](/diagrams/skills/writing-for-agents.excalidraw)
 
-相同修正反覆出現，或技能需要改善時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。
+修正代理程式錯誤或改善技能時，從第一次錯誤開始就閱讀[修正決策樹](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。
 
 撰寫任務範圍內的文字時，請閱讀 [Poteto 適配指南](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#writing)。
 

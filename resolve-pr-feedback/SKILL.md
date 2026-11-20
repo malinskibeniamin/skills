@@ -39,6 +39,8 @@ Paginate threads (bots too), comments, full/outside-diff reviews; check
 
 Cluster: fixed (regression), rejected (counterevidence), blocked (proof/decision).
 On the owning branch: failing regression -> repair -> replay challenge -> fresh review.
+First agent mistake: use the [correction tree](../shared/POTETO-NATIVE.md#harness-improvement).
+Inspect the API/check owner first. Reply with the layer and proof; read-only dispositions stay read-only.
 Commit `fix(review): <cluster summary>`.
 
 ### 4. Reply and resolve

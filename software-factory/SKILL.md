@@ -31,6 +31,12 @@ a pain point or has no candidate. For this harness, read [fit and pilot](HARNESS
 
 ## Decide whether it helps
 
+Evaluate the inner coding loop with the [correction tree](../shared/POTETO-NATIVE.md#harness-improvement)
+before scaling the outer loop. Show a representative mistake rejected by its existing
+guard, a valid task reaching acceptance, and a replayable real-app verification path.
+When these are missing, improve that loop first; more agents or automatic merging do
+not establish trust. These observations support a pilot, not permission to automate it.
+
 Compare three approaches: improve the existing manual loop; a supervised single-task
 pilot; a remote event-driven factory. Recommend the smallest reversible option.
 Prefer no factory when work is infrequent, acceptance is unclear, checks are weak,

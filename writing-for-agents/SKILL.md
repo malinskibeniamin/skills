@@ -3,7 +3,7 @@ name: writing-for-agents
 description: Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.
 ---
 
-Repeated corrections/skill improvements: read [Poteto](../shared/POTETO-NATIVE.md#harness-improvement).
+Corrections/improvements: read the [tree](../shared/POTETO-NATIVE.md#harness-improvement).
 
 For prose, read [Poteto](../shared/POTETO-NATIVE.md#writing).
 

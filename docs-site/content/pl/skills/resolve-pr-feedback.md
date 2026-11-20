@@ -57,6 +57,8 @@ Odpowiadaj z dowodami.
 
 Grupuj przyczyny: naprawione (regresja), odrzucone (kontrdowody), zablokowane (brak dowodu/decyzji).
 Na gałęzi autora: najpierw test regresyjny wykazujący błąd -> naprawa -> ponowne sprawdzenie hipotezy -> nowy przegląd.
+Przy pierwszym błędzie agenta zastosuj [drzewo korekt](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement): sprawdź właściciela API lub kontroli, zanim poprzestaniesz na kolejnym teście lub instrukcji. W istniejącej odpowiedzi podaj wybraną warstwę i dowód; rozstrzygnięcia tylko do odczytu pozostają bez zmian w kodzie.
+
 Utwórz commit `fix(review): <cluster summary>`.
 
 ### 4. Odpowiedz i rozwiąż [#4-reply-and-resolve]

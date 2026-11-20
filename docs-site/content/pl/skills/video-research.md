@@ -31,6 +31,8 @@ Punkt wejścia w pierwszej kolejności korzysta z natywnych napisów, następnie
 
 Jeśli język jest znany, przekaż `--language <code>`. W przypadku trudnego nagrania użyj `--model medium`, a dla nieangielskiego tekstu widocznego na ekranie — `--ocr-language <codes>`. Domyślnie transkrypcja odbywa się wyłącznie lokalnie. Usługa transkrypcji w chmurze wymaga wyraźnej zgody, ponieważ przesyła dźwięk i może generować koszty.
 
+Domyślnie transkrypcja jest wymagana: OCR nie zastępuje realizacji prośby o transkrypcję. Dla rzeczywiście niemych materiałów użyj `--visual-only`; ten tryb wymaga OCR lub plików klatek i oznacza wynik jako dowód wizualny, nie transkrypcję. Zachowaj artefakty nieudanego przetwarzania do diagnozy; nie zmieniaj trybu, aby ukryć błąd rozpoznawania mowy.
+
 ## Analiza
 
 Najpierw przeczytaj `research.md`, a następnie przejrzyj `analysis.json` i wskazane klatki, aby poznać kontekst. Traktuj wyniki ASR i OCR jako dowody pochodne. Przed zacytowaniem istotnego fragmentu zweryfikuj jego brzmienie na podstawie znacznika czasu i klatki. Łącz transkrypcję, tekst widoczny na ekranie, materiały wizualne, opis, rozdziały i podlinkowane źródła pierwotne. Sama wypowiedź może pomijać najważniejsze dowody przedstawione w filmie.

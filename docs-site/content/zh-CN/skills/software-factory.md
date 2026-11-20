@@ -44,6 +44,8 @@ type: skill
 
 ## 判断是否有帮助 [#decide-whether-it-helps]
 
+扩展外层循环前，先用[纠错决策树](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)评估内部编码循环。展示一个被现有防护拒绝的代表性错误、一个达到验收标准的有效任务，以及可重放的真实应用验证路径。缺少这些证据时，先改进内部循环；增加智能体或自动合并不能建立信任。这些观察支持试点，但不授权将其自动化。
+
 比较三种方式：改进现有手动循环；在监督下试点一个任务；
 远程、事件驱动的工厂。推荐最小的可逆方案。
 如果工作频率低、验收标准不清、检查薄弱、人工审查已经是瓶颈，

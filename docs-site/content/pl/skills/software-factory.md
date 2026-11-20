@@ -46,6 +46,8 @@ problem lub nie ma kandydata. Dla tego zestawu przeczytaj [ocenę przydatności 
 
 ## Ustal, czy to pomaga [#decide-whether-it-helps]
 
+Przed skalowaniem zewnętrznej pętli oceń wewnętrzną pętlę programowania za pomocą [drzewa korekt](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement). Pokaż reprezentatywny błąd odrzucony przez istniejące zabezpieczenie, poprawne zadanie spełniające kryteria akceptacji oraz odtwarzalną weryfikację prawdziwej aplikacji. Jeśli ich brakuje, najpierw usprawnij tę pętlę; więcej agentów i automatyczne scalanie nie budują zaufania. Te obserwacje uzasadniają pilotaż, a nie upoważniają do jego automatyzacji.
+
 Porównaj trzy podejścia: usprawnienie obecnej ręcznej pętli; nadzorowany pilotaż jednego zadania;
 zdalną fabrykę sterowaną zdarzeniami. Poleć najmniejszą odwracalną opcję.
 Wybierz brak fabryki, gdy praca jest rzadka, kryteria akceptacji są niejasne, kontrole są słabe,

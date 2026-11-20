@@ -44,6 +44,8 @@ type: skill
 
 ## 判斷是否有幫助 [#decide-whether-it-helps]
 
+擴充外層循環前，先用[修正決策樹](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)評估內部開發循環。展示一個被現有防護拒絕的代表性錯誤、一個達到驗收標準的有效任務，以及可重播的真實應用驗證路徑。缺少這些證據時，先改善內部循環；增加代理程式或自動合併不能建立信任。這些觀察支持試行，但不授權將其自動化。
+
 比較三種方式：改善現有手動循環；在監督下試行單一任務；
 遠端、事件驅動的工廠。建議最小的可逆方案。
 如果工作頻率低、驗收標準不明、檢查薄弱、人工審查已是瓶頸，

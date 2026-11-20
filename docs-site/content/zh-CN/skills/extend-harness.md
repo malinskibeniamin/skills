@@ -23,6 +23,8 @@ type: skill
 
 Claude mods：[MODS.md](https://github.com/malinskibeniamin/skills/blob/main/extend-harness/MODS.md)。跨运行时的规则强制执行仍由设置钩子负责。
 
+添加规则前先应用[纠错决策树](https://github.com/malinskibeniamin/skills/blob/main/shared/POTETO-NATIVE.md#harness-improvement)。优先在契约所属的 API、类型或模块中消除错误选择，而不是再加一项检查或钩子。
+
 添加技能前，先组合现有技能。用真实故障或未满足的契约证明规则有必要；验证干净 -> 违规 -> 干净的过程。
 
 ## 添加规则 [#add-rule]

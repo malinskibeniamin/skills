@@ -53,7 +53,9 @@ Owner: `/codebase-design` for design, `/review --deep` for diff evidence.
 
 ## Encode lessons in structure
 
-When the same correction appears twice, prefer the strongest mechanism the repository can support: unrepresentable state, type/schema, lint or CI failure, canonical helper, runtime check, then prose only when judgment is irreducible. Remove the duplicated instruction after the mechanism owns it.
+Apply the [correction tree](POTETO-NATIVE.md#harness-improvement) on the first agent
+correction. Put the invariant in the strongest effective owner within scope, prove the
+bad case is rejected and valid work remains possible, then retire only superseded prose.
 
 Owner: the affected code/config owner; `/review --deep` reports repeated prose or comments only when a concrete structural enforcement exists.
 
