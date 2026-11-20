@@ -65,6 +65,9 @@ do tworzenia usług, ujawniania danych ani zmiany polityki bezpieczeństwa lub d
 
 Wczytuj dodatkowe instrukcje tylko dla wykonywanej pracy:
 
+- Dobór rozmiaru runnera: [dopasowanie runnera](https://github.com/malinskibeniamin/skills/blob/main/ci-fixes/references/jobs.md#9-runner-fit).
+  Porównaj sąsiednie rozmiary, uwzględniając zapas pamięci przy szczytowym użyciu, rezerwę czasu
+  w workflow i zaobserwowane ustawienia procesów roboczych lub wątków.
 - Zmiany workflow: [utrzymanie CI](https://github.com/malinskibeniamin/skills/blob/main/t3code-skills/ci-maintenance/SKILL.md),
   wraz ze źródłem kanonicznym i granicami zaufania. Chroń poświadczenia, cache, artefakty i forki.
 - Usuwanie testów: [audyt testów](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md).
@@ -87,8 +90,11 @@ sprawdzaj wykonywalnymi narzędziami, nie testami wyszukującymi tekst instrukcj
 - Dla selekcji porównaj wynik z pełnym zestawem. Zmiany lockfile lub konfiguracji CI i niepewne
   wejścia wymuszają pełne wykonanie. W jednorazowym eksperymencie celowo pomiń istotną zmianę:
   pełna bramka przed scaleniem musi ją wykryć. Przywróć stan i potwierdź zielony wynik.
-- Porównuj dopasowane obciążenie, maszynę, wersje, workery i cache, poza badaną zmienną. Powtarzaj
-  rzeczywiste wykonania; raportuj próbki, medianę, uzasadnione ogony, kolejkę i minuty maszyn osobno.
+- Porównuj wyniki przy tym samym obciążeniu, na tym samym runnerze, z tymi samymi wersjami,
+  ustawieniami procesów roboczych i stanem cache; zmieniaj tylko badany czynnik. Przy doborze
+  rozmiaru runnera zachowaj ustawienia procesów roboczych i odnotuj każdą zmianę faktycznej
+  współbieżności. Powtarzaj rzeczywiste uruchomienia; osobno raportuj surowe próbki, medianę,
+  miary ogona rozkładu, jeśli dane na to pozwalają, czas w kolejce i minuty pracy runnerów.
   Pomiar lokalny nie dowodzi zachowania hostowanego CI.
 - Dla workerów, izolacji i dystrybucji powtarzaj i zmieniaj kolejność przy proponowanej współbieżności;
   sprawdź pamięć, CPU, wyścigi współdzielonego stanu i błędy pierwszej próby.

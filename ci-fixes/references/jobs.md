@@ -122,6 +122,8 @@ processes per worker, nested compiler/mutation pools, and external service capac
 Record actual CPU quotas and memory headroom, not just logical processors. Each shard
 usually has its own runner: `shards * workers` describes total demand, not one machine's
 safe local worker count. Memory exhaustion can manifest as timeouts or browser crashes.
+For runner-size changes, also use [runner fit](#9-runner-fit): CPU-derived worker defaults
+can change effective concurrency even when the command and configuration stay unchanged.
 
 **Experiment:** sweep a small justified grid, such as 1/2/4 workers within the machine's
 limits; test shard count separately before combining winners. Track wall time, setup
@@ -224,24 +226,82 @@ keyed only by branch name.
 and service/container overhead inside the job. Public/private runner specifications can
 differ; hardware behind labels changes. Read actual logs and the current
 [runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
-Classify CPU saturation, swapping/OOM, disk contention, network wait, and scarce-capacity
-queueing separately before proposing a larger machine.
+Baseline a few representative runs before picking a size to try. Collect full-job and
+slow-step durations with CPU and memory time series; record sampling interval and whether
+usage covers the runner or only a process/container. Prefer built-in telemetry; if missing,
+use permitted job-local measurements (see [GitHub Actions diagnostics](https://depot.dev/blog/guide-to-debugging-github-actions#log-point-in-time-resource-usage)).
+Before/after snapshots are not peak measurements. Align load to step timings and distinguish
+CPU saturation, swapping/OOM, disk contention, network wait, and scarce-capacity queueing.
+Record configured worker/thread limits and effective concurrency, including CPU-derived defaults.
 
-**Experiment:** compare authorized runner sizes with appropriately retuned workers. Hold
-architecture constant first; architecture changes can affect native modules, emulation,
-binary availability, and correctness. Measure useful throughput and cost for the full job,
-including provisioning and downloads. StarSling, Blacksmith, and other runner providers
-are optional candidates when measured queue/provisioning time is the bottleneck, not
-required migrations. Verify current availability, security, pricing, and account needs
-before any authorized trial; use existing capacity first. CPU capacity unused during network
-waits will not become a speedup merely by doubling cores; low RAM may matter more than vCPU count.
+Use these approximate signals to choose an experiment, not as automatic pass/fail limits:
 
-**Accept only if:** the chosen machine reduces the relevant latency or compute cost without
-new compatibility or isolation risk. Keep OS-specific proof where the product needs it;
-do not replace macOS/Windows coverage with Linux solely for cheaper minutes. Paid capacity,
-self-hosted runners, credentials, persistent disks, and untrusted PR execution need their
-existing owner/trust controls. Self-hosting is not a free default optimization. Record
-the measured size/worker pairing and its fallback when capacity is unavailable.
+| Observed signal | Next comparison |
+| --- | --- |
+| Average CPU around 10% or lower, with ample RAM | Inspect bursts, then try the next smaller size; verify worker-count effects. |
+| CPU sustained around 80-90% or higher in a long step | Check usable tool parallelism; try a larger size if the step delays required feedback. |
+| Brief CPU spike even at 100% in a short step | Keep the size unless those seconds materially affect feedback. |
+| Repeated peak RAM above roughly 80% | Inspect representative peaks and growth; be cautious about downsizing. |
+| RAM near 90-100%, or a runner-memory OOM | Trial the next larger size and investigate memory growth; distinguish a process/container limit from runner exhaustion. |
+
+**Experiment:** for one job, pick a neighboring authorized size and declare an acceptable
+slowdown before testing. For near-equal speed, start around 5-10% and compare that tolerance
+with normal variation. A larger slowdown can be acceptable if it fits measured
+[workflow slack](measurement.md#locate-the-critical-path), including queueing and downstream
+dependencies, without making the job the new bottleneck.
+
+Compare against the current size with the same revision, commands, inputs, tool versions,
+worker settings, and cache conditions. Use the [measurement protocol](measurement.md#run-a-fair-experiment).
+A comparison matrix can run the same job at each size without replacing the required check.
+Keep OS/image and architecture fixed first; architecture can affect native modules, emulation,
+and correctness.
+Let automatic worker settings resolve normally and log the effective counts: this measures
+the label change as it would ship. If needed, hold worker counts fixed in a follow-up or
+[sweep workers separately](#5-worker-capacity). A label that changes both CPU and RAM tests
+that combination, not the isolated contribution of either resource.
+
+Separate setup/build/service readiness from test/scenario execution and cleanup. More CPU
+may accelerate stack preparation while leaving serial scenarios or network waits unchanged;
+check diminishing returns in the whole job rather than upsizing for one CPU peak. Include
+queue/provisioning and downloads in feedback latency. A faster noncritical job will not
+improve feedback but may save compute. Compare cost using observed provider billing and run
+frequency, not duration or core count alone. StarSling, Blacksmith, and other providers are
+optional candidates for measured queue/provisioning bottlenecks, not required migrations.
+Use existing capacity first; verify current availability, security, pricing, and account needs
+before an authorized provider trial.
+
+**Accept only if:** before a permanent size change, validate duration, CPU, and peak RAM
+across at least five representative runs per compared size, including the largest usual
+inputs. A single passing run near the memory limit is not adequate headroom. If the timing
+delta is smaller than normal variation, gather more evidence or retain the baseline; five
+runs do not establish a stable p95. Missing hosted runs leave a proposal, not a validated
+change. Choose the smallest measured size that leaves peak-memory headroom and fits the
+workflow's feedback budget without compromising compatibility, isolation, or first-attempt
+reliability. Upsize for demonstrated reliability or workflow latency needs, not utilization
+alone; keep the current size when no worthwhile tradeoff is established.
+
+Keep OS-specific proof where the product needs it; do not replace macOS/Windows coverage
+with Linux solely for cheaper minutes. Paid capacity, self-hosted runners, credentials,
+persistent disks, and untrusted PR execution need their existing owner/trust controls.
+Self-hosting is not a free default optimization. Record the size/worker pairing, memory
+peak and headroom, slowdown tolerance, workflow slack, cost evidence, capacity fallback,
+and rollback in the existing decision record. Revisit when inputs, memory usage, tool
+concurrency, or the critical path change.
+
+**Worked comparisons:** these are from Depot's [runner-size study](https://depot.dev/blog/how-to-choose-the-right-ci-runner-size)
+(2026-11-19), shared in the [original post](https://x.com/depotdev/status/2123476590550278629).
+These are observations from a comparison workflow, not repeated validation or recommended
+runner labels for other projects:
+
+- **Vitest:** 16 CPUs averaged about 8% CPU yet downsizing to 8 added 6% wall time
+  (48 to 51 s); going from 8 to 4 added another 18 s. CPU-derived file workers changed
+  with the label. Try 8 for near-equal timing; consider 4 only if measured slack permits.
+- **API verification:** 2 to 8 CPUs cut the job from 221 to 99 s, mainly in Compose
+  setup; scenarios plus cleanup stayed at about 13-14 s. The 16-CPU runner hit an 83%
+  peak, but 32 CPUs only saved about 4 s. Check whether those seconds matter before upsizing.
+- **Schema check:** 2 CPUs/8 GB passed at about 98% peak RAM; 4 CPUs/16 GB brought peak
+  usage to 51%. An 8-CPU runner saved another 12 s but would not shorten that workflow.
+  Favor the 4-CPU candidate for headroom, not because the timings isolate the effect of RAM.
 
 ## 10. Prerequisites and tail latency
 
