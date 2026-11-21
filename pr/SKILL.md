@@ -93,6 +93,7 @@ follow [prototype hosting and verification](SUMMARY-VIEWS.md#prototype-hosting-a
 ## Description and risk
 
 Before writing/updating the body, read [supporting description](SUMMARY-VIEWS.md#supporting-description) for evidence, changed decisions and risk.
+For consequential agent choices the request/plan did not settle, apply [decision deltas](../shared/decision-deltas.md), including on direct PR invocations.
 Use the PR body as the operator digest; recap artifacts need an explicit request.
 Eligible non-UI contracts need [backend diagrams](../excalidraw-diagram/PR-WORKFLOW.md); UI recordings remain mandatory per `package-my-work`.
 Name the rollback path and classify the change as a one-way or two-way door.
