@@ -29,6 +29,8 @@ Główny punkt wejścia autora: `/work`. Odpowiadaj za jeden rezultat. Przed edy
 
 Określ **cel** (rezultat), **ograniczenia** (zastrzeżone granice), **weryfikację** (obserwowalne zachowanie) i **zatrzymanie** (punkt końcowy lub blokady).
 
+Gdy zmiana istotnie wpływa na zachowanie, przed edycją wyprowadź kryteria weryfikacji z [pierwotnego kontraktu](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract). Zachowaj oczekiwany wynik podczas napraw i przekazywania pracy.
+
 Przedstaw kontrakt; przy tworzeniu, naprawie lub implementacji od razu kontynuuj.
 [Automatycznie uzupełnij zabezpieczenia przeglądu w repozytorium korzystającym z harnessu](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md) w granicach tego punktu końcowego.
 

@@ -2,7 +2,6 @@
 
 SKILL_DIR="$REPO_ROOT/e2e-testing"
 ROUTE_SIBLING_SCRIPT="$REPO_ROOT/e2e-testing/scripts/route-sibling-test-check.sh"
-STRUCTURAL_TEST_SCRIPT="$REPO_ROOT/e2e-testing/scripts/structural-test-nudge-check.sh"
 
 # ── File structure ──────────────────────────────────────────────
 
@@ -17,8 +16,8 @@ run_content_eval "$SKILL_DIR/SKILL.md" "Use when" "SKILL.md has trigger phrase"
 run_content_eval "$SKILL_DIR/SKILL.md" "Test IDs|getByTestId" "SKILL.md has test ID conventions"
 run_content_eval "$SKILL_DIR/SKILL.md" "getByRole" "SKILL.md has selector priority"
 run_content_eval "$SKILL_DIR/SKILL.md" "agent-browser|Playwright" "SKILL.md mentions test tools"
-run_content_eval "$SKILL_DIR/SKILL.md" "route sibling" "SKILL.md mentions route sibling tests"
-run_content_eval "$SKILL_DIR/SKILL.md" "structural refactor" "SKILL.md mentions structural refactor test nudge"
+run_content_eval "$SKILL_DIR/SKILL.md" 'test-audit/SKILL\.md#authoring-gate' \
+  "direct E2E authoring reaches the common test-value gate"
 run_content_eval "$SKILL_DIR/SKILL.md" "fake timers.*E2E|E2E.*fake timers" "SKILL.md separates timer contracts from E2E outcomes"
 run_content_eval "$SKILL_DIR/SKILL.md" "SOAK-TESTING" "SKILL.md routes long-lived SPA risks to soak guidance"
 run_content_eval "$SKILL_DIR/SOAK-TESTING.md" "round trip" "soak guidance requires a round-trip flow"
@@ -113,36 +112,27 @@ fi
 
 
 rm -f "$test_file"
+rm -f "$capture"
 actual_exit=0
-"$STRUCTURAL_TEST_SCRIPT" > /tmp/e2e-structural-stdout 2> /tmp/e2e-structural-stderr <<JSON || actual_exit=$?
+(
+  cd "$_e2e_tmpdir"
+  PATH="$_e2e_tmpdir/bin:$PATH" CLAUDE_SESSION_ID="e2e-route-hook-$$" ROUTE_SIBLING_TEST_CAPTURE="$capture" \
+    "$ROUTE_SIBLING_SCRIPT"
+) > /tmp/e2e-route-stdout 2> /tmp/e2e-route-stderr <<JSON || actual_exit=$?
 {"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
 JSON
 
-if [ "$actual_exit" -eq 2 ] && grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
-  echo "  PASS  structural test hook blocks new page without test"
+if [ "$actual_exit" -eq 0 ] && [ ! -e "$capture" ] && [ ! -s /tmp/e2e-route-stderr ]; then
+  echo "  PASS  route sibling hook does not require a test file for a new route"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  structural test hook did not block new page without test"
+  echo "  FAIL  route sibling hook ran or demanded a test that does not exist (exit=$actual_exit)"
+  cat /tmp/e2e-route-stderr 2>/dev/null || true
   FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: structural test hook did not block new page without test"
+  ERRORS="$ERRORS\n  FAIL: route sibling hook requires a new test file"
 fi
 
-printf "test('users page', () => {})\n" > "$test_file"
-actual_exit=0
-"$STRUCTURAL_TEST_SCRIPT" > /tmp/e2e-structural-stdout 2> /tmp/e2e-structural-stderr <<JSON || actual_exit=$?
-{"tool_name":"Write","tool_input":{"file_path":"$route_file"}}
-JSON
-
-if [ "$actual_exit" -eq 0 ] && ! grep -q "Structural refactor without test" /tmp/e2e-structural-stderr; then
-  echo "  PASS  structural test hook allows new page with sibling test"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  structural test hook warned despite sibling test"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: structural test hook warned despite sibling test"
-fi
-
-rm -rf "$_e2e_tmpdir" "/tmp/hook-session-e2e-route-hook-$$" /tmp/e2e-route-stdout /tmp/e2e-route-stderr /tmp/e2e-structural-stdout /tmp/e2e-structural-stderr
+rm -rf "$_e2e_tmpdir" "/tmp/hook-session-e2e-route-hook-$$" /tmp/e2e-route-stdout /tmp/e2e-route-stderr
 
 # ── Description length ──────────────────────────────────────────
 

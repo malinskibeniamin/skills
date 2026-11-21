@@ -37,6 +37,8 @@ type: skill
 
 ### 使用 [#use]
 
+首次运行前，[找回原始验收预期](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)。选择一条可能暴露缺陷的用户路径，不要只走实现时考虑的演示流程。
+
 完成预期路径；检查输出、状态转换、副作用、控制台、网络和日志。
 
 使用形状和基数接近生产的代表性真实规模数据。比较

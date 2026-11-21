@@ -15,6 +15,10 @@ rerunnable contract evidence, domain-language alignment and human spot-check acc
 Size, nesting and cyclomatic complexity alone are not defects; measured performance
 can justify less readable internals without weakening correctness proof.
 
+Derive one credible counterexample from the [original contract](verifiability.md#verify-against-the-original-contract)
+before reading the author's proof. For runnable behavior, check the actual surface; a green
+unit suite or matching PR summary cannot establish alignment or an end-to-end outcome.
+
 Inspect the complete assigned diff and affected contracts. Find bugs, security failures,
 credible edge cases and unmet explicit requirements. Report a defect only with a concrete
 execution path or reproduction, consequence and smallest correction. Uncertain suspicions

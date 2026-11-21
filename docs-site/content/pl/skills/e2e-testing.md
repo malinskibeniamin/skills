@@ -27,8 +27,8 @@ Przed wyborem aktualnych API Playwright, Testcontainers, axe-core lub przegląda
 - Testy E2E umieszczaj w `e2e/*.spec.ts`; nazwy plików pochodzą od funkcji.
 - Selektory: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS.
 - Test IDs mają postać `{feature}-{element}` z opcjonalnym indeksem lub stanem.
-- Hook testów sąsiadujących z trasą uruchamia pobliskie testy przeglądarkowe lub integracyjne po edycji trasy.
-- Hook refaktoryzacji strukturalnej wymaga testu dla nowych stron lub wydzielonych komponentów.
+- Po edycji trasy użyj istniejącego testu przeglądarkowego lub integracyjnego. Nowa strona lub wydzielony komponent nie wymaga osobnego testu; stosuj [kryteria tworzenia testów](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#authoring-gate).
+- Gdy ryzyko dotyczy styku systemów, przejdź rzeczywistą ścieżkę użytkownika i sprawdź widoczny lub trwały wynik. Testuj zmienioną integrację bez atrap; atrapa trasy pozwala sprawdzić stany interfejsu, nie tę integrację.
 
 ## Dostępność i przeglądarki [#accessibility-and-browsers]
 
@@ -58,7 +58,7 @@ pokrycie, nie zastępują wymaganych kontraktów. Emulacja nie dowodzi działani
 - Specyfikacje schowka i uprawnień uruchamiaj w Chromium; gdzie indziej pokryj równoważny wynik.
 - Buforuj logi backendu lub kontenera przez teardown i przechwytuj awarie startu. Maskuj sekrety.
 - Utrzymuj zero ponowień testów w CI; diagnozuj błędy pierwszej próby, zamiast ponawiać do zielonego. Lokalnie preferuj zwięzły reporter.
-- Usuń testy samego renderu; każda ścieżka sprawdza skutek działania użytkownika.
+- Sprawdzaj istotne wyniki dla użytkownika, także na ścieżkach tylko do odczytu. Test samego renderowania musi wykrywać konkretny błąd; obecność stałego elementu nie dowodzi, że cała ścieżka działa.
 
 ## Eksploracja generowana i długotrwała [#generated-and-long-lived-exploration]
 

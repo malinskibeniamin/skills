@@ -16,8 +16,10 @@ browser APIs. Setup belongs in [SETUP.md](SETUP.md).
 - Put E2E tests in `e2e/*.spec.ts`; name files by feature.
 - Select with `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS.
 - Test IDs use `{feature}-{element}`, optional index, or state.
-- The route sibling hook runs nearby browser/integration tests after route edits.
-- The structural refactor hook requires a test for new pages or extracted components.
+- Reuse the owning browser/integration check after a route edit. A new page or extracted
+  component is not a test requirement; apply the [authoring gate](../test-audit/SKILL.md#authoring-gate).
+- For risks across boundaries, drive the real user path and assert its visible or durable
+  result. Keep the changed integration real; a route stub can exercise UI states but cannot prove that integration.
 
 ## Accessibility and browsers
 
@@ -49,7 +51,8 @@ branded browser or physical device.
 - Use zero test retries; preserve first-attempt failures and fix their cause. Follow
   [CI flake diagnosis](../ci-fixes/references/test-signal.md#12-diagnose-flakes), not retry-to-green.
   Prefer compact local reporters.
-- Delete render-only specs; each journey exercises a user-caused side effect.
+- Check consequential user outcomes, including read-only journeys. A render-only smoke
+  check needs a distinct failure it would catch; a static landmark alone does not prove a journey.
 
 ## Generated and long-lived exploration
 

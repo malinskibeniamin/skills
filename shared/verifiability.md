@@ -52,14 +52,34 @@ committing/publishing. Keep commands, candidate revision (including WIP), result
 in existing receipts/PR notes; record `none` with a reason when unverified. This is reporting,
 not a new commit stamp or executable gate. Edits invalidate affected evidence.
 
-After two unsuccessful repairs of the same check, challenge the shared premise and probe
-it before a third. If that check still fails after three repair-and-rerun rounds, stop
-automatic repair of that failure and request human help with expected/actual behavior,
+After compaction or handoff, re-read the original request and acceptance evidence before
+claiming completion. After two unsuccessful repairs of the same check, return to those
+sources, challenge the shared premise, and probe it before a third. If the check still
+fails after three rounds, stop repairing it and request human help with expected/actual behavior,
 attempts and remaining hypothesis. Preserve the failure; unrelated work may continue.
 This is per failure, not a lifetime feedback budget or permission to skip required checks.
 
 Adapted from the [user-supplied verification article](https://x.com/addyosmani/status/2122590683055993308).
 These are harness policies, not independently verified claims about another team's results.
+
+### Verify against the original contract
+
+Before implementation, derive an observable expected result and a credible failure or
+recovery case from the original request, spec, reproduction, or established public contract.
+Reuse these expectations across repairs. If the requirement or oracle is wrong, justify its
+correction against the authoritative source, separate it from the product fix, and replay
+known-bad and valid cases. A failing candidate is not a reason to change the expected result.
+
+For an authorized independent behavior pass, use a fresh, read-only verifier. Give it the
+original requirements, pinned runnable candidate, safe setup/fixtures, and scope—not the
+author's reasoning, test verdicts, or expected findings. Let it pick a credible counterexample
+and exercise the real entrypoint. Keep acceptance inputs outside the implementer's control
+for the pass; return reproducible expected/actual results and replay on the repaired candidate.
+Without separate authorization or access, challenge the contract inline and label it
+**self-verification**. Report missing live evidence separately. This adds no delegation,
+provider, hosted approval, or merge requirement.
+
+Source: [Jeff An's Momentic audit and verification workflow](https://stackoverflow.blog/2026/11/13/your-coding-agent-shouldn-t-grade-its-own-homework/).
 
 ## Dead code and duplication
 

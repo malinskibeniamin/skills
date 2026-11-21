@@ -56,6 +56,8 @@ type: skill
 在週期性運作前，約定觀察期間及成功與停止標準；
 量測人工投入、被接受的成果、重工、排隊時間和實際供應商支出。
 
+將已確認檢出和遺漏的缺陷與驗證時間和支出對照，不以測試數量或通過次數衡量成效。如果獲准設立獨立 QA 流程，依據[原始契約交接](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)設計。
+
 ## 規劃基礎設施 [#map-the-infrastructure]
 
 重用現有服務；不要假設每個角色都需要新產品。只閱讀

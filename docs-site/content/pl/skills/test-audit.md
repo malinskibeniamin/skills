@@ -30,20 +30,21 @@ Trzy tryby, jeden próg wartości. Tryb tworzenia weryfikuje każdy nowy lub zmi
 
 Przed dodaniem testu odpowiedz na cztery pytania; brak odpowiedzi oznacza, że nie należy go jeszcze dodawać:
 
-1. Jakie obserwowalne zachowanie, niezmiennik lub niezależny kontrakt chroni?
-2. Jaka realna regresja spowoduje jego niepowodzenie?
-3. Dlaczego istniejące testy nie wykrywają już tego błędu? Każdy kontrakt ma jeden główny test na granicy zapewniającej najsilniejszą weryfikację; kolejna warstwa wymaga odrębnego ryzyka, na przykład błędu transportu lub cyklu życia, którego główny test nie może objąć. Preferuj rozszerzenie przypadku w teście opartym na tabeli lub współdzielonej fixtury zamiast dodawania niemal identycznego testu; w tej samej zmianie ujednolić powielane przygotowanie testów.
+1. Jakie istotne zachowanie, niezmiennik lub niezależny kontrakt chroni? Wskaż wywołujący kod produkcyjny lub odbiorcę publicznego interfejsu i opisz, co przestałoby dla niego działać.
+2. Jaka realna regresja spowoduje jego niepowodzenie? Wyprowadź oczekiwany wynik z kontraktu, a nie z implementacji. Atrapa może odtwarzać warunki zewnętrzne, lecz nie ścieżkę ani efekt, który sprawdzasz. Jeśli ryzyko dotyczy połączenia komponentów, wybierz wyższą warstwę.
+3. Dlaczego istniejące testy nie wykrywają już tego błędu? Wybierz najtańszą granicę, która obejmuje ryzyko; kolejna warstwa musi weryfikować inne ryzyko, np. błąd transportu lub cyklu życia. Rozszerz istniejący przypadek, zamiast dodawać niemal identyczny test.
 4. Czy wymaga punktu dostępu w kodzie produkcyjnym (eksportu, flagi, wrappera, punktu wstrzykiwania), którego nie potrzebuje żaden kod produkcyjny? Jeśli tak, przenieś test na rzeczywistą granicę.
 
 Następnie sprawdź test pod kątem każdego [antywzorca](#junk-patterns); dopasowanie oznacza odrzucenie testu, chyba że [kryteria zachowania](#retention-bar) wskazują kontrakt, którego test niezależnie strzeże. Test, który przestałby przechodzić po refaktoryzacji zachowującej zachowanie, sprawdza implementację, a nie zachowanie; przed włączeniem zmian przepisz go tak, aby działał na granicy komponentu odpowiedzialnego za kontrakt.
 
-Testy regresyjne błędów muszą nie przechodzić na kodzie sprzed poprawki z zamierzonego powodu i przechodzić po naprawie na granicy odpowiedzialnego komponentu. Test regresyjny, którego niepowodzenia nigdy nie wykazano, potwierdza działanie atrapy, a nie poprawki. Jeden test regresyjny na granicy odpowiedzialnego komponentu obejmuje błąd; nie odtwarzaj tego samego scenariusza w każdej warstwie, przez którą przechodzi.
+Potwierdź RED na kodzie sprzed poprawki albo na wiarygodnym wadliwym wariancie w [odizolowanej kopii](https://github.com/malinskibeniamin/skills/blob/main/review/REFERENCE.md#source-snapshots-and-mutation-tests), jeśli wcześniejszej ścieżki nie da się uruchomić. Asercja musi zawieść z powodu naruszenia kontraktu, nie konfiguracji lub kompilacji. Zachowaj to samo kryterium wyniku w fazie GREEN. Jeden trwały test regresyjny na granicy odpowiedzialnego komponentu wystarczy.
 
 ## Antywzorce [#junk-patterns]
 
 Wspólna lista kontrolna dla wszystkich trybów: kwalifikacja odrzuca nowe testy pasujące do któregokolwiek wzorca, a audyty wyszukują takie testy w istniejącym zestawie.
 
 - sondy pokrycia bez asercji;
+- przekazywanie argumentów, formatowanie lub renderowanie bez znaczenia dla rzeczywistego odbiorcy;
 - porównywanie wartości z samą sobą i kopiowanie wartości bez zmian;
 - skopiowane fixtury, inwentarze, manifesty lub listy eksportów;
 - wyszukiwanie dokładnej treści kodu, importów lub ciągów znaków;

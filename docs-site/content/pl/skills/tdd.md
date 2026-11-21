@@ -57,11 +57,11 @@ Przy każdym proponowanym punkcie testowania podaj, jakie błędy wykrywa i jaki
 
 ### RED
 
-Napisz jeden test zachowania i sprawdź, czy kończy się niepowodzeniem z zamierzonego powodu. Używaj publicznych interfejsów; stosuj atrapy tylko dla niedostępnych zewnętrznych granic.
+Sprawdź zgodnie z [kryteriami tworzenia testów](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#authoring-gate), czy jeden test zachowania nie przechodzi z zamierzonego powodu. Stosuj atrapy tylko dla niedostępnych granic zewnętrznych; testuj zagrożone zachowanie bez atrap.
 
 ### GREEN
 
-Napisz najmniejszą implementację, która przechodzi test. Najpierw usuń lub wykorzystaj ponownie, a następnie wybieraj język, platformę lub zainstalowaną zależność. Naśladuj konwencje odpowiedniego pliku w `exemplars/`, a nie jego rozmiar.
+Napisz najmniejszą implementację, która spełnia to samo oczekiwanie i przechodzi test. Najpierw usuń lub wykorzystaj ponownie, a następnie wybieraj język, platformę lub zainstalowaną zależność. Naśladuj konwencje odpowiedniego pliku w `exemplars/`, a nie jego rozmiar.
 
 ### REFACTOR
 

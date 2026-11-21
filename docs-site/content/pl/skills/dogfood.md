@@ -38,6 +38,8 @@ Uruchom użyj -> nadużyj -> napraw -> odtwórz ponownie.
 
 ### Użyj [#use]
 
+Przed pierwszym uruchomieniem [odtwórz pierwotne kryteria akceptacji](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract). Wybierz ścieżkę, która może ujawnić błąd zmiany, a nie tylko scenariusz, pod który ją zbudowano.
+
 Wykonaj zamierzone ścieżki; sprawdź wynik, przejścia stanu, skutki uboczne, konsolę, sieć i logi.
 
 Użyj reprezentatywnych danych o rzeczywistej skali (kształcie i liczności zbliżonych do produkcyjnych); porównaj oczekiwane i zaobserwowane
