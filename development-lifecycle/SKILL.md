@@ -38,7 +38,7 @@ Fixed evals: [hill-climb](../hill-climb/SKILL.md).
 
 ### Act
 
-Single owner; explicit consent for delegation/background. Smallest working diff; respect user code and access.
+Use a single owner; explicit consent for delegation/background. Smallest working diff; respect user code and access.
 Diagnose tool failures; retry safe checks, verify uncertain writes first. Continue unblocked work.
 Uncovered regressions: [tdd](../tdd/SKILL.md); else reuse checks. Re-plan affected slices only;
 no speculative abstractions or cleanup.
@@ -49,7 +49,7 @@ Imports: [checks](../shared/check-loop.md).
 
 ### Verify
 
-Handoff: repo gates, not just scoped checks. Load [dogfood](../dogfood/SKILL.md): material behavior at the real entrypoint + failure/recovery. Review outcome, guardrails and risk; green checks do not prove intent. A failure becomes the next action; repair/repeat. Report unrelated baseline failures.
+Handoff: repo gates, not just scoped checks. Load [dogfood](../dogfood/SKILL.md): material behavior at the real entrypoint + failure/recovery. Review outcome, guardrails and credible risk; green checks do not prove intent. A failure becomes the next action; repair/repeat. Report unrelated baseline failures.
 
 Fix causes, not gates; keep tests/strictness. Rule changes: tooling rationale + bad/valid controls. Missing entrypoint: disposable harness; recurring gap: `/create-verification-skill`.
 
