@@ -5,7 +5,9 @@ disable-model-invocation: true
 argument-hint: "[version]"
 ---
 
-Publish without metadata, tags, or caches diverging. Version must be exact stable SemVer such as `4.34.0`.
+Normal green merges publish automatically; use this manual procedure only for
+[release recovery](../README.md#releases-and-automatic-updates), never while the
+publisher is running. Publish without metadata, tags, or caches diverging. Version must be exact stable SemVer such as `4.34.0`.
 
 ## 1. Establish
 
@@ -17,8 +19,9 @@ Publish without metadata, tags, or caches diverging. Version must be exact stabl
 
 ## 2. Prepare test-first
 
-1. First change `evals/test-improve-release-metadata.sh`; record expected RED metadata failures.
-2. Update `skill-manifest.json`, plugin manifests, both marketplaces, dated changelogs, `CHANGELOG.md`, README pin together.
+1. Record RED release metadata failures with `python3 scripts/release-version.py check`.
+2. Run `python3 scripts/release-version.py prepare --version <version> --note "<note>"` to update
+   `skill-manifest.json`, plugin manifests, both marketplaces, changelogs and README pin together.
 3. For skill-surface changes run hook/catalog/AGENTS generators; never hand-edit generated Codex proxies.
 4. Keep live docs on `main`; do not copy skill docs for a release.
 5. Replay release metadata/packaging evals GREEN.

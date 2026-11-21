@@ -1,11 +1,19 @@
 ---
-title: /release
 description: >-
   Opublikuj niezmienne wydanie frontend-skills obejmujące manifesty, PR, tag,
   GitHub, Claude i Codex.
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - release
 sidebar:
   label: /release
+title: /release
+type: skill
 ---
 ![Diagram umiejętności /release](/diagrams/skills/release.svg)
 
@@ -13,7 +21,9 @@ sidebar:
 
 Opublikuj to repozytorium, nie dopuszczając do rozbieżności metadanych, tagów ani pamięci podręcznych środowiska uruchomieniowego. Argument wersji musi wskazywać dokładną, stabilną wersję SemVer, taką jak `4.34.0`.
 
-## 1. Ustal punkt wydania
+Po przejściu CI zwykłe scalenia są publikowane automatycznie. Używaj tej ręcznej procedury tylko do odzyskiwania wydania, gdy automatyczna publikacja nie trwa.
+
+## 1. Ustal punkt wydania [#1-establish]
 
 1. Pobierz `origin/main`; wymagaj czystego drzewa roboczego na gałęzi funkcjonalnej opartej na najnowszej gałęzi main.
 2. Przejrzyj commity i scalone PR-y od najnowszego tagu `v*`. Określ zakres wydania na podstawie dowodów.
@@ -22,18 +32,16 @@ Opublikuj to repozytorium, nie dopuszczając do rozbieżności metadanych, tagó
 5. Potwierdź, że żądanie obejmuje uprawnienia do scalenia i publikacji. Jawne polecenie
    `/release <version>` lub „utwórz/opublikuj <version>” je zapewnia; planowanie lub omawianie wydania — nie.
 
-## 2. Przygotuj podejście test-first
+## 2. Przygotuj podejście test-first [#2-prepare-test-first]
 
-1. Najpierw zmień wersję docelową w `evals/test-improve-release-metadata.sh`.
-2. Uruchom skrypt i zapisz oczekiwane błędy RED dotyczące metadanych wydania.
-3. Zaktualizuj razem `skill-manifest.json`, oba manifesty wtyczek, oba marketplace’y, ich datowane
-   wpisy dziennika zmian, `CHANGELOG.md` oraz przypiętą wersję instalacyjną w README.
-4. Jeśli powierzchnia umiejętności uległa zmianie, uruchom generatory hooków, katalogu i plików AGENTS. Nigdy nie edytuj ręcznie
+1. Uruchom `python3 scripts/release-version.py check` i potwierdź, że brak podbicia wersji nie przechodzi kontroli metadanych.
+2. Uruchom `python3 scripts/release-version.py prepare --version <version> --note "<note>"`, aby zsynchronizować metadane, dziennik zmian i przypiętą wersję w README.
+3. Jeśli powierzchnia umiejętności uległa zmianie, uruchom generatory hooków, katalogu i plików AGENTS. Nigdy nie edytuj ręcznie
    wygenerowanych proxy Codex.
-5. Pozostaw aktualną dokumentację na `main`; wydanie harnessu nie wymaga kopiowania dokumentacji umiejętności.
-6. Ponownie uruchom ukierunkowane testy ewaluacyjne metadanych wydania i pakowania, aż osiągną stan GREEN.
+4. Pozostaw aktualną dokumentację na `main`; wydanie harnessu nie wymaga kopiowania dokumentacji umiejętności.
+5. Ponownie uruchom ukierunkowane testy ewaluacyjne metadanych wydania i pakowania, aż osiągną stan GREEN.
 
-## 3. Zweryfikuj pakiet
+## 3. Zweryfikuj pakiet [#3-verify]
 
 Uruchom bramkę jakości repozytorium, testy pakietu, pełny zestaw testów ewaluacyjnych powłoki, testy behawioralne hooków,
 kontrole rozbieżności generatorów, analizę JSON oraz `git diff --check`. Wymagaj obu rzeczywistych, izolowanych instalatorów CLI:
@@ -47,7 +55,7 @@ Uruchom `/dogfood` dla obu spakowanych powierzchni umiejętności. Pomiń przegl
 nie obejmuje renderowanej powierzchni widocznej dla użytkownika. Przejrzyj ustabilizowany diff pod kątem standardów, wartości, odporności,
 pakowania i zagrożeń dla niezmienności wydania.
 
-## 4. Scal przed utworzeniem tagu
+## 4. Scal przed utworzeniem tagu [#4-land-then-tag]
 
 1. Utwórz commit, wypchnij zmiany i otwórz PR wydania za pomocą `/go`; dołącz potwierdzenie dogfoodingu i wyniki liczbowe.
 2. Monitoruj wszystkie wymagane kontrole PR i rozwiąż każdy istniejący wątek przeglądu.
@@ -55,7 +63,7 @@ pakowania i zagrożeń dla niezmienności wydania.
 4. Pobierz main i poczekaj na poprawne CI gałęzi main dla commitu scalającego.
 5. Utwórz i wypchnij opisany tag `v<version>` wskazujący ten commit scalający, nigdy commit gałęzi funkcjonalnej.
 
-## 5. Opublikuj i sprawdź ponownie
+## 5. Opublikuj i sprawdź ponownie [#5-publishreplay]
 
 1. Uruchom `gh release create v<version> --verify-tag --latest` z odpowiednio zawężonymi informacjami o wydaniu i linkiem do porównania.
 2. Sprawdź, czy zdalny tag wskazuje commit scalający, jego drzewo jest zgodne z wydaną gałęzią main, a
