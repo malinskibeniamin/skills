@@ -80,6 +80,7 @@ UI 变更按照[视觉证据契约](https://github.com/malinskibeniamin/skills/b
 ## 描述与风险 [#description-and-risk]
 
 撰写或更新正文前，阅读[补充描述指南](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#supporting-description)，了解证据、决策变化和风险。
+对于请求或计划未明确、由代理作出的重要选择，执行[决策差异审计](https://github.com/malinskibeniamin/skills/blob/main/shared/decision-deltas.md)，直接调用 PR 工作流时也适用。
 PR 正文是供操作人员使用的精简摘要；额外总结产物必须由用户明确要求。
 符合条件的非 UI 契约需要[后端图表](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md)；UI 录屏仍须遵循 `package-my-work`。
 说明回滚路径，并判断变更是单向门还是双向门。

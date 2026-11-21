@@ -17,10 +17,8 @@ Before adding any test, answer four questions; a missing answer means do not add
 
 Then check the test against every [junk pattern](#junk-patterns); a match fails the gate unless the [retention bar](#retention-bar) names the contract it independently guards. A test that would break under behavior-preserving refactoring is asserting implementation, not behavior; rewrite it at the owning boundary before landing it.
 
-Prove RED on the pre-fix code, or on a plausible broken variant in an
-[isolated snapshot](../review/REFERENCE.md#source-snapshots-and-mutation-tests) when no runnable pre-fix path exists.
-The assertion must fail for the contract violation, not setup or compilation. Keep the
-same oracle for GREEN. One durable regression at the owning boundary covers the bug.
+Verify that regression tests fail on the pre-fix code, or use a plausible broken variant in an [isolated snapshot](../review/REFERENCE.md#source-snapshots-and-mutation-tests) if no runnable pre-fix path exists.
+RED must be the contract violation, not setup or compilation. Keep the same oracle for GREEN; one durable regression at the owning boundary is enough.
 
 ## Junk patterns
 
@@ -75,8 +73,7 @@ Read [diagnosis and removal rules](REFERENCE.md#flaky-checks) before repairing, 
 
 ## Candidate evidence
 
-Before deletion, record every field in [candidate evidence](REFERENCE.md#candidate-evidence).
-A missing field means the candidate is not ready.
+Before deletion, record every field in [candidate evidence](REFERENCE.md#candidate-evidence); missing fields block deletion.
 
 ## Edit shape
 
