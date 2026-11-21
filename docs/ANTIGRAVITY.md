@@ -4,7 +4,7 @@ Use T3 Code's [Antigravity provider](https://github.com/pingdotgg/t3code/blob/ma
 
 ## Set up a workspace
 
-1. In T3 Code, open **Settings → Providers → Antigravity** on the environment that runs the project. Enable it, install its runtime there, and sign in. Separate standalone CLI or IDE sign-in is not enough.
+1. In T3 Code, open **Settings > Providers > Antigravity** on the environment that runs the project. Enable it, install its runtime there, and sign in. Separate standalone CLI or IDE sign-in is not enough.
 2. On that environment, from a checkout of this harness, build into the **actual project or worktree** you will open in T3 Code. Use Python 3.10+, Git, Bash, and jq; consumer checks also need the consumer's usual toolchain.
 
    ```sh

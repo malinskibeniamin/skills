@@ -8,30 +8,29 @@ paths:
 
 # E2E Testing
 
-Run `/read-the-damn-docs` before choosing current Playwright, Testcontainers, axe-core, or
-browser APIs. Setup belongs in [SETUP.md](SETUP.md).
+Run `/read-the-damn-docs` before choosing Playwright, Testcontainers, axe-core, or browser APIs.
+Setup: [SETUP.md](SETUP.md).
 
 ## Conventions
 
 - Put E2E tests in `e2e/*.spec.ts`; name files by feature.
 - Select with `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS.
 - Test IDs use `{feature}-{element}`, optional index, or state.
-- Reuse the owning browser/integration check after a route edit. A new page or extracted
-  component is not a test requirement; apply the [authoring gate](../test-audit/SKILL.md#authoring-gate).
-- For risks across boundaries, drive the real user path and assert its visible or durable
-  result. Keep the changed integration real; a route stub can exercise UI states but cannot prove that integration.
+- Reuse owning browser/integration checks after route edits. A new page or extracted
+  component alone needs no test; apply the [authoring gate](../test-audit/SKILL.md#authoring-gate).
+- Test boundary risks through the real user path and assert its visible or durable result.
+  Keep the changed integration real; route stubs prove UI states, not integration.
 
 ## Accessibility and browsers
 
-Run axe on every page, but automated accessibility covers only a subset. An axe-only pass
-does not prove keyboard order, focus, names, zoom, or assistive-technology behavior.
+Run axe on every page. An axe-only pass does not prove keyboard order, focus, names,
+zoom, or assistive-technology behavior.
 
-On PRs, run the full suite in Chromium by default; affected-only selection needs the proof in
-[CI fixes](../ci-fixes/SKILL.md). Run the full regression suite before merge on the current
-combined candidate, preferably in a merge queue. Tag critical journeys and credible engine
-risks `@cross-browser`; run those in Firefox and WebKit before merge too. Supplemental nightly
-matrices may expand coverage, not replace required contracts. Emulation cannot prove every
-branded browser or physical device.
+Run the full suite in Chromium by default on PRs; affected-only selection needs
+[CI fixes](../ci-fixes/SKILL.md) proof. Run full regression on the combined candidate before
+merge, preferably in a merge queue. Run critical journeys and engine risks (`@cross-browser`) in Firefox and WebKit before merge.
+Supplement required checks with nightly matrices.
+Emulation cannot prove every browser/device combination.
 
 ## Determinism
 
@@ -51,26 +50,25 @@ branded browser or physical device.
 - Use zero test retries; preserve first-attempt failures and fix their cause. Follow
   [CI flake diagnosis](../ci-fixes/references/test-signal.md#12-diagnose-flakes), not retry-to-green.
   Prefer compact local reporters.
-- Check consequential user outcomes, including read-only journeys. A render-only smoke
-  check needs a distinct failure it would catch; a static landmark alone does not prove a journey.
+- Assert consequential outcomes, including read-only journeys. A render-only smoke needs
+  a distinct failure mode; a static landmark alone cannot prove a journey.
 
 ## Generated and long-lived exploration
 
-For combinatorial customer contracts that cannot be proved cheaper, use narrow generated
-action sequences or a stateful property. Follow
-[PROPERTY-BASED-TESTING.md](../tdd/PROPERTY-BASED-TESTING.md): keep an independent oracle and
-replay seed, then convert real findings to deterministic regressions. This complements fixed
-journeys, cross-browser checks, accessibility, visual review, and dogfood.
+For combinatorial contracts, use narrow generated sequences or a stateful property.
+[PROPERTY-BASED-TESTING.md](../tdd/PROPERTY-BASED-TESTING.md): keep an independent oracle
+and replay seed; turn real findings into deterministic regressions. Supplement fixed journeys,
+cross-browser checks, accessibility, visual review and dogfood.
 
-For listener, DOM, timer, subscription, or heap growth within one browser context, use
-[SOAK-TESTING.md](SOAK-TESTING.md). Isolated E2E tests cannot prove resource lifetime.
+For listener, DOM, timer, subscription or heap growth, use same-context
+[SOAK-TESTING.md](SOAK-TESTING.md); isolated E2E cannot prove resource lifetime.
 
 ## Evidence and tools
 
 Monitor `bun run test:e2e`; react to failures before completion.
 
-For interactive automation/tool choice, use [browser/data guidance](../dogfood/SKILL.md#browser-and-data-tasks).
-Agent-browser is the default interactive CLI when permitted, not Playwright Test's CI runner.
+For interactive tools, use [browser/data guidance](../dogfood/SKILL.md#browser-and-data-tasks).
+When permitted, use agent-browser interactively; use Playwright Test in CI.
 Saved flows do not replace UI assertions; retain browser, accessibility and cross-browser coverage.
 
 | Need | Tool |

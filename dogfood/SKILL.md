@@ -9,11 +9,10 @@ Dogfood each material runnable slice and final PR at public seams. Tests are not
 
 ## Inventory
 
-1. Resolve base with
-   `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
-2. Inspect full PR: merge-base through committed, staged, unstaged and untracked work.
-3. Cover changed branches at real entrypoints, including skill resources/scripts and hook events.
-   Standalone docs/tests/evals need no experiential coverage.
+1. Resolve base: `BASE=$(PR_BASE_REF="${DOGFOOD_BASE_REF:-}" "${CLAUDE_PLUGIN_ROOT:-.}/scripts/resolve-pr-base.sh")`.
+2. Inspect all changes since merge-base, including uncommitted and untracked work.
+3. Use real entrypoints for changed behavior, including skill scripts and hook events.
+   Standalone docs/tests/evals need no dogfood.
 
 ## Loop
 
@@ -22,19 +21,17 @@ Run use -> abuse -> repair -> replay.
 ### Use
 
 Before the first run, [recover the original acceptance expectations](../shared/verifiability.md#verify-against-the-original-contract).
-Choose a journey that could disprove the change, not just the walkthrough it was built around.
-Exercise intended paths; inspect output, transitions, effects, console, network and logs.
+Choose a journey that can disprove the change, not just the original walkthrough.
+Exercise intended paths; inspect state, effects, output, logs and network.
 
-Use representative live-scale data (production-like shape/cardinality); compare expected/observed
-counts, ordering, timing, state and effects; expose accumulation.
+Use representative live-scale data. Compare counts, ordering, timing, state and effects
+against expectations; check accumulation.
 
-For bugs, replay the reporter's exact steps unfixed. If you cannot reproduce it,
-request missing environment or evidence before diagnosis.
+Replay the same steps unfixed. If you cannot reproduce, ask for setup or evidence.
 
 ### Abuse
 
 Try one credible break:
-
 - Careless: empty, invalid, oversized, duplicate, or reordered input.
 - Impatient: repeat, double-submit, reload, navigate away, cancel, or interrupt.
 - Unlucky: stale or missing data, slow or failed dependency, partial completion.
@@ -49,14 +46,13 @@ and evidence in replay/receipt; test only uncovered cases. Keep invalid-input va
 
 ### Repair
 
-Defects fail. When automatable, add a RED public-contract test,
-fix via `/tdd`, and rerun focused checks. Edits invalidate evidence.
+Defects fail. If automatable, add a RED contract test, fix via `/tdd` and rerun. Edits invalidate evidence.
 
 ### Replay
 
-Repeat intended use and every break attempt at the real entrypoint. Replay identical bug
-steps and adjacent behavior. Use [replay packets](../shared/verification-replay.md) for
-stateful bugs/repro gaps. PASS binds to current runnable state.
+Replay intended use, break attempts, exact bug steps and adjacent behavior at the real entrypoint.
+Use [replay packets](../shared/verification-replay.md) for stateful bugs/repro gaps.
+PASS binds to current runnable state.
 
 ## Entrypoints
 
@@ -72,7 +68,7 @@ stateful bugs/repro gaps. PASS binds to current runnable state.
 
 Fresh agents require explicit delegation.
 
-Use project-local `verify-*` doctor, drive, evidence and cleanup when available.
+Use local `verify-*` doctor, drive, evidence and cleanup.
 T3 Code checkout UI only: resolve [native context](../shared/T3CODE-NATIVE.md#resolve-context), then load [web/desktop](../t3code-skills/test-t3-app/SKILL.md) or
 [native mobile](../t3code-skills/test-t3-mobile/SKILL.md). Missing Browser/Device: BLOCKED;
 do not install or switch harnesses.
@@ -94,5 +90,4 @@ Read [browser defaults](../shared/verification-replay.md#browser-and-data-tasks)
 - **Repairs:** defects, RED tests, fixes, replay result.
 - **Limits:** untried behavior and reason.
 
-PASS: direct evidence per behavior; FAIL: observed defect; BLOCKED: missing access,
-environment, hardware or safety condition.
+PASS: direct evidence; FAIL: observed defect; BLOCKED: missing access, environment, hardware or safety condition.

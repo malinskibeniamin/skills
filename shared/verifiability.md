@@ -71,7 +71,7 @@ correction against the authoritative source, separate it from the product fix, a
 known-bad and valid cases. A failing candidate is not a reason to change the expected result.
 
 For an authorized independent behavior pass, use a fresh, read-only verifier. Give it the
-original requirements, pinned runnable candidate, safe setup/fixtures, and scope—not the
+original requirements, pinned runnable candidate, safe setup/fixtures, and scope, not the
 author's reasoning, test verdicts, or expected findings. Let it pick a credible counterexample
 and exercise the real entrypoint. Keep acceptance inputs outside the implementer's control
 for the pass; return reproducible expected/actual results and replay on the repaired candidate.

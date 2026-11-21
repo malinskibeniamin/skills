@@ -17,10 +17,10 @@ Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dep
 
 ## Test seams and anti-patterns
 
-- **Seams:** name public boundaries and catches/misses; confirm unclear contracts. Load "codebase-design"; avoid unconfirmed internals.
-- **Tautological tests:** expected values need an independent source of truth: literal, worked example, fixture, spec, or observation.
+- **Seams:** name public boundaries, catches and misses. Confirm unclear contracts; load "codebase-design".
+- **Tautological tests:** use an independent source of truth: literal, worked example, fixture, spec, or observation.
 - **Dependency re-tests:** trust documented utilities; test only our distinct domain/integration risks.
-- **Source-text proxies:** delete implementation/CSS/markup/config token scans posing as runtime proof. Test behavior at a public seam; use static analysis for syntax. Content assertions are for public output only.
+- **Source-text proxies:** Delete token scans posing as runtime proof. Test public seams; use static analysis for syntax and content assertions only for public output.
 - Use vertical slices: one RED test plus GREEN implementation; bulk tests guess behavior.
 
 ## Workflow
@@ -42,7 +42,7 @@ Mock unavailable external boundaries only; keep the behavior at risk real.
 
 ### GREEN
 
-Write the smallest passing implementation against the same expectation. Delete/reuse first; prefer language, platform, installed dependency. Match `exemplars/`, not size.
+Meet the same expectation with the smallest implementation. Delete/reuse first: language, platform, installed dependency. Match `exemplars/`.
 
 ### REFACTOR
 
@@ -60,4 +60,4 @@ only when helpful/required; non-visible edits need no screenshots.
 
 ## Done
 
-Tests pass without warnings, async leaks, or duration waits; survive refactors. Examples: [REFERENCE.md](REFERENCE.md).
+Pass without warnings, async leaks or duration waits; survive refactors. Examples: [REFERENCE.md](REFERENCE.md).
