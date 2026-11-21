@@ -27,6 +27,8 @@ type: skill
 
 依[審查運作模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)選擇審查深度與收斂規則；風險改變審查力度，不改變權限。另請閱讀[兩類審查約定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)。
 
+自動審查或暫停審查：請閱讀[政策](https://github.com/malinskibeniamin/skills/blob/main/review/POLICIES.md)。
+
 ## 審查約定 [#review-contract]
 
 - **目標**：判斷差異是否實現預期結果且沒有可信缺陷。

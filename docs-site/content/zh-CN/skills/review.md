@@ -27,6 +27,8 @@ type: skill
 
 按[审查运行模型](https://github.com/malinskibeniamin/skills/blob/main/review/OPERATING-MODEL.md)选择审查深度和收敛规则；风险改变审查力度，不改变权限。另请阅读[两类审查约定](https://github.com/malinskibeniamin/skills/blob/main/shared/review-contract.md)。
 
+自动审查或暂停审查：请阅读[策略](https://github.com/malinskibeniamin/skills/blob/main/review/POLICIES.md)。
+
 ## 审查约定 [#review-contract]
 
 - **目标**：判断差异是否实现预期结果且没有可信缺陷。

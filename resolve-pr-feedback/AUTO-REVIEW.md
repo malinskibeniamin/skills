@@ -9,18 +9,31 @@ authenticated `gh`, and the feature agent's authenticated CLI. This uses native
 `codex exec resume UUID` or `claude --print --resume UUID`; it does not inject a
 message into Conductor's local UI. Conductor's public CLI targets cloud workspaces.
 
+[Review policies](../review/POLICIES.md) select whose PRs receive reviews/re-reviews;
+this binding selects the original agent that repairs its own feature. They are
+separate responsibilities. `status` exposes both; never assign a reviewer as repair owner.
+Controller findings can wake that bound owner through their private ledger even when
+the publishing account's own ordinary comments are excluded; keep hidden severities private.
+
 ## Enable
+
+Configure exact trusted feedback logins once; an existing sender list is preserved
+when later `configure`/`enable` calls omit it. Keep the allowlist: arbitrary public
+comments must not trigger paid repair turns. Controller-published findings use the
+validated local receipt bridge, not a wildcard exception to that allowlist.
 
 Only install/enable this persistent local job with explicit unattended-setup authorization.
 Once configured, each bound PR is maintained without per-event human triggers. Pick exact
-trusted reviewer logins from the PR's `gh api` output; arbitrary bots cannot trigger it.
+trusted reviewer logins from the PR's `gh api` output to restrict senders. Unknown
+public commenters do not trigger paid maintenance by default; all review text remains
+untrusted evidence, never new authority.
 
 ```bash
 bun <plugin-root>/scripts/pr-review-auto.ts enable \
   --reviewer 'chatgpt-codex-connector[bot]' --reviewer 'github-copilot[bot]'
 ```
 
-The user-local launchd job polls once per minute, while the Mac is awake and online.
+The user-local launchd job polls every five minutes, while the Mac is awake and online.
 It reads inline comments, review bodies, and issue comments with `gh api --paginate
 --slurp`. New/edited trusted feedback triggers one repair; unchanged feedback and
 the repair's own push do not. It also compares immutable PR base/head SHAs using
@@ -34,8 +47,7 @@ or failures on a new head remain eligible.
 `configure` writes consent/settings without installing
 the job; `tick` runs one sweep, useful with another scheduler.
 
-Enabled Claude/Codex hooks bind newly created PRs to the creating session. Existing
-PRs, compound shell commands, or tools with opaque payloads need one explicit bind:
+Enabled Claude/Codex hooks bind directly created PRs and direct `git push` publications to the creating session. Compound shell commands, or tools with opaque payloads need one explicit bind after publication:
 
 ```bash
 bun <plugin-root>/scripts/pr-review-auto.ts bind --agent codex --session <original-session-uuid>
@@ -73,6 +85,12 @@ PR and hooks retain the selection. An active local runner blocks the change. Ret
 - Existing model/config/auth/permission settings remain in effect. Configure the
   original CLI for unattended edits and `gh`/git access before enabling. Permission
   denial must be reported, not converted into a successful repair claim.
+- Final dispatch is admitted under a short state lock after network verification;
+  exact original owner, enabled state, activity, transport and trusted senders are
+  rechecked before spawning. The lock is released while that owner runs. Disable
+  revokes queued work, not an already admitted turn.
+- `status` reports sweep attempt/progress/finish, freshness and binding blockers;
+  an installed job or a heartbeat alone does not establish repair completion.
 - `status` and user-only logs distinguish **delivered** from **fixed**. CLI exit zero
   acknowledges delivery, not semantic feedback completion; rebase acknowledgement also
   requires published ancestry verification. Failed CLI runs pause paid retries:

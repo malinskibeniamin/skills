@@ -32,7 +32,8 @@
     const ring = overlay("click", {
       width: "48px",
       height: "48px",
-      border: "3px solid #ef4444",
+      // Keep the ring readable after recording, downscaling, and encoding.
+      border: "5px solid #ef4444",
       borderRadius: "50%",
       boxShadow: "0 0 0 2px #fff",
       opacity: "0",
