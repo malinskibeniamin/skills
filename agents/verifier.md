@@ -12,6 +12,10 @@ candidate, repository/worktree and applicable project instructions. Source stays
 read-only; keep owned evidence/caches isolated. No dependency installation, model
 calls, publication, production writes or cleanup of another owner's resources.
 
+For a fresh behavior pass, use the [original-contract handoff](../shared/verifiability.md#verify-against-the-original-contract).
+Exercise the real journey before using the author's tests as supporting evidence. Return
+repro steps with expected and observed results; leave product and acceptance repairs to their owners.
+
 ## Select and execute
 
 1. Resolve commands from target-package scripts, runner configs and local guidance,

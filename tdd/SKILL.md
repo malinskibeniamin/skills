@@ -37,11 +37,12 @@ Follow [dependency loading](../writing-for-agents/SKILL-MECHANICS.md#loading-dep
 
 ### RED
 
-Verify one behavior test fails as intended; mock unavailable external boundaries only.
+Verify one behavior test fails as intended per the [authoring gate](../test-audit/SKILL.md#authoring-gate).
+Mock unavailable external boundaries only; keep the behavior at risk real.
 
 ### GREEN
 
-Write the smallest passing implementation. Delete/reuse first; prefer language, platform, installed dependency. Match `exemplars/`, not size.
+Write the smallest passing implementation against the same expectation. Delete/reuse first; prefer language, platform, installed dependency. Match `exemplars/`, not size.
 
 ### REFACTOR
 

@@ -36,6 +36,8 @@ type: skill
 
 ### 使用 [#use]
 
+首次執行前，[找回原始驗收預期](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)。選擇可能揭露缺陷的使用者流程，不要只走實作時考量的示範路徑。
+
 完成預期路徑；檢查輸出、狀態轉換、副作用、主控台、網路和日誌。
 
 使用代表性真實規模資料（形狀和基數接近正式環境）；比較預期與觀察到的

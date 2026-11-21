@@ -24,8 +24,8 @@ type: skill
 - E2E 測試放在 `e2e/*.spec.ts`，檔案按功能命名。
 - 選取器優先順序：`getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS。
 - 測試 ID 使用 `{feature}-{element}`，可加索引或狀態。
-- 路由兄弟鉤子會在路由編輯後執行相鄰瀏覽器或整合測試。
-- 結構重構鉤子要求新頁面或抽取元件配套測試。
+- 修改路由後，重用負責該行為的瀏覽器或整合測試。新增頁面或抽取元件不代表必須新增測試；遵循[撰寫關卡](https://github.com/malinskibeniamin/skills/blob/main/test-audit/SKILL.md#authoring-gate)。
+- 風險涉及多個邊界時，走真實的使用者流程並斷言可見或持久的結果。保留真實的變更整合；路由替身能驗證 UI 狀態，卻無法證明該整合可用。
 
 ## 無障礙和瀏覽器 [#accessibility-and-browsers]
 
@@ -45,7 +45,7 @@ PR 預設在 Chromium 中執行完整套件；僅執行受影響測試需要 [CI
 - 剪貼簿和權限特定規範在 Chromium 執行；其他瀏覽器覆蓋等價結果。
 - 緩衝後端或容器記錄直到 teardown，並擷取啟動失敗。遮蔽機密。
 - CI 測試重試維持為零；診斷首次失敗，不要重試到通過。本機使用簡潔 reporter。
-- 刪除僅驗證渲染的規範；每段旅程都要觸發使用者造成的副作用。
+- 檢查對使用者有實際影響的結果，包括唯讀流程。僅驗證畫面呈現的冒煙測試必須能偵測某個具體故障；靜態地標本身無法證明整個流程能運作。
 
 ## 生成式與長時間探索 [#generated-and-long-lived-exploration]
 

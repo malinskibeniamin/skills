@@ -12,6 +12,8 @@ Use [communication](../shared/communication.md#admit-work-by-priority); [helpers
 
 State **Objective** (outcome), **Guardrails** (reserved bounds),
 **Verification** (observable behavior), **Stop** (endpoint/blockers).
+For material behavior, [derive verification from the original contract](../shared/verifiability.md#verify-against-the-original-contract)
+before editing. Keep the expected outcome through repairs and handoffs.
 
 Build/fix/implement: continue immediately; [auto-setup](../shared/review-enforcement.md) within endpoint.
 

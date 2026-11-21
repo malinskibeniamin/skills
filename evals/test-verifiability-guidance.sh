@@ -14,6 +14,10 @@ routes = (
     "codebase-design/SKILL.md",
     "shared/review-contract.md",
     "tdd/SKILL.md",
+    "development-lifecycle/SKILL.md",
+    "dogfood/SKILL.md",
+    "agents/verifier.md",
+    "software-factory/SKILL.md",
     "setup-routines/routines/weekly-health.md",
 )
 missing = []

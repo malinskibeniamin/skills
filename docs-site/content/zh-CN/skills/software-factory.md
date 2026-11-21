@@ -56,6 +56,8 @@ type: skill
 在周期性运行前，约定观察窗口以及成功和停止标准；
 测量人工投入、被接受的结果、返工、排队时间和实际供应商支出。
 
+将确认检出和遗漏的缺陷与验证耗时和开支对照，不以测试数量或通过次数衡量成效。若获准单独设立 QA 流程，按[原始契约交接](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)设计。
+
 ## 梳理基础设施 [#map-the-infrastructure]
 
 复用现有服务；不要假设每个角色都需要一个新产品。只阅读

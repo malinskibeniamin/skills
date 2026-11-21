@@ -58,6 +58,8 @@ oraz najtańszy sposób obalenia założeń. Brak pomiarów pozostaje niewiadom�
 Ustal okres obserwacji oraz kryteria sukcesu i zatrzymania przed uruchomieniem pracy cyklicznej;
 mierz wysiłek człowieka, zaakceptowane wyniki, poprawki, czas w kolejce i rzeczywiste wydatki u dostawcy.
 
+Zestawiaj wykryte i przeoczone potwierdzone usterki z czasem i kosztem weryfikacji, a nie z liczbą testów czy zaliczonych kontroli. Jeśli zatwierdzono oddzielną ścieżkę QA, oprzyj ją na [przekazaniu pierwotnego kontraktu](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract).
+
 ## Rozpisz infrastrukturę [#map-the-infrastructure]
 
 Wykorzystuj istniejące usługi; nie zakładaj, że każda rola wymaga nowego produktu. Przeczytaj tylko

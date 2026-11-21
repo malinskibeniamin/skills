@@ -10,20 +10,24 @@ Three modes, one value bar. Authoring mode gates every new or changed test at wr
 
 Before adding any test, answer four questions; a missing answer means do not add it yet:
 
-1. What observable behavior, invariant, or independent contract does it protect?
-2. What credible regression makes it fail?
-3. Why does existing coverage not already catch that failure? Each contract has one primary test owner at the strongest boundary; another layer needs its own distinct risk, such as a transport or lifecycle failure the owner cannot reach. Prefer extending a table-driven case or shared fixture over a near-duplicate test; consolidate duplicated setup in the same change.
+1. What consequential behavior, invariant, or independent contract does it protect? Name the production caller or public consumer and what breaks for them.
+2. What credible regression makes it fail? Derive the expected result from the contract, not the implementation. A double may control external conditions; it must not replace the path or effect being asserted. Move up a layer when the risk is in the wiring.
+3. Why does existing coverage not already catch that failure? Pick the cheapest boundary that exercises the risk; another layer needs its own distinct risk, such as transport or lifecycle failure. Prefer extending an existing case over a near-duplicate test.
 4. Does it need a production seam (export, flag, wrapper, injection hook) that no production caller needs? If yes, move the test to the real boundary instead.
 
 Then check the test against every [junk pattern](#junk-patterns); a match fails the gate unless the [retention bar](#retention-bar) names the contract it independently guards. A test that would break under behavior-preserving refactoring is asserting implementation, not behavior; rewrite it at the owning boundary before landing it.
 
-Bug regression tests must fail on the pre-fix code for the intended reason and pass after the owner-boundary repair. A regression test that never demonstrably failed proves the mock, not the fix. One regression at the owner boundary covers the bug; do not replay the same scenario at every layer it crosses.
+Prove RED on the pre-fix code, or on a plausible broken variant in an
+[isolated snapshot](../review/REFERENCE.md#source-snapshots-and-mutation-tests) when no runnable pre-fix path exists.
+The assertion must fail for the contract violation, not setup or compilation. Keep the
+same oracle for GREEN. One durable regression at the owning boundary covers the bug.
 
 ## Junk patterns
 
 The shared checklist for every mode: the authoring gate rejects a new test that matches one, and audits hunt for existing tests that do.
 
 - assertion-free coverage probes;
+- incidental argument passing, formatting, or rendering with no consequence for a real consumer;
 - self-comparisons and identity copiers;
 - copied fixtures, inventories, manifests, or export lists;
 - exact source, import, or string greps;

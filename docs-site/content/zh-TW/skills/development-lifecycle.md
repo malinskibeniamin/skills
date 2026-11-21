@@ -27,6 +27,8 @@ type: skill
 
 陳述**目標**（成果）、**護欄**（保留的界線）、**驗證**（可觀察的行為）及**停止條件**（端點或阻礙）。
 
+對於實質的行為變更，編輯前先依據[原始契約](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)訂出驗證標準。修正與交接時保留原本的預期結果。
+
 陳述契約；建置、修正或實作請求應立即繼續。
 在該終點範圍內[自動補齊使用端儲存庫的審查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
 

@@ -27,6 +27,8 @@ type: skill
 
 说明**目标**（结果）、**约束**（保留的边界）、**验证**（可观察的行为）和**停止条件**（终点或阻碍）。
 
+对于实质性行为变更，编辑前根据[原始契约](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)确定验证标准。修复和交接时保留原有预期结果。
+
 说明契约；构建、修复或实现请求应立即继续。
 在该终点范围内[自动补齐使用方仓库的审查保障](https://github.com/malinskibeniamin/skills/blob/main/shared/review-enforcement.md)。
 

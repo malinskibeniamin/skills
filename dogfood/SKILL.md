@@ -21,6 +21,8 @@ Run use -> abuse -> repair -> replay.
 
 ### Use
 
+Before the first run, [recover the original acceptance expectations](../shared/verifiability.md#verify-against-the-original-contract).
+Choose a journey that could disprove the change, not just the walkthrough it was built around.
 Exercise intended paths; inspect output, transitions, effects, console, network and logs.
 
 Use representative live-scale data (production-like shape/cardinality); compare expected/observed

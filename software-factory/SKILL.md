@@ -46,6 +46,9 @@ Name the beneficiary and repeatable task, today's handoff/rework cost, expected 
 and the cheapest disproof. Missing measurements stay unknown, not invented savings.
 Agree on an observation window and success/stop criteria before recurring operation;
 measure human effort, accepted outcomes, rework, queue time, and actual provider spend.
+Measure confirmed defects caught and missed against verification time and spend, not test
+count or green checks. Design any authorized separate QA lane around the
+[original-contract handoff](../shared/verifiability.md#verify-against-the-original-contract).
 
 ## Map the infrastructure
 
