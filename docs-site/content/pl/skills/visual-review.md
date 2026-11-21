@@ -44,6 +44,8 @@ testuj tylko niepokryte przypadki. Zachowaj zakres tylko do odczytu lub jawnie d
 
 W trybach implementacji i wydania używaj [materiałów wizualnych PR](https://github.com/malinskibeniamin/skills/blob/main/commit-push-pr/REFERENCE.md#frontendcustomer-facing-detection--screenshot-table-phase-5), gdy zrzuty pomagają w przeglądzie lub są wymagane. Sprawdzaj odpowiednie różnice migawek przed zamierzonymi aktualizacjami; uruchamiaj ponownie w normalnym trybie. Dodawaj adnotacje tylko wtedy, gdy pomagają znaleźć różnicę; przegląd tylko do odczytu zgłasza luki. Zrzuty nie są testami; testy nie są dowodem porównania przed i po.
 
+Przy odwzorowywaniu zatwierdzonego obrazu lub deklarowaniu naprawy wizualnej zastosuj [kontrole wzorca i dowodów](https://github.com/malinskibeniamin/skills/blob/main/visual-review/REFERENCE.md#target-and-evidence-checks): zachowaj wzorzec, potwierdź porównywalność zrzutów i w razie potrzeby sprawdź artefakty oraz różnice PNG dołączonym narzędziem. Pomiary wskazują różnice, nie dowodzą poprawności.
+
 Najpierw wyrenderowane zachowanie. Cykl życia jest ważniejszy niż zrzut. Stan jest ważniejszy niż ścieżka sukcesu. Ruch jest interakcją. Automatyzacja dostępności jest częściowa. Automatyzuj powtarzalne kontrole, gdy ryzyko uzasadnia ich utrzymanie.
 
 W razie potrzeby użyj `/excalidraw-diagram`; zrzuty ekranu są głównym materiałem, a Mermaid rozwiązaniem zapasowym.

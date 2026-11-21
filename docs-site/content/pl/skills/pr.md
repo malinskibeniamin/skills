@@ -82,6 +82,7 @@ Jeśli interakcje, trudno dostępne stany lub alternatywy warto wypróbować, po
 ## Opis i ryzyko [#description-and-risk]
 
 Przed pisaniem lub aktualizacją opisu przeczytaj [wskazówki do opisu](https://github.com/malinskibeniamin/skills/blob/main/pr/SUMMARY-VIEWS.md#supporting-description): dowody, zmiany decyzji i ryzyko.
+W przypadku istotnych wyborów agenta nierozstrzygniętych w żądaniu lub planie zastosuj [audyt nowych decyzji](https://github.com/malinskibeniamin/skills/blob/main/shared/decision-deltas.md), również przy bezpośrednim wywołaniu tworzenia PR.
 Opis PR-a jest zwięzłym podsumowaniem operacyjnym; osobne artefakty podsumowujące wymagają wyraźnego żądania.
 Odpowiednie kontrakty poza UI wymagają [diagramów backendowych](https://github.com/malinskibeniamin/skills/blob/main/excalidraw-diagram/PR-WORKFLOW.md); nagrania UI pozostają obowiązkowe według `package-my-work`.
 Wskaż sposób wycofania zmiany oraz określ, czy decyzja jest jedno- czy dwukierunkowa.
