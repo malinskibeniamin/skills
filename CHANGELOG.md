@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.45.1
+
+- Publish each verified skills merge and refresh opted-in Codex, Claude Code, and Antigravity installs from the same release.
+
 - Vendor the complete agent-browser skill suite with pinned Apache-2.0 sources,
   local Claude/Codex adapters and reproducible refresh checks. Interweave
   `/modern-web-guidance` with UI implementation, accessibility, motion, themes

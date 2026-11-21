@@ -87,7 +87,7 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.45.0
+codex plugin marketplace add malinskibeniamin/skills --ref v4.45.1
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
@@ -97,7 +97,47 @@ Track `main` instead of the pin with `--ref main`. Restart Codex after adding or
 Optional: [review/fix presets](docs/CODEX-PRESETS.md) for Codex CLI 0.164.0.
 Export reusable prompts and a review-model shortcut from this checkout without changing personal configuration or permissions.
 
-**Gemini 4 in T3 Code (Antigravity ACP)** — build the opt-in [Antigravity workspace plugin](docs/ANTIGRAVITY.md) for Neon, Carbon, or Hydrogen. See the guide for setup, coverage, and the live verification checklist.
+**Gemini 4 in T3 Code (Antigravity ACP)** -- build the opt-in [Antigravity workspace plugin](docs/ANTIGRAVITY.md) for Neon, Carbon, or Hydrogen. See the guide for setup, coverage, and the live verification checklist.
+
+### Releases and automatic updates
+
+Every merge must advance the stable version. After installing repository dependencies,
+prepare the default patch bump (or supply `--version` for a deliberate minor/major bump):
+
+```bash
+python3 scripts/release-version.py prepare --note "Describe the user-visible change."
+python3 scripts/release-version.py check
+```
+
+The PR eval checks the bump against the tested merge base. After evals, security and
+render succeed on the exact `main` commit, GitHub Actions publishes its annotated tag
+and GitHub release with an Antigravity bundle. Existing tags are never rewritten.
+A failed, canceled, or versionless merge does not release. To prevent bypass, make
+the existing Ubuntu eval a required, current-base check in repository settings.
+No scheduled local client publishes tags, and release jobs do not write `main`.
+
+For unattended plugin updates, run the following first to stage the latest published tag
+in `~/.local/state/frontend-skills-release/source` (no installation):
+
+```bash
+bash scripts/update-released-skills.sh
+```
+
+On a fresh profile, register that directory as the `skills` marketplace and install
+`frontend-skills@skills` using the commands above with the directory as the marketplace
+source instead of the repo/ref. For an existing remote or main marketplace, choose
+explicitly whether to switch this user install; the updater never replaces a registration
+or updates project-scoped installs. Claude needs a release with a relative marketplace source.
+The 4.45.0 release predates both that source and Antigravity packaging.
+
+Run `bash scripts/update-released-skills.sh --codex --claude --antigravity` once
+from a stable harness checkout, selecting only clients to manage. For T3 ACP use
+`--antigravity-workspace /absolute/path/to/project` instead of the standalone
+`--antigravity` flag. The workspace option refuses to overwrite an unmanaged bundle.
+After verifying one manual update, schedule the same command in your existing
+LaunchAgent with `gh`, Git, jq, Python and the selected host CLIs on its PATH.
+Clients need a reload/new session; updating loose skills with `skills update -g`
+is a separate, non-release channel.
 
 ### React DevTools runtime inspection
 

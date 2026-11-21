@@ -1,0 +1,105 @@
+name: Publish skills release
+
+# Each push has its own verification run. Whichever gate completes last
+# publishes; the others exit without publishing. PR events never have writes.
+on:
+  workflow_run:
+    workflows: [evals, PR video canary, Security review]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: publish-skills-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: >-
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify the exact main candidate
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$SOURCE" origin/main
+          runs="$(gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs?branch=main&event=push&head_sha=$SOURCE&per_page=100")"
+          if ! jq -e '
+            [.[].workflow_runs[]] as $runs |
+            ["evals", "PR video canary", "Security review"] |
+            all(. as $name | [$runs[] | select(.name == $name)] |
+                max_by(.id) | .conclusion == "success")
+          ' <<<"$runs" >/dev/null; then
+            echo "Waiting for all three verification workflows to succeed on $SOURCE."
+            exit 0
+          fi
+          version="$(python3 scripts/release-version.py check --base HEAD^1)"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+      - name: Package Antigravity
+        if: steps.release.outputs.tag != ''
+        run: |
+          python3 scripts/test-antigravity-plugin.py
+          python3 scripts/build-antigravity-plugin.py "$RUNNER_TEMP/frontend-skills"
+          tar -czf "$RUNNER_TEMP/frontend-skills-antigravity.tar.gz" -C "$RUNNER_TEMP" frontend-skills
+      - uses: actions/upload-artifact@v7
+        if: steps.release.outputs.tag != ''
+        with:
+          name: antigravity
+          path: ${{ runner.temp }}/frontend-skills-antigravity.tar.gz
+          if-no-files-found: error
+
+  publish:
+    needs: verify
+    if: needs.verify.outputs.tag != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: antigravity
+          path: ${{ runner.temp }}/skills-release
+      - name: Publish immutable tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE: ${{ github.event.workflow_run.head_sha }}
+          TAG: ${{ needs.verify.outputs.tag }}
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ && "$SOURCE" =~ ^[0-9a-f]{40}$ ]]
+          remote="https://github.com/$GITHUB_REPOSITORY.git"
+          refs="$(git ls-remote --tags "$remote" "refs/tags/$TAG" "refs/tags/$TAG^{}")"
+          if [[ -z "$refs" ]]; then
+            tag_object="$(gh api "repos/$GITHUB_REPOSITORY/git/tags" \
+              -f tag="$TAG" -f message="Frontend Skills $TAG" -f object="$SOURCE" -f type=commit --jq .sha)"
+            gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$TAG" -f sha="$tag_object" >/dev/null
+          fi
+          refs="$(git ls-remote --tags "$remote" "refs/tags/$TAG" "refs/tags/$TAG^{}")"
+          [[ "$(awk -v ref="refs/tags/$TAG^{}" '$2 == ref {print $1}' <<<"$refs")" == "$SOURCE" ]] || {
+            echo "::error::Tag $TAG already exists at a different object; refusing to move it"
+            exit 1
+          }
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,assets \
+              --jq '.isDraft == false and any(.assets[]; .name == "frontend-skills-antigravity.tar.gz")' | grep -qx true
+            exit
+          fi
+          gh release create "$TAG" "$RUNNER_TEMP/skills-release/frontend-skills-antigravity.tar.gz" \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes \
+            --title "frontend-skills ${TAG#v}"
