@@ -59,12 +59,17 @@ run_file_eval "$REPO_ROOT/create-verification-skill/references/feature-map-examp
 run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "usable app from empty data.*migrations and seed data" "verification readiness includes a usable cold launch"
 run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "Missing seed-data prerequisites fail the journey" "verification never weakens journeys around missing prerequisites"
 run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" "stand-in.*target|unverified.*real target" "verification discloses stand-in setup gaps"
-
+run_content_eval "$REPO_ROOT/create-verification-skill/SKILL.md" 'references/proof-loop\.md\)' "verifier creation routes to the known-failure proof loop"
+verifier_proof="$REPO_ROOT/create-verification-skill/references/proof-loop.md"
+run_content_eval "$verifier_proof" "same assertion.*known-bad" "verifier creation replays the same behavioral assertion against a known failure"
+run_content_eval "$verifier_proof" "Discard the scratch break.*rerun" "verifier creation restores the original behavior after the scratch break"
+run_content_eval "$verifier_proof" "sensitivity as unverified" "verifier creation does not infer sensitivity from a passing journey"
 
 # Maintenance distinguishes docs/harness drift from product defects.
 run_content_eval "$REPO_ROOT/maintain-verification-skill/SKILL.md" "clean.*changed.*blocked" "verification maintenance has explicit outcomes"
 run_content_eval "$REPO_ROOT/maintain-verification-skill/SKILL.md" "Never edit product code|Do not edit product code" "verification maintenance cannot hide product regressions"
 run_content_eval "$REPO_ROOT/maintain-verification-skill/SKILL.md" "source.*live|live.*source" "verification maintenance requires source and live coverage"
+run_content_eval "$REPO_ROOT/maintain-verification-skill/SKILL.md" "#prove-the-check-can-fail" "verification maintenance reuses the creation sensitivity check"
 
 # Existing owners compose the new behavior instead of duplicating it.
 run_content_eval "$REPO_ROOT/review/SKILL.md" "/blast-radius" "review routes non-local safety claims through blast-radius"

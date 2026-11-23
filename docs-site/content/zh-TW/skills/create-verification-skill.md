@@ -44,7 +44,7 @@ type: skill
 - **啟動：**確切的啟動與停止指令，包含遷移和種子資料，確保從空資料狀態啟動可用的應用程式。僅有連接埠監聽或資料庫正常不代表應用程式已就緒。
 - **診斷：**提供一項唯讀檢查，涵蓋應用程式身分、建置、處理程序或連接埠擁有權、資料隔離和驗證方式。
 - **操作：**來自此儲存庫的字面指令和穩定控制代碼。優先使用角色、無障礙名稱、路由、提示字串和公開 API，而非座標或內部實作。
-- **證據：**擷取操作及其產生的狀態。透過第二個公開檢視驗證副作用。僅能在既有的正式環境邊界使用模擬。
+- **證據：**針對[使用者約定的預期結果](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)寫出斷言，不要僅憑驅動工具的結束碼或螢幕擷取畫面判定。擷取操作及其產生的狀態。透過第二個公開檢視驗證副作用。僅能在既有的正式環境邊界使用模擬。
 - **清理：**只停止本次執行所建立的處理程序和暫存狀態。絕不要依處理程序名稱終止。證據在清理後仍須保留。
 
 讓輔助工具可執行，並記錄用法。對於有狀態缺陷或反覆出現的重現缺口，透過原生測試資料與偵錯 API 證明[擷取和重放](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
@@ -67,6 +67,10 @@ type: skill
 執行產生的技能：啟動、診斷、一條已映射的實際使用者流程、證據和清理。確認保留證據，且沒有留下已建立的處理程序或狀態。清理失敗嘗試，修正說明並重放。未執行過的驗證器只是草稿。
 
 列出替代環境的設定缺口；在目標環境重放前，仍未經驗證。
+
+### 確認檢查能抓到故障 [#prove-the-check-can-fail]
+
+[用已知故障重放關鍵斷言](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/proof-loop.md)。
 
 將漂移稽核交由 `/maintain-verification-skill`，功能工作交由 `/dogfood`。
 
