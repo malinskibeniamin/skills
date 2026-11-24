@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pr-video-canary-${{ github.ref }}
+  group: pr-video-canary-${{ github.ref }}-${{ github.event_name == 'push' && github.sha || '' }}
   cancel-in-progress: true
 
 jobs:

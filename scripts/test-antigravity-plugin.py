@@ -87,6 +87,19 @@ class PluginTest(unittest.TestCase):
         self.assertIn('role="tablist"', str(self.call("PostInvocation")[0]).replace("\\", ""))
         self.assertEqual(self.call("PostInvocation")[0], {})
 
+        repaired = """export const Widget = () => <>
+  <div role="tablist" aria-label="Sections">
+    <button type="button" role="tab" id="tab" aria-controls="panel"
+      aria-selected="true">Details</button>
+  </div>
+  <div role="tabpanel" id="panel" aria-labelledby="tab">Details content</div>
+</>;
+"""
+        file.write_text(repaired)
+        tool["args"]["CodeContent"] = repaired
+        self.assertEqual(self.call("PostToolUse", tool), ({}, ""))
+        self.assertEqual(self.call("PostInvocation"), ({}, ""))
+
     def test_stop_retry_is_bounded_and_not_requested_for_busy_or_errored_turns(self):
         # Exercise the native retry protocol without running a consumer's build.
         stop = self.bundle / "source/.claude/hooks/stop-dispatch.sh"

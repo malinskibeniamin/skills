@@ -1,11 +1,8 @@
 # Evals for latest release metadata bump.
 
-run_content_eval "$REPO_ROOT/skill-manifest.json" '"version": "4\.45\.0"' "skill manifest bumped to 4.45.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/plugin.json" '"version": "4\.45\.0"' "Claude plugin bumped to 4.45.0"
-run_content_eval "$REPO_ROOT/.codex-plugin/plugin.json" '"version": "4\.45\.0"' "Codex plugin bumped to 4.45.0"
-run_content_eval "$REPO_ROOT/.claude-plugin/marketplace.json" '"version": "4\.45\.0"' "Claude marketplace bumped to 4.45.0"
-run_content_eval "$REPO_ROOT/.agents/plugins/marketplace.json" '"version": "4\.45\.0"' "Codex marketplace bumped to 4.45.0"
-
+# Consistency across all active manifests is checked by release-metadata.
+release_version=$(jq -er '.version' "$REPO_ROOT/skill-manifest.json")
+release_pattern=$(printf '%s' "$release_version" | sed 's/\./\\./g')
 # Count strings were removed from metadata descriptions (PR #46 feedback:
 # hand-maintained counts drift). Assert their ABSENCE instead.
 for metadata_file in \
@@ -25,8 +22,8 @@ do
   fi
 done
 
-run_content_eval "$REPO_ROOT/CHANGELOG.md" '^## 4\.45\.0$' "changelog has 4.45.0 section"
-run_content_eval "$REPO_ROOT/README.md" 'v4\.45\.0' "README pinned release example updated"
+run_content_eval "$REPO_ROOT/CHANGELOG.md" "^## ${release_pattern}$" "changelog has the current release section"
+run_content_eval "$REPO_ROOT/README.md" "ref v${release_pattern}$" "README pins the current release"
 run_file_eval "$REPO_ROOT/skeleton-loaders/SKILL.md" "release includes the canonical skeleton-loaders skill"
 run_file_eval "$REPO_ROOT/codex-skills/skeleton-loaders/SKILL.md" "release includes the Codex skeleton-loaders adapter"
 for skill in remove-animations improve-animations gestures hill-climb reverse-engineer-anything; do
@@ -38,7 +35,6 @@ run_file_eval "$REPO_ROOT/matt-skills/matt-software-factory/SKILL.md" "release i
 run_file_eval "$REPO_ROOT/codex-skills/matt-software-factory/SKILL.md" "release includes the Codex Matt factory proxy"
 # This edition deliberately publishes no documentation archive. Keep the default
 # release contract lean; an explicitly requested archive needs its own coverage.
-release_version=$(jq -er '.version' "$REPO_ROOT/skill-manifest.json")
 if [ -e "$REPO_ROOT/docs-site/content/v$release_version" ] ||
   grep -qF "id: \"v$release_version\"" "$REPO_ROOT/docs-site/blume.config.ts"; then
   echo "  FAIL  metadata-only release includes an unrequested documentation archive"

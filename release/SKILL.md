@@ -5,22 +5,23 @@ disable-model-invocation: true
 argument-hint: "[version]"
 ---
 
-Publish without metadata, tags, or caches diverging. Version must be exact stable SemVer such as `4.34.0`.
+Green merges publish automatically. Use this [recovery procedure](../README.md#releases-and-automatic-updates) only when the publisher is idle. Use exact stable SemVer, e.g. `4.34.0`.
 
 ## 1. Establish
 
-1. Fetch `origin/main`; require a clean worktree on a feature branch based on latest main.
+1. Fetch `origin/main`; use a clean worktree on a branch based on it.
 2. Derive scope from commits/merged PRs since latest `v*` tag.
 3. Require green `origin/main` CI; reproduce/fix failures before versioning.
-4. Prove local tag, remote tag, GitHub release absent; collision stops.
-5. Require merge and publication permission. `/release <version>` or `cut/publish <version>` grants it; discussion does not.
+4. Stop on collision with any local/remote tag or GitHub release.
+5. Require merge/publication permission (e.g. `/release <version>` or `cut/publish <version>`, not discussion).
 
 ## 2. Prepare test-first
 
-1. First change `evals/test-improve-release-metadata.sh`; record expected RED metadata failures.
-2. Update `skill-manifest.json`, plugin manifests, both marketplaces, dated changelogs, `CHANGELOG.md`, README pin together.
+1. Record RED release metadata failures with `python3 scripts/release-version.py check`.
+2. Run `python3 scripts/release-version.py prepare --version <version> --note "<note>"` to update
+   `skill-manifest.json`, plugin manifests, both marketplaces, changelogs and README pin together.
 3. For skill-surface changes run hook/catalog/AGENTS generators; never hand-edit generated Codex proxies.
-4. Keep live docs on `main`; do not copy skill docs for a release.
+4. Keep live docs on `main` only.
 5. Replay release metadata/packaging evals GREEN.
 
 ## 3. Verify
@@ -32,7 +33,7 @@ bash scripts/test-claude-plugin-install.sh
 bash scripts/test-codex-plugin-install.sh
 ```
 
-Run `/dogfood` on both packaged surfaces; skip visual review only without rendered customer surface. Review fixed-point diff for standards, value, resilience, packaging, immutable-release risk.
+Dogfood both packages; visually review rendered surfaces. Review the final diff for standards, value, resilience, packaging and immutability.
 
 ## 4. Land then tag
 
