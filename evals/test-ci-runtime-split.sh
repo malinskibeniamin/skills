@@ -9,11 +9,11 @@ run_content_eval "$_ci_workflow" "os: \[ubuntu-latest, macos-latest\]" \
   "CI preserves the existing Linux and macOS check names"
 _ci_full_condition="if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'"
 _ci_full_condition_count=$(grep -cF -- "$_ci_full_condition" "$_ci_workflow" || true)
-if [ "$_ci_full_condition_count" -eq 6 ]; then
+if [ "$_ci_full_condition_count" -eq 7 ]; then
   echo "  PASS  all comprehensive gates run on Linux or full-suite events"
   PASS=$((PASS + 1))
 else
-  echo "  FAIL  expected 6 comprehensive gate conditions, found $_ci_full_condition_count"
+  echo "  FAIL  expected 7 comprehensive gate conditions, found $_ci_full_condition_count"
   FAIL=$((FAIL + 1))
   ERRORS="$ERRORS\n  FAIL: comprehensive gate conditions"
 fi

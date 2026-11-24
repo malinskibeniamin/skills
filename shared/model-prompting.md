@@ -66,6 +66,33 @@ silently changing environment defaults or forcing every worker onto Fable.
   This repository ships guidance, not an API client or a renderer. Confirm SDK and
   platform support before adding beta controls; preserve refusal/access boundaries.
 
+## Gemini 4 on Antigravity
+
+Load when running Gemini 4 Neon, Carbon, or Hydrogen on Antigravity (ACP, CLI,
+IDE, or Antigravity 2.0). [Antigravity routing](../config/antigravity-model-routing.json)
+owns the Gemini host lane without modifying the Claude/Codex routes in
+`config/model-routing.json`.
+
+- **Preserve model and effort:** Keep the explicitly selected Gemini model and
+  Extra (`xhigh`) or High effort. Ignore Claude/Codex-only model switches and
+  Codex-only sections in `AGENTS.md`; use [GEMINI.md](../GEMINI.md) and the
+  Antigravity plugin rules as host overrides.
+- **Parallel tool batching:** Gemini 4 performs best when independent file
+  reads, searches, and non-overlapping edits are issued in parallel in one turn
+  rather than serial single-call turns.
+- **Direct output verification:** Antigravity's `PostToolUse` hook receives tool
+  errors but not command stdout or stderr. Inspect test, lint, and type-check
+  output directly for warnings before claiming completion, and verify exact file
+  paths and edited hunks from observed tool results rather than memory.
+- **T3 Code native tools:** Inside T3 Code, use `preview_*` for requested
+  browser tasks and `html_preview` -> `html_render` for inline charts or
+  comparisons. Treat `PostInvocation` edit diagnostics as candidates to verify
+  and resolve within scope.
+- **Cross-family handoffs:** An inherited Gemini subagent is not a cross-family
+  review. When handing off between Gemini 4 Neon and Claude Opus/Fable or
+  GPT-6.1 Sol, pass the same compact checkpoint (objective, constraints, paths,
+  revisions, checks run, residual gaps) without relying on private reasoning.
+
 ## Evidence and sources
 
 ### Skill coverage
@@ -76,14 +103,14 @@ mandatory replacement for every skill. Fresh Fable sessions, compaction and mode
 switches receive the installed profile pointer. Authorized children receive a
 conditional pointer: built-in agents such as Explore need not use their parent's model.
 
-| Skill family | Configuration owner |
-|---|---|
+| Skill family                                                            | Configuration owner                                                                                                              |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Curated workflows, specialists and the model-neutral Cursor CLI adapter | Session context, this profile and [efficient frontier](../efficient-frontier/SKILL.md); retain each skill's outcome and endpoint |
-| Poteto adapters | [Compatibility](POTETO-COMPATIBILITY.md) and generated role assignments; pinned source defaults do not select models |
-| Matt Pocock adapters | [Compatibility](MATT-POCOCK.md); preserve explicit-only invocations and scoped ownership |
-| Interface adapters | [Compatibility](INTERFACES.md); Opus keeps UI taste ownership, even in a larger Fable-led task |
-| tstack adapters | [Compatibility](TSTACK.md); no automatic review panel, session switch or hidden fallback |
-| T3/Effect adapters | [Compatibility](T3CODE-SKILLS.md); use the target's verifier rather than repeated generic test reminders |
+| Poteto adapters                                                         | [Compatibility](POTETO-COMPATIBILITY.md) and generated role assignments; pinned source defaults do not select models             |
+| Matt Pocock adapters                                                    | [Compatibility](MATT-POCOCK.md); preserve explicit-only invocations and scoped ownership                                         |
+| Interface adapters                                                      | [Compatibility](INTERFACES.md); Opus keeps UI taste ownership, even in a larger Fable-led task                                   |
+| tstack adapters                                                         | [Compatibility](TSTACK.md); no automatic review panel, session switch or hidden fallback                                         |
+| T3/Effect adapters                                                      | [Compatibility](T3CODE-SKILLS.md); use the target's verifier rather than repeated generic test reminders                         |
 
 `bash scripts/generate-skill-catalog.sh --check` validates all registered skill and
 agent execution metadata before publishing discovery. Keep models inherited,

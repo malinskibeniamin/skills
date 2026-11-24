@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.45.2",
+      "version": "4.45.3",
       "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
       "source": {
         "source": "local",
@@ -70,7 +70,8 @@
         "4.9.0": "2026-04-23 -- Green != done warnings gate (+2 hooks, 89->91 wired, 98->100 scripts). `test-warning-check.sh` (PostToolUse Bash) scans passing `vitest`/`bun test`/`playwright`/`tsgo`/`biome`/`lint` stdout+stderr for curated patterns: Node `DeprecationWarning`/`ExperimentalWarning`/`(node:) XxxWarning`, React `act()`/missing-key/DOM-nesting/prop-type/bad-setstate/non-boolean-attr, unhandled rejection + unhandled error, vitest `stderr |` during test, skipped counts, `@ts-expect-error` + `@ts-ignore`, `npm WARN deprecated`. No per-file or env warning bypass. 3x same-kind streak escalates. `ci-warning-audit.sh` (Stop) fetches `gh run view <id> --log` on green PR CI (per-SHA cache, 45s timeout), greps same pattern, blocks with file:line sample. Gates: feature branch, session touched code, PR exists, all checks SUCCESS. No CI warning env bypass. CLAUDE.md Tests + /tdd `When Done` updated. Why: green tests can spew deprecations / log errors / leak unhandled rejections -- tomorrow's bugs.",
         "4.8.0": "2026-04-22 -- /steelman anti-sycophancy skill, opt-in via slash only. Forces strongest counter-case with repo evidence before agreeing with user claims (factual/causal/architectural only -- preference/goal/scope declined). No ambient CLAUDE.md rule, no automatic hook, no telemetry script -- plugin consumers see zero behavior change unless they type `/steelman`. Skills 47 -> 48.",
         "older": "see CHANGELOG.md for full history",
-        "4.45.2": "Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow."
+        "4.45.2": "Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow.",
+        "4.45.3": "Support Antigravity ACP and IDE hooks with Gemini 4 guidance and verified workspace bundles."
       }
     }
   ]
