@@ -174,6 +174,7 @@
 | `/poteto-principle-type-system-discipline` | Poteto: Type system discipline. |
 | `/poteto-recall` | Poteto: Rebuild recent context from history and live state. |
 | `/poteto-reflect` | Poteto: Turn observed workflow lessons into skill improvements. |
+| `/poteto-reframe` | Poteto: Teach domain terms and reframe a problem with them. |
 | `/poteto-reproduce-and-fix-issues` | Poteto: Reproduce issue reports and verify bounded fixes. |
 | `/poteto-setup-benny` | Poteto: Configure the Benny triage and reproduction pack. |
 | `/poteto-setup-pstack` | Poteto: Configure pstack model roles and reasoning budgets. |

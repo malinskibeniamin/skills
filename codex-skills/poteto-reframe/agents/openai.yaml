@@ -1,0 +1,5 @@
+interface:
+  display_name: "Poteto Reframe"
+  short_description: "Poteto: Teach domain terms and reframe a problem with them"
+policy:
+  allow_implicit_invocation: false

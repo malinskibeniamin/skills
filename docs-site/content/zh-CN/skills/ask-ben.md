@@ -199,6 +199,7 @@ type: skill
 | `/poteto-principle-type-system-discipline` | Poteto：严格遵守类型系统规则。 |
 | `/poteto-recall` | Poteto：根据历史记录和当前状态重建近期上下文。 |
 | `/poteto-reflect` | Poteto：将观察到的工作经验转化为技能改进。 |
+| `/poteto-reframe` | Poteto：讲解领域术语，并用这些术语重新描述问题。 |
 | `/poteto-reproduce-and-fix-issues` | Poteto：复现问题报告并验证限定范围内的修复。 |
 | `/poteto-setup-benny` | Poteto：配置 Benny 问题分类与复现工具包。 |
 | `/poteto-setup-pstack` | Poteto：配置 pstack 模型角色和推理预算。 |

@@ -42,6 +42,7 @@ SHORT_DESCRIPTIONS = {
     "principle-prove-it-works": "Verify real behavior rather than relying on proxies",
     "recall": "Rebuild recent context from history and live state",
     "reflect": "Turn observed workflow lessons into skill improvements",
+    "reframe": "Teach domain terms and reframe a problem with them",
     "reproduce-and-fix-issues": "Reproduce issue reports and verify bounded fixes",
     "setup-benny": "Configure the Benny triage and reproduction pack",
     "setup-pstack": "Configure pstack model roles and reasoning budgets",

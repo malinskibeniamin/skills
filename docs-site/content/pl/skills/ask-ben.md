@@ -199,6 +199,7 @@ Aby celowo zawęzić dostępne API lub graf importów, poleć `/constrain`; uruc
 | `/poteto-principle-type-system-discipline` | Poteto: Przestrzegaj zasad systemu typów. |
 | `/poteto-recall` | Poteto: Odtwórz ostatni kontekst na podstawie historii i aktualnego stanu. |
 | `/poteto-reflect` | Poteto: Przekształć wnioski z obserwacji pracy w ulepszenia umiejętności. |
+| `/poteto-reframe` | Poteto: Wyjaśnij pojęcia z danej dziedziny i użyj ich, by na nowo opisać problem. |
 | `/poteto-reproduce-and-fix-issues` | Poteto: Odtwarzaj zgłoszone problemy i weryfikuj poprawki o określonym zakresie. |
 | `/poteto-setup-benny` | Poteto: Skonfiguruj pakiet Benny do klasyfikacji i odtwarzania zgłoszeń. |
 | `/poteto-setup-pstack` | Poteto: Skonfiguruj role modeli i budżety rozumowania w pstack. |
