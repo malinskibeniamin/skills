@@ -160,12 +160,15 @@ Trace behavior from entrypoint to owner and cite decisive source/history, not pl
 intent. Summarize what changed and genuine pending human decisions without inventing asks.
 Use bounded reads and durable pointers when context fills; bulk output alone never grants
 delegation. Keep teaching's existing exercises and the smallest useful visual.
+When teaching terminology, ground it in the user's actual problem and a verified example;
+distinguish what transfers from neighboring fields from where the analogy breaks.
 
 Sources: [how](../vendor/pstack/skills/how/SKILL.md),
 [why](../vendor/pstack/skills/why/SKILL.md),
 [recall](../vendor/pstack/skills/recall/SKILL.md),
 [ketchup](../vendor/pstack/skills/ketchup/SKILL.md),
 [in your own words](../vendor/pstack/skills/in-your-own-words/SKILL.md),
+[reframe](../vendor/pstack/skills/reframe/SKILL.md),
 [teach](../vendor/pstack/skills/teach/SKILL.md),
 [context window](../vendor/pstack/skills/principle-guard-the-context-window/SKILL.md).
 

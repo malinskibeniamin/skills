@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Refresh the pinned Poteto/pstack suite to 0.15.48. Add explicit-only
+  `/poteto-reframe` for learning and applying domain vocabulary, and retain
+  `/poteto-in-your-own-words` for playing back the user's goal before work starts.
+
 - Vendor the complete agent-browser skill suite with pinned Apache-2.0 sources,
   local Claude/Codex adapters and reproducible refresh checks. Interweave
   `/modern-web-guidance` with UI implementation, accessibility, motion, themes

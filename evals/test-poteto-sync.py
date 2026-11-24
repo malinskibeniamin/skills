@@ -327,7 +327,7 @@ class PotetoSyncTest(unittest.TestCase):
 
     def test_refresh_includes_prompt_and_verification_skills(self):
         additions = [
-            "poteto-help", "ketchup", "sharpen", "in-your-own-words",
+            "poteto-help", "ketchup", "sharpen", "in-your-own-words", "reframe",
             "create-formal-verification-skill", "maintain-formal-verification-skill",
         ]
         for name in additions:

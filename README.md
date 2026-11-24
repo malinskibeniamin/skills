@@ -643,11 +643,13 @@ host adapter is registered; no browser, runtime dependency or connector is insta
 
 `/cli-for-agents` adds Cursor's guidance for non-interactive, composable CLIs through a host-safe adapter. [Pinned sources, licenses, selection, and refresh](shared/CURSOR-SKILLS-CREDITS.md) cover the Cursor recheck; provider-specific integrations and duplicate workflows remain unregistered.
 
-The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **61 skills** from pstack **0.15.36** (58 core/principle skills plus all 3 Benny skills), all 23 mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`6b0300214a09fd6029cfb7077043125758cd1fd2`](https://github.com/cursor/plugins/tree/6b0300214a09fd6029cfb7077043125758cd1fd2/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json). This refresh advances the monorepo pin; pstack's source tree and version are unchanged.
+The **complete [Poteto/pstack](https://github.com/cursor/plugins/tree/main/pstack) stack** is vendored: all **62 skills** from pstack **0.15.48**, including the 3 Benny skills, plus mode playbooks, references, agents, scripts, templates, guide assets, and the MIT license. The byte-exact source is pinned to [`005d8f6e8ec057b738adcd08a08b30db0478402d`](https://github.com/cursor/plugins/tree/005d8f6e8ec057b738adcd08a08b30db0478402d/pstack) in [`vendor/pstack.lock.json`](vendor/pstack.lock.json).
+
+Use `/poteto-in-your-own-words` to hear the agent's understanding of your goal and problem before work starts. Use `/poteto-reframe` to learn the terms experts use for your problem and get a rewritten description backed by real examples. Both are explicit-only in Claude Code and Codex.
 
 The packaged stack includes `/poteto-statechart` and `/poteto-ketchup-video`, including statechart scripts and fixtures. Both remain explicit-only; importing them runs no verifier, renderer, setup or installer.
 
-Existing lifecycle, design, domain, planning, testing, verification, review, diagnosis, impact, research, writing and setup skills now load scoped [native Poteto adaptations](shared/POTETO-NATIVE.md). All 61 source skills have an owner path; no extra `/poteto-*` invocation is needed for the adapted guidance. Complete upstream workflows retain their explicit invocation policy, and delegation/setup remains opt-in. The routing check proves links and coverage, not agent adherence.
+Existing lifecycle, design, domain, planning, testing, verification, review, diagnosis, impact, research, writing and setup skills load scoped [native Poteto adaptations](shared/POTETO-NATIVE.md). Every source skill has an owner path; no extra `/poteto-*` invocation is needed for the adapted guidance. Complete upstream workflows retain their explicit invocation policy, and delegation/setup remains opt-in. The routing check proves links and coverage, not agent adherence.
 
 The [first-correction tree](shared/POTETO-NATIVE.md#harness-improvement) routes mistakes
 to design, deterministic checks, runtime verification or scoped judgment before adding
@@ -655,15 +657,15 @@ more instructions. [Lauren Tan talk notes and the adoption map](docs/lauren-tan-
 record the source, existing owner coverage and a tested correction: video research now
 requires speech evidence by default; silent-media analysis uses explicit `--visual-only`.
 
-Use `/poteto-mode`, `/poteto-how`, `/poteto-architect`, `/poteto-interrogate`, or any `/poteto-<upstream-folder>` skill through Claude or Codex. Every upstream `SKILL.md`, including the Benny automation pack, has a registered adapter in `poteto-skills/`; none are excluded. The complete inventory is linked above; authored-skill docs stay separate from imported source. The prefix avoids replacing this harness's `/tdd`, `/swarm`, `/teach`, `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Upstream invocation policies are preserved. [Compatibility rules](shared/POTETO-COMPATIBILITY.md) keep the requested endpoint, selected model, host tools, and explicit delegation/automation authorization intact. Installation activates no automation or upstream agent. `/poteto-help` guides setup and skill selection; `/poteto-ketchup` summarizes this chat and pending decisions. Active roles use only Opus 5.5 and GPT-6.1 Sol at `xhigh`; upstream Grok defaults are inert source material, not permitted routes.
+Use `/poteto-mode`, `/poteto-how`, `/poteto-architect`, `/poteto-interrogate`, or any `/poteto-<upstream-folder>` skill through Claude or Codex. Every upstream `SKILL.md`, including the Benny automation pack, has a registered adapter in `poteto-skills/`; none are excluded. The complete inventory is linked above; authored-skill docs stay separate from imported source. The prefix avoids replacing this harness's `/tdd`, `/swarm`, `/teach`, `/blast-radius`, `/create-verification-skill`, and `/maintain-verification-skill`. Upstream invocation policies are preserved. [Compatibility rules](shared/POTETO-COMPATIBILITY.md) keep the requested endpoint, selected model, host tools, and explicit delegation/automation authorization intact. Installation activates no automation or upstream agent. `/poteto-help` guides setup and skill selection; `/poteto-ketchup` summarizes this chat and pending decisions. The [host model policy](config/model-routing.json) takes precedence over upstream role defaults.
 
 Verify bytes and registrations with `python3 scripts/vendor-poteto.py --check`; include native owner/source wiring with `python3 scripts/vendor-poteto.py --check-routing`. Refresh from a separate checkout of `cursor/plugins` at a reviewed full SHA:
 
 ```bash
-python3 scripts/vendor-poteto.py --model-rule # print the host's two-model rule; writes nothing
+python3 scripts/vendor-poteto.py --model-rule # print host model routing; writes nothing
 python3 scripts/vendor-poteto.py --source /path/to/plugins/pstack --revision <full-commit-sha>
 bash scripts/generate-skill-catalog.sh
-bunx biome format --write .claude-plugin/plugin.json
+bun x biome format --write .claude-plugin/plugin.json
 python3 scripts/vendor-poteto.py --check-routing
 ```
 

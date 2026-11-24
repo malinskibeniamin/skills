@@ -9,7 +9,7 @@ and the [current source inventory](../vendor/pstack.lock.json).
 
 The native [caller-first sketch](../codebase-design/SKILL.md#caller-first-sketch) and
 structural probe below also adapt [architect](../vendor/pstack/skills/architect/SKILL.md),
-its [design red flags](../vendor/pstack/skills/architect/references/design-red-flags.md),
+its [historical design red flags](https://github.com/cursor/plugins/blob/6b0300214a09fd6029cfb7077043125758cd1fd2/pstack/skills/architect/references/design-red-flags.md),
 and the [historical review rubric](https://github.com/cursor/plugins/blob/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack/skills/interrogate/references/rubric.md) at
 [`88d47514b82e7c44f00f2b2a72ff6dd12158038c`](https://github.com/cursor/plugins/tree/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack).
 These are authored native adaptations, not instructions to invoke the explicit-only
