@@ -87,7 +87,7 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.45.1
+codex plugin marketplace add malinskibeniamin/skills --ref v4.45.2
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
@@ -655,9 +655,10 @@ command names and the distinction between waiting, dropped frames and gesture ha
 
 ### Modern Web Guidance and agent-browser
 
-`/modern-web-guidance` retrieves [Chrome's Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance),
-applies relevant rules within the requested scope, and verifies each rule in a real
-browser. Existing implementation, performance, accessibility, motion and visual-review
+`/modern-web-guidance` includes the [official Chrome skill and guides](vendor/chrome-modern-web-guidance-NOTICE.md).
+Search with a pinned CLI or read the bundled guides offline; apply relevant rules
+within the requested scope and verify them in a real browser. Existing
+implementation, performance, accessibility, motion and visual-review
 owners route layout shift, reduced motion, themes and dialog work through it.
 Static scans and source conformance do not count as browser verification.
 

@@ -12,8 +12,8 @@ requirement. Every consumer/end-user UI PR in every consuming repository require
 [per-PR packaging](../package-my-work/PACKAGING.md#per-pr-delivery), including mixed changes
 and follow-up pushes; reuse still-current captures across iterations.
 
-Web-platform work (layout shift, reduced motion, themes, dialogs or Baseline
-compatibility): load [modern web guidance](../modern-web-guidance/SKILL.md)
+Web-platform work (HTML, CSS, browser APIs or Baseline compatibility):
+load [modern web guidance](../modern-web-guidance/SKILL.md)
 before edits; carry its guide/rule assertions through the same verification loop.
 
 | Changed behavior / needed explanation | Owner and completion evidence |

@@ -68,21 +68,32 @@ measurements of this harness or of the user's task.
 ## modern-web-guidance
 
 Use [modern-web-guidance](../modern-web-guidance/SKILL.md) for a scoped web-platform
-question, not an unsolicited whole-app migration. Retrieve only relevant guides
-from [Chrome's official guidance](https://developer.chrome.com/docs/modern-web-guidance),
-record their IDs, CLI version and retrieval date, and read complete output (including
-any temporary file). The vendored workflow is pinned; retrieved guide content and
-Baseline data can change. Prefer a project-pinned CLI. Otherwise the reviewed
-retrieval recipe is `npx --yes modern-web-guidance@1.0.1 search "<task>"` followed by
-`npx --yes modern-web-guidance@1.0.1 retrieve "<ids>"`. This replaces upstream's
-moving `@latest` examples. Missing installation approval/network access: use the
-matching official guide pages or report retrieval blocked. Do not run either
-skill installer or install Chrome as an incidental prerequisite.
+question, not an unsolicited whole-app migration. Read
+[Chrome's official skill](../vendor/chrome-modern-web-guidance/skills/modern-web-guidance/SKILL.md)
+for search and guide selection. The agent-browser recipe linked from the entrypoint
+supplies verification examples, not a second retrieval workflow.
+
+Find relevant guidance before choosing HTML/CSS or browser APIs. Prefer the
+project-pinned CLI and its supported flags; otherwise use this pinned recipe:
+
+```sh
+DISABLE_TELEMETRY=1 npx --yes modern-web-guidance@1.0.2 search "<generic task>" --skill-version 2026_11_16-268fb9ea
+DISABLE_TELEMETRY=1 npx --yes modern-web-guidance@1.0.2 retrieve "<ids>"
+```
+
+Use generic queries without project or user data. Disable telemetry with either
+pin; use the CLI only where the host allows it. Without CLI access, find matching
+files in the [vendored guides](../vendor/chrome-modern-web-guidance/skills/modern-web-guidance/guides/)
+by topic or guide ID; check current support separately if the date matters.
+Read complete guides (including any temporary file). Record the guide IDs and
+the CLI version/retrieval date or the [snapshot version](../vendor/chrome-modern-web-guidance-NOTICE.md).
+Don't run skill installers or install Chrome as an incidental prerequisite.
 
 Before applying a rule, compare its Baseline/browser support with the target's
 browser matrix and choose progressive enhancement/fallbacks where needed. Reuse
 accessible UI primitives: a native `<dialog>` recipe is not permission to replace
-an established dialog library, theme system or motion policy.
+an established dialog library, theme system or motion policy. Adapt examples to
+the target's framework, type-safety, dependency and verification rules.
 
 Keep one loop: retrieve -> baseline -> apply within scope -> real-browser replay.
 Audits/reviews report findings without applying edits. Map every applied rule to a

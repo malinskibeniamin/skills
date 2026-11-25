@@ -49,12 +49,36 @@ def fixture(root):
 
 
 class AgentBrowserVendoring(unittest.TestCase):
+    def test_official_modern_web_guidance_payload(self):
+        snapshot = REPO / "vendor/chrome-modern-web-guidance"
+        manifest = snapshot.with_suffix(".sha256")
+        expected = {path: digest for digest, path in
+                    (line.split("  ", 1) for line in manifest.read_text().splitlines())}
+        files = sorted(snapshot.rglob("*"))
+        self.assertFalse(snapshot.is_symlink())
+        self.assertFalse(any(path.is_symlink() for path in files))
+        actual = {}
+        for path in files:
+            if path.is_file():
+                self.assertFalse(path.stat().st_mode & 0o111, path)
+                actual[path.relative_to(snapshot).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+        self.assertEqual(actual, expected, "Chrome guidance inventory or bytes changed")
+
+        skill = "skills/modern-web-guidance/SKILL.md"
+        self.assertIn(skill, actual)
+        self.assertIn("LICENSE", actual)
+        self.assertIn("skills/modern-web-guidance/guides/visual-design/dark-mode.md", actual)
+        compatibility = (REPO / "shared/AGENT-BROWSER.md").read_text()
+        self.assertIn(f"](../vendor/chrome-modern-web-guidance/{skill})", compatibility)
+        self.assertTrue((REPO / "vendor/chrome-modern-web-guidance-NOTICE.md").is_file())
+
     def test_installed_discovery_and_resource_links(self):
         lock = json.loads((REPO / "vendor/agent-browser.lock.json").read_text())
         self.assertEqual(len(lock["skills"]), 10)
         registrations = json.loads((REPO / ".claude-plugin/plugin.json").read_text())["skills"]
         catalog = (REPO / "ask-ben/SKILL-CATALOG.md").read_text()
-        pages = [REPO / "shared/AGENT-BROWSER.md", REPO / "vendor/agent-browser-NOTICE.md"]
+        pages = [REPO / "shared/AGENT-BROWSER.md", REPO / "vendor/agent-browser-NOTICE.md",
+                 REPO / "vendor/chrome-modern-web-guidance-NOTICE.md"]
         for skill in lock["skills"]:
             self.assertEqual(registrations.count(skill["registration"]), 1)
             self.assertIn(f'`/{skill["name"]}`', catalog)
@@ -63,9 +87,10 @@ class AgentBrowserVendoring(unittest.TestCase):
         for page in pages:
             for link in re.findall(r"\[[^\]]+\]\(([^)]+)\)", page.read_text()):
                 if ":" not in link and not link.startswith("#"):
-                    target = (page.parent / link.split("#")[0]).resolve()
+                    path = link.split("#")[0]
+                    target = (page.parent / path).resolve()
                     self.assertTrue(target.is_relative_to(REPO), target)
-                    self.assertTrue(target.is_file(), target)
+                    self.assertTrue(target.is_dir() if path.endswith("/") else target.is_file(), target)
         run(sys.executable, IMPORTER, "--check")
         run("bash", REPO / "scripts/generate-skill-catalog.sh", "--check")
 

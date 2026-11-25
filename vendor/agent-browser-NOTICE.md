@@ -12,8 +12,9 @@ These third-party files are Apache-2.0, not this repository's MIT-authored guida
 SHA-256 digest and executable mode of every file, plus local discovery metadata.
 The report template's four screenshot links name future consumer captures, not
 bundled resources; the packaging checker exempts only those exact placeholders.
-The browser CLI, Chrome, cloud SDKs and Google's guide corpus are not bundled.
-Importing skills installs none of them and changes no runtime hook or account.
+The browser CLI, Chrome and cloud SDKs are not bundled. The official
+[Chrome guidance snapshot](chrome-modern-web-guidance-NOTICE.md) is vendored separately.
+Importing skills installs no CLI or browser and changes no runtime hook or account.
 The [host contract](../shared/AGENT-BROWSER.md) records adaptations outside upstream
 bytes: browser/session ownership, version matching, safe traffic capture, local
 workflow owners and per-rule runtime evidence. Nine browser entrypoints use the
@@ -39,9 +40,7 @@ locked upstream commit. A digest-only check proves local consistency, not origin
 Review new helpers/resources and external references before refreshing. Source
 examples referencing the upstream app/CLI are not runnable helpers in this snapshot.
 
-Modern Web Guidance retrieval uses the target's CLI pin, or the reviewed `1.0.1`
-recipe in the host contract, not upstream's moving `@latest`. Retrieved guide IDs,
-date and CLI version belong in the task receipt; dynamic guidance is not part of
-the byte-exact vendor snapshot. The motivating announcement is
+Modern Web Guidance retrieval uses the [host contract](../shared/AGENT-BROWSER.md#modern-web-guidance),
+not this snapshot's moving `@latest` examples. The motivating announcement is
 [the user-supplied post](https://x.com/ctatedev/status/2122816672625275030);
 the import is verified against Git, not the post's sample metrics.

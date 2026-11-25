@@ -182,6 +182,7 @@ python3 "$installed_path/scripts/vendor-tstack.py" --check
 python3 "$installed_path/scripts/vendor-jakubkrehel.py" --check
 python3 "$installed_path/scripts/vendor-mattpocock.py" --check
 bash "$installed_path/evals/run.sh" stack-diagram-vendored-skills
+python3 "$installed_path/evals/test-agent-browser-vendoring.py" AgentBrowserVendoring.test_official_modern_web_guidance_payload
 bash "$installed_path/evals/run.sh" matt-refresh
 bash "$installed_path/evals/run.sh" jakubkrehel-vendored-skills
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check

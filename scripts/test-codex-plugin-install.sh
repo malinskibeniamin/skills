@@ -125,6 +125,7 @@ bash "$installed_path/evals/run.sh" matt-refresh
 bash "$installed_path/evals/run.sh" jakubkrehel-vendored-skills
 python3 "$installed_path/scripts/vendor-poteto.py" --model-rule >"$test_root/pstack-models.mdc"
 bash "$installed_path/scripts/generate-skill-catalog.sh" --check
+python3 "$installed_path/evals/test-agent-browser-vendoring.py" AgentBrowserVendoring.test_official_modern_web_guidance_payload
 bash "$installed_path/evals/run.sh" security-audit-vendored-skill
 
 for skill in development-lifecycle tdd review; do
