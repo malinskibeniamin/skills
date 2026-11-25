@@ -39,7 +39,7 @@
     "@types/pngjs": "6.0.5",
     "@vercel/agent-eval": "1.4.0",
     "asciinema-player": "3.17.0",
-    "hyperframes": "0.9.56",
+    "hyperframes": "0.9.72",
     "pngjs": "7.0.0",
     "typescript": "7.0.2",
     "vitest": "4.1.10",
