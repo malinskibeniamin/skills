@@ -118,10 +118,6 @@ jobs:
         if: runner.os == 'Linux'
         run: bash scripts/test-released-skills.sh
 
-      - name: Antigravity bundle and hook smoke tests
-        if: runner.os == 'Linux'
-        run: python3 scripts/test-antigravity-plugin.py
-
       - name: Translation freshness
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'
         run: bun run docs:translate:check
@@ -129,6 +125,12 @@ jobs:
       - name: Typed protocol tests
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'
         run: bun run test
+
+      - name: Antigravity plugin and harness health gates
+        if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'
+        run: |
+          bun run test:antigravity
+          bun run harness:health --check
 
       - name: Install Codex CLI for plugin integration
         run: |

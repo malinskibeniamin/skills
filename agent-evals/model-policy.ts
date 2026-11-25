@@ -1,3 +1,4 @@
+import antigravityRouting from "../config/antigravity-model-routing.json";
 import routing from "../config/model-routing.json";
 
 export function selectModelRoute(
@@ -31,6 +32,38 @@ export function selectModelRoute(
   return {
     agent: agentName,
     model: agentName === "codex" ? `${model}?reasoningEffort=${effort}` : model,
+    effort,
+  };
+}
+
+type AntigravityModelId = keyof typeof antigravityRouting.models;
+
+export function selectAntigravityRoute(
+  modelOverride?: string,
+  effortOverride?: string,
+): { agent: "antigravity"; model: AntigravityModelId; effort: string } {
+  const model = (modelOverride ??
+    antigravityRouting.defaults.primary.model) as AntigravityModelId;
+  const allowedModels = antigravityRouting.selection.allowed_models;
+  if (!allowedModels.includes(model) || !(model in antigravityRouting.models)) {
+    throw new Error(
+      `Antigravity model policy: requires ${allowedModels.join(", ")}; received ${model}`,
+    );
+  }
+  const entry = antigravityRouting.models[model];
+  const effort = effortOverride ?? entry.starting_effort;
+  const allowedEfforts = new Set([
+    entry.starting_effort,
+    entry.fallback_effort,
+  ]);
+  if (!allowedEfforts.has(effort)) {
+    throw new Error(
+      `Antigravity model policy: ${model} requires ${[...allowedEfforts].join(" or ")}; received ${effort}`,
+    );
+  }
+  return {
+    agent: "antigravity",
+    model,
     effort,
   };
 }

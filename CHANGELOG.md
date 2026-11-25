@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.45.3
+
+- Support Antigravity ACP and IDE hooks with Gemini 4 guidance and verified workspace bundles.
+
 ## 4.45.2
 
 - Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow.

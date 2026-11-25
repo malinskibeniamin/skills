@@ -6,9 +6,15 @@
         "timeout": 10
       }
     ],
+    "PreInvocation": [
+      {
+        "command": "python3 ./scripts/hook.py PreInvocation",
+        "timeout": 10
+      }
+    ],
     "PreToolUse": [
       {
-        "matcher": "^(run_command|write_to_file|replace_file_content|multi_replace_file_content)$",
+        "matcher": "^(run_command|write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content|mcp_.*)$",
         "hooks": [
           {
             "command": "python3 ./scripts/hook.py PreToolUse",
@@ -19,7 +25,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "^(write_to_file|replace_file_content|multi_replace_file_content)$",
+        "matcher": "^(run_command|write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content)$",
         "hooks": [
           {
             "command": "python3 ./scripts/hook.py PostToolUse",

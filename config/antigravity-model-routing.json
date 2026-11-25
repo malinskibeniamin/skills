@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "host": "antigravity",
+  "policy": "quality-first-preserve-selected",
+  "defaults": {
+    "primary": {
+      "model": "gemini-4-neon",
+      "efforts": ["xhigh", "high"],
+      "preferred_effort": "xhigh",
+      "use": "Primary daily driver, architecture, UI, and multi-file implementation on Antigravity."
+    },
+    "secondary": {
+      "model": "gemini-4-carbon",
+      "efforts": ["xhigh", "high"],
+      "preferred_effort": "xhigh",
+      "use": "Owner-selected Antigravity alternative when chosen in the host catalog."
+    },
+    "lightweight": {
+      "model": "gemini-4-hydrogen",
+      "efforts": ["xhigh", "high"],
+      "preferred_effort": "high",
+      "use": "Owner-selected lightweight Antigravity lane; never substituted silently."
+    }
+  },
+  "selection": {
+    "preserve_selected_model": true,
+    "single_owner": true,
+    "cross_family_review_requires_external_provider": true,
+    "allowed_models": ["gemini-4-neon", "gemini-4-carbon", "gemini-4-hydrogen"],
+    "promotion_rule": "Do not promote Gemini/Antigravity routes over owner-selected Claude/Codex defaults without recorded context-ablation and capability-probe evidence."
+  },
+  "models": {
+    "gemini-4-neon": {
+      "status": "primary",
+      "work": [
+        "planning",
+        "implementation",
+        "review",
+        "ui",
+        "long-context-synthesis"
+      ],
+      "starting_effort": "xhigh",
+      "fallback_effort": "high",
+      "scores": {
+        "cost": null,
+        "intelligence": null,
+        "speed": null,
+        "taste": null,
+        "review": null,
+        "allowance": null
+      }
+    },
+    "gemini-4-carbon": {
+      "status": "secondary",
+      "work": ["implementation", "investigation", "review"],
+      "starting_effort": "xhigh",
+      "fallback_effort": "high",
+      "scores": {
+        "cost": null,
+        "intelligence": null,
+        "speed": null,
+        "taste": null,
+        "review": null,
+        "allowance": null
+      }
+    },
+    "gemini-4-hydrogen": {
+      "status": "lightweight",
+      "work": ["investigation", "chores"],
+      "starting_effort": "high",
+      "fallback_effort": "high",
+      "scores": {
+        "cost": null,
+        "intelligence": null,
+        "speed": null,
+        "taste": null,
+        "review": null,
+        "allowance": null
+      }
+    }
+  },
+  "sources": [
+    "https://antigravity.google/docs/models",
+    "https://antigravity.google/docs/hooks",
+    "https://antigravity.google/docs/plugins"
+  ]
+}

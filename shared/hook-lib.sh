@@ -319,7 +319,7 @@ hook_adopt_stdin_session() {
   return 0
 }
 
-# ── PostToolUse: Parse stdin, gate on Edit|Write, extract file_path ──
+# ── Parse edit/write stdin and extract file_path ──
 
 hook_parse_edit_write() {
   _hook_assert_bound_worktree
@@ -334,10 +334,10 @@ hook_parse_edit_write() {
     _hook_repoint_session_dir "$(echo "$_hook_input" | jq -r '.session_id // empty' 2>/dev/null || true)"
   fi
 
-  if [ "$_hook_tool_name" != "Edit" ] && [ "$_hook_tool_name" != "Write" ] && [ "$_hook_tool_name" != "apply_patch" ]; then
-    _hook_skip_or_exit 1
-    return $?
-  fi
+  case "$_hook_tool_name" in
+    Edit|MultiEdit|Write|apply_patch) ;;
+    *) _hook_skip_or_exit 1; return $? ;;
+  esac
   tool_name="$_hook_tool_name"
   tool_input=$(echo "$_hook_input" | jq -c '.tool_input // {}' 2>/dev/null || echo '{}')
 

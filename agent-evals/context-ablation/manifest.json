@@ -52,6 +52,26 @@
       ]
     }
   },
+  "opt_in_hosts": {
+    "antigravity": {
+      "routing_config": "config/antigravity-model-routing.json",
+      "instruction_file": "GEMINI.md",
+      "models": [
+        {
+          "id": "gemini-4-neon",
+          "efforts": ["xhigh", "high"]
+        },
+        {
+          "id": "gemini-4-carbon",
+          "efforts": ["xhigh", "high"]
+        },
+        {
+          "id": "gemini-4-hydrogen",
+          "efforts": ["high"]
+        }
+      ]
+    }
+  },
   "gate": {
     "quality": "No lower task success, first-pass intent success, or verified completion per task; no new high-severity regression or scope/endpoint violation; median human-quality score and readability no lower than current. Missing manual evidence leaves promotion undecided.",
     "efficiency": "Among quality-equivalent cells, prefer fewer input tokens and shorter duration.",
