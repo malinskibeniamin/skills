@@ -48,7 +48,7 @@ Utwórz `SKILL.md` z frontmatter zawierającym pasujące `name: verify-<app>` or
 - **Uruchamianie:** dokładne polecenia uruchamiania i zamykania, które prowadzą od pustych danych do użytecznej aplikacji, wraz z migracjami i danymi początkowymi. Sam nasłuchujący port lub sprawna baza danych nie oznaczają gotowości.
 - **Diagnostyka:** jedna kontrola tylko do odczytu obejmująca tożsamość aplikacji, kompilację, właściciela procesu lub portu, izolację danych i uwierzytelnianie.
 - **Sterowanie:** dosłowne polecenia i stabilne uchwyty z tego repozytorium. Preferuj role, dostępne nazwy, trasy, teksty monitów i publiczne interfejsy API zamiast współrzędnych lub elementów wewnętrznych.
-- **Dowody:** zarejestruj działanie i wynikowy stan. Zweryfikuj skutki uboczne za pomocą drugiego publicznego widoku. Atrapy są dozwolone wyłącznie na istniejącej granicy produkcyjnej.
+- **Dowody:** sprawdź [oczekiwany wynik](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract), zamiast polegać wyłącznie na kodzie wyjścia narzędzia lub zrzucie ekranu. zarejestruj działanie i wynikowy stan. Zweryfikuj skutki uboczne za pomocą drugiego publicznego widoku. Atrapy są dozwolone wyłącznie na istniejącej granicy produkcyjnej.
 - **Czyszczenie:** zatrzymaj tylko procesy i usuń tylko dane tymczasowe utworzone w tym uruchomieniu. Nigdy nie kończ procesów na podstawie ich nazwy. Dowody muszą przetrwać czyszczenie.
 
 Nadaj narzędziom pomocniczym uprawnienia do wykonywania; opisz użycie. Dla błędów zależnych od stanu lub powtarzających się luk reprodukcji udowodnij [zapis i odtwarzanie](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md) przez natywne interfejsy danych testowych i debugowania.
@@ -71,6 +71,10 @@ Mapuj każdy punkt wejścia. Brak wymaganych danych początkowych oblewa ścież
 Wykonaj wygenerowaną umiejętność: uruchamianie, diagnostykę, jedną zmapowaną rzeczywistą ścieżkę użytkownika, dowody i czyszczenie. Potwierdź, że dowody przetrwały, a utworzone procesy i stan nie pozostały. Posprzątaj po nieudanych próbach, popraw instrukcje i odtwórz ścieżkę. Niewykonany weryfikator jest wersją roboczą.
 
 Wymień luki konfiguracji środowiska zastępczego; pozostają niezweryfikowane do odtworzenia w środowisku docelowym.
+
+### Pokaż, że sprawdzenie wykrywa błąd [#prove-the-check-can-fail]
+
+[Odtwórz rozstrzygającą asercję na znanej usterce](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/proof-loop.md).
 
 Kieruj audyty rozbieżności do `/maintain-verification-skill`, a pracę nad funkcjami do `/dogfood`.
 

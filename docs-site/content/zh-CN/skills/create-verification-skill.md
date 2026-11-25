@@ -44,7 +44,7 @@ type: skill
 - **启动：**确切的启动和关闭命令，包含迁移和种子数据，确保从空数据状态启动可用的应用。仅有端口监听或数据库正常并不代表应用已就绪。
 - **诊断：**提供一项只读检查，覆盖应用身份、构建、进程或端口所有权、数据隔离和身份验证。
 - **驱动：**使用此仓库中的字面命令和稳定定位方式。优先使用角色、无障碍名称、路由、提示字符串和公共 API，而非坐标或内部实现。
-- **证据：**捕获操作及其产生的状态。通过第二个公共视图验证副作用。仅允许在现有生产边界使用模拟。
+- **证据：**对[用户约定的预期结果](https://github.com/malinskibeniamin/skills/blob/main/shared/verifiability.md#verify-against-the-original-contract)作出断言，不要只凭驱动程序的退出码或截图。捕获操作及其产生的状态。通过第二个公共视图验证副作用。仅允许在现有生产边界使用模拟。
 - **清理：**仅停止本次运行创建的进程和临时状态。切勿按进程名称终止进程。清理后仍须保留证据。
 
 使辅助工具可执行，并记录用法。对于有状态缺陷或反复出现的复现缺口，通过原生测试数据和调试 API 证明[捕获和重放](https://github.com/malinskibeniamin/skills/blob/main/shared/verification-replay.md)。
@@ -67,6 +67,10 @@ type: skill
 执行生成的技能：启动、诊断、一条已梳理的真实用户流程、证据和清理。确认保留证据，且创建的进程或状态均未残留。清理失败尝试，修复说明并重放。未经执行的验证器只是草稿。
 
 列出替代环境的设置缺口；在目标环境重放前，仍未经过验证。
+
+### 确认检查能发现故障 [#prove-the-check-can-fail]
+
+[用已知故障重放关键断言](https://github.com/malinskibeniamin/skills/blob/main/create-verification-skill/references/proof-loop.md)。
 
 漂移审计交由 `/maintain-verification-skill`，功能工作交由 `/dogfood`。
 
