@@ -10,3 +10,4 @@ vendor/tstack/** -text -whitespace
 vendor/jakubkrehel/** -text -whitespace
 vendor/emil/** -text -whitespace
 vendor/stack-diagram/** -text -whitespace
+vendor/chrome-modern-web-guidance/** -text -whitespace

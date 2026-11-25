@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.45.2
+
+- Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow.
+
 ## 4.45.1
 
 - Publish each verified skills merge and refresh opted-in Codex, Claude Code, and Antigravity installs from the same release.

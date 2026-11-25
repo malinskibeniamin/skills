@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "frontend-skills",
-      "version": "4.45.1",
+      "version": "4.45.2",
       "description": "React/TypeScript + Go enforcement harness. Hooks enforce accessibility, React/TypeScript correctness, styling, env/data rules, warning-free tests and CI, security, PR feedback completeness, worktree safety, and lockfile parity. Skills cover planning, TDD, review, dependency upgrades, resilience, PR reviewability, visual planning, status summaries, CI-green shipping, and handoff. Includes Builder.io and Cursor Team Kit workflows. POSIX-friendly.",
       "source": {
         "source": "local",
@@ -17,7 +17,7 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Development",
-      "x-updatedAt": "2026-11-21",
+      "x-updatedAt": "2026-11-25",
       "x-includes": {
         "instructions": ["CLAUDE.md", "AGENTS.md"],
         "settings": "settings.json"
@@ -69,7 +69,8 @@
         "4.10.0": "2026-04-29 -- Sync mattpocock/skills (Apr 17 -> Apr 29). New `/diagnose` skill ported verbatim: feedback-loop-first 6-phase debug discipline (build loop -> reproduce -> 3-5 ranked falsifiable hypotheses -> instrument -> fix at correct seam -> cleanup + post-mortem hand-off to `/improve-codebase-architecture`); ships `scripts/hitl-loop.template.sh`. Merged `github-triage` + `triage-issue` into single `/triage` (multi-tracker `tracker-github.md` via `gh` + `tracker-jira.md` via `acli`); bug-investigation + TDD-fix-plan absorbed as sub-mode. Vague-prose domain-glossary + ADR awareness added to /tdd, /improve-codebase-architecture, /zoom-out, /triage -- soft-dep, degrades gracefully when no `CONTEXT.md`. Upstream content merged while preserving 3-hat fan-out: `improve-codebase-architecture/LANGUAGE.md` (canonical vocab + deletion test), `tdd/tests.md` (good vs bad tests), `domain-model/ADR-FORMAT.md` 'what qualifies' enriched. Skills 48 -> 51. +96 eval checks. Skipped per direction: caveman, git-guardrails, to-prd/to-issues, /setup-matt-pocock-skills explicit pointer.",
         "4.9.0": "2026-04-23 -- Green != done warnings gate (+2 hooks, 89->91 wired, 98->100 scripts). `test-warning-check.sh` (PostToolUse Bash) scans passing `vitest`/`bun test`/`playwright`/`tsgo`/`biome`/`lint` stdout+stderr for curated patterns: Node `DeprecationWarning`/`ExperimentalWarning`/`(node:) XxxWarning`, React `act()`/missing-key/DOM-nesting/prop-type/bad-setstate/non-boolean-attr, unhandled rejection + unhandled error, vitest `stderr |` during test, skipped counts, `@ts-expect-error` + `@ts-ignore`, `npm WARN deprecated`. No per-file or env warning bypass. 3x same-kind streak escalates. `ci-warning-audit.sh` (Stop) fetches `gh run view <id> --log` on green PR CI (per-SHA cache, 45s timeout), greps same pattern, blocks with file:line sample. Gates: feature branch, session touched code, PR exists, all checks SUCCESS. No CI warning env bypass. CLAUDE.md Tests + /tdd `When Done` updated. Why: green tests can spew deprecations / log errors / leak unhandled rejections -- tomorrow's bugs.",
         "4.8.0": "2026-04-22 -- /steelman anti-sycophancy skill, opt-in via slash only. Forces strongest counter-case with repo evidence before agreeing with user claims (factual/causal/architectural only -- preference/goal/scope declined). No ambient CLAUDE.md rule, no automatic hook, no telemetry script -- plugin consumers see zero behavior change unless they type `/steelman`. Skills 47 -> 48.",
-        "older": "see CHANGELOG.md for full history"
+        "older": "see CHANGELOG.md for full history",
+        "4.45.2": "Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow."
       }
     }
   ]
