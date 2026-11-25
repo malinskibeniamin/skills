@@ -18,7 +18,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: evals-${{ github.event_name }}-${{ github.ref }}
+  group: evals-${{ github.event_name }}-${{ github.ref }}-${{ github.event_name == 'push' && github.sha || '' }}
   cancel-in-progress: true
 
 jobs:
@@ -39,6 +39,10 @@ jobs:
           # Git-derived page dates need the complete history.
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Require the next release version
+        if: runner.os == 'Linux' && github.event_name == 'pull_request'
+        run: python3 scripts/release-version.py check --base HEAD^1
 
       - name: Select macOS coverage
         if: runner.os == 'macOS'
@@ -109,6 +113,14 @@ jobs:
       - name: Repository quality gate
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'
         run: bun run quality:gate
+
+      - name: Release updater contract
+        if: runner.os == 'Linux'
+        run: bash scripts/test-released-skills.sh
+
+      - name: Antigravity bundle and hook smoke tests
+        if: runner.os == 'Linux'
+        run: python3 scripts/test-antigravity-plugin.py
 
       - name: Translation freshness
         if: runner.os == 'Linux' || steps.macos-scope.outputs.full == 'true'

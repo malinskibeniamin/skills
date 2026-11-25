@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.45.1
+
+- Publish each verified skills merge and refresh opted-in Codex, Claude Code, and Antigravity installs from the same release.
+
 - Refresh the pinned Poteto/pstack suite to 0.15.48. Add explicit-only
   `/poteto-reframe` for learning and applying domain vocabulary, and retain
   `/poteto-in-your-own-words` for playing back the user's goal before work starts.

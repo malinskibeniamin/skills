@@ -1,9 +1,17 @@
 ---
-title: /release
 description: 在資訊清單、PR、標籤、GitHub、Claude 與 Codex 之間發布不可變的 frontend-skills 版本。
-type: skill
+related:
+  - /skills/development-lifecycle
+  - /skills/tdd
+  - /skills/review
+search:
+  boost: 1
+  keywords:
+    - release
 sidebar:
   label: /release
+title: /release
+type: skill
 ---
 ![「/release」技能示意圖](/diagrams/skills/release.svg)
 
@@ -12,7 +20,9 @@ sidebar:
 發布此儲存庫，同時避免中繼資料、標籤或執行階段快取出現分歧。
 版本引數必須解析為確切且穩定的 SemVer，例如 `4.34.0`。
 
-## 1. 確立發布點
+CI 通過的合併會自動發布。只在自動發布閒置時使用此[復原流程](https://github.com/malinskibeniamin/skills/blob/main/README.md#releases-and-automatic-updates)。
+
+## 1. 確立發布點 [#1-establish]
 
 1. 擷取 `origin/main`；要求工作目錄乾淨，且目前位於以最新 main 為基礎的功能分支。
 2. 讀取自最新 `v*` 標籤以來的提交與已合併 PR。根據證據撰寫發布範圍。
@@ -21,18 +31,16 @@ sidebar:
 5. 確認請求包含合併權限與發布權限。明確的
    `/release <version>` 或「cut/publish <version>」具備這些權限；規劃或討論發布則不具備。
 
-## 2. 以測試優先方式準備
+## 2. 以測試優先方式準備 [#2-prepare-test-first]
 
-1. 先將 `evals/test-improve-release-metadata.sh` 變更為目標版本。
-2. 執行該檔案，並記錄預期的 RED 發布中繼資料失敗。
-3. 一併更新 `skill-manifest.json`、兩份外掛資訊清單、兩個市集、各自含日期的
-   變更記錄項目、`CHANGELOG.md`，以及 README 的安裝版本固定值。
-4. 若技能介面有所變更，請執行掛鉤、目錄與 AGENTS 產生器。絕不可手動編輯
+1. 執行 `python3 scripts/release-version.py check`，確認未提升版本時中繼資料檢查失敗。
+2. 執行 `python3 scripts/release-version.py prepare --version <version> --note "<note>"`，同步中繼資料、變更記錄及 README 中固定的版本。
+3. 若技能介面有所變更，請執行掛鉤、目錄與 AGENTS 產生器。絕不可手動編輯
    產生的 Codex 代理檔案。
-5. 即時文件保留在 `main`；發布技能工具組不需要複製技能文件。
-6. 重新執行聚焦的發布中繼資料與封裝評估，直到達到 GREEN。
+4. 即時文件保留在 `main`；發布技能工具組不需要複製技能文件。
+5. 重新執行聚焦的發布中繼資料與封裝評估，直到達到 GREEN。
 
-## 3. 驗證套件
+## 3. 驗證套件 [#3-verify]
 
 執行儲存庫品質閘門、套件測試、完整 Shell 評估套件、行為掛鉤測試、
 產生器漂移檢查、JSON 解析，以及 `git diff --check`。要求下列兩個真實的隔離式 CLI
@@ -47,7 +55,7 @@ bash scripts/test-codex-plugin-install.sh
 則略過視覺檢閱。檢閱已達固定點的差異，確認其標準、價值、韌性、
 封裝方式與不可變發布風險。
 
-## 4. 加上標籤前先完成合併
+## 4. 加上標籤前先完成合併 [#4-land-then-tag]
 
 1. 透過 `/go` 提交、推送並開啟發布 PR；包含內部試用收據與計數。
 2. 監控每項必要的 PR 檢查，並解決所有現有的審查討論串。
@@ -55,7 +63,7 @@ bash scripts/test-codex-plugin-install.sh
 4. 擷取 main，並等待合併提交上的 main 分支 CI 通過。
 5. 在該合併提交上建立並推送附註的 `v<version>`，絕不可加在功能提交上。
 
-## 5. 發布並重新執行
+## 5. 發布並重新執行 [#5-publishreplay]
 
 1. 使用範圍明確的說明與比較連結執行 `gh release create v<version> --verify-tag --latest`。
 2. 驗證遠端標籤解析至該合併提交、其檔案樹與已發布的 main 相符，且
