@@ -436,8 +436,8 @@ fi
 $JSON_MODE || echo ""
 $JSON_MODE || echo "--- Hook Wiring ---"
 
-# All 8 hook events used by the harness
-HOOK_EVENTS=("SessionStart" "PostCompact" "UserPromptSubmit" "PreToolUse" "PostToolUse" "SubagentStart" "SubagentStop" "Stop")
+# All 7 hook events used by the harness
+HOOK_EVENTS=("SessionStart" "UserPromptSubmit" "PreToolUse" "PostToolUse" "SubagentStart" "SubagentStop" "Stop")
 
 if [ "$INSTALL_MODE" = "plugin" ]; then
   # Plugin mode: check hooks/hooks.json

@@ -28,6 +28,19 @@
             ]
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash",
+            "args": [
+              "-c",
+              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'post-compact-context.sh'; exit 0"
+            ]
+          }
+        ]
       }
     ],
     "PreModelSwitch": [
@@ -120,20 +133,6 @@
             "args": [
               "-c",
               "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'skill-fire-log.sh'; exit 0"
-            ]
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/bin/bash",
-            "args": [
-              "-c",
-              "root=$(git rev-parse --show-toplevel 2>/dev/null || printf %s \"${CLAUDE_PROJECT_DIR:-}\"); [ -n \"$root\" ] && exec \"$root/.claude/hooks/run-hook.sh\" 'post-compact-context.sh'; exit 0"
             ]
           }
         ]

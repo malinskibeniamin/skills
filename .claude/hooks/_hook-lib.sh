@@ -1259,7 +1259,7 @@ hook_stop_context() {
   exit 0
 }
 
-# ── UserPromptSubmit/SessionStart/PostCompact: inject context ────
+# ── UserPromptSubmit/SessionStart/SubagentStart: inject context ──
 # additionalContext payloads carry hookEventName per the harness contract,
 # so the event name is a required argument. The standalone context hooks
 # (user-prompt-context.sh, post-compact-context.sh) stay lib-free by

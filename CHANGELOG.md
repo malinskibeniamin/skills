@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 4.45.3
+
+- Fix the compact hooks' rejected output: post-compaction context now comes from SessionStart (source compact) with real newlines, and PreCompact prints nothing.
+
 ## 4.45.2
 
 - Vendor Google Chrome's Modern Web Guidance skill and guides behind the existing browser-verification workflow.

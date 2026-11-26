@@ -67,10 +67,10 @@ describe("emit: stream/exit contract per tier", () => {
   });
 
   test("context carries the required hookEventName", () => {
-    const r = run(["emit", "context", HOSTILE, "PostCompact"]);
+    const r = run(["emit", "context", HOSTILE, "SessionStart"]);
     expect(r.code).toBe(0);
     const payload = JSON.parse(r.stdout);
-    expect(payload.hookSpecificOutput.hookEventName).toBe("PostCompact");
+    expect(payload.hookSpecificOutput.hookEventName).toBe("SessionStart");
     expect(payload.hookSpecificOutput.additionalContext).toBe(HOSTILE);
   });
 

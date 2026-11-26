@@ -62,11 +62,11 @@ fi
 printf 'local\n' > "$_fable_session_dir/task-endpoint"
 _fable_compact=$(cd "$_fable_fixture" && env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID \
   "$HOOKS_DIR/post-compact-context.sh" <<JSON
-{"hook_event_name":"PostCompact","session_id":"$_fable_session"}
+{"hook_event_name":"SessionStart","source":"compact","session_id":"$_fable_session"}
 JSON
 )
 if printf '%s' "$_fable_compact" | jq -e '
-    .hookSpecificOutput.hookEventName == "PostCompact"
+    .hookSpecificOutput.hookEventName == "SessionStart"
     and (.hookSpecificOutput.additionalContext | contains("model-prompting.md"))
     and (.hookSpecificOutput.additionalContext | contains("Endpoint: local"))' >/dev/null 2>&1; then
   echo "  PASS  compaction restores the Fable profile pointer without losing the endpoint"

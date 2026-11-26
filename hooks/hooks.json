@@ -16,6 +16,15 @@
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/pr-review-auto-hook.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/post-compact-context.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
       }
     ],
     "PreModelSwitch": [
@@ -77,16 +86,6 @@
           {
             "type": "command",
             "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/skill-fire-log.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/post-compact-context.sh\"; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

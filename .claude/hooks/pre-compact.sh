@@ -3,8 +3,10 @@ set -eo pipefail
 trap 'exit 0' ERR
 
 # PreCompact: snapshot critical session state before compaction wipes
-# in-context working memory. Pairs with post-compact-context.sh which
-# re-injects rules. PreCompact saves the DATA; PostCompact restores UX.
+# in-context working memory. post-compact-context.sh restores context after
+# compaction. Print nothing: Claude Code reads PreCompact stdout as
+# compaction-summary instructions, Codex ignores it, and neither accepts
+# hookSpecificOutput here.
 
 input=$(cat)
 hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
@@ -45,10 +47,5 @@ cat > "$snapshot" <<EOF
   "violations": {${_violations}}
 }
 EOF
-
-# Inject brief context: "compaction imminent, state saved"
-context="[PRE-COMPACT] Session state snapshot saved. ${_log_entries} hook entries, ${_touched_count} files touched. Violation counters survive compaction."
-escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PreCompact\",\"additionalContext\":$escaped}}"
 
 exit 0

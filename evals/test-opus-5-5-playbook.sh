@@ -23,7 +23,7 @@ mkdir -p "$_pc_tmp/.context"
 printf -- '- [ ] migrate endpoint\n' > "$_pc_tmp/.context/implementation-notes.md"
 _pc_out=$(
   cd "$_pc_tmp" \
-    && printf '%s' '{"hook_event_name":"PostCompact","session_id":"opus-playbook-eval-'$$'"}' \
+    && printf '%s' '{"hook_event_name":"SessionStart","source":"compact","session_id":"opus-playbook-eval-'$$'"}' \
       | CLAUDE_SESSION_ID="opus-playbook-eval-$$" "$REPO_ROOT/.claude/hooks/post-compact-context.sh"
 )
 if printf '%s' "$_pc_out" | jq -e '.hookSpecificOutput.additionalContext

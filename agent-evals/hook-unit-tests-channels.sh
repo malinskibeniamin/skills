@@ -264,8 +264,8 @@ then stop'; $_call"
   # context payloads must carry hookEventName -- harness contract for
   # additionalContext -- on BOTH paths.
   for _mode in typed shell; do
-    _run_lib_call_env "$_mode" 'hook_context "ctx body" PostCompact'
-    _check "context/$_mode: payload carries hookEventName" 'printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.hookEventName" 2>/dev/null | grep -qx "PostCompact"'
+    _run_lib_call_env "$_mode" 'hook_context "ctx body" SessionStart'
+    _check "context/$_mode: payload carries hookEventName" 'printf "%s" "$_stdout" | jq -re ".hookSpecificOutput.hookEventName" 2>/dev/null | grep -qx "SessionStart"'
   done
 
   # parse: shell-safe assignments round-trip quotes and newlines

@@ -16,6 +16,15 @@
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/codex-pr-review-auto-hook.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/post-compact-context.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -36,16 +45,6 @@
           {
             "type": "command",
             "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/codex-pr-review-auto-hook.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "f=$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/post-compact-context.sh; [ -x \"$f\" ] && exec \"$f\"; exit 0"
           }
         ]
       }

@@ -52,15 +52,47 @@ else
   ERRORS="$ERRORS\n  FAIL: FileChanged dynamic routing"
 fi
 
-# ── PreCompact injects additionalContext (paired with PostCompact) ─
-if grep -q 'hookEventName.*PreCompact' "$HOOKS_DIR/pre-compact.sh"; then
-  echo "  PASS  pre-compact.sh emits additionalContext for PreCompact"
-  PASS=$((PASS + 1))
-else
-  echo "  FAIL  pre-compact.sh missing additionalContext emission"
-  FAIL=$((FAIL + 1))
-  ERRORS="$ERRORS\n  FAIL: pre-compact emit"
-fi
+# ── Compact hooks emit only host-valid output ──────────────────────
+# Neither Claude Code nor Codex accepts hookSpecificOutput on PreCompact or
+# PostCompact; post-compaction context goes through SessionStart(source=compact).
+_cp_check() {
+  if eval "$2"; then
+    echo "  PASS  $1"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL  $1"
+    FAIL=$((FAIL + 1))
+    ERRORS="$ERRORS\n  FAIL: $1"
+  fi
+}
+_cp_sid="new-events-compact-$$"
+_cp_dir="/tmp/hook-session-$_cp_sid"
+_cp_tmp=$(mktemp -d)
+mkdir -p "$_cp_dir"
+printf 'local\n' > "$_cp_dir/task-endpoint"
+_cp_run() {
+  (cd "$_cp_tmp" && printf '%s\n' "$2" \
+    | env -u CLAUDE_SESSION_ID -u CODEX_SESSION_ID "$HOOKS_DIR/$1" 2>/dev/null)
+}
+_cp_pre=$(_cp_run pre-compact.sh '{"hook_event_name":"PreCompact","trigger":"manual","session_id":"'"$_cp_sid"'"}')
+_cp_check "pre-compact.sh saves its snapshot and prints nothing" \
+  '[ -z "$_cp_pre" ] && [ -f "$_cp_dir/pre-compact-snapshot.json" ]'
+_cp_post=$(_cp_run post-compact-context.sh '{"hook_event_name":"PostCompact","trigger":"manual","session_id":"'"$_cp_sid"'"}')
+_cp_check "post-compact-context.sh prints nothing on PostCompact" '[ -z "$_cp_post" ]'
+_cp_startup=$(_cp_run post-compact-context.sh '{"hook_event_name":"SessionStart","source":"startup","session_id":"'"$_cp_sid"'"}')
+_cp_check "post-compact-context.sh skips non-compact SessionStart" '[ -z "$_cp_startup" ]'
+_cp_start=$(_cp_run post-compact-context.sh '{"hook_event_name":"SessionStart","source":"compact","session_id":"'"$_cp_sid"'"}')
+_cp_check "post-compact-context.sh restores context on SessionStart(compact) with real newlines" \
+  'printf "%s" "$_cp_start" | jq -e ".hookSpecificOutput.hookEventName == \"SessionStart\"
+    and (.hookSpecificOutput.additionalContext | startswith(\"[POST-COMPACTION]\"))
+    and (.hookSpecificOutput.additionalContext | contains(\"\nEndpoint: local\"))
+    and (.hookSpecificOutput.additionalContext | contains(\"\\\\n\") | not)" >/dev/null 2>&1'
+_cp_check "manifest wires post-compact-context.sh to SessionStart(compact), not PostCompact" \
+  'jq -e "(.hooks.SessionStart.compact | index(\"post-compact-context.sh\")) and (.hooks.PostCompact == null)" "$REPO_ROOT/skill-manifest.json" >/dev/null 2>&1'
+_cp_check "no hook emits context for PreCompact or PostCompact" \
+  '! grep -E -q "(hookEventName|hook_context).*(PreCompact|PostCompact)" "$HOOKS_DIR"/*.sh'
+rm -f "$_cp_dir/pre-compact-snapshot.json" "$_cp_dir/task-endpoint"
+rmdir "$_cp_dir" "$_cp_tmp" 2>/dev/null || true
 
 # ── file-changed-manifest auto-regens configs (drift prevention) ───
 if grep -q 'generate-hook-configs.sh' "$HOOKS_DIR/file-changed-manifest.sh"; then

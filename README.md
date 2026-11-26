@@ -87,7 +87,7 @@ See the [mod README](plugins/frontend-skills-mods/README.md) for verification an
 brew upgrade --cask codex
 codex features enable plugins
 codex features enable hooks
-codex plugin marketplace add malinskibeniamin/skills --ref v4.45.2
+codex plugin marketplace add malinskibeniamin/skills --ref v4.45.3
 codex plugin marketplace upgrade skills
 codex plugin add frontend-skills@skills
 ```
@@ -221,8 +221,8 @@ still reports the initial database.
 
 **Token-first hook profile:** TraceDecay v0.0.73 `UserPromptSubmit` emitted about 2,600
 characters on every prompt in dogfood testing. Disable only that TraceDecay hook through
-Codex `/hooks`; keep SessionStart, PostToolUse, PostCompact, and Stop for startup guidance,
-incremental sync, compaction recovery, and session ingestion. Re-measure after TraceDecay
+Codex `/hooks`; keep SessionStart, PostToolUse, and Stop for startup guidance and
+compaction recovery, incremental sync, and session ingestion. Re-measure after TraceDecay
 upgrades before changing the profile.
 
 **Fallback: individual skills via skills.sh** -- when you want specific skills instead of the full plugin:

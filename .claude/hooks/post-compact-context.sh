@@ -4,9 +4,12 @@ trap 'exit 0' ERR
 
 # Restore volatile session state after compaction. Static repository rules stay in
 # CLAUDE.md and skills; repeating them here costs context and creates drift.
+# Claude Code and Codex take post-compaction context only from SessionStart with
+# source "compact"; neither accepts hookSpecificOutput on PostCompact.
 
 input=$(cat)
-[ "$(echo "$input" | jq -r '.hook_event_name // empty')" = "PostCompact" ] || exit 0
+[ "$(echo "$input" | jq -r '.hook_event_name // empty')" = "SessionStart" ] || exit 0
+[ "$(echo "$input" | jq -r '.source // empty')" = "compact" ] || exit 0
 
 sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 [ -z "$sid" ] && sid=$(echo "$input" | jq -r '.session_id // empty' 2>/dev/null || true)
@@ -15,28 +18,29 @@ sid="${CLAUDE_SESSION_ID:-${CODEX_SESSION_ID:-}}"
 session_dir="/tmp/hook-session-${sid}"
 branch=$(git branch --show-current 2>/dev/null || echo detached)
 context="[POST-COMPACTION] Branch: $branch"
+add() { context="$context"$'\n'"$1"; }
+
 if [ -f "$session_dir/current-model" ] \
   && [ "$(head -1 "$session_dir/current-model")" = "claude-fable-5-2" ]; then
   source "$(dirname "$0")/../../shared/model-prompting.sh"
-  context="$context\n$(harness_model_prompting_context)"
+  add "$(harness_model_prompting_context)"
 fi
 
 if [ -f "$session_dir/task-endpoint" ]; then
-  context="$context\nEndpoint: $(head -1 "$session_dir/task-endpoint")"
+  add "Endpoint: $(head -1 "$session_dir/task-endpoint")"
 fi
 
 if [ -f "$session_dir/session-touched-files" ]; then
   touched=$(sort -u "$session_dir/session-touched-files" | wc -l | tr -d '[:space:]')
-  context="$context\nSession-touched files: ${touched:-0}"
+  add "Session-touched files: ${touched:-0}"
 fi
 
 if [ -f "$session_dir/last-stop" ]; then
-  context="$context\nLast stop: $(head -1 "$session_dir/last-stop")"
+  add "Last stop: $(head -1 "$session_dir/last-stop")"
 fi
 
 if [ -f ".context/implementation-notes.md" ]; then
-  context="$context\nWorking notes: .context/implementation-notes.md -- reread its checklist before continuing"
+  add "Working notes: .context/implementation-notes.md -- reread its checklist before continuing"
 fi
 
-escaped=$(printf '%s' "$context" | jq -Rs . 2>/dev/null) || exit 0
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostCompact\",\"additionalContext\":$escaped}}"
+jq -nc --arg ctx "$context" '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'
