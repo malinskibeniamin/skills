@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/emilkowalski/skills",
-  "revision": "0f2e23b32bb1265e84cff8d3e75785fec953fb1b",
+  "revision": "64eb3deb9a5fbfa041faf783e0bc3fd635872e9c",
   "files": {
     "LICENSE": {
       "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
       "mode": 420
     },
     "README.md": {
-      "sha256": "76cd144b4af09ae7df883d21747d0bc4d1baacf18cd1ae52ece91fc7657169aa",
+      "sha256": "5d442010b00b14cb272ccc96255770cb2a81063958a878b598d79a4a08f38d53",
       "mode": 420
     },
     "performance-cheatsheet.md": {
@@ -40,6 +40,10 @@
     },
     "skills/apple-design/SKILL.md": {
       "sha256": "7fbacf928637e136da6d475358d0639667a3637ba772f03f8e815bb4c0b86946",
+      "mode": 420
+    },
+    "skills/ask-emil/SKILL.md": {
+      "sha256": "b14d6fec27af1ce59e48c5444520c08abc3ae90e93e1843e19ca382512ac6233",
       "mode": 420
     },
     "skills/ask-sonner/API.md": {
